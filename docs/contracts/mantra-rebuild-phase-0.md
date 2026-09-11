@@ -64,7 +64,7 @@ RICO contains forward-looking contracts and review records. MANTRA contains exec
 
 The existing MANTRA Git repository is the VIPER workspace. A root `viper.toml` marks that boundary because `viper.repository.resolve_root()` requires the marker to equal the Git work-tree root. `viper init` serves empty targets by generating a Python package, build configuration, test tree, and example stages. MANTRA supplies those structures itself, so Phase 0 adds only the workspace marker and MANTRA-owned adapters.
 
-The MANTRA execution environment is `/Users/machina/Developer/ChatGPT/mantra/venv`. It must contain Python 3.13 and the `viper-provenance` package. The environment receipt records the installed version and module path as observations. The gate accepts every installed VIPER version.
+The MANTRA execution environment is the Conda environment named `mantra`. It must contain Python 3.13 and the `viper-provenance` package. The environment receipt records the environment name, Python executable, installed VIPER version, and module path as observations. The gate accepts every installed VIPER version.
 
 New orchestration code belongs under `src/mantra/rebuild/`. It calls the historical MANTRA implementation at its current paths and preserves the historical experiment layout. The Hopfield replay adapter and its focused test are `src/mantra/rebuild/hopfield_replay.py` and `src/mantra/rebuild/tests/test_hopfield_replay.py`. `P0-PB-02` identifies every declared stage input before we draft their complete source.
 
@@ -182,7 +182,7 @@ The dependency graph, restoration bindings, environment receipt, capacity receip
 | `P0-VR-02` | Every absent restored file in $F$ has exactly one valid `RestorationBinding`. |
 | `P0-VR-03` | The measured free space is greater than or equal to $R_{max}$ before download begins. |
 | `P0-VR-04` | Every materialized file exists at its canonical path and matches its declared byte count and SHA-256. |
-| `P0-VR-05` | The active Python environment is MANTRA's root `venv`, uses Python 3.13, and imports its installed `viper-provenance` package. |
+| `P0-VR-05` | The active Conda environment is named `mantra`, uses Python 3.13, and imports its installed `viper-provenance` package. |
 | `P0-VR-06` | The VIPER graph contains every member of $B$, and severing one required node or edge makes verification fail. |
 | `P0-VR-07` | The Hopfield replay reproduces the selected raw-gene readout score `0.5861640938949398` within the approved tolerance and retains its produced predictions. |
 | `P0-VR-08` | The saved MIL application reproduces the hashes and metrics declared by `reinstantiation/APPLICATION_VERIFICATION.json` within its stated tolerances. |
@@ -232,9 +232,9 @@ Context: MANTRA already owns its package, tests, configuration, and historical e
 
 **Status:** Approved — ready for user implementation
 
-**Requirement:** Mark the MANTRA Git root as the VIPER workspace and verify the existing root `venv` uses Python 3.13 with `viper-provenance` installed.
+**Requirement:** Mark the MANTRA Git root as the VIPER workspace and verify the Conda environment named `mantra` uses Python 3.13 with `viper-provenance` installed.
 
-**Dependency:** The user-created `venv` exists at the MANTRA Git root.
+**Dependency:** The Conda environment named `mantra` exists.
 
 **File: `viper.toml`**
 
@@ -247,7 +247,7 @@ schema_version = 2
 
 ```bash
 cd /Users/machina/Developer/ChatGPT/mantra
-source venv/bin/activate
+conda activate mantra
 python -m pip install viper-provenance
 ```
 
@@ -255,13 +255,14 @@ python -m pip install viper-provenance
 
 ```bash
 cd /Users/machina/Developer/ChatGPT/mantra
-source venv/bin/activate
+conda activate mantra
+python -c 'import os; print(os.environ.get("CONDA_DEFAULT_ENV"))'
 python -c 'import sys; print(sys.executable); print(sys.version)'
 python -c 'from importlib.metadata import version; import viper; print(version("viper-provenance")); print(viper.__file__)'
 python -c 'from pathlib import Path; from viper.repository import resolve_root; print(resolve_root(Path.cwd()))'
 ```
 
-**Gate:** The commands identify MANTRA's root `venv`, Python 3.13, the installed `viper-provenance` version, a `viper` module under that `venv`, and `/Users/machina/Developer/ChatGPT/mantra` as the resolved VIPER root. `P0-PB-06` must register this output in the VIPER graph before Phase 0 closes.
+**Gate:** The commands identify `mantra` as the active Conda environment, Python 3.13, the installed `viper-provenance` version, a `viper` module under that environment, and `/Users/machina/Developer/ChatGPT/mantra` as the resolved VIPER root. `P0-PB-06` must register this output in the VIPER graph before Phase 0 closes.
 
 **Stop condition:** Stop before `P0-PB-02` if any value differs. Stop before `P0-PB-07` if its focused test shows that the adapter reads an undeclared input.
 
