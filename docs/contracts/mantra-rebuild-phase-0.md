@@ -14,7 +14,7 @@ This contract governs artifact discovery, capacity planning, restoration, and pr
 | `P0-REQ-02` | Give every restored file node in $B$ one verified `RestorationBinding`. |
 | `P0-REQ-03` | Calculate the maximum simultaneous local storage requirement before downloading an archive. |
 | `P0-REQ-04` | Restore verified files to their canonical, Git-ignored paths inside the MANTRA checkout. |
-| `P0-REQ-05` | Run restoration from the MANTRA workspace with a released, pinned `viper-provenance` distribution. |
+| `P0-REQ-05` | Run restoration from the MANTRA workspace with `viper-provenance` installed in MANTRA's `venv`. |
 | `P0-REQ-06` | Record and verify $B$ in the VIPER provenance graph. |
 | `P0-REQ-07` | Replay the historical Hopfield raw-gene readout from its saved encoder and restored inputs. |
 | `P0-REQ-08` | Replay the saved MIL application from restored inputs. |
@@ -64,7 +64,7 @@ RICO contains forward-looking contracts and review records. MANTRA contains exec
 
 The existing MANTRA Git repository is the VIPER workspace. A root `viper.toml` marks that boundary because `viper.repository.resolve_root()` requires the marker to equal the Git work-tree root. `viper init` serves empty targets by generating a Python package, build configuration, test tree, and example stages. MANTRA supplies those structures itself, so Phase 0 adds only the workspace marker and MANTRA-owned adapters.
 
-The MANTRA execution environment is `/Users/machina/Developer/ChatGPT/mantra/venv`. It must contain Python 3.13 and the released `viper-provenance==0.1.0a3` distribution. The environment gate records the installed distribution's version and direct-install metadata and rejects an editable VIPER checkout.
+The MANTRA execution environment is `/Users/machina/Developer/ChatGPT/mantra/venv`. It must contain Python 3.13 and the `viper-provenance` package. The environment receipt records the installed version and module path as observations. The gate accepts every installed VIPER version.
 
 New orchestration code belongs under `src/mantra/rebuild/`. It calls the historical MANTRA implementation at its current paths and preserves the historical experiment layout. The Hopfield replay adapter and its focused test are `src/mantra/rebuild/hopfield_replay.py` and `src/mantra/rebuild/tests/test_hopfield_replay.py`. `P0-PB-02` identifies every declared stage input before we draft their complete source.
 
@@ -163,7 +163,7 @@ flowchart TB
 |---|---|
 | Graph $B$ | Every required member of $F$, $P$, and $E$, with the selected result as its terminal node. |
 | Restoration bindings | One reviewed $r=(f,d,s,c)$ record for every absent restored file in $F$. |
-| Environment receipt | Python executable, installed VIPER version, installed distribution identity, lock-file identity, and editable-install rejection result. |
+| Environment receipt | Python executable, installed VIPER version, and imported VIPER module path. |
 | Capacity receipt | The measured terms in $R_{max}=C+D+V+T+H$, the measurement time, and the gate result. |
 | Restoration receipt | The resolved `RestorationBinding` and outcome for each restored file. |
 | VIPER graph | The verified runtime representation of $B$. |
@@ -182,7 +182,7 @@ The dependency graph, restoration bindings, environment receipt, capacity receip
 | `P0-VR-02` | Every absent restored file in $F$ has exactly one valid `RestorationBinding`. |
 | `P0-VR-03` | The measured free space is greater than or equal to $R_{max}$ before download begins. |
 | `P0-VR-04` | Every materialized file exists at its canonical path and matches its declared byte count and SHA-256. |
-| `P0-VR-05` | The active Python environment is MANTRA's root `venv`, uses Python 3.13, and contains the released non-editable `viper-provenance==0.1.0a3` distribution. |
+| `P0-VR-05` | The active Python environment is MANTRA's root `venv`, uses Python 3.13, and imports its installed `viper-provenance` package. |
 | `P0-VR-06` | The VIPER graph contains every member of $B$, and severing one required node or edge makes verification fail. |
 | `P0-VR-07` | The Hopfield replay reproduces the selected raw-gene readout score `0.5861640938949398` within the approved tolerance and retains its produced predictions. |
 | `P0-VR-08` | The saved MIL application reproduces the hashes and metrics declared by `reinstantiation/APPLICATION_VERIFICATION.json` within its stated tolerances. |
@@ -196,7 +196,7 @@ Phase 0 passes when `P0-VR-01` through `P0-VR-09` pass, every required provenanc
 
 ### Rejection
 
-Phase 0 fails when $B$ contains an unnecessary node, omits a required node or edge, admits a parity reference as a rebuild input, lacks a `RestorationBinding`, exceeds available storage, uses an editable VIPER checkout, restores different bytes, or either replay exceeds its approved tolerance.
+Phase 0 fails when $B$ contains an unnecessary node, omits a required node or edge, admits a parity reference as a rebuild input, lacks a `RestorationBinding`, exceeds available storage, restores different bytes, or either replay exceeds its approved tolerance.
 
 ## 9. PairBlock order
 
@@ -232,7 +232,7 @@ Context: MANTRA already owns its package, tests, configuration, and historical e
 
 **Status:** Approved — ready for user implementation
 
-**Requirement:** Mark the MANTRA Git root as the VIPER workspace and verify the existing root `venv` uses Python 3.13 with the released `viper-provenance==0.1.0a3` distribution.
+**Requirement:** Mark the MANTRA Git root as the VIPER workspace and verify the existing root `venv` uses Python 3.13 with `viper-provenance` installed.
 
 **Dependency:** The user-created `venv` exists at the MANTRA Git root.
 
@@ -241,6 +241,14 @@ Context: MANTRA already owns its package, tests, configuration, and historical e
 ```toml
 [workspace]
 schema_version = 2
+```
+
+**Install:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/mantra
+source venv/bin/activate
+python -m pip install viper-provenance
 ```
 
 **Focused check:**
@@ -253,7 +261,7 @@ python -c 'from importlib.metadata import version; import viper; print(version("
 python -c 'from pathlib import Path; from viper.repository import resolve_root; print(resolve_root(Path.cwd()))'
 ```
 
-**Gate:** The commands identify MANTRA's root `venv`, Python 3.13, the installed `viper-provenance` version `0.1.0a3`, a `viper` module under that `venv`, and `/Users/machina/Developer/ChatGPT/mantra` as the resolved VIPER root. `P0-PB-06` must register this output in the VIPER graph before Phase 0 closes.
+**Gate:** The commands identify MANTRA's root `venv`, Python 3.13, the installed `viper-provenance` version, a `viper` module under that `venv`, and `/Users/machina/Developer/ChatGPT/mantra` as the resolved VIPER root. `P0-PB-06` must register this output in the VIPER graph before Phase 0 closes.
 
 **Stop condition:** Stop before `P0-PB-02` if any value differs. Stop before `P0-PB-07` if its focused test shows that the adapter reads an undeclared input.
 
