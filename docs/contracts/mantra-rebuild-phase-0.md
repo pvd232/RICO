@@ -99,13 +99,14 @@ The download gate passes only when observed free space is at least $R_{max}$. Sh
 ```mermaid
 flowchart TB
     roots["Confirm Hopfield and MIL result roots"]
-    environment["Create virtual environment for the rebuild<br/>install pinned VIPER package"]
+    environment["Create venv for the rebuild<br/>install VIPER"]
     trace["Trace result dependencies<br/>into rebuild graph B"]
     binding["RestorationBinding<br/>for each absent file"]
     parity["Parity-reference graph Q<br/>comparison only"]
     capacity["Capacity gate<br/>free space ≥ Rmax"]
-    restore["Restore required files into MANTRA<br/>record the run with VIPER"]
-    verify["Verified VIPER graph B<br/>including severed-edge rejection"]
+    restore["Restore absent Mantra files <br/> record the run with VIPER"]
+    verify["Verify rebuild dependency graph B<br/>in VIPER"]
+    rejection_test["Run missing-edge<br/>rejection test"]
     replay_ready["Required inputs and<br/>parity references verified"]
     hopfield_replay["Replay historical Hopfield<br/>raw-gene readout"]
     mil_replay["Replay saved MIL application"]
@@ -121,7 +122,8 @@ flowchart TB
     capacity --> restore
     restore --> verify
     trace --> verify
-    verify --> replay_ready
+    verify --> rejection_test
+    rejection_test --> replay_ready
     parity --> replay_ready
     replay_ready --> hopfield_replay
     replay_ready --> mil_replay
@@ -133,7 +135,7 @@ flowchart TB
     classDef gateNode fill:#fff4d6,color:#111827,stroke:#9a6700,stroke-width:2px
     classDef outcomeNode fill:#e8f7ee,color:#111827,stroke:#237a44,stroke-width:2px
     class roots,environment,trace,binding,parity,restore workNode
-    class capacity,verify,replay_ready,hopfield_replay,mil_replay,evidence_review gateNode
+    class capacity,verify,rejection_test,replay_ready,hopfield_replay,mil_replay,evidence_review gateNode
     class hopfield outcomeNode
 ```
 
