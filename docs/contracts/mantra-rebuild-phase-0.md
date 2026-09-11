@@ -99,14 +99,14 @@ The download gate passes only when observed free space is at least $R_{max}$. Sh
 ```mermaid
 flowchart TB
     roots["Confirm Hopfield and MIL result roots"]
-    environment["Create rebuild virtual environment<br/>install pinned VIPER package"]
+    environment["Create virtual environment for the rebuild<br/>install pinned VIPER package"]
     trace["Trace result dependencies<br/>into rebuild graph B"]
     binding["RestorationBinding<br/>for each absent file"]
     parity["Parity-reference graph Q<br/>comparison only"]
     capacity["Capacity gate<br/>free space ≥ Rmax"]
     restore["Restore required files into MANTRA<br/>record the run with VIPER"]
     verify["Verified VIPER graph B<br/>including severed-edge rejection"]
-    replay_ready["Rebuild inputs and<br/>parity references verified"]
+    replay_ready["Required inputs and<br/>parity references verified"]
     hopfield_replay["Replay historical Hopfield<br/>raw-gene readout"]
     mil_replay["Replay saved MIL application"]
     evidence_review["User reviews Phase 0 evidence"]
