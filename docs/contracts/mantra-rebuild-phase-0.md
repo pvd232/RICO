@@ -97,10 +97,9 @@ The download gate passes only when observed free space is at least $R_{max}$. Sh
 
 ```mermaid
 flowchart TB
-    scope_review["User approves Phase 0 contract"]
-    contract["RICO Phase 0 contract"]
+    roots["Confirm Hopfield and MIL result roots"]
     environment["MANTRA environment<br/>released VIPER distribution"]
-    trace["Trace selected results<br/>into rebuild graph B"]
+    trace["Trace result dependencies<br/>into rebuild graph B"]
     binding["RestorationBinding<br/>for each absent file"]
     parity["Parity-reference graph Q<br/>comparison only"]
     capacity["Capacity gate<br/>free space ≥ Rmax"]
@@ -110,12 +109,10 @@ flowchart TB
     evidence_review["User reviews Phase 0 evidence"]
     hopfield["Approval to begin<br/>Hopfield reconstruction"]
 
-    scope_review --> contract
-    contract --> environment
-    contract --> trace
+    roots --> environment
+    roots --> trace
     trace --> binding
     trace --> parity
-    trace --> capacity
     binding --> capacity
     environment --> restore
     capacity --> restore
@@ -126,13 +123,11 @@ flowchart TB
     replay --> evidence_review
     evidence_review --> hopfield
 
-    classDef contractNode fill:#0b5fff,color:#ffffff,stroke:#052e8a,stroke-width:2px
     classDef workNode fill:#f3f7ff,color:#111827,stroke:#315a8a,stroke-width:1.5px
     classDef gateNode fill:#fff4d6,color:#111827,stroke:#9a6700,stroke-width:2px
     classDef outcomeNode fill:#e8f7ee,color:#111827,stroke:#237a44,stroke-width:2px
-    class contract contractNode
-    class environment,trace,binding,parity,restore workNode
-    class scope_review,capacity,verify,replay,evidence_review gateNode
+    class roots,environment,trace,binding,parity,restore workNode
+    class capacity,verify,replay,evidence_review gateNode
     class hopfield outcomeNode
 ```
 
