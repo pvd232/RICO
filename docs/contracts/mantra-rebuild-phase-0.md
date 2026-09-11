@@ -16,8 +16,9 @@ This contract governs artifact discovery, capacity planning, restoration, and pr
 | `P0-REQ-04` | Restore verified files to their canonical, Git-ignored paths inside the MANTRA checkout. |
 | `P0-REQ-05` | Run restoration from the MANTRA workspace with a released, pinned `viper-provenance` distribution. |
 | `P0-REQ-06` | Record and verify $B$ in the VIPER provenance graph. |
-| `P0-REQ-07` | Replay the saved MIL application from restored inputs before rebuilding either model. |
-| `P0-REQ-08` | Maintain an independent usefulness ledger for VIPER checks, failures, costs, and confirmed findings. |
+| `P0-REQ-07` | Replay the historical Hopfield raw-gene readout from its saved encoder and restored inputs. |
+| `P0-REQ-08` | Replay the saved MIL application from restored inputs. |
+| `P0-REQ-09` | Maintain an independent usefulness ledger for VIPER checks, failures, costs, and confirmed findings. |
 
 ## 2. Required claim
 
@@ -98,14 +99,16 @@ The download gate passes only when observed free space is at least $R_{max}$. Sh
 ```mermaid
 flowchart TB
     roots["Confirm Hopfield and MIL result roots"]
-    environment["MANTRA environment<br/>released VIPER distribution"]
+    environment["Create rebuild virtual environment<br/>install pinned VIPER package"]
     trace["Trace result dependencies<br/>into rebuild graph B"]
     binding["RestorationBinding<br/>for each absent file"]
     parity["Parity-reference graph Q<br/>comparison only"]
     capacity["Capacity gate<br/>free space ≥ Rmax"]
-    restore["MANTRA-rooted<br/>VIPER restoration run"]
+    restore["Restore required files into MANTRA<br/>record the run with VIPER"]
     verify["Verified VIPER graph B<br/>including severed-edge rejection"]
-    replay["Saved MIL application replay"]
+    replay_ready["Rebuild inputs and<br/>parity references verified"]
+    hopfield_replay["Replay historical Hopfield<br/>raw-gene readout"]
+    mil_replay["Replay saved MIL application"]
     evidence_review["User reviews Phase 0 evidence"]
     hopfield["Approval to begin<br/>Hopfield reconstruction"]
 
@@ -118,16 +121,19 @@ flowchart TB
     capacity --> restore
     restore --> verify
     trace --> verify
-    verify --> replay
-    parity --> replay
-    replay --> evidence_review
+    verify --> replay_ready
+    parity --> replay_ready
+    replay_ready --> hopfield_replay
+    replay_ready --> mil_replay
+    hopfield_replay --> evidence_review
+    mil_replay --> evidence_review
     evidence_review --> hopfield
 
     classDef workNode fill:#f3f7ff,color:#111827,stroke:#315a8a,stroke-width:1.5px
     classDef gateNode fill:#fff4d6,color:#111827,stroke:#9a6700,stroke-width:2px
     classDef outcomeNode fill:#e8f7ee,color:#111827,stroke:#237a44,stroke-width:2px
     class roots,environment,trace,binding,parity,restore workNode
-    class capacity,verify,replay,evidence_review gateNode
+    class capacity,verify,replay_ready,hopfield_replay,mil_replay,evidence_review gateNode
     class hopfield outcomeNode
 ```
 
@@ -140,7 +146,8 @@ flowchart TB
 7. Calculate $R_{max}$ and stop if the capacity gate fails.
 8. Download and extract the required archive members through MANTRA-rooted VIPER stages.
 9. Verify $B$, including a rejection case with one required relationship severed.
-10. Replay the saved MIL application, freeze Phase 0 evidence, and request approval to begin Hopfield reconstruction.
+10. Replay the historical Hopfield raw-gene readout and the saved MIL application.
+11. Freeze Phase 0 evidence and request approval to begin Hopfield reconstruction.
 
 ## 6. Persisted evidence
 
@@ -153,10 +160,11 @@ flowchart TB
 | Restoration receipt | The resolved `RestorationBinding` and outcome for each restored file. |
 | VIPER graph | The verified runtime representation of $B$. |
 | Graph-completeness report | Missing members of $F$, $P$, or $E$, plus the pass or fail result. |
+| Hopfield replay receipt | Approved command, saved-encoder identity, input digests, produced predictions, metric, tolerance, and comparison result. |
 | MIL replay receipt | Exact command, environment, input digests, output digests, metrics, tolerances, and comparison result. |
 | VIPER usefulness ledger | Claimed check, real defect detected, independent confirmation, ordinary-test coverage, false alarms, infrastructure failures, time cost, and later reuse. |
 
-The dependency graph, restoration bindings, environment receipt, capacity receipt, restoration receipts, completeness report, replay receipt, and usefulness ledger must themselves be registered in VIPER. Each checked-in evidence file requires a corresponding graph record.
+The dependency graph, restoration bindings, environment receipt, capacity receipt, restoration receipts, completeness report, both replay receipts, and usefulness ledger must themselves be registered in VIPER. Each checked-in evidence file requires a corresponding graph record.
 
 ## 7. Verification
 
@@ -168,18 +176,19 @@ The dependency graph, restoration bindings, environment receipt, capacity receip
 | `P0-VR-04` | Every materialized file exists at its canonical path and matches its declared byte count and SHA-256. |
 | `P0-VR-05` | The active Python environment contains the released `viper-provenance==0.1.0a3` distribution selected by the checked-in lock file. |
 | `P0-VR-06` | The VIPER graph contains every member of $B$, and severing one required node or edge makes verification fail. |
-| `P0-VR-07` | The saved MIL application reproduces the hashes and metrics declared by `reinstantiation/APPLICATION_VERIFICATION.json` within its stated tolerances. |
-| `P0-VR-08` | Every assessed VIPER check has a usefulness-ledger row and independent evidence for any confirmed defect. |
+| `P0-VR-07` | The Hopfield replay reproduces the selected raw-gene readout score `0.5861640938949398` within the approved tolerance and retains its produced predictions. |
+| `P0-VR-08` | The saved MIL application reproduces the hashes and metrics declared by `reinstantiation/APPLICATION_VERIFICATION.json` within its stated tolerances. |
+| `P0-VR-09` | Every assessed VIPER check has a usefulness-ledger row and independent evidence for any confirmed defect. |
 
 ## 8. Acceptance boundary
 
 ### Success
 
-Phase 0 passes when `P0-VR-01` through `P0-VR-08` pass, every required provenance record exists in VIPER, the user reviews the complete evidence set, and the repository contains a synced commit recording the approved contract and Phase 0 receipts.
+Phase 0 passes when `P0-VR-01` through `P0-VR-09` pass, every required provenance record exists in VIPER, the user reviews the complete evidence set, and the repository contains a synced commit recording the approved contract and Phase 0 receipts.
 
 ### Rejection
 
-Phase 0 fails when $B$ contains an unnecessary node, omits a required node or edge, admits a parity reference as a rebuild input, lacks a `RestorationBinding`, exceeds available storage, uses an editable VIPER checkout, restores different bytes, or exceeds a MIL replay tolerance.
+Phase 0 fails when $B$ contains an unnecessary node, omits a required node or edge, admits a parity reference as a rebuild input, lacks a `RestorationBinding`, exceeds available storage, uses an editable VIPER checkout, restores different bytes, or either replay exceeds its approved tolerance.
 
 ## 9. PairBlock order
 
@@ -191,8 +200,9 @@ Phase 0 fails when $B$ contains an unnecessary node, omits a required node or ed
 | `P0-PB-04` | `RestorationBinding` implementation and reviewed records | `P0-VR-02`. |
 | `P0-PB-05` | Capacity receipt and download plan | `P0-VR-03`. |
 | `P0-PB-06` | Verified restoration and graph-completeness rejection test | `P0-VR-04` and `P0-VR-06`. |
-| `P0-PB-07` | Saved MIL application replay | `P0-VR-07`. |
-| `P0-PB-08` | Phase 0 evidence freeze and usefulness assessment | `P0-VR-08` and user approval. |
+| `P0-PB-07` | Historical Hopfield raw-gene readout replay | `P0-VR-07`. |
+| `P0-PB-08` | Saved MIL application replay | `P0-VR-08`. |
+| `P0-PB-09` | Phase 0 evidence freeze and usefulness assessment | `P0-VR-09` and user approval. |
 
 For each PairBlock, Codex drafts the proposed contract or source, the user reviews it, Codex performs the agreed code review, the user implements approved code, and Codex reviews the applied diff and focused gate. A PairBlock closes only when the implementation, test result, Git evidence, and VIPER evidence agree.
 
