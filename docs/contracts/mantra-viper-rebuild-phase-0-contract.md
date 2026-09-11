@@ -151,4 +151,4 @@ For each PairBlock, Codex drafts the proposed contract or source, the user revie
 - MANTRA: `reinstantiation/APPLICATION_VERIFICATION.json`
 - MANTRA: `docs/EXPERIMENT_ARCHIVE_AND_DELETE.md`
 - MANTRA: `archive_pointers/`
-- RICO: [`mantra-viper-rebuild-handoff.md`](mantra-viper-rebuild-handoff.md)
+- RICO: [`mantra-viper-rebuild-handoff.md`](../mantra-viper-rebuild-handoff.md)
