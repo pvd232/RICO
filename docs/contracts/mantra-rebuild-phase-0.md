@@ -2,9 +2,9 @@
 
 ## 1. Status
 
-**Contract status:** Draft — awaiting user review
+**Contract status:** Final
 
-**Approval state:** Unapproved. This Git-tracked draft preserves the proposed roadmap. Artifact downloads, restoration, implementation, and PairBlock closure each require the user's review and approval.
+**Approval state:** Approved
 
 This contract governs artifact discovery, capacity planning, restoration, and provenance capture before the Hopfield or MIL rebuild begins. The model rebuild remains out of scope until every Phase 0 acceptance condition passes. The user actively reviews each PairBlock's scope, proposed work, observed result, and gate evidence before the next PairBlock begins.
 
