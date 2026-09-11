@@ -10,7 +10,7 @@ This contract governs artifact discovery, capacity planning, restoration, and pr
 
 | ID | Implementation obligation |
 |---|---|
-| `P0-REQ-01` | Define the minimal reconstruction graph $B$ for the selected Hopfield and MIL outputs. |
+| `P0-REQ-01` | Define $B$ for the selected Hopfield and MIL outputs. |
 | `P0-REQ-02` | Give every restored file node in $B$ one verified `RestorationBinding`. |
 | `P0-REQ-03` | Calculate the maximum simultaneous local storage requirement before downloading an archive. |
 | `P0-REQ-04` | Restore verified files to their canonical, Git-ignored paths inside the MANTRA checkout. |
@@ -24,7 +24,7 @@ This contract governs artifact discovery, capacity planning, restoration, and pr
 
 Before a model rebuild starts, VIPER can trace each selected result through every file the rebuild reads and every producer entrypoint it executes.
 
-The reconstruction graph is $B=(F,P,E)$:
+The graph $B=(F,P,E)$ contains:
 
 - $F$ contains exact file identities. A file enters $F$ only when a selected rebuild stage reads it or an upstream stage produces it.
 - $P$ contains exact producer entrypoints. Each entrypoint is identified by repository commit, source path, symbol, source-file byte count, and source-file SHA-256.
@@ -40,7 +40,7 @@ This claim establishes byte identity, executed-producer identity, and graph comp
 
 The repository contains restoration controls, artifact pointers, application verification inputs, and historical producer code. The missing rebuild-specific graph must identify the selected result first, then trace only the files and producers required to rebuild it.
 
-The first missing result is therefore the complete reconstruction graph. When the signed Hugging Face records identify an absent local file's bytes, Phase 0 classifies that file as a restoration task. An unrecoverable classification requires a failed search of the signed restoration records.
+The first missing result is therefore the complete graph $B$. When the signed Hugging Face records identify an absent local file's bytes, Phase 0 classifies that file as a restoration task. An unrecoverable classification requires a failed search of the signed restoration records.
 
 ## 4. Restoration and storage contract
 
@@ -96,22 +96,24 @@ The download gate passes only when observed free space is at least $R_{max}$. Sh
 
 ## 5. Execution roadmap
 
+$B$ contains the files, programs, and read/write links required to reproduce the selected Hopfield and MIL results. $Q$ contains historical outputs used only for comparison.
+
 ```mermaid
 flowchart TB
-    roots["Confirm Hopfield and MIL result roots"]
+    roots["Select result roots"]
     environment["Create venv for the rebuild<br/>install VIPER"]
-    trace["Trace result dependencies<br/>into reconstruction graph B"]
-    binding["RestorationBinding<br/>for each absent file"]
-    parity["Parity-reference graph Q<br/>comparison only"]
-    capacity["Capacity gate<br/>free space ≥ Rmax"]
-    restore["Restore absent Mantra files <br/> record the run with VIPER"]
-    verify["Verify graph B in VIPER"]
-    rejection_test["Run missing-edge<br/>rejection test"]
-    replay_ready["Required inputs and<br/>parity references verified"]
-    hopfield_replay["Replay historical Hopfield<br/>raw-gene readout"]
-    mil_replay["Replay saved MIL application"]
-    evidence_review["User reviews Phase 0 evidence"]
-    hopfield["Approval to begin<br/>Hopfield reconstruction"]
+    trace["Build B"]
+    binding["Bind missing files<br/>to archive sources"]
+    parity["Build Q"]
+    capacity["Check disk capacity"]
+    restore["Restore files into Mantra<br/>record with VIPER"]
+    verify["Verify B in VIPER"]
+    rejection_test["Remove one required edge<br/>confirm verification fails"]
+    replay_ready["Verify replay inputs"]
+    hopfield_replay["Replay Hopfield readout"]
+    mil_replay["Replay MIL application"]
+    evidence_review["Review Phase 0 evidence"]
+    hopfield["Begin Hopfield reconstruction"]
 
     roots --> environment
     roots --> trace
@@ -155,7 +157,7 @@ flowchart TB
 
 | Evidence | Required content |
 |---|---|
-| Reconstruction graph | Every required member of $F$, $P$, and $E$, with the selected result as its terminal node. |
+| Graph $B$ | Every required member of $F$, $P$, and $E$, with the selected result as its terminal node. |
 | Restoration bindings | One reviewed $r=(f,d,s,c)$ record for every absent restored file in $F$. |
 | Environment receipt | Python executable, installed VIPER version, installed distribution identity, lock-file identity, and editable-install rejection result. |
 | Capacity receipt | The measured terms in $R_{max}=C+D+V+T+H$, the measurement time, and the gate result. |
