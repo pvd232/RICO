@@ -1,0 +1,1151 @@
+{
+  "revision": "178653de710763d1f9d171b77d8eade89e498b10",
+  "declarations": [
+    {
+      "symbol": "PythonRNGState",
+      "source": "src/viper/randomness.py",
+      "line": 17,
+      "source_sha256": "358f5c67742921951ccceaeb37ffda73e4c6b2eadeb01d05be178db36398da56"
+    },
+    {
+      "symbol": "PCG64InternalState",
+      "source": "src/viper/randomness.py",
+      "line": 31,
+      "source_sha256": "358f5c67742921951ccceaeb37ffda73e4c6b2eadeb01d05be178db36398da56"
+    },
+    {
+      "symbol": "PCG64GeneratorState",
+      "source": "src/viper/randomness.py",
+      "line": 38,
+      "source_sha256": "358f5c67742921951ccceaeb37ffda73e4c6b2eadeb01d05be178db36398da56"
+    },
+    {
+      "symbol": "LegacyNumPyRNGState",
+      "source": "src/viper/randomness.py",
+      "line": 47,
+      "source_sha256": "358f5c67742921951ccceaeb37ffda73e4c6b2eadeb01d05be178db36398da56"
+    },
+    {
+      "symbol": "NumPyRNGState",
+      "source": "src/viper/randomness.py",
+      "line": 57,
+      "source_sha256": "358f5c67742921951ccceaeb37ffda73e4c6b2eadeb01d05be178db36398da56"
+    },
+    {
+      "symbol": "MainProcessRNGState",
+      "source": "src/viper/randomness.py",
+      "line": 64,
+      "source_sha256": "358f5c67742921951ccceaeb37ffda73e4c6b2eadeb01d05be178db36398da56"
+    },
+    {
+      "symbol": "DataLoaderConfiguration",
+      "source": "src/viper/resume.py",
+      "line": 23,
+      "source_sha256": "9bd664a38aa8ba15f8fa15a49431ee4505d0037a74ea8c4e0f2c8ba30eafcd5e"
+    },
+    {
+      "symbol": "DataLoaderResumeState",
+      "source": "src/viper/resume.py",
+      "line": 45,
+      "source_sha256": "9bd664a38aa8ba15f8fa15a49431ee4505d0037a74ea8c4e0f2c8ba30eafcd5e"
+    },
+    {
+      "symbol": "ResumeState",
+      "source": "src/viper/resume.py",
+      "line": 52,
+      "source_sha256": "9bd664a38aa8ba15f8fa15a49431ee4505d0037a74ea8c4e0f2c8ba30eafcd5e"
+    },
+    {
+      "symbol": "ProtocolModel",
+      "source": "src/viper/_schema.py",
+      "line": 65,
+      "source_sha256": "5e984bc4a7c172bba3183cf6258fc11809e71d707e26d353c54e245e503a5777"
+    },
+    {
+      "symbol": "Config",
+      "source": "src/viper/config.py",
+      "line": 22,
+      "source_sha256": "64e4b15cf76e5c31ed80a3b259ce5d4dba5b55ec373b24e0b04caf04c4a09368"
+    },
+    {
+      "symbol": "BuildConfig",
+      "source": "src/viper/config.py",
+      "line": 38,
+      "source_sha256": "64e4b15cf76e5c31ed80a3b259ce5d4dba5b55ec373b24e0b04caf04c4a09368"
+    },
+    {
+      "symbol": "EmbedConfig",
+      "source": "src/viper/config.py",
+      "line": 42,
+      "source_sha256": "64e4b15cf76e5c31ed80a3b259ce5d4dba5b55ec373b24e0b04caf04c4a09368"
+    },
+    {
+      "symbol": "TrainConfig",
+      "source": "src/viper/config.py",
+      "line": 46,
+      "source_sha256": "64e4b15cf76e5c31ed80a3b259ce5d4dba5b55ec373b24e0b04caf04c4a09368"
+    },
+    {
+      "symbol": "EvalConfig",
+      "source": "src/viper/config.py",
+      "line": 50,
+      "source_sha256": "64e4b15cf76e5c31ed80a3b259ce5d4dba5b55ec373b24e0b04caf04c4a09368"
+    },
+    {
+      "symbol": "MetricConfig",
+      "source": "src/viper/config.py",
+      "line": 62,
+      "source_sha256": "64e4b15cf76e5c31ed80a3b259ce5d4dba5b55ec373b24e0b04caf04c4a09368"
+    },
+    {
+      "symbol": "HttpConfig",
+      "source": "src/viper/config.py",
+      "line": 66,
+      "source_sha256": "64e4b15cf76e5c31ed80a3b259ce5d4dba5b55ec373b24e0b04caf04c4a09368"
+    },
+    {
+      "symbol": "DiagnosticConfig",
+      "source": "src/viper/config.py",
+      "line": 70,
+      "source_sha256": "64e4b15cf76e5c31ed80a3b259ce5d4dba5b55ec373b24e0b04caf04c4a09368"
+    },
+    {
+      "symbol": "ConfigTypeRef",
+      "source": "src/viper/config.py",
+      "line": 77,
+      "source_sha256": "64e4b15cf76e5c31ed80a3b259ce5d4dba5b55ec373b24e0b04caf04c4a09368"
+    },
+    {
+      "symbol": "GitSource",
+      "source": "src/viper/references.py",
+      "line": 14,
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+    },
+    {
+      "symbol": "GitFileRef",
+      "source": "src/viper/references.py",
+      "line": 22,
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+    },
+    {
+      "symbol": "ArtifactPointerRef",
+      "source": "src/viper/references.py",
+      "line": 61,
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+    },
+    {
+      "symbol": "HuggingFaceFileRef",
+      "source": "src/viper/references.py",
+      "line": 71,
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+    },
+    {
+      "symbol": "LocalFileRef",
+      "source": "src/viper/references.py",
+      "line": 81,
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+    },
+    {
+      "symbol": "LocalStageResultSnapshotRef",
+      "source": "src/viper/references.py",
+      "line": 90,
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+    },
+    {
+      "symbol": "HuggingFaceStageResultSnapshotRef",
+      "source": "src/viper/references.py",
+      "line": 98,
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+    },
+    {
+      "symbol": "ViperCloudFileRef",
+      "source": "src/viper/references.py",
+      "line": 107,
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+    },
+    {
+      "symbol": "ViperCloudStageResultSnapshotRef",
+      "source": "src/viper/references.py",
+      "line": 117,
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+    },
+    {
+      "symbol": "ResolvedFileRef",
+      "source": "src/viper/references.py",
+      "line": 141,
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+    },
+    {
+      "symbol": "SnapshotFileRef",
+      "source": "src/viper/references.py",
+      "line": 149,
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+    },
+    {
+      "symbol": "ResolvedGitFileRef",
+      "source": "src/viper/references.py",
+      "line": 157,
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+    },
+    {
+      "symbol": "ResolvedStageRef",
+      "source": "src/viper/references.py",
+      "line": 163,
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+    },
+    {
+      "symbol": "ResolvedStageInvocationRef",
+      "source": "src/viper/references.py",
+      "line": 171,
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+    },
+    {
+      "symbol": "ResolvedArtifactPointerRef",
+      "source": "src/viper/references.py",
+      "line": 177,
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+    },
+    {
+      "symbol": "ResolvedRunSpecRef",
+      "source": "src/viper/references.py",
+      "line": 189,
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+    },
+    {
+      "symbol": "ResolvedRunRef",
+      "source": "src/viper/references.py",
+      "line": 195,
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+    },
+    {
+      "symbol": "ResolvedBenchmarkSpecRef",
+      "source": "src/viper/references.py",
+      "line": 201,
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+    },
+    {
+      "symbol": "ResolvedBenchmarkResultRef",
+      "source": "src/viper/references.py",
+      "line": 207,
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+    },
+    {
+      "symbol": "OutputDraft",
+      "source": "src/viper/outputs.py",
+      "line": 20,
+      "source_sha256": "b0cd9ed2ab7de0d8e0c9b4d0e75f6535a65df0c169f7a71799f481723e318e04"
+    },
+    {
+      "symbol": "OutputSpec",
+      "source": "src/viper/outputs.py",
+      "line": 35,
+      "source_sha256": "b0cd9ed2ab7de0d8e0c9b4d0e75f6535a65df0c169f7a71799f481723e318e04"
+    },
+    {
+      "symbol": "StageOutputs",
+      "source": "src/viper/outputs.py",
+      "line": 44,
+      "source_sha256": "b0cd9ed2ab7de0d8e0c9b4d0e75f6535a65df0c169f7a71799f481723e318e04"
+    },
+    {
+      "symbol": "TrainOutputs",
+      "source": "src/viper/outputs.py",
+      "line": 111,
+      "source_sha256": "b0cd9ed2ab7de0d8e0c9b4d0e75f6535a65df0c169f7a71799f481723e318e04"
+    },
+    {
+      "symbol": "EvalOutputs",
+      "source": "src/viper/outputs.py",
+      "line": 118,
+      "source_sha256": "b0cd9ed2ab7de0d8e0c9b4d0e75f6535a65df0c169f7a71799f481723e318e04"
+    },
+    {
+      "symbol": "StageArtifactRef",
+      "source": "src/viper/artifacts.py",
+      "line": 36,
+      "source_sha256": "e311fed9430b066e153496b55de0ba10b6df4db8375affbd22949bbdcb897799"
+    },
+    {
+      "symbol": "ArtifactPointer",
+      "source": "src/viper/artifacts.py",
+      "line": 43,
+      "source_sha256": "e311fed9430b066e153496b55de0ba10b6df4db8375affbd22949bbdcb897799"
+    },
+    {
+      "symbol": "ArtifactLoaderRef",
+      "source": "src/viper/artifacts.py",
+      "line": 52,
+      "source_sha256": "e311fed9430b066e153496b55de0ba10b6df4db8375affbd22949bbdcb897799"
+    },
+    {
+      "symbol": "SingleFileArtifactSpec",
+      "source": "src/viper/artifacts.py",
+      "line": 61,
+      "source_sha256": "e311fed9430b066e153496b55de0ba10b6df4db8375affbd22949bbdcb897799"
+    },
+    {
+      "symbol": "BundleArtifactSpec",
+      "source": "src/viper/artifacts.py",
+      "line": 70,
+      "source_sha256": "e311fed9430b066e153496b55de0ba10b6df4db8375affbd22949bbdcb897799"
+    },
+    {
+      "symbol": "ResolvedSingleFileArtifact",
+      "source": "src/viper/artifacts.py",
+      "line": 85,
+      "source_sha256": "e311fed9430b066e153496b55de0ba10b6df4db8375affbd22949bbdcb897799"
+    },
+    {
+      "symbol": "ResolvedBundleMember",
+      "source": "src/viper/artifacts.py",
+      "line": 92,
+      "source_sha256": "e311fed9430b066e153496b55de0ba10b6df4db8375affbd22949bbdcb897799"
+    },
+    {
+      "symbol": "ResolvedBundleArtifact",
+      "source": "src/viper/artifacts.py",
+      "line": 99,
+      "source_sha256": "e311fed9430b066e153496b55de0ba10b6df4db8375affbd22949bbdcb897799"
+    },
+    {
+      "symbol": "SingleFileArtifactDraft",
+      "source": "src/viper/artifacts.py",
+      "line": 139,
+      "source_sha256": "e311fed9430b066e153496b55de0ba10b6df4db8375affbd22949bbdcb897799"
+    },
+    {
+      "symbol": "BundleArtifactDraft",
+      "source": "src/viper/artifacts.py",
+      "line": 150,
+      "source_sha256": "e311fed9430b066e153496b55de0ba10b6df4db8375affbd22949bbdcb897799"
+    },
+    {
+      "symbol": "AttemptFailure",
+      "source": "src/viper/runs.py",
+      "line": 58,
+      "source_sha256": "2d6e851fae5528bac131f349a1ef70b7e80169edc458b6521f22a7d16e26863a"
+    },
+    {
+      "symbol": "AttemptJournalRef",
+      "source": "src/viper/runs.py",
+      "line": 67,
+      "source_sha256": "2d6e851fae5528bac131f349a1ef70b7e80169edc458b6521f22a7d16e26863a"
+    },
+    {
+      "symbol": "RunAttempt",
+      "source": "src/viper/runs.py",
+      "line": 73,
+      "source_sha256": "2d6e851fae5528bac131f349a1ef70b7e80169edc458b6521f22a7d16e26863a"
+    },
+    {
+      "symbol": "ResolvedAttemptRef",
+      "source": "src/viper/runs.py",
+      "line": 182,
+      "source_sha256": "2d6e851fae5528bac131f349a1ef70b7e80169edc458b6521f22a7d16e26863a"
+    },
+    {
+      "symbol": "RunStageRef",
+      "source": "src/viper/runs.py",
+      "line": 188,
+      "source_sha256": "2d6e851fae5528bac131f349a1ef70b7e80169edc458b6521f22a7d16e26863a"
+    },
+    {
+      "symbol": "RunSpec",
+      "source": "src/viper/runs.py",
+      "line": 197,
+      "source_sha256": "2d6e851fae5528bac131f349a1ef70b7e80169edc458b6521f22a7d16e26863a"
+    },
+    {
+      "symbol": "ResolvedRun",
+      "source": "src/viper/runs.py",
+      "line": 248,
+      "source_sha256": "2d6e851fae5528bac131f349a1ef70b7e80169edc458b6521f22a7d16e26863a"
+    },
+    {
+      "symbol": "LocalSource",
+      "source": "src/viper/inputs.py",
+      "line": 20,
+      "source_sha256": "565f4861a41eb6e18cb91029ff4c8a8e1b13ebc97f2d96686b3c075c1ea4735b"
+    },
+    {
+      "symbol": "ExternalInputRef",
+      "source": "src/viper/inputs.py",
+      "line": 27,
+      "source_sha256": "565f4861a41eb6e18cb91029ff4c8a8e1b13ebc97f2d96686b3c075c1ea4735b"
+    },
+    {
+      "symbol": "ResolvedExternalInputRef",
+      "source": "src/viper/inputs.py",
+      "line": 35,
+      "source_sha256": "565f4861a41eb6e18cb91029ff4c8a8e1b13ebc97f2d96686b3c075c1ea4735b"
+    },
+    {
+      "symbol": "StoredInputRef",
+      "source": "src/viper/inputs.py",
+      "line": 66,
+      "source_sha256": "565f4861a41eb6e18cb91029ff4c8a8e1b13ebc97f2d96686b3c075c1ea4735b"
+    },
+    {
+      "symbol": "FutureInputRef",
+      "source": "src/viper/inputs.py",
+      "line": 87,
+      "source_sha256": "565f4861a41eb6e18cb91029ff4c8a8e1b13ebc97f2d96686b3c075c1ea4735b"
+    },
+    {
+      "symbol": "ResolvedStoredInputRef",
+      "source": "src/viper/inputs.py",
+      "line": 101,
+      "source_sha256": "565f4861a41eb6e18cb91029ff4c8a8e1b13ebc97f2d96686b3c075c1ea4735b"
+    },
+    {
+      "symbol": "ResolvedFutureInputRef",
+      "source": "src/viper/inputs.py",
+      "line": 108,
+      "source_sha256": "565f4861a41eb6e18cb91029ff4c8a8e1b13ebc97f2d96686b3c075c1ea4735b"
+    },
+    {
+      "symbol": "GCEBootImageRef",
+      "source": "src/viper/runtime.py",
+      "line": 37,
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+    },
+    {
+      "symbol": "GCEMachineImageRef",
+      "source": "src/viper/runtime.py",
+      "line": 46,
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+    },
+    {
+      "symbol": "PythonDistributionSpec",
+      "source": "src/viper/runtime.py",
+      "line": 61,
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+    },
+    {
+      "symbol": "CPUComputeSpec",
+      "source": "src/viper/runtime.py",
+      "line": 68,
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+    },
+    {
+      "symbol": "CUDAComputeSpec",
+      "source": "src/viper/runtime.py",
+      "line": 74,
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+    },
+    {
+      "symbol": "NumPyRandomnessSpec",
+      "source": "src/viper/runtime.py",
+      "line": 88,
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+    },
+    {
+      "symbol": "TorchDeterminismSpec",
+      "source": "src/viper/runtime.py",
+      "line": 95,
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+    },
+    {
+      "symbol": "TorchPrecisionSpec",
+      "source": "src/viper/runtime.py",
+      "line": 105,
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+    },
+    {
+      "symbol": "ParallelismSpec",
+      "source": "src/viper/runtime.py",
+      "line": 128,
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+    },
+    {
+      "symbol": "ReproducibilitySpec",
+      "source": "src/viper/runtime.py",
+      "line": 138,
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+    },
+    {
+      "symbol": "ExecutionPolicyRef",
+      "source": "src/viper/runtime.py",
+      "line": 147,
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+    },
+    {
+      "symbol": "GeneratorInitializationReceipt",
+      "source": "src/viper/runtime.py",
+      "line": 245,
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+    },
+    {
+      "symbol": "PythonEnvSpec",
+      "source": "src/viper/runtime.py",
+      "line": 273,
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+    },
+    {
+      "symbol": "GCEEnvSpec",
+      "source": "src/viper/runtime.py",
+      "line": 290,
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+    },
+    {
+      "symbol": "ResolvedGCEEnv",
+      "source": "src/viper/runtime.py",
+      "line": 301,
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+    },
+    {
+      "symbol": "LocalEnvSpec",
+      "source": "src/viper/runtime.py",
+      "line": 312,
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+    },
+    {
+      "symbol": "ResolvedLocalEnv",
+      "source": "src/viper/runtime.py",
+      "line": 321,
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+    },
+    {
+      "symbol": "RuntimeControlsReceipt",
+      "source": "src/viper/runtime.py",
+      "line": 341,
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+    },
+    {
+      "symbol": "ProcessStartupReceipt",
+      "source": "src/viper/runtime.py",
+      "line": 411,
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+    },
+    {
+      "symbol": "GCEHostContext",
+      "source": "src/viper/runtime.py",
+      "line": 428,
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+    },
+    {
+      "symbol": "LocalHostContext",
+      "source": "src/viper/runtime.py",
+      "line": 443,
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+    },
+    {
+      "symbol": "CPUContext",
+      "source": "src/viper/runtime.py",
+      "line": 458,
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+    },
+    {
+      "symbol": "CPUBackendContext",
+      "source": "src/viper/runtime.py",
+      "line": 470,
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+    },
+    {
+      "symbol": "CUDADeviceContext",
+      "source": "src/viper/runtime.py",
+      "line": 477,
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+    },
+    {
+      "symbol": "CUDABackendContext",
+      "source": "src/viper/runtime.py",
+      "line": 489,
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+    },
+    {
+      "symbol": "NativeLibraryContext",
+      "source": "src/viper/runtime.py",
+      "line": 515,
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+    },
+    {
+      "symbol": "NativeThreadPoolContext",
+      "source": "src/viper/runtime.py",
+      "line": 522,
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+    },
+    {
+      "symbol": "NumericalRuntimeContext",
+      "source": "src/viper/runtime.py",
+      "line": 528,
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+    },
+    {
+      "symbol": "ExecutionContext",
+      "source": "src/viper/runtime.py",
+      "line": 540,
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+    },
+    {
+      "symbol": "RuntimeInitialization",
+      "source": "src/viper/runtime.py",
+      "line": 560,
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+    },
+    {
+      "symbol": "FactorSpec",
+      "source": "src/viper/experiments.py",
+      "line": 15,
+      "source_sha256": "525393087d86f8fd07c19b743f06ea9472573ba8c45c03902dd6b47f62be3779"
+    },
+    {
+      "symbol": "ReplicateSpec",
+      "source": "src/viper/experiments.py",
+      "line": 29,
+      "source_sha256": "525393087d86f8fd07c19b743f06ea9472573ba8c45c03902dd6b47f62be3779"
+    },
+    {
+      "symbol": "ExperimentSpec",
+      "source": "src/viper/experiments.py",
+      "line": 36,
+      "source_sha256": "525393087d86f8fd07c19b743f06ea9472573ba8c45c03902dd6b47f62be3779"
+    },
+    {
+      "symbol": "BuildVariantStageConfig",
+      "source": "src/viper/experiments.py",
+      "line": 72,
+      "source_sha256": "525393087d86f8fd07c19b743f06ea9472573ba8c45c03902dd6b47f62be3779"
+    },
+    {
+      "symbol": "EmbedVariantStageConfig",
+      "source": "src/viper/experiments.py",
+      "line": 80,
+      "source_sha256": "525393087d86f8fd07c19b743f06ea9472573ba8c45c03902dd6b47f62be3779"
+    },
+    {
+      "symbol": "DiagnosticVariantStageConfig",
+      "source": "src/viper/experiments.py",
+      "line": 88,
+      "source_sha256": "525393087d86f8fd07c19b743f06ea9472573ba8c45c03902dd6b47f62be3779"
+    },
+    {
+      "symbol": "TrainVariantStageConfig",
+      "source": "src/viper/experiments.py",
+      "line": 96,
+      "source_sha256": "525393087d86f8fd07c19b743f06ea9472573ba8c45c03902dd6b47f62be3779"
+    },
+    {
+      "symbol": "EvalVariantStageConfig",
+      "source": "src/viper/experiments.py",
+      "line": 104,
+      "source_sha256": "525393087d86f8fd07c19b743f06ea9472573ba8c45c03902dd6b47f62be3779"
+    },
+    {
+      "symbol": "VariantSpec",
+      "source": "src/viper/experiments.py",
+      "line": 122,
+      "source_sha256": "525393087d86f8fd07c19b743f06ea9472573ba8c45c03902dd6b47f62be3779"
+    },
+    {
+      "symbol": "FloatComparator",
+      "source": "src/viper/metrics.py",
+      "line": 38,
+      "source_sha256": "ceb66cd0cf5b5d51e32d5dad298764064382691ad13edfdc24edda87a277a189"
+    },
+    {
+      "symbol": "MetricImplementationRef",
+      "source": "src/viper/metrics.py",
+      "line": 54,
+      "source_sha256": "ceb66cd0cf5b5d51e32d5dad298764064382691ad13edfdc24edda87a277a189"
+    },
+    {
+      "symbol": "MetricDependency",
+      "source": "src/viper/metrics.py",
+      "line": 63,
+      "source_sha256": "ceb66cd0cf5b5d51e32d5dad298764064382691ad13edfdc24edda87a277a189"
+    },
+    {
+      "symbol": "MetricSpec",
+      "source": "src/viper/metrics.py",
+      "line": 73,
+      "source_sha256": "ceb66cd0cf5b5d51e32d5dad298764064382691ad13edfdc24edda87a277a189"
+    },
+    {
+      "symbol": "ResolvedMetricDependency",
+      "source": "src/viper/metrics.py",
+      "line": 106,
+      "source_sha256": "ceb66cd0cf5b5d51e32d5dad298764064382691ad13edfdc24edda87a277a189"
+    },
+    {
+      "symbol": "MetricExecutionReceipt",
+      "source": "src/viper/metrics.py",
+      "line": 113,
+      "source_sha256": "ceb66cd0cf5b5d51e32d5dad298764064382691ad13edfdc24edda87a277a189"
+    },
+    {
+      "symbol": "Measurement",
+      "source": "src/viper/metrics.py",
+      "line": 135,
+      "source_sha256": "ceb66cd0cf5b5d51e32d5dad298764064382691ad13edfdc24edda87a277a189"
+    },
+    {
+      "symbol": "MetricVerificationReceipt",
+      "source": "src/viper/metrics.py",
+      "line": 150,
+      "source_sha256": "ceb66cd0cf5b5d51e32d5dad298764064382691ad13edfdc24edda87a277a189"
+    },
+    {
+      "symbol": "MetricContext",
+      "source": "src/viper/metrics.py",
+      "line": 215,
+      "source_sha256": "ceb66cd0cf5b5d51e32d5dad298764064382691ad13edfdc24edda87a277a189"
+    },
+    {
+      "symbol": "MetricObjectiveSpec",
+      "source": "src/viper/metrics.py",
+      "line": 536,
+      "source_sha256": "ceb66cd0cf5b5d51e32d5dad298764064382691ad13edfdc24edda87a277a189"
+    },
+    {
+      "symbol": "StageContext",
+      "source": "src/viper/stages.py",
+      "line": 76,
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+    },
+    {
+      "symbol": "StageImplementationRef",
+      "source": "src/viper/stages.py",
+      "line": 93,
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+    },
+    {
+      "symbol": "StageContextBinding",
+      "source": "src/viper/stages.py",
+      "line": 102,
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+    },
+    {
+      "symbol": "StageInvocationReceipt",
+      "source": "src/viper/stages.py",
+      "line": 117,
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+    },
+    {
+      "symbol": "BaseSpec",
+      "source": "src/viper/stages.py",
+      "line": 135,
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+    },
+    {
+      "symbol": "ParameterizedSpec",
+      "source": "src/viper/stages.py",
+      "line": 179,
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+    },
+    {
+      "symbol": "DownloadSpec",
+      "source": "src/viper/stages.py",
+      "line": 197,
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+    },
+    {
+      "symbol": "InternalSpec",
+      "source": "src/viper/stages.py",
+      "line": 215,
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+    },
+    {
+      "symbol": "BuildSpec",
+      "source": "src/viper/stages.py",
+      "line": 253,
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+    },
+    {
+      "symbol": "EmbedSpec",
+      "source": "src/viper/stages.py",
+      "line": 260,
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+    },
+    {
+      "symbol": "DiagnosticSpec",
+      "source": "src/viper/stages.py",
+      "line": 278,
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+    },
+    {
+      "symbol": "TrainSpec",
+      "source": "src/viper/stages.py",
+      "line": 285,
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+    },
+    {
+      "symbol": "EvalSpec",
+      "source": "src/viper/stages.py",
+      "line": 331,
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+    },
+    {
+      "symbol": "ResolvedBaseSpec",
+      "source": "src/viper/stages.py",
+      "line": 404,
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+    },
+    {
+      "symbol": "ResolvedExecutedSpec",
+      "source": "src/viper/stages.py",
+      "line": 450,
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+    },
+    {
+      "symbol": "ResolvedDownloadSpec",
+      "source": "src/viper/stages.py",
+      "line": 531,
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+    },
+    {
+      "symbol": "ResolvedParameterizedSpec",
+      "source": "src/viper/stages.py",
+      "line": 565,
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+    },
+    {
+      "symbol": "ResolvedInternalSpec",
+      "source": "src/viper/stages.py",
+      "line": 606,
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+    },
+    {
+      "symbol": "ResolvedBuildSpec",
+      "source": "src/viper/stages.py",
+      "line": 644,
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+    },
+    {
+      "symbol": "ResolvedEmbedSpec",
+      "source": "src/viper/stages.py",
+      "line": 651,
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+    },
+    {
+      "symbol": "ResolvedDiagnosticSpec",
+      "source": "src/viper/stages.py",
+      "line": 658,
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+    },
+    {
+      "symbol": "ResolvedTrainSpec",
+      "source": "src/viper/stages.py",
+      "line": 665,
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+    },
+    {
+      "symbol": "ResolvedEvalSpec",
+      "source": "src/viper/stages.py",
+      "line": 672,
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+    },
+    {
+      "symbol": "StageDefinition",
+      "source": "src/viper/stages.py",
+      "line": 694,
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+    },
+    {
+      "symbol": "StageDefinitionError",
+      "source": "src/viper/stages.py",
+      "line": 701,
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+    },
+    {
+      "symbol": "HttpOrigin",
+      "source": "src/viper/http.py",
+      "line": 54,
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+    },
+    {
+      "symbol": "EnvSecretRef",
+      "source": "src/viper/http.py",
+      "line": 70,
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+    },
+    {
+      "symbol": "HttpRequestSpec",
+      "source": "src/viper/http.py",
+      "line": 88,
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+    },
+    {
+      "symbol": "HttpRetrievalPolicy",
+      "source": "src/viper/http.py",
+      "line": 120,
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+    },
+    {
+      "symbol": "HttpImplementationRef",
+      "source": "src/viper/http.py",
+      "line": 157,
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+    },
+    {
+      "symbol": "ExternalExecutableSpec",
+      "source": "src/viper/http.py",
+      "line": 166,
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+    },
+    {
+      "symbol": "BuiltinHttpImplementationSpec",
+      "source": "src/viper/http.py",
+      "line": 175,
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+    },
+    {
+      "symbol": "WorkspaceHttpImplementationSpec",
+      "source": "src/viper/http.py",
+      "line": 182,
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+    },
+    {
+      "symbol": "ObservedHttpResponse",
+      "source": "src/viper/http.py",
+      "line": 207,
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+    },
+    {
+      "symbol": "ResolvedExternalExecutable",
+      "source": "src/viper/http.py",
+      "line": 231,
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+    },
+    {
+      "symbol": "ResolvedHttpImplementation",
+      "source": "src/viper/http.py",
+      "line": 238,
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+    },
+    {
+      "symbol": "ResolvedHttpRetrieval",
+      "source": "src/viper/http.py",
+      "line": 260,
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+    },
+    {
+      "symbol": "HttpRetrievalError",
+      "source": "src/viper/http.py",
+      "line": 300,
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+    },
+    {
+      "symbol": "RuntimeHttpCredential",
+      "source": "src/viper/http.py",
+      "line": 305,
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+    },
+    {
+      "symbol": "HttpContext",
+      "source": "src/viper/http.py",
+      "line": 314,
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+    },
+    {
+      "symbol": "HttpResult",
+      "source": "src/viper/http.py",
+      "line": 327,
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+    },
+    {
+      "symbol": "CustomHttpDraft",
+      "source": "src/viper/http.py",
+      "line": 334,
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+    },
+    {
+      "symbol": "HttpDefinition",
+      "source": "src/viper/http.py",
+      "line": 348,
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+    },
+    {
+      "symbol": "HttpCallable",
+      "source": "src/viper/http.py",
+      "line": 356,
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+    },
+    {
+      "symbol": "ReuseFileIdentity",
+      "source": "src/viper/reuse.py",
+      "line": 118,
+      "source_sha256": "a1cf33ec7c83e877367dfc9d9e63e0a4113e5de74ac6f448cdd31293a3fb5ce4"
+    },
+    {
+      "symbol": "ReuseInputIdentity",
+      "source": "src/viper/reuse.py",
+      "line": 126,
+      "source_sha256": "a1cf33ec7c83e877367dfc9d9e63e0a4113e5de74ac6f448cdd31293a3fb5ce4"
+    },
+    {
+      "symbol": "StageReuseKey",
+      "source": "src/viper/reuse.py",
+      "line": 134,
+      "source_sha256": "a1cf33ec7c83e877367dfc9d9e63e0a4113e5de74ac6f448cdd31293a3fb5ce4"
+    },
+    {
+      "symbol": "ReusedStageFile",
+      "source": "src/viper/reuse.py",
+      "line": 147,
+      "source_sha256": "a1cf33ec7c83e877367dfc9d9e63e0a4113e5de74ac6f448cdd31293a3fb5ce4"
+    },
+    {
+      "symbol": "ReusedMetricEvidence",
+      "source": "src/viper/reuse.py",
+      "line": 164,
+      "source_sha256": "a1cf33ec7c83e877367dfc9d9e63e0a4113e5de74ac6f448cdd31293a3fb5ce4"
+    },
+    {
+      "symbol": "StageReuseReceipt",
+      "source": "src/viper/reuse.py",
+      "line": 172,
+      "source_sha256": "a1cf33ec7c83e877367dfc9d9e63e0a4113e5de74ac6f448cdd31293a3fb5ce4"
+    },
+    {
+      "symbol": "ResolvedStageReuseRef",
+      "source": "src/viper/reuse.py",
+      "line": 186,
+      "source_sha256": "a1cf33ec7c83e877367dfc9d9e63e0a4113e5de74ac6f448cdd31293a3fb5ce4"
+    },
+    {
+      "symbol": "ExecutedStageCompletion",
+      "source": "src/viper/reuse.py",
+      "line": 192,
+      "source_sha256": "a1cf33ec7c83e877367dfc9d9e63e0a4113e5de74ac6f448cdd31293a3fb5ce4"
+    },
+    {
+      "symbol": "ReusedStageCompletion",
+      "source": "src/viper/reuse.py",
+      "line": 204,
+      "source_sha256": "a1cf33ec7c83e877367dfc9d9e63e0a4113e5de74ac6f448cdd31293a3fb5ce4"
+    },
+    {
+      "symbol": "DataLoaderConfiguration",
+      "source": "src/viper/resume.py",
+      "line": 23,
+      "source_sha256": "9bd664a38aa8ba15f8fa15a49431ee4505d0037a74ea8c4e0f2c8ba30eafcd5e"
+    },
+    {
+      "symbol": "DataLoaderResumeState",
+      "source": "src/viper/resume.py",
+      "line": 45,
+      "source_sha256": "9bd664a38aa8ba15f8fa15a49431ee4505d0037a74ea8c4e0f2c8ba30eafcd5e"
+    },
+    {
+      "symbol": "ResumeState",
+      "source": "src/viper/resume.py",
+      "line": 52,
+      "source_sha256": "9bd664a38aa8ba15f8fa15a49431ee4505d0037a74ea8c4e0f2c8ba30eafcd5e"
+    },
+    {
+      "symbol": "MetricCriterion",
+      "source": "src/viper/benchmark.py",
+      "line": 23,
+      "source_sha256": "1c444c5b5c7a10866516a966e5eeeb2d763967c25ceeb1afbf0b77e0df972556"
+    },
+    {
+      "symbol": "RunArtifactDraft",
+      "source": "src/viper/benchmark.py",
+      "line": 31,
+      "source_sha256": "1c444c5b5c7a10866516a966e5eeeb2d763967c25ceeb1afbf0b77e0df972556"
+    },
+    {
+      "symbol": "BenchmarkDraft",
+      "source": "src/viper/benchmark.py",
+      "line": 42,
+      "source_sha256": "1c444c5b5c7a10866516a966e5eeeb2d763967c25ceeb1afbf0b77e0df972556"
+    },
+    {
+      "symbol": "BenchmarkSpec",
+      "source": "src/viper/benchmark.py",
+      "line": 79,
+      "source_sha256": "1c444c5b5c7a10866516a966e5eeeb2d763967c25ceeb1afbf0b77e0df972556"
+    },
+    {
+      "symbol": "ArtifactComparisonReceipt",
+      "source": "src/viper/benchmark.py",
+      "line": 105,
+      "source_sha256": "1c444c5b5c7a10866516a966e5eeeb2d763967c25ceeb1afbf0b77e0df972556"
+    },
+    {
+      "symbol": "MetricCriterionResult",
+      "source": "src/viper/benchmark.py",
+      "line": 123,
+      "source_sha256": "1c444c5b5c7a10866516a966e5eeeb2d763967c25ceeb1afbf0b77e0df972556"
+    },
+    {
+      "symbol": "BenchmarkMetricResult",
+      "source": "src/viper/benchmark.py",
+      "line": 139,
+      "source_sha256": "1c444c5b5c7a10866516a966e5eeeb2d763967c25ceeb1afbf0b77e0df972556"
+    },
+    {
+      "symbol": "BenchmarkResult",
+      "source": "src/viper/benchmark.py",
+      "line": 151,
+      "source_sha256": "1c444c5b5c7a10866516a966e5eeeb2d763967c25ceeb1afbf0b77e0df972556"
+    },
+    {
+      "symbol": "RunResult",
+      "source": "src/viper/execution/results.py",
+      "line": 14,
+      "source_sha256": "d8431086d3b75831805d81642d8a75f45cebbe5e1539ea6d8ecc938eee2fb475"
+    },
+    {
+      "symbol": "ConfirmationRunResult",
+      "source": "src/viper/execution/results.py",
+      "line": 34,
+      "source_sha256": "d8431086d3b75831805d81642d8a75f45cebbe5e1539ea6d8ecc938eee2fb475"
+    },
+    {
+      "symbol": "BenchmarkExecutionResult",
+      "source": "src/viper/execution/results.py",
+      "line": 47,
+      "source_sha256": "d8431086d3b75831805d81642d8a75f45cebbe5e1539ea6d8ecc938eee2fb475"
+    },
+    {
+      "symbol": "ExperimentRunFailure",
+      "source": "src/viper/execution/results.py",
+      "line": 73,
+      "source_sha256": "d8431086d3b75831805d81642d8a75f45cebbe5e1539ea6d8ecc938eee2fb475"
+    },
+    {
+      "symbol": "ExperimentRunResult",
+      "source": "src/viper/execution/results.py",
+      "line": 82,
+      "source_sha256": "d8431086d3b75831805d81642d8a75f45cebbe5e1539ea6d8ecc938eee2fb475"
+    },
+    {
+      "symbol": "ExperimentExecutionResult",
+      "source": "src/viper/execution/results.py",
+      "line": 127,
+      "source_sha256": "d8431086d3b75831805d81642d8a75f45cebbe5e1539ea6d8ecc938eee2fb475"
+    },
+    {
+      "symbol": "StageDraftOutputRef",
+      "source": "src/viper/authoring.py",
+      "line": 184,
+      "source_sha256": "c4dda74b9e446b8555ad932ab34d1532e8530f657bc9603c204d8d6374c60960"
+    },
+    {
+      "symbol": "StageDraft",
+      "source": "src/viper/authoring.py",
+      "line": 311,
+      "source_sha256": "c4dda74b9e446b8555ad932ab34d1532e8530f657bc9603c204d8d6374c60960"
+    },
+    {
+      "symbol": "VariantDraft",
+      "source": "src/viper/authoring.py",
+      "line": 383,
+      "source_sha256": "c4dda74b9e446b8555ad932ab34d1532e8530f657bc9603c204d8d6374c60960"
+    },
+    {
+      "symbol": "ExperimentDraft",
+      "source": "src/viper/authoring.py",
+      "line": 414,
+      "source_sha256": "c4dda74b9e446b8555ad932ab34d1532e8530f657bc9603c204d8d6374c60960"
+    },
+    {
+      "symbol": "RunPlanDraft",
+      "source": "src/viper/authoring.py",
+      "line": 436,
+      "source_sha256": "c4dda74b9e446b8555ad932ab34d1532e8530f657bc9603c204d8d6374c60960"
+    }
+  ]
+}

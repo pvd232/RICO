@@ -1,0 +1,14 @@
+{
+  "document": "/Users/machina/Developer/ChatGPT/RICO/viper-protocol.md",
+  "source_revision": "178653de710763d1f9d171b77d8eade89e498b10",
+  "line_count": 4476,
+  "class_field_excerpts_checked": 191,
+  "local_links_checked": 218,
+  "math_blocks_checked": 59,
+  "original_foundation_appendix_math_blocks_preserved": 58,
+  "checks": "passed",
+  "runtime_tests": "not run: project .venv interpreter symlink target /Library/Frameworks/Python.framework/Versions/3.14/bin/python3.14 is absent",
+  "scope": "Documentation only; source AST, fields, inheritance, link targets, headings, fences, and math braces checked. No live execution or universal reproducibility proof claimed.",
+  "document_sha256": "a3d8d979eead854a2a14ca43cf59aca57fc624a0e2de406e19cc91db41afdd79",
+  "math_typesetting": "59 display expressions compiled successfully with pdfLaTeX; source blank lines removed only in the temporary TeX rendering harness"
+}
