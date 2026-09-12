@@ -454,7 +454,7 @@ def parse_pair_block_rows(
             raise PairBlockGateError(f"invalid PairBlock ID: {pair_block_id}")
         if pair_block_id in rows:
             raise PairBlockGateError(f"duplicate PairBlock row: {pair_block_id}")
-        rows[pair_block_id] = PairBlockRow(
+        row = PairBlockRow(
             pair_block_id=pair_block_id,
             gate=cells[1],
             status=cells[2],
@@ -462,6 +462,14 @@ def parse_pair_block_rows(
             declaration=cells[4],
             proposed_code=cells[5],
         )
+        if row.status in profile.lifecycle.resolved_dependency_states and (
+            "/staging/" in row.proposed_code
+            or dialect.proposed_code_link_prefix in row.proposed_code
+        ):
+            raise PairBlockGateError(
+                f"{pair_block_id} resolved status points to proposed code"
+            )
+        rows[pair_block_id] = row
     if not rows:
         raise PairBlockGateError("PairBlock status table contains no rows")
     _validate_dependency_graph(rows)

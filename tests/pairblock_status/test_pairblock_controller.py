@@ -236,6 +236,22 @@ def test_applied_blocks_do_not_link_staging_proposals() -> None:
             )
 
 
+@pytest.mark.parametrize("status", ["Applied", "Complete"])
+def test_validator_rejects_resolved_block_with_staging_links(
+    repository_factory: RepositoryFactory,
+    status: str,
+) -> None:
+    """Reject a resolved status whose code links still name its proposal."""
+
+    repository = repository_factory(command=passing_command(), status=status)
+
+    with pytest.raises(
+        PairBlockGateError,
+        match=f"{PAIR_BLOCK_ID} resolved status points to proposed code",
+    ):
+        validate_test_repository(repository)
+
+
 def test_passing_gate_writes_receipt_and_advances_one_status(
     repository_factory: RepositoryFactory,
 ) -> None:
