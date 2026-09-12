@@ -85,7 +85,7 @@ owned by `historical_and_shared_experiments` and two owned by
 | `P0-PB-07` | Pending | Waiting for `P0-PB-06` | `P0-PB-06` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-07) | [Source](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/tests/test_hopfield_replay.py) |
 | `P0-PB-08` | Pending | Waiting for `P0-PB-06` | `P0-PB-06` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-08) | [Source](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/tests/test_mil_replay.py) |
 | `P0-PB-09` | Pending | Waiting for `P0-PB-07`, `P0-PB-08`, `P0-PB-10` | `P0-PB-07`, `P0-PB-08`, `P0-PB-10` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-09) | [Source](../../staging/p0-pb-09/tools/freeze_phase0.py) · [Tests](../../staging/p0-pb-09/tests/test_freeze_phase0.py) |
-| `P0-PB-10` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-10/20260912T035542.464393Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-10) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-10-proposed-code) |
+| `P0-PB-10` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-10/20260912T035542.464393Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-10) | [Controller](../../tools/pairblock_status/pairblock_controller.py) · [Tests](../../tests/pairblock_status/test_pairblock_controller.py) |
 
 ## Terminal outcome
 
@@ -236,7 +236,8 @@ definitions in RICO.
 - [ ] Measure free space and save a passing capacity receipt before download.
       <!-- pair-block: P0-PB-05 -->
       <!-- pair-block-contract: P0-PB-05 contract=docs/contracts/mantra-rebuild-phase-0.md -->
-- [ ] Review and activate the `P0-PB-10` proposal-gate runner.
+- [ ] Register the active `P0-PB-10` controller and its acceptance evidence in
+      VIPER.
       <!-- pair-block: P0-PB-10 -->
       <!-- pair-block-contract: P0-PB-10 contract=docs/contracts/mantra-rebuild-phase-0.md -->
 

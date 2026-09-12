@@ -287,7 +287,7 @@ Resolution status lives in the [master checklist](../checklists/mantra-rebuild.m
 | [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay Hopfield. | User reviews, implements, and runs; Codex reviews the applied diff and evidence. | [Source](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/tests/test_hopfield_replay.py) | `P0-VR-07` |
 | [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay standalone MIL application. | User reviews, implements, and runs; Codex reviews the applied diff and evidence. | [Source](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/tests/test_mil_replay.py) | `P0-VR-08` |
 | [`P0-PB-09`](../checklists/mantra-rebuild.md#pairblock-resolution) | Freeze evidence and assess VIPER. | Codex compiles; user approves. | [Source](../../staging/p0-pb-09/tools/freeze_phase0.py) · [Tests](../../staging/p0-pb-09/tests/test_freeze_phase0.py) | `P0-VR-09` |
-| [`P0-PB-10`](../checklists/mantra-rebuild.md#pairblock-resolution) | Validate staged PairBlock traceability, run one proposal gate, retain its receipt, and apply its legal checklist transition. | Codex proposes; user reviews. | [Source and tests](#p0-pb-10-proposed-code) | `P0-VR-10` |
+| [`P0-PB-10`](../checklists/mantra-rebuild.md#pairblock-resolution) | Validate staged PairBlock traceability, run one proposal gate, retain its receipt, and apply its legal checklist transition. | RICO owns the active controller; the user reviews lifecycle changes. | [Active source and tests](#p0-pb-10-accepted-implementation) | `P0-VR-10` |
 
 ### Blocks
 
@@ -541,7 +541,7 @@ choices.
 | [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/tests/test_hopfield_replay.py) · [Gate](#p0-pb-07-proposed-code) |
 | [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/tests/test_mil_replay.py) · [Gate](#p0-pb-08-proposed-code) |
 | [`P0-PB-09`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../staging/p0-pb-09/tools/freeze_phase0.py) · [Tests](../../staging/p0-pb-09/tests/test_freeze_phase0.py) · [Gate](#p0-pb-09-proposed-code) |
-| [`P0-PB-10`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Active implementation](#p0-pb-10-proposed-code) |
+| [`P0-PB-10`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Active implementation](#p0-pb-10-accepted-implementation) |
 
 A pending row links its block definition and checklist state while omitting an implementation body.
 
@@ -884,28 +884,28 @@ independent confirmation, or final VIPER record is absent.
 
 **Dependency:** The block has one checklist row, one contract ownership row, and one complete code section. A declared PairBlock dependency must reach an approved or later state before execution. `P0-PB-06` owns the later VIPER registration needed to move this applied block to `Complete`; implementation and review may finish before that registration.
 
-##### `P0-PB-10` proposed code
+##### `P0-PB-10` accepted implementation
 
 **Code boundary:** These seven files are the active RICO implementation:
 
-- [`review/p0-pb-10/tools/__init__.py`](../../review/p0-pb-10/tools/__init__.py)
-- [`review/p0-pb-10/tools/checklist_profile.py`](../../review/p0-pb-10/tools/checklist_profile.py)
-- [`review/p0-pb-10/tools/execution_identity.py`](../../review/p0-pb-10/tools/execution_identity.py)
-- [`review/p0-pb-10/tools/profile.py`](../../review/p0-pb-10/tools/profile.py)
-- [`review/p0-pb-10/tools/pairblock_controller.py`](../../review/p0-pb-10/tools/pairblock_controller.py)
-- [`review/p0-pb-10/tests/conftest.py`](../../review/p0-pb-10/tests/conftest.py)
-- [`review/p0-pb-10/tests/test_pairblock_controller.py`](../../review/p0-pb-10/tests/test_pairblock_controller.py)
+- [`tools/pairblock_status/__init__.py`](../../tools/pairblock_status/__init__.py)
+- [`tools/pairblock_status/checklist_profile.py`](../../tools/pairblock_status/checklist_profile.py)
+- [`tools/pairblock_status/execution_identity.py`](../../tools/pairblock_status/execution_identity.py)
+- [`tools/pairblock_status/profile.py`](../../tools/pairblock_status/profile.py)
+- [`tools/pairblock_status/pairblock_controller.py`](../../tools/pairblock_status/pairblock_controller.py)
+- [`tests/pairblock_status/conftest.py`](../../tests/pairblock_status/conftest.py)
+- [`tests/pairblock_status/test_pairblock_controller.py`](../../tests/pairblock_status/test_pairblock_controller.py)
 
 **Fixture boundary:** These two documents define the minimal RICO profile used by the tests. The fixture factory copies the actual `checklist_profile.py` and `test_pairblock_controller.py` into each disposable repository:
 
-- [`tests/fixtures/minimal_profile/docs/checklists/checklist.md`](../../review/p0-pb-10/tests/fixtures/minimal_profile/docs/checklists/checklist.md)
-- [`tests/fixtures/minimal_profile/docs/contracts/contract.md`](../../review/p0-pb-10/tests/fixtures/minimal_profile/docs/contracts/contract.md)
+- [`tests/pairblock_status/fixtures/minimal_profile/docs/checklists/checklist.md`](../../tests/pairblock_status/fixtures/minimal_profile/docs/checklists/checklist.md)
+- [`tests/pairblock_status/fixtures/minimal_profile/docs/contracts/contract.md`](../../tests/pairblock_status/fixtures/minimal_profile/docs/contracts/contract.md)
 
 **Structural tests:**
 
 | Boundary | Observing tests |
 |---|---|
-| Python lint | `ruff check` over all seven executable review files |
+| Python lint | `ruff check` over the active controller package and its tests |
 | Project policy and lifecycle validity | `test_lifecycle_policy_rejects_undeclared_transition_status`; `test_checklist_profile_requires_two_phase_capture_groups`; `test_project_profile_excludes_markdown_dialect`; `test_markdown_dialect_rejects_empty_markers` |
 | Global lifecycle contract | `test_profile_fixture_compiles_with_global_validator`; `test_mantra_profile_compiles_current_contract`; `test_lifecycle_completion_updates_every_derived_status`; `test_checkbox_must_match_pairblock_completion` |
 | Complete PairBlock inventory and requirement mapping | `test_every_contract_pair_block_requires_one_status_row`; `test_unmapped_pair_block_is_rejected`; `test_duplicate_status_row_is_rejected`; `test_standard_pair_block_contract_marker_is_required`; `test_external_document_fragment_is_outside_repository_validation` |
@@ -921,18 +921,16 @@ independent confirmation, or final VIPER record is absent.
 ```bash
 cd /Users/machina/Developer/ChatGPT/RICO
 python -m ruff check \
-  review/p0-pb-10/tools \
-  review/p0-pb-10/tests/conftest.py \
-  review/p0-pb-10/tests/test_pairblock_controller.py &&
-PYTHONPATH=review/p0-pb-10 python -m pytest \
-  review/p0-pb-10/tests/test_pairblock_controller.py -q
+  tools/pairblock_status \
+  tests/pairblock_status &&
+python -m pytest tests/pairblock_status/test_pairblock_controller.py -q
 ```
 
 **Gate:** The focused tests prove incremental sibling-block closure in the global validator; complete RICO PairBlock coverage; legal receipt-backed transitions; automatic checkbox, requirement, dependency-readiness, and contract updates; retained pass and failure evidence; and rejection of nested Conda execution, identity drift, broken links, missing owners, missing files, or invalid observing gates.
 
 **Stop condition:** Return the proposal for revision if a gate can run outside its declared code or runtime boundary, bypass an unresolved dependency, change status after failure or identity drift, accept an illegal lifecycle event, or leave a rendered status inconsistent with its evidence.
 
-**Evidence:** Global commit `58b59175e2a4a949bc8dd33302099cf780249c75` repairs incremental PairBlock closure and passes its three focused tests, normalized-manifest validation, and Ruff. The RICO implementation reuses that validator. `ChecklistProfile` owns project paths and lifecycle events; `MarkdownChecklistAdapter` owns RICO parsing and rendering; `pairblock_controller.py` runs proposal gates and records later evidence events while the adapter parses Markdown. The current focused RICO check passes `43` cases. The [master-checklist resolution table](../checklists/mantra-rebuild.md#pairblock-resolution) owns the current lifecycle state and links its supporting receipt.
+**Evidence:** Global commit `58b59175e2a4a949bc8dd33302099cf780249c75` repairs incremental PairBlock closure and passes its three focused tests, normalized-manifest validation, and Ruff. The RICO implementation reuses that validator. `ChecklistProfile` owns project paths and lifecycle events; `MarkdownChecklistAdapter` owns RICO parsing and rendering; `pairblock_controller.py` runs proposal gates and records later evidence events while the adapter parses Markdown. The current focused RICO check passes `43` cases. Historical receipts retain the paths and file identities captured when they were written; current links resolve to the accepted functional paths above. The [master-checklist resolution table](../checklists/mantra-rebuild.md#pairblock-resolution) owns the current lifecycle state and links its supporting receipt.
 
 ## 11. Sources
 

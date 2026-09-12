@@ -9,23 +9,27 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import pytest
-from tools.checklist_profile import MarkdownChecklistAdapter, MarkdownChecklistDialect
-from tools.profile import ChecklistProfile, LifecyclePolicy
+
+from tools.pairblock_status.checklist_profile import (
+    MarkdownChecklistAdapter,
+    MarkdownChecklistDialect,
+)
+from tools.pairblock_status.profile import ChecklistProfile, LifecyclePolicy
 
 FIXTURE_ROOT = Path(__file__).parent / "fixtures/minimal_profile"
-PROPOSAL_ROOT = Path(__file__).parents[1]
+REPOSITORY_ROOT = Path(__file__).parents[2]
 PAIR_BLOCK_ID = "PB-GATE"
 DEPENDENCY_PAIR_BLOCK_ID = "PB-DEPENDENCY"
 UNKNOWN_PAIR_BLOCK_ID = "PB-UNKNOWN"
 REQUIREMENT_ID = "REQ-GATE"
 CHECKLIST_PATH = Path("docs/checklists/checklist.md")
 CONTRACT_PATH = Path("docs/contracts/contract.md")
-SOURCE_PATH = Path("review/gate/tools/checklist_profile.py")
-TEST_PATH = Path("review/gate/tests/test_pairblock_controller.py")
-FIXTURE_SOURCE_PATH = Path("review/gate/fixtures/profile.md")
+SOURCE_PATH = Path("tools/pairblock_status/checklist_profile.py")
+TEST_PATH = Path("tests/pairblock_status/test_pairblock_controller.py")
+FIXTURE_SOURCE_PATH = Path("tests/pairblock_status/fixtures/profile.md")
 SOURCE_COPIES = {
-    PROPOSAL_ROOT / "tools/checklist_profile.py": SOURCE_PATH,
-    PROPOSAL_ROOT / "tests/test_pairblock_controller.py": TEST_PATH,
+    REPOSITORY_ROOT / SOURCE_PATH: SOURCE_PATH,
+    REPOSITORY_ROOT / TEST_PATH: TEST_PATH,
 }
 
 TEST_PROFILE = ChecklistProfile(

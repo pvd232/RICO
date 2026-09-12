@@ -26,15 +26,16 @@ from conftest import (
     PairBlockFixture,
     RepositoryFactory,
 )
-from tools.checklist_profile import MANTRA_PHASE0_ADAPTER
-from tools.pairblock_controller import (
+
+from tools.pairblock_status.checklist_profile import MANTRA_PHASE0_ADAPTER
+from tools.pairblock_status.pairblock_controller import (
     DEFAULT_MASTER_CHECKLIST_VALIDATOR,
     EvidenceRef,
     PairBlockGateError,
     advance_pairblock,
     run_gate,
 )
-from tools.profile import MANTRA_PHASE0_PROFILE, ChecklistProfile
+from tools.pairblock_status.profile import MANTRA_PHASE0_PROFILE, ChecklistProfile
 
 NOW = datetime(2026, 9, 11, 16, 0, tzinfo=timezone.utc)
 
@@ -170,7 +171,10 @@ def test_markdown_dialect_rejects_empty_markers(field_name: str) -> None:
 def test_gate_controller_does_not_parse_or_render_markdown() -> None:
     """Keep Markdown row manipulation inside the checklist adapter."""
 
-    controller = Path(__file__).parents[1] / "tools/pairblock_controller.py"
+    controller = (
+        Path(__file__).parents[2]
+        / "tools/pairblock_status/pairblock_controller.py"
+    )
     tree = ast.parse(controller.read_text(encoding="utf-8"), filename=str(controller))
     function_names = {
         node.name
@@ -192,7 +196,7 @@ def test_gate_controller_does_not_parse_or_render_markdown() -> None:
 def test_mantra_profile_compiles_current_contract() -> None:
     """Compile the real MANTRA documents through their project profile."""
 
-    repository = Path(__file__).parents[3]
+    repository = Path(__file__).parents[2]
     rows, manifest = MANTRA_PHASE0_ADAPTER.validate_traceability(
         repository,
     )
@@ -715,14 +719,14 @@ def test_execution_identity_drift_invalidates_pass(
 def test_active_modules_and_definitions_have_docstrings() -> None:
     """Keep every active module, class, function, and method documented."""
 
-    root = Path(__file__).parents[1]
+    root = Path(__file__).parents[2]
     paths = [
-        root / "tools/__init__.py",
-        root / "tools/checklist_profile.py",
-        root / "tools/execution_identity.py",
-        root / "tools/profile.py",
-        root / "tools/pairblock_controller.py",
-        root / "tests/conftest.py",
+        root / "tools/pairblock_status/__init__.py",
+        root / "tools/pairblock_status/checklist_profile.py",
+        root / "tools/pairblock_status/execution_identity.py",
+        root / "tools/pairblock_status/profile.py",
+        root / "tools/pairblock_status/pairblock_controller.py",
+        root / "tests/pairblock_status/conftest.py",
         Path(__file__),
     ]
     for path in paths:
