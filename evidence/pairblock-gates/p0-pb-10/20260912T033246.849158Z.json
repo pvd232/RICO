@@ -1,0 +1,438 @@
+{
+  "checklist_path": "docs/checklists/mantra-rebuild.md",
+  "checklist_written_sha256": "a32c3a1b81d61c349a88dce84ea0801d95e2c5d27bec6ba9672895dbf2e8f59a",
+  "command": "cd /Users/machina/Developer/ChatGPT/RICO\nconda run -n mantra python -m ruff check \\\n  review/p0-pb-10/tools \\\n  review/p0-pb-10/tests/conftest.py \\\n  review/p0-pb-10/tests/test_pairblock_controller.py &&\nPYTHONPATH=review/p0-pb-10 conda run -n mantra \\\n  python -m pytest \\\n  review/p0-pb-10/tests/test_pairblock_controller.py -q",
+  "command_sha256": "2df1a9f8e5b46377631bbb1667477b196762d33710ecd936fd4069f8c602fda3",
+  "contract_path": "docs/contracts/mantra-rebuild-phase-0.md",
+  "exit_code": 0,
+  "finished_at": "2026-09-12T03:32:55.563162+00:00",
+  "identity_after": {
+    "checklist_sha256": "00c3024c12cd5aff4dddc07ff75e17a4c2420a01f45aeb8a21092aebebafe1aa",
+    "contract_sha256": "40f1396fc531acaabe61957ca182ad2ab5af4e45d2fa157e526ee5bf307189de",
+    "git_diff_sha256": "b7b972df7ad5025a983a3e681374e5b3a33c0c002f7e17ec720627367bc56935",
+    "git_head": "b84cab65c10239fc5b26e787db264ef5458ae71e",
+    "git_status_sha256": "1e8b6b4a6a36c71c63b7bb8c40b0624588cb56bf1898460e2e6ae3a801aac45b",
+    "master_validator_sha256": "1a521e702c65221b821b6dbeed418a3eb8f463c6df114a62697aaecf3b23d609",
+    "source_sha256": {
+      "review/p0-pb-10/tests/conftest.py": "09cec9beeaa8b1b6303eccb0d1b9eb89d480e1b6ace17213dccb562d64dc8672",
+      "review/p0-pb-10/tests/fixtures/minimal_profile/docs/checklists/checklist.md": "8bfcdb75af6c71ed898fca765b6c35c1b67fb3737ebd33c1eb81f4fd617fc024",
+      "review/p0-pb-10/tests/fixtures/minimal_profile/docs/contracts/contract.md": "7abd9dce6e0e05e4bef8e20d71b08fd27b2bcae9029d9f7ac3d115567387bc9e",
+      "review/p0-pb-10/tests/test_pairblock_controller.py": "8625090e680a6ef3a1ee4d88dc6c10bd33513032a3e38f1084de49a0b957b94b",
+      "review/p0-pb-10/tools/__init__.py": "86f80c4ce8de033365a56e01fecd68a1d69d87ef86d9c76230fc5fe9b584644e",
+      "review/p0-pb-10/tools/checklist_profile.py": "c5f13f8c49722068d2201db6b2f594e61d7219eef1dac000396b89b94cf6ee88",
+      "review/p0-pb-10/tools/execution_identity.py": "aa3e29e86755f0fc010cfd60154974df1f3e4bbd43b52961493b0a6ac72ec5f3",
+      "review/p0-pb-10/tools/pairblock_controller.py": "c996c3cf676744760af4dfe6ca5ef683036bcaf52a84beadd78646717134a4cc",
+      "review/p0-pb-10/tools/profile.py": "3d0b3c7811204eed1af1b819a65a930e21cb0f19ddd86bc94d72a3ef3863041f"
+    }
+  },
+  "identity_before": {
+    "checklist_sha256": "00c3024c12cd5aff4dddc07ff75e17a4c2420a01f45aeb8a21092aebebafe1aa",
+    "contract_sha256": "40f1396fc531acaabe61957ca182ad2ab5af4e45d2fa157e526ee5bf307189de",
+    "git_diff_sha256": "b7b972df7ad5025a983a3e681374e5b3a33c0c002f7e17ec720627367bc56935",
+    "git_head": "b84cab65c10239fc5b26e787db264ef5458ae71e",
+    "git_status_sha256": "1e8b6b4a6a36c71c63b7bb8c40b0624588cb56bf1898460e2e6ae3a801aac45b",
+    "master_validator_sha256": "1a521e702c65221b821b6dbeed418a3eb8f463c6df114a62697aaecf3b23d609",
+    "source_sha256": {
+      "review/p0-pb-10/tests/conftest.py": "09cec9beeaa8b1b6303eccb0d1b9eb89d480e1b6ace17213dccb562d64dc8672",
+      "review/p0-pb-10/tests/fixtures/minimal_profile/docs/checklists/checklist.md": "8bfcdb75af6c71ed898fca765b6c35c1b67fb3737ebd33c1eb81f4fd617fc024",
+      "review/p0-pb-10/tests/fixtures/minimal_profile/docs/contracts/contract.md": "7abd9dce6e0e05e4bef8e20d71b08fd27b2bcae9029d9f7ac3d115567387bc9e",
+      "review/p0-pb-10/tests/test_pairblock_controller.py": "8625090e680a6ef3a1ee4d88dc6c10bd33513032a3e38f1084de49a0b957b94b",
+      "review/p0-pb-10/tools/__init__.py": "86f80c4ce8de033365a56e01fecd68a1d69d87ef86d9c76230fc5fe9b584644e",
+      "review/p0-pb-10/tools/checklist_profile.py": "c5f13f8c49722068d2201db6b2f594e61d7219eef1dac000396b89b94cf6ee88",
+      "review/p0-pb-10/tools/execution_identity.py": "aa3e29e86755f0fc010cfd60154974df1f3e4bbd43b52961493b0a6ac72ec5f3",
+      "review/p0-pb-10/tools/pairblock_controller.py": "c996c3cf676744760af4dfe6ca5ef683036bcaf52a84beadd78646717134a4cc",
+      "review/p0-pb-10/tools/profile.py": "3d0b3c7811204eed1af1b819a65a930e21cb0f19ddd86bc94d72a3ef3863041f"
+    }
+  },
+  "identity_drift": {},
+  "master_validator_path": "/Users/machina/.agents/scripts/validate-master-checklist.py",
+  "normalized_manifest": {
+    "checklist_id": "mantra-rebuild",
+    "contracts": [
+      {
+        "contract_id": "mantra-rebuild-phase-0",
+        "path": "docs/contracts/mantra-rebuild-phase-0.md",
+        "requirement_ids": [
+          "P0-REQ-01",
+          "P0-REQ-02",
+          "P0-REQ-03",
+          "P0-REQ-04",
+          "P0-REQ-05",
+          "P0-REQ-06",
+          "P0-REQ-07",
+          "P0-REQ-08",
+          "P0-REQ-09",
+          "P0-REQ-10"
+        ],
+        "revision": "working-tree",
+        "sha256": "40f1396fc531acaabe61957ca182ad2ab5af4e45d2fa157e526ee5bf307189de",
+        "state": "in_progress"
+      }
+    ],
+    "pair_blocks": [
+      {
+        "completion_evidence": [],
+        "contract_id": "mantra-rebuild-phase-0",
+        "gate": {
+          "kind": "external",
+          "target": "Environment check passed"
+        },
+        "pair_block_id": "P0-PB-01",
+        "requirement_ids": [
+          "P0-REQ-05"
+        ],
+        "section": "Phase 0D. Restore files and verify graph B in VIPER",
+        "state": "in_progress"
+      },
+      {
+        "completion_evidence": [],
+        "contract_id": "mantra-rebuild-phase-0",
+        "gate": {
+          "kind": "external",
+          "target": "Hopfield artifact table approved"
+        },
+        "pair_block_id": "P0-PB-02",
+        "requirement_ids": [
+          "P0-REQ-01"
+        ],
+        "section": "Phase 0B. Freeze the two independent replay graphs",
+        "state": "in_progress"
+      },
+      {
+        "completion_evidence": [],
+        "contract_id": "mantra-rebuild-phase-0",
+        "gate": {
+          "kind": "external",
+          "target": "Pending"
+        },
+        "pair_block_id": "P0-PB-03",
+        "requirement_ids": [
+          "P0-REQ-01"
+        ],
+        "section": "Phase 0B. Freeze the two independent replay graphs",
+        "state": "in_progress"
+      },
+      {
+        "completion_evidence": [],
+        "contract_id": "mantra-rebuild-phase-0",
+        "gate": {
+          "kind": "external",
+          "target": "Pending"
+        },
+        "pair_block_id": "P0-PB-04",
+        "requirement_ids": [
+          "P0-REQ-02"
+        ],
+        "section": "Phase 0C. Implement restoration bindings and capacity planning",
+        "state": "planned"
+      },
+      {
+        "completion_evidence": [],
+        "contract_id": "mantra-rebuild-phase-0",
+        "gate": {
+          "kind": "external",
+          "target": "Passed: `17` tests"
+        },
+        "pair_block_id": "P0-PB-04A",
+        "requirement_ids": [
+          "P0-REQ-02"
+        ],
+        "section": "Phase 0C. Implement restoration bindings and capacity planning",
+        "state": "in_progress"
+      },
+      {
+        "completion_evidence": [],
+        "contract_id": "mantra-rebuild-phase-0",
+        "gate": {
+          "kind": "external",
+          "target": "Passed: `42` tests ([receipt](../../evidence/pairblock-gates/p0-pb-04b/20260912T025100.211753Z.json))"
+        },
+        "pair_block_id": "P0-PB-04B",
+        "requirement_ids": [
+          "P0-REQ-02"
+        ],
+        "section": "Phase 0C. Implement restoration bindings and capacity planning",
+        "state": "in_progress"
+      },
+      {
+        "completion_evidence": [],
+        "contract_id": "mantra-rebuild-phase-0",
+        "gate": {
+          "kind": "external",
+          "target": "Pending"
+        },
+        "pair_block_id": "P0-PB-05",
+        "requirement_ids": [
+          "P0-REQ-03"
+        ],
+        "section": "Phase 0C. Implement restoration bindings and capacity planning",
+        "state": "planned"
+      },
+      {
+        "completion_evidence": [],
+        "contract_id": "mantra-rebuild-phase-0",
+        "gate": {
+          "kind": "external",
+          "target": "Passed: `9` tests"
+        },
+        "pair_block_id": "P0-PB-05A",
+        "requirement_ids": [
+          "P0-REQ-03"
+        ],
+        "section": "Phase 0C. Implement restoration bindings and capacity planning",
+        "state": "in_progress"
+      },
+      {
+        "completion_evidence": [],
+        "contract_id": "mantra-rebuild-phase-0",
+        "gate": {
+          "kind": "external",
+          "target": "Pending"
+        },
+        "pair_block_id": "P0-PB-05B",
+        "requirement_ids": [
+          "P0-REQ-03"
+        ],
+        "section": "Phase 0C. Implement restoration bindings and capacity planning",
+        "state": "planned"
+      },
+      {
+        "completion_evidence": [],
+        "contract_id": "mantra-rebuild-phase-0",
+        "gate": {
+          "kind": "external",
+          "target": "Pending"
+        },
+        "pair_block_id": "P0-PB-06",
+        "requirement_ids": [
+          "P0-REQ-04",
+          "P0-REQ-05",
+          "P0-REQ-06"
+        ],
+        "section": "Phase 0D. Restore files and verify graph B in VIPER",
+        "state": "planned"
+      },
+      {
+        "completion_evidence": [],
+        "contract_id": "mantra-rebuild-phase-0",
+        "gate": {
+          "kind": "external",
+          "target": "Pending"
+        },
+        "pair_block_id": "P0-PB-07",
+        "requirement_ids": [
+          "P0-REQ-07"
+        ],
+        "section": "Phase 0E. Replay Hopfield and MIL",
+        "state": "planned"
+      },
+      {
+        "completion_evidence": [],
+        "contract_id": "mantra-rebuild-phase-0",
+        "gate": {
+          "kind": "external",
+          "target": "Pending"
+        },
+        "pair_block_id": "P0-PB-08",
+        "requirement_ids": [
+          "P0-REQ-08"
+        ],
+        "section": "Phase 0E. Replay Hopfield and MIL",
+        "state": "planned"
+      },
+      {
+        "completion_evidence": [],
+        "contract_id": "mantra-rebuild-phase-0",
+        "gate": {
+          "kind": "external",
+          "target": "Pending"
+        },
+        "pair_block_id": "P0-PB-09",
+        "requirement_ids": [
+          "P0-REQ-09"
+        ],
+        "section": "Phase 0F. Freeze evidence and assess VIPER",
+        "state": "planned"
+      },
+      {
+        "completion_evidence": [],
+        "contract_id": "mantra-rebuild-phase-0",
+        "gate": {
+          "kind": "external",
+          "target": "Passed: `40` tests ([receipt](../../evidence/pairblock-gates/p0-pb-10/20260912T033246.849158Z.json))"
+        },
+        "pair_block_id": "P0-PB-10",
+        "requirement_ids": [
+          "P0-REQ-10"
+        ],
+        "section": "Phase 0C. Implement restoration bindings and capacity planning",
+        "state": "in_progress"
+      }
+    ],
+    "project": "MANTRA rebuild",
+    "requirements": [
+      {
+        "completion_evidence": [],
+        "contract_id": "mantra-rebuild-phase-0",
+        "depends_on": [],
+        "gate": {
+          "kind": "external",
+          "target": "The approved Hopfield and MIL portions of graph $B$ contain every required file, producer, and edge and exclude parity graph $Q$."
+        },
+        "order": 0,
+        "phase": 1,
+        "requirement_id": "P0-REQ-01",
+        "state": "in_progress"
+      },
+      {
+        "completion_evidence": [],
+        "contract_id": "mantra-rebuild-phase-0",
+        "depends_on": [
+          "P0-REQ-01"
+        ],
+        "gate": {
+          "kind": "external",
+          "target": "Every absent file in $B$ resolves through exactly one valid `RestorationBinding`."
+        },
+        "order": 0,
+        "phase": 2,
+        "requirement_id": "P0-REQ-02",
+        "state": "in_progress"
+      },
+      {
+        "completion_evidence": [],
+        "contract_id": "mantra-rebuild-phase-0",
+        "depends_on": [
+          "P0-REQ-01"
+        ],
+        "gate": {
+          "kind": "external",
+          "target": "The capacity receipt records every term in $R_{max}$ and measured free space is at least $R_{max}$."
+        },
+        "order": 1,
+        "phase": 2,
+        "requirement_id": "P0-REQ-03",
+        "state": "in_progress"
+      },
+      {
+        "completion_evidence": [],
+        "contract_id": "mantra-rebuild-phase-0",
+        "depends_on": [
+          "P0-REQ-02",
+          "P0-REQ-03"
+        ],
+        "gate": {
+          "kind": "external",
+          "target": "Every restored canonical file matches its approved byte count and SHA-256."
+        },
+        "order": 0,
+        "phase": 3,
+        "requirement_id": "P0-REQ-04",
+        "state": "planned"
+      },
+      {
+        "completion_evidence": [],
+        "contract_id": "mantra-rebuild-phase-0",
+        "depends_on": [
+          "P0-REQ-02",
+          "P0-REQ-03"
+        ],
+        "gate": {
+          "kind": "external",
+          "target": "Restoration runs from the MANTRA root through the verified `mantra` environment, and VIPER retains the environment receipt."
+        },
+        "order": 1,
+        "phase": 3,
+        "requirement_id": "P0-REQ-05",
+        "state": "in_progress"
+      },
+      {
+        "completion_evidence": [],
+        "contract_id": "mantra-rebuild-phase-0",
+        "depends_on": [
+          "P0-REQ-04",
+          "P0-REQ-05"
+        ],
+        "gate": {
+          "kind": "external",
+          "target": "VIPER verifies graph $B$; deleting one required node or edge makes verification fail."
+        },
+        "order": 2,
+        "phase": 3,
+        "requirement_id": "P0-REQ-06",
+        "state": "planned"
+      },
+      {
+        "completion_evidence": [],
+        "contract_id": "mantra-rebuild-phase-0",
+        "depends_on": [
+          "P0-REQ-06"
+        ],
+        "gate": {
+          "kind": "external",
+          "target": "Hopfield replay reproduces `0.5861640938949398` within the approved tolerance and retains its predictions."
+        },
+        "order": 0,
+        "phase": 4,
+        "requirement_id": "P0-REQ-07",
+        "state": "planned"
+      },
+      {
+        "completion_evidence": [],
+        "contract_id": "mantra-rebuild-phase-0",
+        "depends_on": [
+          "P0-REQ-06"
+        ],
+        "gate": {
+          "kind": "external",
+          "target": "Standalone v1952 seed-123460 `without_control` replay reproduces `0.6025499488874759` and the approved prediction hashes."
+        },
+        "order": 1,
+        "phase": 4,
+        "requirement_id": "P0-REQ-08",
+        "state": "planned"
+      },
+      {
+        "completion_evidence": [],
+        "contract_id": "mantra-rebuild-phase-0",
+        "depends_on": [
+          "P0-REQ-07",
+          "P0-REQ-08"
+        ],
+        "gate": {
+          "kind": "external",
+          "target": "Every assessed VIPER check has a usefulness-ledger entry and independently confirmed findings."
+        },
+        "order": 0,
+        "phase": 5,
+        "requirement_id": "P0-REQ-09",
+        "state": "planned"
+      },
+      {
+        "completion_evidence": [],
+        "contract_id": "mantra-rebuild-phase-0",
+        "depends_on": [],
+        "gate": {
+          "kind": "external",
+          "target": "A declared proposal gate retains its result and applies only its legal checklist transition; traceability validation rejects broken IDs, dependencies, owners, code links, tests, or gates."
+        },
+        "order": 2,
+        "phase": 2,
+        "requirement_id": "P0-REQ-10",
+        "state": "in_progress"
+      }
+    ],
+    "revision": "working-tree",
+    "schema_version": 2
+  },
+  "normalized_manifest_sha256": "2ca4eb47279e1005372d2314fc408c7c7ba93f996292c698daab872ff7c460c6",
+  "output_sha256": "4fb72620852fc13019907a2fba6334a6462dd22c747e4de49c8cbd6d162c5b5b",
+  "pair_block_id": "P0-PB-10",
+  "result": "passed",
+  "schema_version": 2,
+  "started_at": "2026-09-12T03:32:46.849158+00:00",
+  "status_after": "Review",
+  "status_before": "Review",
+  "stderr": "",
+  "stdout": "All checks passed!\n........................................                                 [100%]\n40 passed in 5.92s\n"
+}

@@ -45,11 +45,10 @@ current status, review points, and completion evidence.
 **Active tranche:** repair `P0-PB-10`, then review `P0-PB-04A` and
 `P0-PB-04B` while Codex revises `P0-PB-05A` and drafts `P0-PB-05B`.
 
-The resolution table identifies the next owner. `Review` requires the user's
-decision. `Implementation` covers the user's MANTRA edit and Codex's applied
-code review. `VIPER` means the applied code is accepted and awaits provenance
-registration. `Complete` requires the final receipt and a checked execution
-box.
+The resolution table identifies the next action. `Review` requires the user's
+decision. `Approved` authorizes the user to apply the proposal. `Applied`
+means Codex accepted the resulting diff, test evidence, and Git evidence.
+`Complete` requires VIPER registration, the final receipt, and a checked box.
 
 **`P0-PB-04B` inspection evidence:** Project release revision
 `51cb27990244f1f418e8b7cd11cd98672d18919a` pins control revision
@@ -71,7 +70,7 @@ owned by `historical_and_shared_experiments` and two owned by
 
 | PairBlock | Proposal gate | Resolution status | Depends on | Contract declaration | Proposed code |
 |---|---|---|---|---|---|
-| <a id="status-p0-pb-01"></a>`P0-PB-01` | Environment check passed | VIPER | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-01-declaration) | [Accepted implementation](../contracts/mantra-rebuild-phase-0.md#p0-pb-01-accepted-implementation) |
+| <a id="status-p0-pb-01"></a>`P0-PB-01` | Environment check passed | Applied | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-01-declaration) | [Accepted implementation](../contracts/mantra-rebuild-phase-0.md#p0-pb-01-accepted-implementation) |
 | <a id="status-p0-pb-02"></a>`P0-PB-02` | Hopfield artifact table approved | Drafting | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-02-declaration) | [Work description](../contracts/mantra-rebuild-phase-0.md#replay-traces-awaiting-approval) |
 | <a id="status-p0-pb-03"></a>`P0-PB-03` | Pending | Drafting | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-03-declaration) | [Work description](../contracts/mantra-rebuild-phase-0.md#replay-traces-awaiting-approval) |
 | <a id="status-p0-pb-04"></a>`P0-PB-04` | Pending | Waiting for `P0-PB-04A`, `P0-PB-04B` | `P0-PB-04A`, `P0-PB-04B` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-04-declaration) | [Child blocks](../contracts/mantra-rebuild-phase-0.md#p0-pb-04-declaration) |
@@ -84,7 +83,7 @@ owned by `historical_and_shared_experiments` and two owned by
 | <a id="status-p0-pb-07"></a>`P0-PB-07` | Pending | Waiting for `P0-PB-06` | `P0-PB-06` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-07-declaration) | Pending |
 | <a id="status-p0-pb-08"></a>`P0-PB-08` | Pending | Waiting for `P0-PB-06` | `P0-PB-06` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-08-declaration) | Pending |
 | <a id="status-p0-pb-09"></a>`P0-PB-09` | Pending | Waiting for `P0-PB-07`, `P0-PB-08`, `P0-PB-10` | `P0-PB-07`, `P0-PB-08`, `P0-PB-10` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-09-declaration) | Pending |
-| <a id="status-p0-pb-10"></a>`P0-PB-10` | Passed: `40` tests ([receipt](../../evidence/pairblock-gates/p0-pb-10/20260912T032028.024353Z.json)) | Review | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-10-declaration) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-10-proposed-code) |
+| <a id="status-p0-pb-10"></a>`P0-PB-10` | Passed: `40` tests ([receipt](../../evidence/pairblock-gates/p0-pb-10/20260912T033246.849158Z.json)) | Review | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-10-declaration) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-10-proposed-code) |
 
 ## Terminal outcome
 
@@ -114,9 +113,9 @@ receipt supports each transition. The RICO profile derives the checkbox,
 requirement state, dependent-block readiness, and contract state from those
 rows, then invokes the global master-checklist validator. A passing proposal
 gate advances `Drafting` to `Review`. User approval advances `Review` to
-`Implementation`; accepted MANTRA code advances `Implementation` to `VIPER`;
-VIPER registration advances `VIPER` to `Complete`. A failed gate or illegal
-transition preserves the checklist.
+`Approved`; acceptance of the applied diff, tests, and Git evidence advances
+`Approved` to `Applied`; VIPER registration advances `Applied` to `Complete`.
+A failed gate or illegal transition preserves the checklist.
 
 For each review cycle, Codex updates this file in the same RICO commit that
 records any changed contract status. MANTRA implementation commits remain in

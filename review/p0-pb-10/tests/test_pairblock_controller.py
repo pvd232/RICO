@@ -124,7 +124,7 @@ def test_lifecycle_policy_rejects_disconnected_transition_chain() -> None:
     with pytest.raises(ValueError, match="transition chain expected Review"):
         replace(
             TEST_PROFILE.lifecycle,
-            transitions=(("approve", "Implementation", "VIPER"),),
+            transitions=(("approve", "Approved", "Applied"),),
         )
 
 
@@ -250,10 +250,8 @@ def test_lifecycle_completion_updates_every_derived_status(
         if item["requirement_id"] == REQUIREMENT_ID
     )
 
-    assert json.loads(approval.read_text(encoding="utf-8"))["status_after"] == (
-        "Implementation"
-    )
-    assert json.loads(accepted.read_text(encoding="utf-8"))["status_after"] == "VIPER"
+    assert json.loads(approval.read_text(encoding="utf-8"))["status_after"] == "Approved"
+    assert json.loads(accepted.read_text(encoding="utf-8"))["status_after"] == "Applied"
     assert json.loads(completed.read_text(encoding="utf-8"))["result"] == "applied"
     assert rows[PAIR_BLOCK_ID].status == "Complete"
     assert "- [x] Exercise `PB-GATE`." in checklist
@@ -318,9 +316,9 @@ def test_checkbox_must_match_pairblock_completion(
 def test_accepted_dependency_releases_waiting_block(
     repository_factory: RepositoryFactory,
 ) -> None:
-    """Move a waiting block to drafting after its dependency reaches VIPER."""
+    """Move a waiting block to drafting after its dependency is applied."""
 
-    dependency = PairBlockFixture(DEPENDENCY_PAIR_BLOCK_ID, "Implementation")
+    dependency = PairBlockFixture(DEPENDENCY_PAIR_BLOCK_ID, "Approved")
     repository = repository_factory(
         command=passing_command(),
         status=f"Waiting for {DEPENDENCY_PAIR_BLOCK_ID}",
@@ -341,7 +339,7 @@ def test_accepted_dependency_releases_waiting_block(
     )
     rows, _ = validate_test_repository(repository)
 
-    assert rows[DEPENDENCY_PAIR_BLOCK_ID].status == "VIPER"
+    assert rows[DEPENDENCY_PAIR_BLOCK_ID].status == "Applied"
     assert rows[PAIR_BLOCK_ID].status == "Drafting"
 
 
