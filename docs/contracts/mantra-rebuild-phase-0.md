@@ -230,7 +230,7 @@ Context: MANTRA already owns its package, tests, configuration, and historical e
 
 ### `P0-PB-01` workspace marker and environment
 
-**Status:** Approved — ready for user implementation
+**Status:** Applied — awaiting MANTRA commit and later VIPER graph registration
 
 **Requirement:** Mark the MANTRA Git root as the VIPER workspace and verify the Conda environment named `mantra` uses Python 3.13 with `viper-provenance` installed.
 
@@ -265,6 +265,25 @@ python -c 'from pathlib import Path; from viper.repository import resolve_root; 
 **Gate:** The commands identify `mantra` as the active Conda environment, Python 3.13, the installed `viper-provenance` version, a `viper` module under that environment, and `/Users/machina/Developer/ChatGPT/mantra` as the resolved VIPER root. `P0-PB-06` must register this output in the VIPER graph before Phase 0 closes.
 
 **Stop condition:** Stop before `P0-PB-02` if any value differs. Stop before `P0-PB-07` if its focused test shows that the adapter reads an undeclared input.
+
+### Next execution tranche
+
+The dependency order is:
+
+```text
+P0-PB-01 -> (P0-PB-02 and P0-PB-03) -> (P0-PB-04 and P0-PB-05) -> P0-PB-06
+```
+
+| Block | Codex owns | User owns | Deliverable | Gate |
+|---|---|---|---|---|
+| `P0-PB-01` | Review the applied marker and environment output. | Commit only `viper.toml` in MANTRA. | Git identity for the workspace marker. | The MANTRA commit contains `viper.toml`; the unrelated `requirements.txt` and existing changes remain outside that commit. |
+| `P0-PB-02` | Trace every file read and producer executed by the selected Hopfield replay. Classify each file as present, restorable, produced, or parity-only. | Review necessity and reject every node absent from the replay's reads. | Approved Hopfield portion of $B$. | Every file and program reaches the selected Hopfield prediction; removing one required member breaks the path. |
+| `P0-PB-03` | Trace the saved MIL application from `reinstantiation/APPLICATION_VERIFICATION.json` through its runtime configuration, stages, and files. | Review necessity and confirm the saved-application boundary. | Approved MIL portion of $B$. | Every file and program reaches the selected MIL prediction; training-only and parity-only files remain outside the application replay. |
+| `P0-PB-04` | Draft complete `RestorationBinding` source, tests, and one binding record for each missing file in the approved $B$. | Review the code blocks, then implement the approved files. | Executable bindings for the missing Hopfield and MIL files. | Each missing file has one binding; altered destination, archive member, byte count, or SHA-256 fails validation. |
+| `P0-PB-05` | Read the approved archive metadata and calculate $C$, $D$, $V$, $T$, $H$, and $R_{max}$. | Review the retention assumptions and approve the download boundary. | Capacity receipt and ordered download plan. | Measured free space is at least $R_{max}$. |
+| `P0-PB-06` | Draft and code-review the restoration stages and graph-completeness test. Inspect each resulting receipt. | Implement the approved code and run the restoration command. | Restored canonical files and verified graph $B$. | Every restored file matches its binding, graph verification passes, and the severed-edge case fails. |
+
+`P0-PB-02` and `P0-PB-03` run concurrently after the MANTRA marker commit. `P0-PB-04` and `P0-PB-05` run concurrently after both graph portions are approved. The user reviews each block before its output becomes an input to the next dependency layer.
 
 For each PairBlock, Codex drafts the proposed contract or source, the user reviews it, Codex performs the agreed code review, the user implements approved code, and Codex reviews the applied diff and focused gate. A PairBlock closes only when the implementation, test result, Git evidence, and VIPER evidence agree.
 
