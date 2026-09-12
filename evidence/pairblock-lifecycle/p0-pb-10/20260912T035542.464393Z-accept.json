@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "a97c1f5a346378c755fcb91a27ef852950dd634197458fa2927509650af310d7",
+  "checklist_written_sha256": "8806c9e1a39a2eeee09ba4cc3261a2316b11f1dcebe854c8e73c8a5de304e005",
+  "event": "accept",
+  "evidence": {
+    "kind": "test",
+    "revision": "1006386ad761e821da489346e4df8cc8d97d1ab3",
+    "target": "evidence/pairblock-gates/p0-pb-10/20260912T033246.849158Z.json"
+  },
+  "pair_block_id": "P0-PB-10",
+  "previous_receipt": "../../evidence/pairblock-lifecycle/p0-pb-10/20260912T035200.969366Z-approve.json",
+  "recorded_at": "2026-09-12T03:55:42.464393+00:00",
+  "repository_head": "1006386ad761e821da489346e4df8cc8d97d1ab3",
+  "result": "applied",
+  "schema_version": 1,
+  "status_after": "Applied",
+  "status_before": "Approved"
+}
