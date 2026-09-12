@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "e454eebb6474b0880331b4051baa52bc8a12675d9c9cc3b3891734d581baee7e",
+  "checklist_written_sha256": "1ce83f9e0aaa2939946aeaa729f418daf1a6ec3d501db7a3d3d7f0625fa36ea5",
+  "event": "approve",
+  "evidence": {
+    "kind": "external",
+    "revision": "2026-09-11",
+    "target": "User approval of P0-PB-05A in the active Codex task"
+  },
+  "pair_block_id": "P0-PB-05A",
+  "previous_receipt": null,
+  "recorded_at": "2026-09-12T03:59:04.894879+00:00",
+  "repository_head": "adec97da1741d2af33f4d9acabd2ca273026e23a",
+  "result": "applied",
+  "schema_version": 1,
+  "status_after": "Approved",
+  "status_before": "Review"
+}

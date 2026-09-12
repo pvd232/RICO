@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "5d2e974ab1434957aa70f61314d0bad393e0902e5495825b1b5a10afbcfcf555",
+  "checklist_written_sha256": "e454eebb6474b0880331b4051baa52bc8a12675d9c9cc3b3891734d581baee7e",
+  "event": "approve",
+  "evidence": {
+    "kind": "external",
+    "revision": "2026-09-11",
+    "target": "User approval of P0-PB-04B in the active Codex task"
+  },
+  "pair_block_id": "P0-PB-04B",
+  "previous_receipt": "../../evidence/pairblock-gates/p0-pb-04b/20260912T025100.211753Z.json",
+  "recorded_at": "2026-09-12T03:59:04.710258+00:00",
+  "repository_head": "adec97da1741d2af33f4d9acabd2ca273026e23a",
+  "result": "applied",
+  "schema_version": 1,
+  "status_after": "Approved",
+  "status_before": "Review"
+}
