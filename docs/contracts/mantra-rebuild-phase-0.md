@@ -1053,8 +1053,9 @@ python -m pytest \
   tests/test_verification.py::RunPlanRelationshipTests::test_benchmark_estimator_requires_training -q
 ```
 
-**Gate:** The two tests cover three relationship cases and Ruff passes. The patch adds no field,
-configuration, observer, or runtime branch outside plan verification.
+**Gate:** The two tests cover three relationship cases and Ruff passes. The
+change surface contains plan relationship verification, its tests, and the
+declaration-to-test map.
 
 **Applied check:** Repeat the focused check against the committed VIPER source,
 then rerun the P0-PB-06 restoration preflight through MANTRA's active `mantra`
@@ -1091,12 +1092,12 @@ and the [VIPER tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/
 
 **Implementation requirements:**
 
-- Download only the signed control files named by this block; omit the Git
-  bundle and every unrelated control payload.
+- Download exactly the five signed control files named by this block.
 - Build the signed 34-part plan and call `measure_capacity()` before the first
-  archive-part download. Persist the capacity receipt and require `passed`. Count one
-  compressed part, the canonical files, the persistent VIPER store, the VIPER
-  attempt workspace, one largest-file temporary write, and the 10 MiB reserve.
+  archive-part download. Persist the capacity receipt and require `passed`.
+  Count one compressed part, the canonical files, the persistent VIPER store,
+  the VIPER attempt workspace, one largest-file temporary write, and the 10 MiB
+  reserve.
 - Declare a preparation stage that consumes the signed root release, detached
   signature, and public key. It authenticates the pinned project release and
   control package, resolves all eight bindings from the filesystem and content
@@ -1140,22 +1141,31 @@ python /Users/machina/Developer/ChatGPT/RICO/tools/pairblock_status/python_overl
     staging/p0-pb-06/src/mantra/rebuild/tests/test_viper_restore.py -q
 ```
 
-**Gate:** Ruff and the thirteen focused tests pass; the real restoration receipt identifies
+**Gate:** Ruff and the sixteen focused tests pass; the real restoration receipt identifies
 every downloaded part and all eight restored identities; `verify_run()` passes;
 and the retained severed-edge fixture fails verification.
 
-**Applied paths:** `src/mantra/rebuild/archive_restore.py`,
-`src/mantra/rebuild/viper_restore.py`, and their two observing test files.
+**Applied paths:** `cleanup/reinstantiation_archive.py`,
+`cleanup/tests/test_reinstantiation_archive.py`,
+`src/mantra/rebuild/archive_restore.py`, `src/mantra/rebuild/viper_restore.py`,
+and their two rebuild test files.
 
 **Applied check:**
 
 ```bash
 cd /Users/machina/Developer/ChatGPT/mantra
+python -m ruff check --ignore F841 \
+  cleanup/reinstantiation_archive.py \
+  cleanup/tests/test_reinstantiation_archive.py
 python -m ruff check \
   src/mantra/rebuild/archive_restore.py \
   src/mantra/rebuild/viper_restore.py \
   src/mantra/rebuild/tests/test_archive_restore.py \
-  src/mantra/rebuild/tests/test_viper_restore.py && \
+  src/mantra/rebuild/tests/test_viper_restore.py
+PYTHONPATH="$PWD" PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+python -m pytest \
+  cleanup/tests/test_reinstantiation_archive.py::test_control_download_requires_independent_key_and_signatures \
+  cleanup/tests/test_reinstantiation_archive.py::test_control_download_fetches_only_selected_signed_files -q
 PYTHONPATH="$PWD/src" PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
 python -m pytest \
   --rootdir="$PWD/src" \
