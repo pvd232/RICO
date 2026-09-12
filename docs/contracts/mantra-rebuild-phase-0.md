@@ -530,7 +530,7 @@ PYTHONPATH=review/p0-pb-05a/src conda run -n mantra \
 
 **Requirement:** Compile the RICO Markdown checklist into schema version 2 of the global master-checklist manifest. One linked receipt advances a PairBlock through `Drafting`, `Review`, `Approved`, `Applied`, and `Complete`. The RICO profile updates the block's checkbox, mapped requirements, newly ready dependents, and contract state before the global validator accepts the transition. The global contract permits one of several sibling PairBlocks to close while their shared requirement remains in progress and requires that requirement to close with evidence after its final block closes.
 
-**Dependency:** The proposed block has one checklist row, one contract ownership row, and one complete proposed-code section. A declared PairBlock dependency must reach an approved or later state before execution.
+**Dependency:** The block has one checklist row, one contract ownership row, and one complete code section. A declared PairBlock dependency must reach an approved or later state before execution. `P0-PB-06` owns the later VIPER registration needed to move this applied block to `Complete`; that registration does not block this block's implementation or review.
 
 **Code boundary:** These seven executable review files form the proposal:
 
@@ -579,7 +579,7 @@ PYTHONPATH=review/p0-pb-10 conda run -n mantra \
 
 **Stop condition:** Return the proposal for revision if a gate can run outside its declared code or runtime boundary, bypass an unresolved dependency, change status after failure or identity drift, accept an illegal lifecycle event, or leave a rendered status inconsistent with its evidence.
 
-**Evidence:** Global commit `58b59175e2a4a949bc8dd33302099cf780249c75` repairs incremental PairBlock closure and passes its three focused tests, normalized-manifest validation, and Ruff. The RICO proposal reuses that validator. `ChecklistProfile` owns project paths and lifecycle events; `MarkdownChecklistAdapter` owns RICO parsing and rendering; `pairblock_controller.py` runs proposal gates and records later evidence events without parsing Markdown. The focused RICO gate passes `40` cases and retains its receipt. The proposal has not been activated.
+**Evidence:** Global commit `58b59175e2a4a949bc8dd33302099cf780249c75` repairs incremental PairBlock closure and passes its three focused tests, normalized-manifest validation, and Ruff. The RICO implementation reuses that validator. `ChecklistProfile` owns project paths and lifecycle events; `MarkdownChecklistAdapter` owns RICO parsing and rendering; `pairblock_controller.py` runs proposal gates and records later evidence events without parsing Markdown. The focused RICO gate passes `40` cases and retains its receipt. The [master-checklist row](../checklists/mantra-rebuild.md#status-p0-pb-10) owns the current lifecycle state and its supporting receipt.
 
 ## 11. Sources
 

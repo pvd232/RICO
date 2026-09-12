@@ -42,8 +42,9 @@ current status, review points, and completion evidence.
 
 ## Current focus
 
-**Active tranche:** repair `P0-PB-10`, then review `P0-PB-04A` and
-`P0-PB-04B` while Codex revises `P0-PB-05A` and drafts `P0-PB-05B`.
+**Active tranche:** the user applies `P0-PB-04A`, `P0-PB-04B`, and
+`P0-PB-05A` in MANTRA while Codex reviews each resulting diff. `P0-PB-10` is
+applied; `P0-PB-06` will register its evidence in VIPER and close it.
 
 The resolution table identifies the next action. `Review` requires the user's
 decision. `Approved` authorizes the user to apply the proposal. `Applied`
