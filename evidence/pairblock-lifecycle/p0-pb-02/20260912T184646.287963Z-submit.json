@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "d6060b00ce2d19f9ce28726ffbeebd26a70b578030614eb1a46b7e883b37dc69",
+  "checklist_written_sha256": "8ebfeb7f75c13c5d47da358efa26affcc359c50f2962f30757702ad45e5584c5",
+  "event": "submit",
+  "evidence": {
+    "kind": "external",
+    "revision": "10e6ddf",
+    "target": "Completed Hopfield artifact and source trace in the Phase 0 contract"
+  },
+  "pair_block_id": "P0-PB-02",
+  "previous_receipt": null,
+  "recorded_at": "2026-09-12T18:46:46.287963+00:00",
+  "repository_head": "10e6ddf38a621d8b41618b9e67a8f3f5923924b7",
+  "result": "applied",
+  "schema_version": 1,
+  "status_after": "Review",
+  "status_before": "Drafting"
+}

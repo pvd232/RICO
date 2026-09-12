@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "8ebfeb7f75c13c5d47da358efa26affcc359c50f2962f30757702ad45e5584c5",
+  "checklist_written_sha256": "a95640756dd81313bd48d90cd80dc4ef9a7c7a6cdcbeb6b37672857a9c9ed8f7",
+  "event": "confirm",
+  "evidence": {
+    "kind": "external",
+    "revision": "msg_0a3e35007447ca2c016aa49a9df9d087d19272c0fc5c35533a",
+    "target": "User approval of the selected Hopfield artifact boundary in the Codex task"
+  },
+  "pair_block_id": "P0-PB-02",
+  "previous_receipt": "../../evidence/pairblock-lifecycle/p0-pb-02/20260912T184646.287963Z-submit.json",
+  "recorded_at": "2026-09-12T18:46:46.515912+00:00",
+  "repository_head": "10e6ddf38a621d8b41618b9e67a8f3f5923924b7",
+  "result": "applied",
+  "schema_version": 1,
+  "status_after": "Complete",
+  "status_before": "Review"
+}

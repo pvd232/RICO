@@ -73,7 +73,7 @@ owned by `historical_and_shared_experiments` and two owned by
 | PairBlock | Proposal gate | Resolution status | Depends on | Contract block | Proposed code |
 |---|---|---|---|---|---|
 | `P0-PB-01` | Environment check passed | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-01) | [Accepted implementation](../contracts/mantra-rebuild-phase-0.md#p0-pb-01-accepted-implementation) |
-| `P0-PB-02` | Hopfield artifact table approved | Drafting | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-02) | [Work description](../contracts/mantra-rebuild-phase-0.md#p0-pb-02) |
+| `P0-PB-02` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-02/20260912T184646.515912Z-confirm.json)) | Complete | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-02) | [Work description](../contracts/mantra-rebuild-phase-0.md#p0-pb-02) |
 | `P0-PB-03` | Pending | Drafting | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-03) | [Work description](../contracts/mantra-rebuild-phase-0.md#p0-pb-03) |
 | `P0-PB-04` | Pending | Drafting | `P0-PB-04A`, `P0-PB-04B` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-04) | [Child blocks](../contracts/mantra-rebuild-phase-0.md#p0-pb-04) |
 | `P0-PB-04A` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-04a/20260912T070755.867088Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-04a) | [Source](../../../mantra/src/mantra/rebuild/restoration.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_restoration.py) |
@@ -204,7 +204,7 @@ The environment receipt enters VIPER during Phase 0D. That registration closes
 
 **Depends on:** the verified workspace and environment baseline
 
-- [ ] Approve the complete Hopfield path from its eleven data inputs and saved
+- [x] Approve the complete Hopfield path from its eleven data inputs and saved
       encoder to the selected raw-gene prediction.
       <!-- pair-block: P0-PB-02 -->
       <!-- pair-block-contract: P0-PB-02 contract=docs/contracts/mantra-rebuild-phase-0.md -->
