@@ -1338,7 +1338,7 @@ cd /Users/machina/Developer/ChatGPT/RICO
 python -m ruff check \
   staging/p0-pb-09/tools/freeze_phase0.py \
   staging/p0-pb-09/tests/test_freeze_phase0.py && \
-PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+PYTHONPATH="$PWD/staging/p0-pb-09" PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
 python -m pytest staging/p0-pb-09/tests/test_freeze_phase0.py -q
 ```
 
