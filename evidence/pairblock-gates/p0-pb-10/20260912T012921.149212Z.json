@@ -1,0 +1,26 @@
+{
+  "checklist_after_sha256": "e0249cd09f6f69a92909b97b125199aa68c7ba8a87c8778347cb6ff59cc01fb3",
+  "checklist_before_sha256": "b4f1245724feadd2ce57540346af03ad1b60235557190521db4ef116cad399b9",
+  "checklist_path": "docs/checklists/mantra-rebuild.md",
+  "command": "cd /Users/machina/Developer/ChatGPT/RICO\nPYTHONPATH=review/p0-pb-10 conda run -n mantra \\\n  python -m pytest \\\n  review/p0-pb-10/tests/test_run_pairblock_gate.py -q",
+  "command_sha256": "c6a648ada1606206184b46f3e2949e7b1b1d934f7d19559bf4d43fd7bc41354c",
+  "contract_path": "docs/contracts/mantra-rebuild-phase-0.md",
+  "contract_sha256": "b28bef671c0ebc42992178f3692253a91d59ed2af224cdfafcc781bde9f6482e",
+  "exit_code": 0,
+  "finished_at": "2026-09-12T01:29:23.607889+00:00",
+  "git_head": "6900b12e054b894e13c489aec242988b8bae200a",
+  "output_sha256": "ff18c8e3b7e3a127799589eb140183e98aee19780c57f51940f9d201283d5533",
+  "pair_block_id": "P0-PB-10",
+  "result": "passed",
+  "schema_version": 1,
+  "source_sha256": {
+    "review/p0-pb-10/tests/test_run_pairblock_gate.py": "3fa6354f85485c5d080fcb389d7253126e98f6c865ca05db1de9bef6e95d6a7c",
+    "review/p0-pb-10/tools/__init__.py": "86f80c4ce8de033365a56e01fecd68a1d69d87ef86d9c76230fc5fe9b584644e",
+    "review/p0-pb-10/tools/run_pairblock_gate.py": "8b8ecdbcc01c08b48b2ac5a10abbb91121d5455f04073d31b7622a8ed6d99113"
+  },
+  "started_at": "2026-09-12T01:29:21.149212+00:00",
+  "status_after": "Awaiting user review",
+  "status_before": "Codex drafting",
+  "stderr": "",
+  "stdout": "........                                                                 [100%]\n8 passed in 0.93s\n"
+}
