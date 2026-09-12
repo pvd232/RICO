@@ -83,13 +83,44 @@ RICO owns this definition and its approval history. The proposed executable type
 
 ### Ownership boundary
 
-RICO contains forward-looking contracts and review records. MANTRA contains executable restoration records, restoration code, restored files, rebuild code, and VIPER run evidence. Restoration imports the installed VIPER distribution. The VIPER source checkout remains outside the MANTRA execution path and unchanged by this work.
+MANTRA is the historical oracle. It contains the restored legacy artifacts,
+historical source, Phase 0 restoration and replay adapters, and exact Hopfield
+and MIL replay evidence. RICO contains the contracts and receipts for Phase 0.
+RICO owns reconstructed model source, tests, VIPER declarations, and future
+graph encoders from Phase 1 onward. Restoration imports the installed VIPER
+distribution. The VIPER source checkout remains outside both execution paths
+and unchanged by this work.
 
 The existing MANTRA Git repository is the VIPER workspace. A root `viper.toml` marks that boundary because `viper.repository.resolve_root()` requires the marker to equal the Git work-tree root. `viper init` serves empty targets by generating a Python package, build configuration, test tree, and example stages. MANTRA supplies those structures itself, so Phase 0 adds only the workspace marker and MANTRA-owned adapters.
 
 The MANTRA execution environment is the Conda environment named `mantra`. It must contain Python 3.13 and the `viper-provenance` package. The environment receipt records the environment name, Python executable, installed VIPER version, and module path as observations. The gate accepts every installed VIPER version.
 
 New orchestration code belongs under `src/mantra/rebuild/`. It calls the historical MANTRA implementation at its current paths and preserves the historical experiment layout. The Hopfield replay adapter and its focused test are `src/mantra/rebuild/hopfield_replay.py` and `src/mantra/rebuild/tests/test_hopfield_replay.py`. `P0-PB-02` identifies every declared stage input before we draft their complete source.
+
+### Cross-workspace artifact handoff
+
+VIPER 0.1.0a3 intentionally confines `ExternalInputRef` to a file beneath the
+active repository root. `capture_external_input()` then copies those bytes into
+the consuming attempt. This restriction gives the active workspace custody of
+the bytes it declares. The local [cross-workspace assessment](../../evidence/viper-assessments/local-prior-run-cross-workspace.json)
+identifies the inspected VIPER commit, files, symbols, and line ranges.
+
+Local prior-run references have a different limitation. `LocalFileRef` records
+the store path, content revision, and file path while omitting repository
+identity.
+`_freeze_input()` accepts that reference in a second local workspace, while
+`RunFetcher` resolves it against the second workspace's `LocalArtifactStore`.
+The [cross-workspace probe](../../evidence/viper-assessments/local-prior-run-cross-workspace.json)
+therefore compiled a consumer pointer and then failed with `local immutable file
+is missing` when the consumer fetched the producer run. This is a VIPER
+validation gap: the compiler accepts a local storage graph that execution fails
+to traverse.
+
+A `LocalFileRef` must remain within one workspace root. A Phase 1
+consumer may use a MANTRA artifact only through an immutable remote-backed
+VIPER reference or a verified custody copy inside RICO. Phase 0 must test and
+record the selected route before Phase 1 consumes it. `P0-PB-09` registers this
+assessment and its later route test in the VIPER graph.
 
 ### Local storage
 
@@ -193,6 +224,7 @@ flowchart TB
 | Graph-completeness report | Missing members of $F$, $P$, or $E$, plus the pass or fail result. |
 | Hopfield replay receipt | Approved command, saved-encoder identity, input digests, produced predictions, metric, tolerance, and comparison result. |
 | MIL replay receipt | Exact command, environment, input digests, output digests, metrics, tolerances, and comparison result. |
+| Cross-workspace assessment | The installed VIPER version, source revision, accepted local pointer, failed cross-workspace fetch, classification, and project rule. |
 | VIPER usefulness ledger | Claimed check, real defect detected, independent confirmation, ordinary-test coverage, false alarms, infrastructure failures, time cost, and later reuse. |
 
 The dependency graph, restoration bindings, environment receipt, capacity receipt, restoration receipts, completeness report, both replay receipts, and usefulness ledger must themselves be registered in VIPER. Each checked-in evidence file requires a corresponding graph record.
@@ -392,17 +424,17 @@ The [Phase 0 ownership record](#phase-0-ownership-record) records each block's s
 ### Repository evidence protocol
 
 RICO records the contract, checklist, approvals, and lifecycle receipts. MANTRA
-owns every rebuild source file and test. A RICO proposal-gate receipt supports
-`Review` or `Approved`. The MANTRA implementation receipt proves that MANTRA
-contains the accepted code.
+owns Phase 0 restoration and replay source. RICO owns reconstruction source from
+Phase 1 onward. A proposal-gate receipt supports `Review` or `Approved`. The
+implementation receipt proves that the repository named by the PairBlock's code
+boundary contains the accepted code.
 
-An `Applied` transition requires one MANTRA implementation receipt with the
-MANTRA repository identity, verified base and result commits, exact owned
-paths, the canonical diff SHA-256, and the focused-test receipt. The canonical
-diff uses the command defined by the global master-checklist contract. The
-controller must recompute the commits and diff digest before changing status.
-A `Complete` transition then requires the VIPER record named by the block's
-gate.
+An `Applied` transition requires one implementation receipt with the owning
+repository identity, verified base and result commits, exact owned paths, the
+canonical diff SHA-256, and the focused-test receipt. The canonical diff uses
+the command defined by the global master-checklist contract. The controller
+must recompute the commits and diff digest before changing status. A `Complete`
+transition then requires the VIPER record named by the block's gate.
 
 This project rule instantiates the global lifecycle-evidence contract. Git
 supplies the immutable commit identities and commit comparison. in-toto and

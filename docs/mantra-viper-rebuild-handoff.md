@@ -2,7 +2,7 @@
 
 ## Objective and checkout identity
 
-Rebuild the two MANTRA models described in the architecture papers: the Hopfield predictor reporting PearsonDelta 0.5861640938949398 (résumé shorthand ~0.58), and the selected single-query MIL predictor reporting 0.6025499488874759 (~0.602). Reconstruct preprocessing and training as well as inference. Use VIPER for experiment declarations, execution, measurements, and verification; MANTRA owns the model and biological transformations.
+Rebuild the two MANTRA models described in the architecture papers: the Hopfield predictor reporting PearsonDelta 0.5861640938949398 (résumé shorthand ~0.58), and the selected single-query MIL predictor reporting 0.6025499488874759 (~0.602). Reconstruct preprocessing and training as well as inference. Use VIPER for experiment declarations, execution, measurements, and verification. MANTRA is the historical oracle and owns Phase 0 restoration and replay. RICO owns reconstructed model source, tests, VIPER declarations, and future graph encoders from Phase 1 onward.
 
 The verified MANTRA checkout is `/Users/machina/Developer/ChatGPT/mantra`, revision `6916d01404ecebe4ee21b29ca74724a8a8ced7c2`. The earlier location `/Users/machina/Developer/mantra` no longer exists. Another directory, `/Users/machina/Developer/mantra_local`, exists; it was not selected for this source map.
 

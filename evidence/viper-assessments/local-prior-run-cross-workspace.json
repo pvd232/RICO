@@ -1,0 +1,62 @@
+{
+  "assessment_id": "VIPER-GAP-001",
+  "observed_at": "2026-09-12T04:28:26Z",
+  "installed_distribution": {
+    "name": "viper-provenance",
+    "version": "0.1.0a3",
+    "module_path": "/Users/machina/miniconda3/envs/mantra/lib/python3.13/site-packages/viper/__init__.py",
+    "source_commit": "178653de710763d1f9d171b77d8eade89e498b10"
+  },
+  "inspected_sources": [
+    {
+      "path": "src/viper/inputs.py",
+      "lines": "18-31",
+      "symbols": ["LocalSource", "ExternalInputRef"]
+    },
+    {
+      "path": "src/viper/execution/_materialization.py",
+      "lines": "266-310",
+      "symbols": ["capture_external_input"]
+    },
+    {
+      "path": "src/viper/references.py",
+      "lines": "64-71",
+      "symbols": ["LocalFileRef"]
+    },
+    {
+      "path": "src/viper/authoring.py",
+      "lines": "891-940",
+      "symbols": ["_freeze_input"]
+    },
+    {
+      "path": "src/viper/execution/_source.py",
+      "lines": "42-84",
+      "symbols": ["RunFetcher"]
+    }
+  ],
+  "claim_under_test": "A local consumer workspace can retrieve a prior run stored in a different local producer workspace through StoredInputRef.",
+  "fixed_input": "cross-workspace-artifact",
+  "observations": {
+    "producer_artifact_fetch": "cross-workspace-artifact",
+    "consumer_compile": "accepted",
+    "consumer_pointer_fetch": "accepted",
+    "producer_run_ref_type": "LocalFileRef",
+    "consumer_producer_run_fetch": "rejected",
+    "consumer_fetch_error": "local immutable file is missing"
+  },
+  "classifications": [
+    {
+      "behavior": "ExternalInputRef accepts only repository-local files and capture_external_input copies their bytes into the active attempt.",
+      "classification": "intentional_restriction",
+      "reason": "The restriction binds declared input bytes to the active workspace and rejects path or symlink escapes."
+    },
+    {
+      "behavior": "_freeze_input accepts a LocalFileRef from another local workspace, but RunFetcher resolves it through the consumer workspace store.",
+      "classification": "framework_gap",
+      "reason": "Compilation accepts a storage graph that execution cannot traverse."
+    }
+  ],
+  "missing_connector": "LocalFileRef contains no producer repository identity, and local compilation does not reject a reference created under another workspace root.",
+  "project_rule": "A LocalFileRef must not cross the MANTRA and RICO workspace roots. Cross-workspace consumption requires an immutable remote-backed VIPER reference or a verified custody copy in the consumer workspace.",
+  "viper_graph_status": "pending P0-PB-09 registration"
+}
