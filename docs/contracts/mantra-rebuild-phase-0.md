@@ -278,10 +278,10 @@ Resolution status lives in the [master checklist](../checklists/mantra-rebuild.m
 | [`P0-PB-02`](../checklists/mantra-rebuild.md#pairblock-resolution) | Trace the Hopfield replay. | Codex traces; user approves. | [Work description](#p0-pb-02-declaration) | Hopfield portion of `P0-VR-01` |
 | [`P0-PB-03`](../checklists/mantra-rebuild.md#pairblock-resolution) | Trace the MIL replay. | Codex traces; user approves. | [Work description](#p0-pb-03-declaration) | MIL portion of `P0-VR-01` |
 | [`P0-PB-04`](../checklists/mantra-rebuild.md#pairblock-resolution) | Produce every restoration binding. | User implements approved code; Codex reviews it. | [`P0-PB-04A`](#p0-pb-04a-proposed-code); [`P0-PB-04B`](#p0-pb-04b-proposed-code) | `P0-VR-02` |
-| [`P0-PB-04A`](../checklists/mantra-rebuild.md#pairblock-resolution) | Define and validate `RestorationBinding`. | User reviews and implements. | [Source and tests](#p0-pb-04a-proposed-code) | Reject malformed bindings and incomplete coverage. |
-| [`P0-PB-04B`](../checklists/mantra-rebuild.md#pairblock-resolution) | Resolve a MANTRA path through signed controls to one archive member. | Codex proposes; user reviews and implements. | [Source and tests](#p0-pb-04b-proposed-code) | Resolve the eight approved Hopfield restorations; reject broken path, symlink, file-identity, object-identity, and archive joins. |
+| [`P0-PB-04A`](../checklists/mantra-rebuild.md#pairblock-resolution) | Define and validate `RestorationBinding`. | User reviews and implements. | [Source](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/restoration.py) · [Tests](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/tests/test_restoration.py) | Reject malformed bindings and incomplete coverage. |
+| [`P0-PB-04B`](../checklists/mantra-rebuild.md#pairblock-resolution) | Resolve a MANTRA path through signed controls to one archive member. | Codex proposes; user reviews and implements. | [Source](../../../mantra/staging/p0-pb-04b/src/mantra/rebuild/restoration.py) · [Tests](../../../mantra/staging/p0-pb-04b/src/mantra/rebuild/tests/test_control_resolution.py) | Resolve the eight approved Hopfield restorations; reject broken path, symlink, file-identity, object-identity, and archive joins. |
 | [`P0-PB-05`](../checklists/mantra-rebuild.md#pairblock-resolution) | Prove capacity and produce the download plan. | User implements approved code; Codex reviews it. | [`P0-PB-05A`](#p0-pb-05a-proposed-code); `P0-PB-05B` pending | `P0-VR-03` |
-| [`P0-PB-05A`](../checklists/mantra-rebuild.md#pairblock-resolution) | Calculate capacity and write its receipt. | User reviews and implements. | [Source and tests](#p0-pb-05a-proposed-code) | Report every term in $R_{max}$ and reject insufficient space. |
+| [`P0-PB-05A`](../checklists/mantra-rebuild.md#pairblock-resolution) | Calculate capacity and write its receipt. | User reviews and implements. | [Source](../../../mantra/staging/p0-pb-05a/src/mantra/rebuild/capacity.py) · [Tests](../../../mantra/staging/p0-pb-05a/src/mantra/rebuild/tests/test_capacity.py) | Report every term in $R_{max}$ and reject insufficient space. |
 | [`P0-PB-05B`](../checklists/mantra-rebuild.md#pairblock-resolution) | Order the required archive chunks. | Codex proposes; user approves cache timing. | Pending proposal | Identify every chunk by revision, byte count, and digest. |
 | [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | Restore files and verify graph $B$. | User runs approved code; Codex reviews evidence. | Pending proposal | `P0-VR-04` and `P0-VR-06` |
 | [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay Hopfield. | User runs approved code; Codex reviews evidence. | Pending proposal | `P0-VR-07` |
@@ -315,11 +315,14 @@ MANTRA already owns its package, tests, configuration, and historical experiment
 
 #### `P0-PB-04` declaration
 
-`P0-PB-04` closes when `P0-PB-04A` and `P0-PB-04B` produce every restoration binding.
+`P0-PB-04` closes when its two implementation blocks produce every restoration binding:
+
+- [`P0-PB-04A` source](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/restoration.py) · [tests](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/tests/test_restoration.py)
+- [`P0-PB-04B` source](../../../mantra/staging/p0-pb-04b/src/mantra/rebuild/restoration.py) · [tests](../../../mantra/staging/p0-pb-04b/src/mantra/rebuild/tests/test_control_resolution.py)
 
 #### `P0-PB-05` declaration
 
-`P0-PB-05` closes when `P0-PB-05A` proves capacity and `P0-PB-05B` fixes the archive-chunk order.
+`P0-PB-05` closes when [`P0-PB-05A` source](../../../mantra/staging/p0-pb-05a/src/mantra/rebuild/capacity.py) and its [tests](../../../mantra/staging/p0-pb-05a/src/mantra/rebuild/tests/test_capacity.py) prove capacity and `P0-PB-05B` fixes the archive-chunk order.
 
 #### `P0-PB-05B` declaration
 
@@ -457,10 +460,10 @@ choices.
 | [`P0-PB-02`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Declaration](#p0-pb-02-declaration) |
 | [`P0-PB-03`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Declaration](#p0-pb-03-declaration) |
 | [`P0-PB-04`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Declaration](#p0-pb-04-declaration) |
-| [`P0-PB-04A`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Proposed code](#p0-pb-04a-proposed-code) |
-| [`P0-PB-04B`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Proposed code](#p0-pb-04b-proposed-code) |
+| [`P0-PB-04A`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/restoration.py) · [Tests](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/tests/test_restoration.py) |
+| [`P0-PB-04B`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/staging/p0-pb-04b/src/mantra/rebuild/restoration.py) · [Tests](../../../mantra/staging/p0-pb-04b/src/mantra/rebuild/tests/test_control_resolution.py) |
 | [`P0-PB-05`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Declaration](#p0-pb-05-declaration) |
-| [`P0-PB-05A`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Proposed code](#p0-pb-05a-proposed-code) |
+| [`P0-PB-05A`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/staging/p0-pb-05a/src/mantra/rebuild/capacity.py) · [Tests](../../../mantra/staging/p0-pb-05a/src/mantra/rebuild/tests/test_capacity.py) |
 | [`P0-PB-05B`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Declaration](#p0-pb-05b-declaration) |
 | [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Declaration](#p0-pb-06-declaration) |
 | [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Declaration](#p0-pb-07-declaration) |
