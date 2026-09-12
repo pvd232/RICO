@@ -91,9 +91,9 @@ D_q
 \mathcal{D}.
 ```
 
-The exact dataset artifacts selected by the stage inputs, together with the
-stage callables and typed parameters that select samples, features, quality
-controls, and transformations, determine $D_q$.
+For the fixed-data derivation below, immutable dataset artifacts and the stage callables/configurations selecting samples, features, and transformations determine $D_q$.
+
+An ExternalInputRef freezes a workspace path and data role, not an expected byte digest. The current executor reads that path when it captures the input. Two executions can therefore observe different datasets, denoted $D_{q,e}$ and $D_{q,e'}$, under the same path declaration. Applying the fixed-$D_q$ derivation requires these datasets to agree, for example by consuming an immutable stored artifact. Snapshot verification authenticates the captured bytes; it does not retroactively establish a pre-execution content commitment. See [external input capture](../viper/src/viper/execution/_materialization.py).
 
 The final parameter value produced by the run is denoted:
 
@@ -732,6 +732,7 @@ class MainProcessRNGState(ProtocolModel):
     torch_cpu: bytes = Field(min_length=1)
     torch_cuda: tuple[bytes, ...]
 ```
+
 #### DataLoaderConfiguration
 
 [DataLoaderConfiguration source](../viper/src/viper/resume.py) (line 23).
@@ -861,7 +862,7 @@ artifact name a
 
 ## 10. Boundary rules
 
-The protocol applies completeness and parsimony at three nested boundaries:
+The following design rules apply completeness and parsimony at three nested boundaries. They guide workspace decomposition; the verifier does not prove that an artifact contains the minimum possible files or that user code uses every declared input:
 
 1. Every state from which $q$ permits replay creates a stage boundary. A
    training stage ends at its single terminal checkpoint $s_k^{(N_k)}$.
@@ -1048,6 +1049,10 @@ class RunPlanDraft(BaseModel):
 
 Run IDs are 26-character uppercase ULID-form strings matching `^[0-9A-HJKMNP-TV-Z]{26}$`. Human-authored experiment, variant, replicate, stage, input, output, metric, and eval IDs use lowercase identifiers matching `^[a-z][a-z0-9_]*$`. RunId is not a HumanId. Paths are normalized relative POSIX paths without empty, dot, parent, absolute, backslash, or control-character components. SHA-256 values contain 64 lowercase hexadecimal characters.
 
+### File identity and logical document digests
+
+A file SHA-256 hashes the exact stored bytes, and its byte count is the length of that byte sequence. By contrast, `document_digest()` first serializes a model to JSON values, then hashes UTF-8 JSON with sorted mapping keys, compact separators, and `ensure_ascii=False`. Thus config and context digests are independent of mapping insertion order. `serialize_document()` emits YAML with `sort_keys=False`; different YAML bytes can encode the same logical value. Verification uses the appropriate identity at each join rather than treating these hashes as interchangeable. See [serialization.py](../viper/src/viper/serialization.py).
+
 A standalone file reference combines storage location, byte count, and SHA-256. SnapshotFileRef supplies the path and content identity within a separately selected stage-result snapshot. Storage includes Git, Hugging Face, local stores, and VIPER Cloud file references; the snapshot union has its own supported storage variants. These unions are defined in references.py.
 
 The output declaration belongs to `BaseSpec.outputs`; realized output files belong to `ResolvedBaseSpec.artifacts`. Their output-name sets agree. `OutputSpec.kind` selects `file` or `bundle`. A single file has one identity; a bundle has at least two uniquely named members under its declared root. Verification checks member order, containment, non-overlap, exact membership, hashes, byte counts, and loader execution. A successful generic loader invocation demonstrates loadability of those bytes, not scientific correctness.
@@ -1063,6 +1068,7 @@ class ProtocolModel(BaseModel):
     'Closed, frozen protocol object.'
     model_config = ConfigDict(extra="forbid", frozen=True)
 ```
+
 #### Config
 
 [Config source](../viper/src/viper/config.py) (line 22).
@@ -1154,6 +1160,7 @@ class ConfigTypeRef(ProtocolModel):
     sha256: SHA256
     bytes: int = Field(gt=0)
 ```
+
 #### GitSource
 
 [GitSource source](../viper/src/viper/references.py) (line 14).
@@ -1373,6 +1380,7 @@ class ResolvedBenchmarkResultRef(ResolvedFileRef):
     'Identify one completed benchmark result.'
     kind: Literal["benchmark_result"] = "benchmark_result"
 ```
+
 #### OutputDraft
 
 [OutputDraft source](../viper/src/viper/outputs.py) (line 20).
@@ -1436,6 +1444,7 @@ class EvalOutputs(StageOutputs[OutputT], Generic[OutputT]):
     'Require the canonical evaluation result.'
     predictions: OutputT
 ```
+
 #### StageArtifactRef
 
 [StageArtifactRef source](../viper/src/viper/artifacts.py) (line 36).
@@ -1561,6 +1570,7 @@ class BundleArtifactDraft(BaseModel):
     loader: Callable[[Path], Any]
     data_role: DataRole
 ```
+
 ## 14. Run, input, and attempt records
 
 RunSpec selects one experiment, variant, and replicate, and freezes its seed, source revision, shared env, execution policy, complete reproducibility settings, ordered stage references, and estimator. `RunSpec.estimator` selects a declared training stage's `model` output. A stage's `env` overrides the shared env; run-wide reproducibility controls remain shared.
@@ -1689,6 +1699,7 @@ class ResolvedRun(ProtocolModel):
 ```
 
 Validation: Require the success selector only for a successful terminal run.
+
 #### LocalSource
 
 [LocalSource source](../viper/src/viper/inputs.py) (line 20).
@@ -1773,6 +1784,7 @@ class ResolvedFutureInputRef(ProtocolModel):
     kind: Literal["future"] = "future"
     producer: ResolvedStageRef
 ```
+
 ## 15. Environment, reproducibility, and execution records
 
 `EnvSpec` discriminates LocalEnvSpec and GCEEnvSpec; `ResolvedEnv` records their realized counterparts. Requested lockfiles are source references; resolved lockfiles include verified content identities. `ExecutionContext` records host, compute backend, and numerical-runtime information. A requested environment is not a provisioning receipt by itself.
@@ -2231,6 +2243,7 @@ class RuntimeInitialization():
     numpy_generators: dict[str, np.random.Generator]
     generators: tuple[GeneratorInitializationReceipt, ...]
 ```
+
 ## 16. Experiment, variant, replicate, and measurement records
 
 ExperimentSpec declares factor levels, permitted variants, replicate IDs/seeds, and metric specifications. VariantSpec binds selected factor levels and stage configurations. Plan verification checks the selected experiment, variant, seed, configs, metric IDs, and estimator together. Human-authored stage names remain independent of stage kinds: two different stage IDs may both be training stages.
@@ -2361,6 +2374,7 @@ class VariantSpec(ProtocolModel):
 ```
 
 Validation: Require one variant-config record per stage.
+
 #### FloatComparator
 
 [FloatComparator source](../viper/src/viper/metrics.py) (line 38).
@@ -2516,6 +2530,7 @@ class MetricObjectiveSpec(ProtocolModel):
     metric_id: MetricId
     direction: ObjectiveDirection
 ```
+
 ## 17. Concrete stage records
 
 The Spec union has six kinds: download, build, embed, diagnostic, train, and eval. DownloadSpec is runner-owned HTTP retrieval; its input request names equal its single-file output names. Workspace stages identify exact callable and config-type sources and receive StageContext. Download bodies are verified against their frozen request identities and recorded retrieval evidence before publication.
@@ -2862,6 +2877,7 @@ class StageDefinition(Generic[ConfigT]):
 class StageDefinitionError(RuntimeError):
     'Report an invalid decorated stage or frozen implementation identity.'
 ```
+
 #### HttpOrigin
 
 [HttpOrigin source](../viper/src/viper/http.py) (line 54).
@@ -3124,6 +3140,7 @@ class HttpDefinition(Generic[HttpConfigT]):
 class HttpCallable(Protocol[HttpConfigT]):
     'Describe the callable interface shared by workspace HTTP implementations.'
 ```
+
 #### ReuseFileIdentity
 
 [ReuseFileIdentity source](../viper/src/viper/reuse.py) (line 118).
@@ -3245,6 +3262,7 @@ class ReusedStageCompletion(ProtocolModel):
     kind: Literal["reused"] = "reused"
     receipt: ResolvedStageReuseRef
 ```
+
 ## 18. Training checkpoint mapping
 
 The reserved output names are `model` and `resume_state`. TrainOutputs expresses that pair at authoring time; TrainSpec validates both names in outputs. The model loader reconstructs model parameters and persistent buffers. The resume-state loader reconstructs optimizer, main-process RNG, and stateful DataLoader state. Together they should reconstruct the state in Section 4.
@@ -3293,6 +3311,7 @@ class ResumeState(ProtocolModel):
     main_process_rng: MainProcessRNGState
     dataloader: DataLoaderResumeState
 ```
+
 ### Reconstruction condition
 
 Let $L_m$ and $L_r$ be the selected model and resume loaders, and let $F_m,F_r$ be their verified file representations. A complete checkpoint requires
@@ -3316,7 +3335,7 @@ BenchmarkSpec fixes test and split pointers, eval identity, metric IDs, optional
 
 The result status distinguishes verified comparisons without criteria, passed criteria, and failed comparisons or criteria. A saved passed Boolean is checked against its supporting values; it is not self-authenticating. A failed numerical comparison is a benchmark result, whereas execution or verification errors raise through the public execution API.
 
-Artifact-pointer verification separately checks promotion eligibility. When a benchmark governs the selected estimator, the promoted pointer must carry the benchmark result required by the verifier. A passed comparison covers those observed runs and selected outputs; it is not the universal statement over all E_q in Section 6.
+Artifact-pointer verification separately checks promotion eligibility. When a benchmark governs the selected estimator, the promoted pointer must carry the benchmark result required by the verifier. A passed comparison covers those observed runs and selected outputs; it is not the universal statement over all $E_q$ in Section 6.
 
 #### MetricCriterion
 
@@ -3452,6 +3471,7 @@ class BenchmarkResult(ProtocolModel):
 ```
 
 Validation: Require unique artifact selectors and metric results.
+
 ## 21. Validation and external verification
 
 Pydantic validation checks local shape, discriminators, finite values, identity syntax, name uniqueness, path relations, status/timing rules, and relationships contained in one record. It cannot authenticate a referenced file until the verifier retrieves that file.
@@ -3480,7 +3500,7 @@ The built-in checkpoint helper covers optimizer, main-process RNG, and StatefulD
 
 ### Limits of the conclusion
 
-Let P(q,r) mean that the implemented checks accept recorded evidence r for plan q. Acceptance establishes P(q,r), subject to the trusted code, storage, hashing, and observation assumptions. It does not alone imply every unobserved action of the execution satisfied q, nor that all permitted executions produce identical bytes. This distinguishes record consistency, observed runtime agreement, repeated-output comparison, and the conditional reproducibility theorem.
+Let $P(q,r)$ mean that the implemented checks accept recorded evidence $r$ for plan $q$. Acceptance establishes $P(q,r)$, subject to the trusted code, storage, hashing, and observation assumptions. It does not alone imply every unobserved action of the execution satisfied $q$, nor that all permitted executions produce identical bytes. This distinguishes record consistency, observed runtime agreement, repeated-output comparison, and the conditional reproducibility theorem.
 
 ### Verification owners and observing tests
 
@@ -3494,6 +3514,7 @@ Let P(q,r) mean that the implemented checks accept recorded evidence r for plan 
 | Metric lifecycle and binding | [src/viper/metrics.py](../viper/src/viper/metrics.py) | [tests/test_metric_interface.py](../viper/tests/test_metric_interface.py) |
 | Independent confirmation and comparisons | [src/viper/execution/_benchmark.py](../viper/src/viper/execution/_benchmark.py) | [tests/test_benchmark_execution.py](../viper/tests/test_benchmark_execution.py) |
 | Reuse selection and evidence | [src/viper/reuse.py](../viper/src/viper/reuse.py) | [tests/test_verification_acceptance.py](../viper/tests/test_verification_acceptance.py) |
+
 ## 22. Execution and publication sequence
 
 1. Commit workspace implementation, loaders, config classes, environment lockfile, and authored experiment declarations. `read_source()` supplies source identity through the public repository API.
@@ -3502,7 +3523,7 @@ Let P(q,r) mean that the implemented checks accept recorded evidence r for plan 
 4. Allocate an attempt, materialize verified inputs, and visit the ordered stages. Resolve a verified reuse candidate when permitted; otherwise start the stage worker under the selected controls.
 5. Capture startup evidence inside the invocation's autocast context, invoke the workspace callable or runner-owned download operation, and retain timing, invocation, retrieval, and metric evidence.
 6. Publish each resolved stage and output snapshot, verify it, and append the stage result to the attempt. Publish the terminal attempt record with its journal, logs, measurement files, and evidence references.
-7. Publish ResolvedRun and verify its referenced graph. Return RunResult. Use result.status, result.path, result.reference, and result.record directly; there is no required result.resolved_run_path indirection.
+7. Publish ResolvedRun and verify its referenced graph. Return RunResult. Use result.status, result.path, result.reference, and result.record directly.
 8. Optionally run an independent benchmark confirmation, restore artifacts, or promote an eligible artifact. Batch execution returns one outcome per input in input order and retains failures explicitly.
 
 Logical publication dependencies are source → plan → invocation/execution evidence → stage snapshot → attempt → terminal run → optional benchmark → optional pointer. Different storage destinations implement those immutable references; the public Python workflow is independent of the transport choice.
@@ -3608,6 +3629,7 @@ class ExperimentExecutionResult(BaseModel):
             min_length=1, description="Per-run outcomes in the original input order."
         )
 ```
+
 ## 23. Repository layout
 
 ### Workspace layout
@@ -4212,7 +4234,7 @@ $B_{\alpha,\beta,q,t}$ from Appendix A.2. A training stage supplies one
 explicit `torch.Generator` to a map-style DataLoader with shuffled sampling and
 automatic batching. The same generator supplies the DataLoader base seed and
 the `RandomSampler` permutation. `BatchSampler` groups indices deterministically.
-The diagrams assume `persistent_workers=False`.
+The diagrams assume `persistent_workers=False`. These ordinary PyTorch DataLoader examples explain generator consumption. VIPER's capture_resume_state() requires a torchdata StatefulDataLoader, whose state_dict() also records resumable iteration state.
 
 The generator states after iterator creation and randomized index generation
 form $r_{k,\mathrm{sampling}}^{(t+1)}$. The generator states after retrieval,
@@ -4223,6 +4245,12 @@ $b_{k,\mathrm{batch}}^{(t+1)}$.
 ### Single-process loading
 
 ```python
+import torch
+from torch.utils.data import DataLoader, TensorDataset
+
+run_seed = 7
+batch_size = 2
+dataset = TensorDataset(torch.arange(8))
 generator = torch.Generator().manual_seed(run_seed)
 
 loader = DataLoader(
@@ -4287,6 +4315,8 @@ subsequent next(iterator) calls
             │
             ▼
 all indices consumed
+├── RandomSampler draws a final permutation for its remainder branch
+│   └── zero remaining indices are yielded, but g still advances
 ├── RandomSampler iterator ends
 ├── BatchSampler iterator ends
 └── DataLoader iterator raises StopIteration
@@ -4297,6 +4327,8 @@ iterator = iter(loader)
 ├── draws another base seed from g
 └── the next demand for indices generates a new permutation using g
 ```
+
+For this default without-replacement sampler, exhausting the iterator advances the generator once more: RandomSampler evaluates a final randperm before taking the empty remainder slice. Saving generator state after the last yielded batch therefore differs from saving it after StopIteration. A checkpoint must preserve the actual iterator position as well as the RNG state.
 
 An index batch is the complete list of dataset indices for one returned batch.
 For example:
@@ -4400,6 +4432,12 @@ The following configuration gives the DataLoader and `RandomSampler` different
 generator objects:
 
 ```python
+import torch
+from torch.utils.data import DataLoader, RandomSampler, TensorDataset
+
+run_seed = 7
+batch_size = 2
+dataset = TensorDataset(torch.arange(8))
 loader_generator = torch.Generator().manual_seed(run_seed)
 sampler_generator = torch.Generator().manual_seed(run_seed)
 
@@ -4450,8 +4488,7 @@ private RandomSampler generator
 ```
 
 Both variants use distinct generator states for DataLoader base-seed generation
-and shuffled-permutation generation. The protocol uses one shared generator so
-replay captures and restores one DataLoader sampling state.
+and shuffled-permutation generation. The examples use one shared generator to make its state transitions explicit. VIPER does not require the DataLoader and sampler to share a generator; exact continuation requires capturing the state of whichever configuration the workspace actually uses.
 
 ### Epoch boundary
 
@@ -4466,7 +4503,7 @@ one epoch
 
 The next epoch begins with another `iter(loader)` call.
 
-This appendix follows the PyTorch 2.13.0 implementations of:
+The historical source references below use PyTorch 2.13.0. Iterator creation, shuffled-index generation, and the exhaustion draw were also checked against installed PyTorch 2.14.0:
 
 - [`DataLoader` iterator and base-seed construction](https://github.com/pytorch/pytorch/blob/v2.13.0/torch/utils/data/dataloader.py#L639-L644);
 - [`RandomSampler`](https://github.com/pytorch/pytorch/blob/v2.13.0/torch/utils/data/sampler.py#L146-L170);

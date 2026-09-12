@@ -1,14 +1,46 @@
 {
   "document": "/Users/machina/Developer/ChatGPT/RICO/viper-protocol.md",
   "source_revision": "178653de710763d1f9d171b77d8eade89e498b10",
-  "line_count": 4476,
+  "line_count": 4513,
   "class_field_excerpts_checked": 191,
-  "local_links_checked": 218,
+  "local_links_checked": 220,
   "math_blocks_checked": 59,
   "original_foundation_appendix_math_blocks_preserved": 58,
   "checks": "passed",
-  "runtime_tests": "not run: project .venv interpreter symlink target /Library/Frameworks/Python.framework/Versions/3.14/bin/python3.14 is absent",
-  "scope": "Documentation only; source AST, fields, inheritance, link targets, headings, fences, and math braces checked. No live execution or universal reproducibility proof claimed.",
-  "document_sha256": "a3d8d979eead854a2a14ca43cf59aca57fc624a0e2de406e19cc91db41afdd79",
-  "math_typesetting": "59 display expressions compiled successfully with pdfLaTeX; source blank lines removed only in the temporary TeX rendering harness"
+  "runtime_tests": {
+    "command": "source .venv/bin/activate && python -m pytest tests -q -m 'not live_cuda'",
+    "working_directory": "/Users/machina/Developer/ChatGPT/viper",
+    "exit_code": 0,
+    "passed": 518,
+    "subtests_passed": 31,
+    "deselected_live_cuda": 9,
+    "warnings": 3,
+    "duration_seconds": 648.86,
+    "log": "/tmp/viper-protocol-full-tests.log"
+  },
+  "scope": "Current source declarations, local links, mathematical typesetting, host-independent runtime tests, and focused runtime checks. Live CUDA acceptance was excluded; no universal reproducibility claim is inferred from these checks.",
+  "document_sha256": "7b736e047d62aea70d03a46fd8a9fda6abd63209cf15ead1b9e06fe32e571f36",
+  "math_typesetting": "59 display expressions compiled successfully with pdfLaTeX; source blank lines removed only in the temporary TeX rendering harness",
+  "environment": {
+    "python": "3.12.14",
+    "interpreter": "/Users/machina/Developer/ChatGPT/viper/.venv/bin/python",
+    "torch": "2.14.0",
+    "installation": "editable .[test,release,mcp]",
+    "pip_check": "No broken requirements found.",
+    "previous_environment_backup": "/Users/machina/.cache/viper-env-backups/viper-python314-20260911"
+  },
+  "additional_runtime_checks": {
+    "registered_json_schemas": 73,
+    "self_contained_dataloader_examples": 2,
+    "sampler_exhaustion_advances_rng": "passed",
+    "canonical_document_digest_distinct_from_yaml_byte_identity": "passed",
+    "external_input_capture_uses_current_source_bytes": "passed"
+  },
+  "review_corrections": [
+    "Fixed-data derivation requires equal input contents; an external path alone does not commit their digest.",
+    "Boundary parsimony rules describe workspace design rather than verifier-proven minimality.",
+    "Logical document digests and serialized file hashes identify different objects.",
+    "Ordinary DataLoader illustrations are distinguished from StatefulDataLoader checkpoint capture.",
+    "RandomSampler exhaustion can advance RNG after the final yielded batch; the appendix now includes this transition."
+  ]
 }
