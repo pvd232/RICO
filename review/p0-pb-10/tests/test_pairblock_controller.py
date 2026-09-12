@@ -401,12 +401,12 @@ def test_html_declaration_anchor_is_not_a_navigation_target(
 
     repository = repository_factory(command=passing_command())
     contract = repository / CONTRACT_PATH
-    heading = f"#### `{PAIR_BLOCK_ID}` declaration"
-    html_anchor = f'<a id="{PAIR_BLOCK_ID.lower()}-declaration"></a>'
+    heading = f"#### {PAIR_BLOCK_ID}"
+    html_anchor = f'<a id="{PAIR_BLOCK_ID.lower()}"></a>'
     text = contract.read_text(encoding="utf-8").replace(heading, html_anchor)
     contract.write_text(text, encoding="utf-8")
 
-    with pytest.raises(PairBlockGateError, match="native declaration heading"):
+    with pytest.raises(PairBlockGateError, match="native PairBlock heading"):
         validate_test_repository(repository)
 
 
@@ -546,7 +546,7 @@ def test_duplicate_requirement_id_is_rejected(
     text = contract.read_text(encoding="utf-8")
     row = (
         f"| `{REQUIREMENT_ID}` | Retain gate evidence. | "
-        f"[`{PAIR_BLOCK_ID}`](#{PAIR_BLOCK_ID.lower()}-declaration) |\n"
+        f"[`{PAIR_BLOCK_ID}`](#{PAIR_BLOCK_ID.lower()}) |\n"
     )
     contract.write_text(text.replace(row, row + row), encoding="utf-8")
 
@@ -562,8 +562,8 @@ def test_unmapped_pair_block_is_rejected(
     repository = repository_factory(command=passing_command())
     contract = repository / CONTRACT_PATH
     text = contract.read_text(encoding="utf-8").replace(
-        f"(#{PAIR_BLOCK_ID.lower()}-declaration)",
-        f"(#{UNKNOWN_PAIR_BLOCK_ID.lower()}-declaration)",
+        f"(#{PAIR_BLOCK_ID.lower()})",
+        f"(#{UNKNOWN_PAIR_BLOCK_ID.lower()})",
         1,
     )
     contract.write_text(text, encoding="utf-8")
@@ -599,7 +599,7 @@ def test_every_contract_pair_block_requires_one_status_row(
     text = contract.read_text(encoding="utf-8").replace(
         "## Ownership",
         "## Ownership\n\n"
-        f"#### `{DEPENDENCY_PAIR_BLOCK_ID}` declaration\n\n"
+        f"#### {DEPENDENCY_PAIR_BLOCK_ID}\n\n"
         f"| [`{DEPENDENCY_PAIR_BLOCK_ID}`](#pairblock-resolution) | "
         "Exercise dependency. | Test author. | Pending | Gate. |",
     )

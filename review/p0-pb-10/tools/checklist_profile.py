@@ -517,12 +517,12 @@ def _proposal_boundary(
 
 
 def _declaration_heading(contract_text: str, pair_block_id: str) -> None:
-    """Require one renderer-visible heading for a PairBlock declaration."""
+    """Require one renderer-visible heading for a PairBlock."""
 
-    heading = f"#### `{pair_block_id}` declaration"
+    heading = f"#### {pair_block_id}"
     if contract_text.splitlines().count(heading) != 1:
         raise PairBlockGateError(
-            f"contract must contain one native declaration heading for {pair_block_id}"
+            f"contract must contain one native PairBlock heading for {pair_block_id}"
         )
 
 
@@ -595,7 +595,7 @@ def validate_declaration(
         raise PairBlockGateError(
             f"declaration anchor is missing for {row.pair_block_id}"
         )
-    expected_anchor = f"{row.pair_block_id.lower()}-declaration"
+    expected_anchor = row.pair_block_id.lower()
     if anchor != expected_anchor:
         raise PairBlockGateError(
             f"declaration link differs for {row.pair_block_id}"
@@ -625,7 +625,7 @@ def load_proposal_contract(
         raise PairBlockGateError(
             f"declaration anchor is missing for {row.pair_block_id}"
         )
-    expected_declaration = f"{row.pair_block_id.lower()}-declaration"
+    expected_declaration = row.pair_block_id.lower()
     if declaration_anchor != expected_declaration:
         raise PairBlockGateError(
             f"declaration link differs for {row.pair_block_id}"
@@ -824,7 +824,7 @@ def _contract_requirement_map(
         for block_id, anchor in block_links:
             if not profile.accepts_pair_block_id(block_id):
                 raise PairBlockGateError(f"invalid PairBlock ID: {block_id}")
-            if anchor != f"{block_id.lower()}-declaration":
+            if anchor != block_id.lower():
                 raise PairBlockGateError(f"requirement-map link differs for {block_id}")
             requirements_by_block.setdefault(block_id, []).append(requirement_id)
     return requirement_ids, requirements_by_block
@@ -1051,7 +1051,7 @@ def _validate_block_inventory(
     """Require the contract declarations and status rows to name the same blocks."""
 
     headings = re.findall(
-        r"(?m)^#### `([^`]+)` declaration$",
+        r"(?m)^#### ([A-Za-z0-9_.-]+)$",
         contract_text,
     )
     declared = set(headings)
@@ -1345,10 +1345,10 @@ def validate_traceability(
 MANTRA_PHASE0_DIALECT = MarkdownChecklistDialect(
     pair_block_table_header=(
         "| PairBlock | Proposal gate | Resolution status | Depends on | "
-        "Contract declaration | Proposed code |"
+        "Contract block | Proposed code |"
     ),
     requirement_table_header="| Requirement | State | Phase | Depends on | Gate |",
-    requirement_map_header=("| ID | Contract boundary | Owning block declarations |"),
+    requirement_map_header=("| ID | Contract boundary | Blocks |"),
     contract_table_header=(
         "| Work unit | Current state | Owning phase | Completion evidence |"
     ),

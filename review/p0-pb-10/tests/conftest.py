@@ -113,7 +113,7 @@ def _pair_block_row(
 
     contract_link = _relative_link(CHECKLIST_PATH, CONTRACT_PATH)
     declaration = (
-        f"[Declaration]({contract_link}#{block.pair_block_id.lower()}-declaration)"
+        f"[Block]({contract_link}#{block.pair_block_id.lower()})"
     )
     proposed_code = "Pending"
     if proposed:
@@ -208,11 +208,9 @@ class RepositoryFactory:
                 )
             )
             ownership_rows.append(_ownership_row(block, proposed=is_target))
-            declaration_headings.append(
-                f"#### `{block.pair_block_id}` declaration"
-            )
+            declaration_headings.append(f"#### {block.pair_block_id}")
             block_links.append(
-                f"[`{block.pair_block_id}`](#{block.pair_block_id.lower()}-declaration)"
+                f"[`{block.pair_block_id}`](#{block.pair_block_id.lower()})"
             )
             checkboxes.append(_checkbox(block))
 

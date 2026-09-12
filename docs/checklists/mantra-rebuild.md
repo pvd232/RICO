@@ -71,22 +71,22 @@ owned by `historical_and_shared_experiments` and two owned by
 
 ## PairBlock resolution
 
-| PairBlock | Proposal gate | Resolution status | Depends on | Contract declaration | Proposed code |
+| PairBlock | Proposal gate | Resolution status | Depends on | Contract block | Proposed code |
 |---|---|---|---|---|---|
-| `P0-PB-01` | Environment check passed | Applied | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-01-declaration) | [Accepted implementation](../contracts/mantra-rebuild-phase-0.md#p0-pb-01-accepted-implementation) |
-| `P0-PB-02` | Hopfield artifact table approved | Drafting | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-02-declaration) | [Work description](../contracts/mantra-rebuild-phase-0.md#p0-pb-02-declaration) |
-| `P0-PB-03` | Pending | Drafting | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-03-declaration) | [Work description](../contracts/mantra-rebuild-phase-0.md#p0-pb-03-declaration) |
-| `P0-PB-04` | Pending | Waiting for `P0-PB-04A`, `P0-PB-04B` | `P0-PB-04A`, `P0-PB-04B` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-04-declaration) | [Child blocks](../contracts/mantra-rebuild-phase-0.md#p0-pb-04-declaration) |
-| `P0-PB-04A` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-04a/20260912T035904.514065Z-approve.json)) | Approved | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-04a-declaration) | [Source and tests](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/restoration.py) · [Tests](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/tests/test_restoration.py) |
-| `P0-PB-04B` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-04b/20260912T035904.710258Z-approve.json)) | Approved | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-04b-declaration) | [Source and tests](../../../mantra/staging/p0-pb-04b/src/mantra/rebuild/restoration.py) · [Base tests](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/tests/test_restoration.py) · [Resolver tests](../../../mantra/staging/p0-pb-04b/src/mantra/rebuild/tests/test_control_resolution.py) |
-| `P0-PB-05` | Pending | Waiting for `P0-PB-05A`, `P0-PB-05B` | `P0-PB-05A`, `P0-PB-05B` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-05-declaration) | [Child blocks](../contracts/mantra-rebuild-phase-0.md#p0-pb-05-declaration) |
-| `P0-PB-05A` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05a/20260912T035904.894879Z-approve.json)) | Approved | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a-declaration) | [Source and tests](../../../mantra/staging/p0-pb-05a/src/mantra/rebuild/capacity.py) · [Tests](../../../mantra/staging/p0-pb-05a/src/mantra/rebuild/tests/test_capacity.py) |
-| `P0-PB-05B` | Pending | Waiting for `P0-PB-04B` | `P0-PB-04B` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-05b-declaration) | Pending |
-| `P0-PB-06` | Pending | Waiting for `P0-PB-04`, `P0-PB-05` | `P0-PB-04`, `P0-PB-05` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-06-declaration) | Pending |
-| `P0-PB-07` | Pending | Waiting for `P0-PB-06` | `P0-PB-06` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-07-declaration) | Pending |
-| `P0-PB-08` | Pending | Waiting for `P0-PB-06` | `P0-PB-06` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-08-declaration) | Pending |
-| `P0-PB-09` | Pending | Waiting for `P0-PB-07`, `P0-PB-08`, `P0-PB-10` | `P0-PB-07`, `P0-PB-08`, `P0-PB-10` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-09-declaration) | Pending |
-| `P0-PB-10` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-10/20260912T035542.464393Z-accept.json)) | Applied | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-10-declaration) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-10-proposed-code) |
+| `P0-PB-01` | Environment check passed | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-01) | [Accepted implementation](../contracts/mantra-rebuild-phase-0.md#p0-pb-01-accepted-implementation) |
+| `P0-PB-02` | Hopfield artifact table approved | Drafting | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-02) | [Work description](../contracts/mantra-rebuild-phase-0.md#p0-pb-02) |
+| `P0-PB-03` | Pending | Drafting | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-03) | [Work description](../contracts/mantra-rebuild-phase-0.md#p0-pb-03) |
+| `P0-PB-04` | Pending | Waiting for `P0-PB-04A`, `P0-PB-04B` | `P0-PB-04A`, `P0-PB-04B` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-04) | [Child blocks](../contracts/mantra-rebuild-phase-0.md#p0-pb-04) |
+| `P0-PB-04A` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-04a/20260912T035904.514065Z-approve.json)) | Approved | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-04a) | [Source](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/restoration.py) · [Tests](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/tests/test_restoration.py) |
+| `P0-PB-04B` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-04b/20260912T035904.710258Z-approve.json)) | Approved | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-04b) | [Source](../../../mantra/staging/p0-pb-04b/src/mantra/rebuild/restoration.py) · [Base tests](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/tests/test_restoration.py) · [Resolver tests](../../../mantra/staging/p0-pb-04b/src/mantra/rebuild/tests/test_control_resolution.py) |
+| `P0-PB-05` | Pending | Waiting for `P0-PB-05A`, `P0-PB-05B` | `P0-PB-05A`, `P0-PB-05B` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05) | [Child blocks](../contracts/mantra-rebuild-phase-0.md#p0-pb-05) |
+| `P0-PB-05A` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05a/20260912T035904.894879Z-approve.json)) | Approved | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a) | [Source](../../../mantra/staging/p0-pb-05a/src/mantra/rebuild/capacity.py) · [Tests](../../../mantra/staging/p0-pb-05a/src/mantra/rebuild/tests/test_capacity.py) |
+| `P0-PB-05B` | Pending | Waiting for `P0-PB-04B` | `P0-PB-04B` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05b) | Pending |
+| `P0-PB-06` | Pending | Waiting for `P0-PB-04`, `P0-PB-05` | `P0-PB-04`, `P0-PB-05` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-06) | Pending |
+| `P0-PB-07` | Pending | Waiting for `P0-PB-06` | `P0-PB-06` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-07) | Pending |
+| `P0-PB-08` | Pending | Waiting for `P0-PB-06` | `P0-PB-06` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-08) | Pending |
+| `P0-PB-09` | Pending | Waiting for `P0-PB-07`, `P0-PB-08`, `P0-PB-10` | `P0-PB-07`, `P0-PB-08`, `P0-PB-10` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-09) | Pending |
+| `P0-PB-10` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-10/20260912T035542.464393Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-10) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-10-proposed-code) |
 
 ## Terminal outcome
 
@@ -473,8 +473,8 @@ specification passes.
 
 | Owner action | First consumer | Result unlocked |
 |---|---|---|
-| Review [`P0-PB-04A`](../contracts/mantra-rebuild-phase-0.md#p0-pb-04a-declaration) and [`P0-PB-05A`](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a-declaration). | Phase 0C | MANTRA implementation of the first two proposed blocks. |
-| Review [`P0-PB-04B`](../contracts/mantra-rebuild-phase-0.md#p0-pb-04b-declaration) after Codex drafts it. | Phase 0C | Signed-control resolution and complete binding records. |
+| Review [`P0-PB-04A`](../contracts/mantra-rebuild-phase-0.md#p0-pb-04a) and [`P0-PB-05A`](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a). | Phase 0C | MANTRA implementation of the first two proposed blocks. |
+| Review [`P0-PB-04B`](../contracts/mantra-rebuild-phase-0.md#p0-pb-04b) after Codex drafts it. | Phase 0C | Signed-control resolution and complete binding records. |
 | Approve cache deletion timing and the archive download plan. | Phase 0C | First archive download. |
 | Provide or authorize the L4-class execution environment if local replay fails the historical gate. | Phase 0E | Acceptance-level MIL replay and later training runs. |
 | Approve each reconstruction contract and its PairBlocks. | Phases 1A, 2A, and 3 | Implementation of each model generation. |
