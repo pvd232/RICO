@@ -530,9 +530,9 @@ python -c 'from pathlib import Path; from viper.repository import resolve_root; 
 
 **Code boundary:** MANTRA owns these implementation paths:
 
-- `src/mantra/rebuild/__init__.py`
-- `src/mantra/rebuild/restoration.py`
-- `src/mantra/rebuild/tests/test_restoration.py`
+- [`src/mantra/rebuild/__init__.py`](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/__init__.py)
+- [`src/mantra/rebuild/restoration.py`](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/restoration.py)
+- [`src/mantra/rebuild/tests/test_restoration.py`](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/tests/test_restoration.py)
 
 **Focused check:**
 
@@ -560,10 +560,10 @@ conda run -n mantra python -m pytest \
 
 **Code boundary:** MANTRA owns the cumulative implementation at these paths:
 
-- `src/mantra/rebuild/__init__.py`
-- `src/mantra/rebuild/restoration.py`
-- `src/mantra/rebuild/tests/test_restoration.py`
-- `src/mantra/rebuild/tests/test_control_resolution.py`
+- [`src/mantra/rebuild/__init__.py`](../../../mantra/staging/p0-pb-04b/src/mantra/rebuild/__init__.py)
+- [`src/mantra/rebuild/restoration.py`](../../../mantra/staging/p0-pb-04b/src/mantra/rebuild/restoration.py)
+- [`src/mantra/rebuild/tests/test_restoration.py`](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/tests/test_restoration.py)
+- [`src/mantra/rebuild/tests/test_control_resolution.py`](../../../mantra/staging/p0-pb-04b/src/mantra/rebuild/tests/test_control_resolution.py)
 
 **Focused check:**
 
@@ -593,8 +593,8 @@ conda run -n mantra python -m pytest \
 
 **Code boundary:** MANTRA owns these implementation paths:
 
-- `src/mantra/rebuild/capacity.py`
-- `src/mantra/rebuild/tests/test_capacity.py`
+- [`src/mantra/rebuild/capacity.py`](../../../mantra/staging/p0-pb-05a/src/mantra/rebuild/capacity.py)
+- [`src/mantra/rebuild/tests/test_capacity.py`](../../../mantra/staging/p0-pb-05a/src/mantra/rebuild/tests/test_capacity.py)
 
 **Focused check:**
 
