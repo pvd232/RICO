@@ -17,7 +17,7 @@ This contract governs artifact discovery, capacity planning, restoration, and pr
 | `P0-REQ-05` | Run restoration from the MANTRA workspace with `viper-provenance` installed in MANTRA's `venv`. |
 | `P0-REQ-06` | Record and verify $B$ in the VIPER provenance graph. |
 | `P0-REQ-07` | Replay the historical Hopfield raw-gene readout from its saved encoder and restored inputs. |
-| `P0-REQ-08` | Replay the saved MIL application from restored inputs. |
+| `P0-REQ-08` | Replay the standalone v1952 MIL seed-123460 `without_control` result from restored inputs. |
 | `P0-REQ-09` | Maintain an independent usefulness ledger for VIPER checks, failures, costs, and confirmed findings. |
 
 ## 2. Required claim
@@ -31,6 +31,8 @@ The graph $B=(F,P,E)$ contains:
 - $E$ contains `consumes` edges from files to producer entrypoints and `produces` edges from producer entrypoints to files.
 
 A `consumes` edge requires both a named stage input and an inspected read of that input by the producer. A `produces` edge requires both a declared stage output and a successful run receipt for that output. Every member of $F \cup P$ must lie on a directed path ending at the selected Hopfield or MIL output. Severing any required node or edge must make graph verification fail.
+
+The Hopfield and MIL portions of $B$ are independent. Neither model consumes an output produced by the other model. A shared raw or derived data file may appear in both portions only when each model reads that file directly.
 
 Historical predictions, checkpoints, and reports used only to compare the rebuild form a separate parity-reference graph $Q$. Reconstruction and training stages exclude every member of $Q$ from their inputs.
 
@@ -185,7 +187,7 @@ The dependency graph, restoration bindings, environment receipt, capacity receip
 | `P0-VR-05` | The active Conda environment is named `mantra`, uses Python 3.13, and imports its installed `viper-provenance` package. |
 | `P0-VR-06` | The VIPER graph contains every member of $B$, and severing one required node or edge makes verification fail. |
 | `P0-VR-07` | The Hopfield replay reproduces the selected raw-gene readout score `0.5861640938949398` within the approved tolerance and retains its produced predictions. |
-| `P0-VR-08` | The saved MIL application reproduces the hashes and metrics declared by `reinstantiation/APPLICATION_VERIFICATION.json` within its stated tolerances. |
+| `P0-VR-08` | The standalone MIL replay reproduces the v1952 seed-123460 `without_control` hold PearsonDelta `0.6025499488874759` and its declared prediction-array hashes. |
 | `P0-VR-09` | Every assessed VIPER check has a usefulness-ledger row and independent evidence for any confirmed defect. |
 
 ## 8. Acceptance boundary
@@ -209,7 +211,7 @@ Phase 0 fails when $B$ contains an unnecessary node, omits a required node or ed
 | `P0-PB-05` | Capacity receipt and download plan | `P0-VR-03`. |
 | `P0-PB-06` | Verified restoration and graph-completeness rejection test | `P0-VR-04` and `P0-VR-06`. |
 | `P0-PB-07` | Hopfield VIPER adapter, focused test, and historical raw-gene readout replay | `P0-VR-07`. |
-| `P0-PB-08` | Saved MIL application replay | `P0-VR-08`. |
+| `P0-PB-08` | Standalone v1952 MIL seed-123460 `without_control` replay | `P0-VR-08`. |
 | `P0-PB-09` | Phase 0 evidence freeze and usefulness assessment | `P0-VR-09` and user approval. |
 
 ### Approved MANTRA integration boundary
@@ -280,7 +282,7 @@ P0-PB-01 -> (P0-PB-02 and P0-PB-03) -> (P0-PB-04 and P0-PB-05) -> P0-PB-06
 |---|---|---|---|---|
 | `P0-PB-01` | Review the applied marker and environment output. | Commit only `viper.toml` in MANTRA. | Git identity for the workspace marker. | The MANTRA commit contains `viper.toml`; the unrelated `requirements.txt` and existing changes remain outside that commit. |
 | `P0-PB-02` | Trace every file read and producer executed by the selected Hopfield replay. Classify each file as present, restorable, produced, or parity-only. | Review necessity and reject every node absent from the replay's reads. | Approved Hopfield portion of $B$. | Every file and program reaches the selected Hopfield prediction; removing one required member breaks the path. |
-| `P0-PB-03` | Trace the saved MIL application from `reinstantiation/APPLICATION_VERIFICATION.json` through its runtime configuration, stages, and files. | Review necessity and confirm the saved-application boundary. | Approved MIL portion of $B$. | Every file and program reaches the selected MIL prediction; training-only and parity-only files remain outside the application replay. |
+| `P0-PB-03` | Trace the standalone v1952 MIL seed-123460 `without_control` result through its specification, training, scorer, and files. | Review necessity and confirm that the MIL graph contains no Hopfield output. | Approved MIL portion of $B$. | Every file and program reaches the selected MIL prediction; no Hopfield output appears in the MIL graph. |
 | `P0-PB-04` | Draft complete `RestorationBinding` source, tests, and one binding record for each missing file in the approved $B$. | Review the code blocks, then implement the approved files. | Executable bindings for the missing Hopfield and MIL files. | Each missing file has one binding; altered destination, archive member, byte count, or SHA-256 fails validation. |
 | `P0-PB-05` | Read the approved archive metadata and calculate $C$, $D$, $V$, $T$, $H$, and $R_{max}$. | Review the retention assumptions and approve the download boundary. | Capacity receipt and ordered download plan. | Measured free space is at least $R_{max}$. |
 | `P0-PB-06` | Draft and code-review the restoration stages and graph-completeness test. Inspect each resulting receipt. | Implement the approved code and run the restoration command. | Restored canonical files and verified graph $B$. | Every restored file matches its binding, graph verification passes, and the severed-edge case fails. |
@@ -293,9 +295,9 @@ For each PairBlock, Codex drafts the proposed contract or source, the user revie
 
 `P0-PB-02` traced the selected Hopfield computation. It reads eleven data files and one saved encoder. Five data files are present and hash-match; six data files and the encoder are absent and restorable. The adapter will call the selected helper path with `memory=("fit",)`, `topk=1600`, and `temperature=0.055`. It will write a new prediction and receipt. It will not execute the historical ten-encoder, 42-readout-per-encoder sweep or overwrite the historical report. The historical prediction and report remain in $Q$.
 
-`P0-PB-03` traced the saved MIL application. It does not retrain the teacher, student, base Hopfield model, or projected Hopfield model. It reads their saved outputs, reruns Direct-MIL retrieval, then fits the permitted fit-only ridge and per-gene slopes. The replay requires the saved base prediction, projected prediction, seed-123460 prototype vectors, and the eleven paths declared by the v1953 Step02 input contract. Two of those eleven paths are hashed by the runner but are not used numerically; they remain in $B$ because the selected entrypoint reads them.
+The first `P0-PB-03` trace followed the wrong result. The v1953 application wraps Direct-MIL around a projected Hopfield prediction and is excluded from the standalone MIL rebuild. The replacement target is the v1952 seed-123460 `without_control` result recorded in `experiments/v1952_direct_mil_control_term_ablation/diagnostics/CONTROL_TERM_MULTISEED_RESULTS.json`. Its hold PearsonDelta is `0.6025499488874759`.
 
-The MIL trace exposed two historical provenance defects that the new adapter must not copy: `APPLICATION_VERIFICATION.json` omits several files the application reads, and the legacy provenance writer records v1938 default specification paths instead of the v1953 specifications actually loaded.
+The v1952 scorer is standalone: it reads the saved single-query MIL prototype, saved teacher representations, biological descriptor files, coefficient targets, and gene labels. It does not read a Hopfield prediction. The saved scorer explicitly requires CUDA, so CPU evaluation of stored predictions and a GPU replay are separate gates.
 
 ### Next implementation tranche
 
@@ -315,6 +317,8 @@ The next work is divided into four reviewable code blocks:
 - MANTRA: `reinstantiation/README.md`
 - MANTRA: `reinstantiation/REINSTANTIATION_ROOT_RELEASE.json`
 - MANTRA: `reinstantiation/APPLICATION_VERIFICATION.json`
+- MANTRA: `experiments/v1952_direct_mil_control_term_ablation/specs/control_term_ablation.yaml`
+- MANTRA: `experiments/v1952_direct_mil_control_term_ablation/diagnostics/CONTROL_TERM_MULTISEED_RESULTS.json`
 - MANTRA: `docs/EXPERIMENT_ARCHIVE_AND_DELETE.md`
 - MANTRA: `archive_pointers/`
 - RICO: [`mantra-viper-rebuild-handoff.md`](../mantra-viper-rebuild-handoff.md)
