@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "6ee6e365538eee0d92cc2529e5b0f00b376a27381c1526119bc35ee64e5598cb",
+  "checklist_written_sha256": "b259c1e027cb29d9324e6a39606b48ec79d8708814a69c384f95ff7d2baa97c0",
+  "event": "approve",
+  "evidence": {
+    "kind": "external",
+    "revision": "2026-09-12-finish-phase-0",
+    "target": "Codex task instruction to finish Phase 0 autonomously"
+  },
+  "pair_block_id": "P0-PB-06",
+  "previous_receipt": "../../evidence/pairblock-gates/p0-pb-06/20260912T192549.181101Z.json",
+  "recorded_at": "2026-09-12T19:26:04.690678+00:00",
+  "repository_head": "37cd9d4a3da8414ba129926d3db3f4032698b53f",
+  "result": "applied",
+  "schema_version": 1,
+  "status_after": "Approved",
+  "status_before": "Review"
+}
