@@ -43,6 +43,7 @@ The [Mantra rebuild master checklist](../checklists/mantra-rebuild.md) owns exec
 | `P0-REQ-11` | Make each governed VIPER stage reject undeclared CPython-visible file-open attempts and retain each successful Python file open, including one read-open for every declared input. | [`P0-PB-05C`](#p0-pb-05c) |
 | `P0-REQ-12` | Permit an unbenchmarked VIPER run to select a `model` artifact from a non-training stage while retaining the training-stage requirement for benchmarked runs. | [`P0-PB-05D`](#p0-pb-05d) |
 | `P0-REQ-13` | Bind an approved runtime destination absent from the signed filesystem manifest only when its required digest exists in its approved signed archive. | [`P0-PB-04B`](#p0-pb-04b), [`P0-PB-06`](#p0-pb-06) |
+| `P0-REQ-14` | Permit an unbenchmarked VIPER run to select any artifact declared by one of its stages while retaining model selection from a training stage for benchmarked runs. | [`P0-PB-05E`](#p0-pb-05e) |
 
 ## 2. Required claim
 
@@ -271,12 +272,13 @@ The dependency graph, restoration bindings, environment receipt, capacity receip
 | `P0-VR-10` | The global master-checklist validator accepts incremental sibling-block closure. The RICO profile rejects an unsupported transition or any disagreement among a PairBlock row, checkbox, mapped requirement, dependent-block readiness, completion evidence, and contract state. | [`P0-PB-10`](#p0-pb-10) |
 | `P0-VR-11` | A stage using `file_access="declared"` fails after a declared input lacks a successful Python read-open, an undeclared read-open or write-open attempt, a directory change, or a Python thread or child-process launch. Its verified invocation receipt contains only successful opens permitted by the frozen inputs, outputs, and metric declarations. | [`P0-PB-05C`](#p0-pb-05c) |
 | `P0-VR-12` | Plan verification accepts a `model` artifact produced by a build stage when the run has no benchmark. It rejects a missing selected artifact and retains the training-stage requirement when the run has a benchmark. | [`P0-PB-05D`](#p0-pb-05d) |
+| `P0-VR-13` | An unbenchmarked `RunSpec` accepts a selected artifact with any declared output name. Plan verification rejects an output absent from its selected stage. A benchmarked `RunSpec` accepts only the `model` output, and plan verification requires a training-stage producer. | [`P0-PB-05E`](#p0-pb-05e) |
 
 ## 8. Acceptance boundary
 
 ### Success
 
-Phase 0 passes when `P0-VR-01` through `P0-VR-12` pass, every required provenance record exists in VIPER, the user reviews the complete evidence set, and the repository contains a synced commit recording the approved contract and Phase 0 receipts.
+Phase 0 passes when `P0-VR-01` through `P0-VR-13` pass, every required provenance record exists in VIPER, the user reviews the complete evidence set, and the repository contains a synced commit recording the approved contract and Phase 0 receipts.
 
 ### Rejection
 
@@ -293,6 +295,7 @@ Phase 0 fails when $B$ contains an unnecessary node, omits a required node or ed
 | `P0-PB-05` | Capacity receipt and download plan | `P0-VR-03`. |
 | `P0-PB-05C` | VIPER stage file-access enforcement and invocation evidence | `P0-VR-11`. |
 | `P0-PB-05D` | VIPER support for unbenchmarked model-producing workflows | `P0-VR-12`. |
+| `P0-PB-05E` | VIPER support for unbenchmarked terminal artifacts | `P0-VR-13`. |
 | `P0-PB-06` | Verified restoration and graph-completeness rejection test | `P0-VR-04` and `P0-VR-06`. |
 | `P0-PB-07` | Hopfield VIPER adapter, focused test, and historical raw-gene readout replay | `P0-VR-07`. |
 | `P0-PB-08` | v1952 MIL seed-123460 `without_control` replay | `P0-VR-08`. |
@@ -317,6 +320,7 @@ Resolution status lives in the [master checklist](../checklists/mantra-rebuild.m
 | [`P0-PB-05B`](../checklists/mantra-rebuild.md#pairblock-resolution) | Derive the ordered archive-part plan from the signed archive index. | Codex implemented and independently reviewed MANTRA commit `3ea3a042e71f3ed71c804839698dde51b36f64bf`. | [Source](../../../mantra/src/mantra/rebuild/archive_plan.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_archive_plan.py) | Select 36 verified parts for the completed artifact set and expose the measured capacity values. |
 | [`P0-PB-05C`](../checklists/mantra-rebuild.md#pairblock-resolution) | Enforce and retain each governed VIPER stage's declared file boundary. | Codex implements in VIPER; user reviews the guarantee, workflow cost, measured overhead, and applied diff. | [Protocol](../../../viper/src/viper/stages.py) · [Authoring](../../../viper/src/viper/authoring.py) · [Observer](../../../viper/src/viper/_workers/file_access.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Verifier](../../../viper/src/viper/_verification/attempt.py) · [Tests](../../../viper/tests/test_stage_file_access.py) | `P0-VR-11` and the framework tradeoff review pass. |
 | [`P0-PB-05D`](../checklists/mantra-rebuild.md#pairblock-resolution) | Permit a build stage to supply an unbenchmarked run's selected `model` artifact. | Codex implements and independently reviews the VIPER change. | [Verifier](../../../viper/src/viper/_verification/plan.py) · [Tests](../../../viper/tests/test_verification.py) · [Test map](../../../viper/tests/declaration_observers.toml) | `P0-VR-12` |
+| [`P0-PB-05E`](../checklists/mantra-rebuild.md#pairblock-resolution) | Permit an unbenchmarked run to select a declared terminal artifact such as a replay receipt. | Codex implements and independently reviews the VIPER change. | [Run model](../../../viper/src/viper/runs.py) · [Protocol tests](../../../viper/tests/test_protocol.py) · [Relationship tests](../../../viper/tests/test_verification.py) | `P0-VR-13` |
 | [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | Restore files and verify graph $B$. | Codex implements, runs, and independently reviews each bounded commit. | [Bindings](../../../mantra/src/mantra/rebuild/restoration.py) · [Extraction](../../../mantra/src/mantra/rebuild/archive_restore.py) · [VIPER workflow](../../../mantra/src/mantra/rebuild/viper_restore.py) · [Tests](../../../mantra/src/mantra/rebuild/tests) | `P0-VR-04`, `P0-VR-06`, and `P0-REQ-13` |
 | [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay Hopfield. | Codex implemented and independently reviewed MANTRA commits `0d06e069` and `e1025457`. | [Source](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py) · [Review](../../evidence/pairblock-reviews/p0-pb-07/e10254570214e92ef1785b92794752222387e9a1.json) | `P0-VR-07` |
 | [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay standalone MIL application. | Codex implemented and independently reviewed MANTRA commit `28490068`. | [Source](../../../mantra/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py) · [Review](../../evidence/pairblock-reviews/p0-pb-08/2849006816f7dc4e58c94b1f06b76cf4ac42457f.json) | `P0-VR-08` |
@@ -413,6 +417,14 @@ Aligns plan verification with `RunSpec`: an unbenchmarked run selects a real
 artifact named `model` from any declared producer stage. A benchmarked run
 continues to require a training-stage estimator because its evaluation stage
 consumes that trained model. [Review the implementation and gate](#p0-pb-05d-proposed-code).
+
+#### P0-PB-05E
+
+Keeps the early selection check while matching it to the run type. An
+unbenchmarked run may select any artifact declared by one of its stages, such
+as a replay receipt. A benchmarked run must select `model`; plan verification
+then requires that artifact to come from a training stage. [Review the
+implementation and gate](#p0-pb-05e-proposed-code).
 
 #### P0-PB-06
 
@@ -741,6 +753,7 @@ choices.
 | [`P0-PB-05B`](../../../mantra/src/mantra/rebuild/archive_plan.py) | [Accepted source](../../../mantra/src/mantra/rebuild/archive_plan.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_archive_plan.py) · [Review receipt](../../evidence/pairblock-reviews/p0-pb-05b/3ea3a042e71f3ed71c804839698dde51b36f64bf.json) |
 | [`P0-PB-05C`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Protocol](../../../viper/src/viper/stages.py) · [Authoring](../../../viper/src/viper/authoring.py) · [Observer](../../../viper/src/viper/_workers/file_access.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Verifier](../../../viper/src/viper/_verification/attempt.py) · [Tests](../../../viper/tests/test_stage_file_access.py) · [Gate](#p0-pb-05c-proposed-code) |
 | [`P0-PB-05D`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Verifier](../../../viper/src/viper/_verification/plan.py) · [Tests](../../../viper/tests/test_verification.py) · [Test map](../../../viper/tests/declaration_observers.toml) · [Gate](#p0-pb-05d-proposed-code) |
+| [`P0-PB-05E`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Run model](../../../viper/src/viper/runs.py) · [Protocol tests](../../../viper/tests/test_protocol.py) · [Relationship tests](../../../viper/tests/test_verification.py) · [Gate](#p0-pb-05e-proposed-code) |
 | [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Bindings](../../../mantra/src/mantra/rebuild/restoration.py) · [Extraction](../../../mantra/src/mantra/rebuild/archive_restore.py) · [VIPER workflow](../../../mantra/src/mantra/rebuild/viper_restore.py) · [Tests](../../../mantra/src/mantra/rebuild/tests) · [Gate](#p0-pb-06-proposed-code) · [Review receipt](../../evidence/pairblock-reviews/p0-pb-06/75e7ce38dc85918c1f593886f20ed33601daa288.json) |
 | [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py) · [Gate](#p0-pb-07-accepted-implementation) · [Review](../../evidence/pairblock-reviews/p0-pb-07/e10254570214e92ef1785b92794752222387e9a1.json) |
 | [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py) · [Gate](#p0-pb-08-accepted-implementation) · [Review](../../evidence/pairblock-reviews/p0-pb-08/2849006816f7dc4e58c94b1f06b76cf4ac42457f.json) |
@@ -1123,6 +1136,61 @@ environment.
 **Stop condition:** Reject the patch if it permits a missing selected artifact
 or a benchmark whose estimator comes from a non-training stage.
 
+### P0-PB-05E implementation record
+
+**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
+
+**Requirement:** Validate the selected artifact name according to the run's
+evaluation boundary. An unbenchmarked run may select any stage output. A
+benchmarked run must select `model`.
+
+**Dependency:** Applied `P0-PB-05D`. The plan relationship verifier remains
+responsible for proving that the selected stage actually declares the named
+artifact and that a benchmarked run selects a training-stage output.
+
+##### `P0-PB-05E` proposed code
+
+**Code boundary:** [run model](../../../viper/src/viper/runs.py),
+[protocol tests](../../../viper/tests/test_protocol.py), and
+[relationship tests](../../../viper/tests/test_verification.py), and the
+[declaration-to-test map](../../../viper/tests/declaration_observers.toml).
+
+**Implementation requirements:**
+
+- Require `estimator.stage_id` to name one stage in `RunSpec.stages`.
+- When `benchmark_id` is absent, accept any `estimator.artifact_name` and let
+  plan relationship verification require that output on the selected stage.
+- When `benchmark_id` is present, require `estimator.artifact_name == "model"`.
+- Retain the plan relationship rule that requires a training-stage producer
+  whenever the run names a benchmark.
+
+**Focused check:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/viper
+source .venv/bin/activate
+python -m ruff check src/viper/runs.py tests/test_protocol.py tests/test_verification.py
+python -m pytest \
+  tests/test_protocol.py::RunPlanTests::test_unbenchmarked_run_may_select_a_declared_terminal_artifact \
+  tests/test_protocol.py::RunPlanTests::test_benchmarked_run_must_select_the_model_artifact \
+  tests/test_verification.py::RunPlanRelationshipTests::test_unbenchmarked_run_requires_the_selected_terminal_artifact \
+  tests/test_verification.py::RunPlanRelationshipTests::test_benchmark_estimator_requires_training -q
+```
+
+**Gate:** Ruff passes. The protocol tests accept an unbenchmarked `receipt`
+selection and reject the same selection after a benchmark is named. The
+relationship test accepts that selection only when the producer declares the
+receipt. The existing benchmark relationship test retains the training-stage
+constraint.
+
+**Applied check:** Repeat the focused check against the committed VIPER source,
+then compile the Hopfield replay plan through MANTRA's active `mantra`
+environment.
+
+**Stop condition:** Reject the patch if a benchmarked run can select a
+non-model artifact or plan verification accepts an artifact absent from the
+selected stage.
+
 ### P0-PB-06 implementation record
 
 **Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
@@ -1134,7 +1202,8 @@ after one required edge is removed.
 
 **Dependency:** applied `P0-PB-04A` and `P0-PB-04B` binding code, applied
 `P0-PB-05A` and `P0-PB-05B` capacity and archive-plan code, and applied
-`P0-PB-05C` file-access enforcement. This block produces the real binding and
+`P0-PB-05C` file-access enforcement, `P0-PB-05D` model-producer support, and
+`P0-PB-05E` terminal-artifact selection. This block produces the real binding and
 capacity receipts that later close the aggregate `P0-PB-04` and `P0-PB-05`
 records.
 
