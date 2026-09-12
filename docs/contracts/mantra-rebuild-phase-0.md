@@ -1374,7 +1374,8 @@ encoder. The user approves the numerical tolerance before the real replay.
 and [observing tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py).
 
 **Implementation requirements:** initialize scikit-learn's native threadpool
-inventory when the worker imports the replay implementation; verify all twelve
+inventory when the worker imports the replay implementation; select one
+`NVIDIA L4` in the VIPER environment when `device="cuda"`; verify all twelve
 input identities; call the selected historical loader and saved encoder once;
 call the raw-gene readout with `memory_splits=("fit",)`, `topk=1600`, and
 `temperature=0.055`; write the new six-array prediction; score it against hold
