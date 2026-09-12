@@ -76,7 +76,7 @@ controls. The completed set contains 27 Hopfield and MIL destinations in
 |---|---|---|---|---|---|
 | `P0-PB-01` | Environment check passed | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-01) | [Accepted implementation](../contracts/mantra-rebuild-phase-0.md#p0-pb-01-accepted-implementation) |
 | `P0-PB-02` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-02/20260912T184646.515912Z-confirm.json)) | Complete | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-02) | [Work description](../contracts/mantra-rebuild-phase-0.md#p0-pb-02) |
-| `P0-PB-03` | Pending | Drafting | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-03) | [Work description](../contracts/mantra-rebuild-phase-0.md#p0-pb-03) |
+| `P0-PB-03` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-03/20260912T203922.293506Z-confirm.json)) | Complete | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-03) | [Work description](../contracts/mantra-rebuild-phase-0.md#p0-pb-03) |
 | `P0-PB-04` | Pending | Drafting | `P0-PB-04A`, `P0-PB-04B` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-04) | [Child blocks](../contracts/mantra-rebuild-phase-0.md#p0-pb-04) |
 | `P0-PB-04A` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-04a/20260912T070755.867088Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-04a) | [Source](../../../mantra/src/mantra/rebuild/restoration.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_restoration.py) |
 | `P0-PB-04B` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-04b/20260912T070756.106235Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-04b) | [Source](../../../mantra/src/mantra/rebuild/restoration.py) · [Base tests](../../../mantra/src/mantra/rebuild/tests/test_restoration.py) · [Resolver tests](../../../mantra/src/mantra/rebuild/tests/test_control_resolution.py) |
@@ -181,7 +181,7 @@ This table schedules every requirement in the approved Phase 0 contract once.
 
 | Requirement | State | Phase | Depends on | Gate |
 |---|---|---|---|---|
-| `P0-REQ-01` | In progress | 0B | None | The approved Hopfield and MIL portions of graph $B$ contain every required file, producer, and edge and exclude parity graph $Q$. |
+| `P0-REQ-01` | Complete | 0B | None | The approved Hopfield and MIL portions of graph $B$ contain every required file, producer, and edge and exclude parity graph $Q$. |
 | `P0-REQ-02` | In progress | 0C | `P0-REQ-01` | Every absent file in $B$ resolves through exactly one valid `RestorationBinding`. |
 | `P0-REQ-03` | In progress | 0C | `P0-REQ-01` | The capacity receipt records every term in $R_{max}$ and measured free space is at least $R_{max}$. |
 | `P0-REQ-04` | In progress | 0D | `P0-REQ-02`, `P0-REQ-03` | Every restored canonical file matches its approved byte count and SHA-256. |
@@ -216,7 +216,7 @@ The environment receipt enters VIPER during Phase 0D. That registration closes
       encoder to the selected raw-gene prediction.
       <!-- pair-block: P0-PB-02 -->
       <!-- pair-block-contract: P0-PB-02 contract=docs/contracts/mantra-rebuild-phase-0.md -->
-- [ ] Approve the complete MIL path for v1952 seed 123460
+- [x] Approve the complete MIL path for v1952 seed 123460
       `without_control`, excluding every Hopfield output from its inputs.
       <!-- pair-block: P0-PB-03 -->
       <!-- pair-block-contract: P0-PB-03 contract=docs/contracts/mantra-rebuild-phase-0.md -->

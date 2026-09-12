@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "1686be0c40e2f95987734154ae6a5cfe63031708b2e51ea1c21bf7465efee7ad",
+  "checklist_written_sha256": "e584fb7505c96c7817fc9934026812bfc81578d1a2d925311125b68ef3074b6c",
+  "event": "submit",
+  "evidence": {
+    "kind": "external",
+    "revision": "abaf38e7f6e26b4add216ea1e9bbc68678ff2daf",
+    "target": "Completed MIL graph and artifact trace in Phase 0 contract"
+  },
+  "pair_block_id": "P0-PB-03",
+  "previous_receipt": null,
+  "recorded_at": "2026-09-12T20:39:22.055861+00:00",
+  "repository_head": "abaf38e7f6e26b4add216ea1e9bbc68678ff2daf",
+  "result": "applied",
+  "schema_version": 1,
+  "status_after": "Review",
+  "status_before": "Drafting"
+}
