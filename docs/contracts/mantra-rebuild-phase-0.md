@@ -1373,11 +1373,14 @@ encoder. The user approves the numerical tolerance before the real replay.
 **Code boundary:** [Hopfield replay source](../../../mantra/src/mantra/rebuild/hopfield_replay.py)
 and [observing tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py).
 
-**Implementation requirements:** verify all twelve input identities; call the
-selected historical loader and saved encoder once; call the raw-gene readout
-with `memory_splits=("fit",)`, `topk=1600`, and `temperature=0.055`; write the
-new six-array prediction; score it against hold truth; and persist the
-prediction identity, device, effective top-k, scores, tolerance, and decision.
+**Implementation requirements:** initialize scikit-learn's native threadpool
+inventory when the worker imports the replay implementation; verify all twelve
+input identities; call the selected historical loader and saved encoder once;
+call the raw-gene readout with `memory_splits=("fit",)`, `topk=1600`, and
+`temperature=0.055`; write the new six-array prediction; score it against hold
+truth; and persist the prediction identity, device, effective top-k, scores,
+tolerance, and decision. Runtime inventory initialization occurs before the
+governed stage begins, so the stage retains its child-process ban.
 
 **Gate:** the tests prove the selected call arguments, output schema, CPU
 path, effective donor count, and parity decision. The real run retains the
