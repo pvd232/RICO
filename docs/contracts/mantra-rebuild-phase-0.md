@@ -1430,11 +1430,14 @@ predictions, and the Step02 input-root files named below.
 [self-contained artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py),
 and [observing tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py).
 
-**Implementation requirements:** load the saved v1952 seed-123460 prototype;
-verify the selected Step02, Step03, and prototype identities; assign a fresh
-run name and output root; call the maintained application runtime once; and
-retain the four prediction arrays, Step02 and Step03 scores, and their
-identities. The declared input set is the standalone MIL graph.
+**Implementation requirements:** initialize scikit-learn's native threadpool
+inventory when the worker imports the replay implementation; select one
+`NVIDIA L4` in the VIPER environment when `device="cuda"`; load the saved v1952
+seed-123460 prototype; verify the selected Step02, Step03, and prototype
+identities; assign a fresh run name and output root; call the maintained
+application runtime once; and retain the four prediction arrays, Step02 and
+Step03 scores, and their identities. The declared input set is the standalone
+MIL graph.
 VIPER verifies each output through the self-contained loader source it
 materializes into its validation workspace.
 
