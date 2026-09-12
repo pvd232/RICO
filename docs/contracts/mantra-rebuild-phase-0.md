@@ -39,7 +39,7 @@ The [Mantra rebuild master checklist](../checklists/mantra-rebuild.md) owns exec
 | `P0-REQ-07` | Replay the historical Hopfield raw-gene readout from its saved encoder and restored inputs. | [`P0-PB-07`](#p0-pb-07-declaration) |
 | `P0-REQ-08` | Replay the v1952 MIL seed-123460 `without_control` result from restored inputs. | [`P0-PB-08`](#p0-pb-08-declaration) |
 | `P0-REQ-09` | Maintain an independent usefulness ledger for VIPER checks, failures, costs, and confirmed findings. | [`P0-PB-09`](#p0-pb-09-declaration) |
-| `P0-REQ-10` | Compile the RICO checklist into the established normalized master-checklist manifest, validate it with the existing global validator, and bind every staged proposal gate to retained evidence and one legal status update. | [`P0-PB-10`](#p0-pb-10-declaration) |
+| `P0-REQ-10` | Compile the RICO checklist into the global master-checklist manifest and propagate each evidence-backed PairBlock transition through its checkbox, requirements, dependent blocks, and contract state. | [`P0-PB-10`](#p0-pb-10-declaration) |
 
 ## 2. Required claim
 
@@ -210,7 +210,7 @@ The dependency graph, restoration bindings, environment receipt, capacity receip
 | `P0-VR-07` | The Hopfield replay reproduces the selected raw-gene readout score `0.5861640938949398` within the approved tolerance and retains its produced predictions. | [`P0-PB-07`](#p0-pb-07-declaration) |
 | `P0-VR-08` | The MIL replay reproduces the v1952 seed-123460 `without_control` hold PearsonDelta `0.6025499488874759` and its declared prediction-array hashes. | [`P0-PB-08`](#p0-pb-08-declaration) |
 | `P0-VR-09` | Every assessed VIPER check has a usefulness-ledger row and independent evidence for any confirmed defect. | [`P0-PB-09`](#p0-pb-09-declaration) |
-| `P0-VR-10` | The existing global master-checklist validator accepts the compiled manifest; a passing proposal gate retains the validator identity, manifest, command, output, Git baseline, contract digest, and proposed-source digests before advancing one checklist row; a failing gate retains the same evidence without changing checklist bytes; malformed RICO links or unresolved PairBlock dependencies reject execution. | [`P0-PB-10`](#p0-pb-10-declaration) |
+| `P0-VR-10` | The global master-checklist validator accepts incremental sibling-block closure. The RICO profile rejects an unsupported transition or any disagreement among a PairBlock row, checkbox, mapped requirement, dependent-block readiness, completion evidence, and contract state. | [`P0-PB-10`](#p0-pb-10-declaration) |
 
 ## 8. Acceptance boundary
 
@@ -528,7 +528,7 @@ PYTHONPATH=review/p0-pb-05a/src conda run -n mantra \
 
 **Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#status-p0-pb-10)
 
-**Requirement:** Compile the RICO Markdown checklist into schema version 2 of the established master-checklist manifest and invoke `/Users/machina/.agents/scripts/validate-master-checklist.py` for requirement coverage, requirement ordering, PairBlock mapping, completion evidence, and derived contract state. The Markdown adapter reuses the standard `pair-block` and `pair-block-contract` markers, owns RICO-specific tables and rendering, and exposes typed records to the gate controller. It additionally validates detailed PairBlock dependencies, owners, proposed files, observing tests, focused gates, and status links. The controller retains the contract-declared gate evidence and advances only `Codex drafting` to `Awaiting user review` after a pass.
+**Requirement:** Compile the RICO Markdown checklist into schema version 2 of the global master-checklist manifest. One linked receipt advances a PairBlock through `Drafting`, `Review`, `Implementation`, `VIPER`, and `Complete`. The RICO profile updates the block's checkbox, mapped requirements, newly ready dependents, and contract state before the global validator accepts the transition. The global contract permits one of several sibling PairBlocks to close while their shared requirement remains in progress and requires that requirement to close with evidence after its final block closes.
 
 **Dependency:** The proposed block has one checklist row, one contract ownership row, and one complete proposed-code section. A declared PairBlock dependency must reach an approved or later state before execution.
 
@@ -538,11 +538,11 @@ PYTHONPATH=review/p0-pb-05a/src conda run -n mantra \
 - [`tools/checklist_profile.py`](../../review/p0-pb-10/tools/checklist_profile.py)
 - [`tools/execution_identity.py`](../../review/p0-pb-10/tools/execution_identity.py)
 - [`tools/profile.py`](../../review/p0-pb-10/tools/profile.py)
-- [`tools/run_pairblock_gate.py`](../../review/p0-pb-10/tools/run_pairblock_gate.py)
+- [`tools/pairblock_controller.py`](../../review/p0-pb-10/tools/pairblock_controller.py)
 - [`tests/conftest.py`](../../review/p0-pb-10/tests/conftest.py)
-- [`tests/test_run_pairblock_gate.py`](../../review/p0-pb-10/tests/test_run_pairblock_gate.py)
+- [`tests/test_pairblock_controller.py`](../../review/p0-pb-10/tests/test_pairblock_controller.py)
 
-**Fixture boundary:** These two documents define the minimal RICO profile used by the tests. The fixture factory copies the actual `checklist_profile.py` and `test_run_pairblock_gate.py` into each disposable repository:
+**Fixture boundary:** These two documents define the minimal RICO profile used by the tests. The fixture factory copies the actual `checklist_profile.py` and `test_pairblock_controller.py` into each disposable repository:
 
 - [`tests/fixtures/minimal_profile/docs/checklists/checklist.md`](../../review/p0-pb-10/tests/fixtures/minimal_profile/docs/checklists/checklist.md)
 - [`tests/fixtures/minimal_profile/docs/contracts/contract.md`](../../review/p0-pb-10/tests/fixtures/minimal_profile/docs/contracts/contract.md)
@@ -553,11 +553,11 @@ PYTHONPATH=review/p0-pb-05a/src conda run -n mantra \
 |---|---|
 | Python lint | `ruff check` over all seven executable review files |
 | Project policy and lifecycle validity | `test_lifecycle_policy_rejects_undeclared_transition_status`; `test_checklist_profile_requires_two_phase_capture_groups`; `test_project_profile_excludes_markdown_dialect`; `test_markdown_dialect_rejects_empty_markers` |
-| Existing normalized checklist contract | `test_profile_fixture_compiles_with_global_validator`; `test_mantra_profile_compiles_current_contract`; `test_passing_gate_writes_receipt_and_advances_one_status`; `test_duplicate_requirement_id_is_rejected` |
+| Global lifecycle contract | `test_profile_fixture_compiles_with_global_validator`; `test_mantra_profile_compiles_current_contract`; `test_lifecycle_completion_updates_every_derived_status`; `test_checkbox_must_match_pairblock_completion` |
 | Complete PairBlock inventory and requirement mapping | `test_every_contract_pair_block_requires_one_status_row`; `test_unmapped_pair_block_is_rejected`; `test_duplicate_status_anchor_is_rejected`; `test_standard_pair_block_contract_marker_is_required` |
-| PairBlock dependency order | `test_unknown_dependency_is_rejected`; `test_unresolved_pair_block_dependency_blocks_gate` |
+| PairBlock dependency order | `test_unknown_dependency_is_rejected`; `test_unresolved_pair_block_dependency_blocks_gate`; `test_accepted_dependency_releases_waiting_block` |
 | Owner, code, and fixture boundaries | `test_missing_owner_is_rejected`; `test_missing_proposed_source_is_rejected`; `test_missing_fixture_source_is_rejected`; `test_proposed_code_must_stay_in_governing_contract` |
-| Gate behavior | `test_gate_must_name_every_observing_test`; `test_failing_gate_retains_receipt_without_changing_checklist`; `test_nested_conda_run_is_rejected_before_gate_execution`; `test_unknown_pair_block_is_rejected` |
+| Gate and lifecycle behavior | `test_gate_must_name_every_observing_test`; `test_failing_gate_retains_receipt_without_changing_checklist`; `test_nested_conda_run_is_rejected_before_gate_execution`; `test_illegal_lifecycle_event_changes_no_status` |
 | Controller and Markdown-adapter boundary | `test_gate_controller_does_not_parse_or_render_markdown`; `test_passing_gate_writes_receipt_and_advances_one_status` |
 | Git-backed execution identity | `test_execution_identity_drift_invalidates_pass` for source, contract, checklist, validator, and `HEAD` drift |
 | Code documentation | `test_active_modules_and_definitions_have_docstrings` |
@@ -569,17 +569,17 @@ cd /Users/machina/Developer/ChatGPT/RICO
 conda run -n mantra python -m ruff check \
   review/p0-pb-10/tools \
   review/p0-pb-10/tests/conftest.py \
-  review/p0-pb-10/tests/test_run_pairblock_gate.py &&
+  review/p0-pb-10/tests/test_pairblock_controller.py &&
 PYTHONPATH=review/p0-pb-10 conda run -n mantra \
   python -m pytest \
-  review/p0-pb-10/tests/test_run_pairblock_gate.py -q
+  review/p0-pb-10/tests/test_pairblock_controller.py -q
 ```
 
-**Gate:** The focused tests prove delegation to the established normalized validator, complete RICO PairBlock coverage, retained pass and failure evidence, one legal status transition, rejection of nested Conda execution and broken RICO dependencies, ownership, links, files, or observing gates, and invalidation when source, contract, checklist, validator, Git `HEAD`, porcelain status, or binary diff identity changes during execution.
+**Gate:** The focused tests prove incremental sibling-block closure in the global validator; complete RICO PairBlock coverage; legal receipt-backed transitions; automatic checkbox, requirement, dependency-readiness, and contract updates; retained pass and failure evidence; and rejection of nested Conda execution, identity drift, broken links, missing owners, missing files, or invalid observing gates.
 
-**Stop condition:** Return the proposal for revision if a gate can run outside its declared code or runtime boundary, bypass an unresolved dependency, change status after failure or identity drift, bind its receipt to post-execution bytes alone, or advance beyond `Awaiting user review`.
+**Stop condition:** Return the proposal for revision if a gate can run outside its declared code or runtime boundary, bypass an unresolved dependency, change status after failure or identity drift, accept an illegal lifecycle event, or leave a rendered status inconsistent with its evidence.
 
-**Evidence:** The proposal uses the existing global validator rather than reimplementing its normalized checks. Its identity check follows the earlier Git-backed strategy by recording `HEAD`, porcelain worktree state, binary diff identity, and file digests before and after execution. `ChecklistProfile` owns project paths, identifier rules, and lifecycle policy. `MarkdownChecklistAdapter` owns the standard markers plus RICO-specific tables and rendering. The gate controller receives typed records and requests a result update without parsing or rendering Markdown. It refuses to nest a declared `conda run` under a non-base Conda controller environment. Unit tests use a generic profile and dialect; one integration test compiles the actual MANTRA documents. Ruff 0.16.7 passes over all executable review files. The dataclass annotations declare the stored structure, their class docstrings explain the fields, every active definition has a docstring, and all `32` focused tests pass. The proposal has not been activated.
+**Evidence:** Global commit `58b59175e2a4a949bc8dd33302099cf780249c75` repairs incremental PairBlock closure and passes its three focused tests, normalized-manifest validation, and Ruff. The RICO proposal reuses that validator. `ChecklistProfile` owns project paths and lifecycle events; `MarkdownChecklistAdapter` owns RICO parsing and rendering; `pairblock_controller.py` runs proposal gates and records later evidence events without parsing Markdown. The focused RICO gate passes `40` cases and retains its receipt. The proposal has not been activated.
 
 ## 11. Sources
 

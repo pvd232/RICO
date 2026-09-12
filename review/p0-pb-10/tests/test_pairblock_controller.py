@@ -1,4 +1,4 @@
-"""Contract tests for automatic PairBlock proposal-gate status."""
+"""Contract tests for evidence-backed PairBlock lifecycle updates."""
 
 from __future__ import annotations
 
@@ -27,12 +27,14 @@ from conftest import (
     RepositoryFactory,
 )
 from tools.checklist_profile import MANTRA_PHASE0_ADAPTER
-from tools.profile import MANTRA_PHASE0_PROFILE, ChecklistProfile
-from tools.run_pairblock_gate import (
+from tools.pairblock_controller import (
     DEFAULT_MASTER_CHECKLIST_VALIDATOR,
+    EvidenceRef,
     PairBlockGateError,
+    advance_pairblock,
     run_gate,
 )
+from tools.profile import MANTRA_PHASE0_PROFILE, ChecklistProfile
 
 NOW = datetime(2026, 9, 11, 16, 0, tzinfo=timezone.utc)
 
@@ -58,6 +60,23 @@ def run_test_gate(
         pair_block_id,
         now=NOW,
         validator_path=validator_path,
+        adapter=TEST_ADAPTER,
+    )
+
+
+def advance_test_block(repository: Path, event: str) -> Path:
+    """Advance the test PairBlock with one compact evidence reference."""
+
+    return advance_pairblock(
+        repository,
+        PAIR_BLOCK_ID,
+        event,
+        EvidenceRef(
+            kind="external",
+            target=f"{event} evidence",
+            revision="test-revision",
+        ),
+        now=NOW,
         adapter=TEST_ADAPTER,
     )
 
@@ -99,6 +118,16 @@ def test_lifecycle_policy_rejects_undeclared_transition_status() -> None:
         replace(TEST_PROFILE.lifecycle, review_status="Unlisted")
 
 
+def test_lifecycle_policy_rejects_disconnected_transition_chain() -> None:
+    """Require each lifecycle event to consume the preceding event's status."""
+
+    with pytest.raises(ValueError, match="transition chain expected Review"):
+        replace(
+            TEST_PROFILE.lifecycle,
+            transitions=(("approve", "Implementation", "VIPER"),),
+        )
+
+
 def test_checklist_profile_requires_two_phase_capture_groups() -> None:
     """Require the phase expression to expose both ordering components."""
 
@@ -114,6 +143,8 @@ def test_project_profile_excludes_markdown_dialect() -> None:
         "pair_block_table_header",
         "requirement_table_header",
         "requirement_map_header",
+        "contract_table_header",
+        "contract_link_prefix",
         "proposed_code_link_prefix",
     }
 
@@ -124,6 +155,8 @@ def test_project_profile_excludes_markdown_dialect() -> None:
         "pair_block_table_header",
         "requirement_table_header",
         "requirement_map_header",
+        "contract_table_header",
+        "contract_link_prefix",
         "proposed_code_link_prefix",
     ],
 )
@@ -137,7 +170,7 @@ def test_markdown_dialect_rejects_empty_markers(field_name: str) -> None:
 def test_gate_controller_does_not_parse_or_render_markdown() -> None:
     """Keep Markdown row manipulation inside the checklist adapter."""
 
-    controller = Path(__file__).parents[1] / "tools/run_pairblock_gate.py"
+    controller = Path(__file__).parents[1] / "tools/pairblock_controller.py"
     tree = ast.parse(controller.read_text(encoding="utf-8"), filename=str(controller))
     function_names = {
         node.name
@@ -176,9 +209,7 @@ def test_passing_gate_writes_receipt_and_advances_one_status(
     repository = repository_factory(command=passing_command())
     receipt_path = run_test_gate(repository)
     receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
-    checklist = (
-        repository / CHECKLIST_PATH
-    ).read_text(encoding="utf-8")
+    checklist = (repository / CHECKLIST_PATH).read_text(encoding="utf-8")
 
     assert receipt["result"] == "passed"
     assert receipt["status_before"] == TEST_PROFILE.lifecycle.drafting_status
@@ -194,6 +225,124 @@ def test_passing_gate_writes_receipt_and_advances_one_status(
     assert "Passed: `2` tests" in checklist
     assert TEST_PROFILE.lifecycle.review_status in checklist
     assert receipt_path.name in checklist
+
+
+def test_lifecycle_completion_updates_every_derived_status(
+    repository_factory: RepositoryFactory,
+) -> None:
+    """Propagate one receipt chain through block, checkbox, requirement, and contract."""
+
+    repository = repository_factory(command=passing_command())
+    run_test_gate(repository)
+    approval = advance_test_block(repository, "approve")
+    accepted = advance_test_block(repository, "accept")
+    completed = advance_test_block(repository, "register")
+    rows, manifest = validate_test_repository(repository)
+    checklist = (repository / CHECKLIST_PATH).read_text(encoding="utf-8")
+    block = next(
+        item
+        for item in manifest["pair_blocks"]
+        if item["pair_block_id"] == PAIR_BLOCK_ID
+    )
+    requirement = next(
+        item
+        for item in manifest["requirements"]
+        if item["requirement_id"] == REQUIREMENT_ID
+    )
+
+    assert json.loads(approval.read_text(encoding="utf-8"))["status_after"] == (
+        "Implementation"
+    )
+    assert json.loads(accepted.read_text(encoding="utf-8"))["status_after"] == "VIPER"
+    assert json.loads(completed.read_text(encoding="utf-8"))["result"] == "applied"
+    assert rows[PAIR_BLOCK_ID].status == "Complete"
+    assert "- [x] Exercise `PB-GATE`." in checklist
+    assert f"| `{REQUIREMENT_ID}` | Complete |" in checklist
+    assert "| [Contract](../contracts/contract.md) | Complete |" in checklist
+    assert block["state"] == requirement["state"] == "complete"
+    assert block["completion_evidence"] == requirement["completion_evidence"]
+    assert manifest["contracts"][0]["state"] == "complete"
+
+
+def test_completion_rejects_a_broken_receipt_chain(
+    repository_factory: RepositoryFactory,
+) -> None:
+    """Reject a final receipt that skips the accepted implementation event."""
+
+    repository = repository_factory(command=passing_command())
+    run_test_gate(repository)
+    advance_test_block(repository, "approve")
+    advance_test_block(repository, "accept")
+    completed = advance_test_block(repository, "register")
+    receipt = json.loads(completed.read_text(encoding="utf-8"))
+    receipt["event"] = "accept"
+    completed.write_text(json.dumps(receipt), encoding="utf-8")
+
+    with pytest.raises(PairBlockGateError, match="chain differs"):
+        validate_test_repository(repository)
+
+
+def test_illegal_lifecycle_event_changes_no_status(
+    repository_factory: RepositoryFactory,
+) -> None:
+    """Reject approval before a proposal reaches review."""
+
+    repository = repository_factory(command=passing_command())
+    checklist = repository / CHECKLIST_PATH
+    before = checklist.read_bytes()
+
+    with pytest.raises(PairBlockGateError, match="approve cannot advance Drafting"):
+        advance_test_block(repository, "approve")
+
+    assert checklist.read_bytes() == before
+    assert not (repository / "evidence").exists()
+
+
+def test_checkbox_must_match_pairblock_completion(
+    repository_factory: RepositoryFactory,
+) -> None:
+    """Reject a checked execution box while its PairBlock remains open."""
+
+    repository = repository_factory(command=passing_command())
+    checklist = repository / CHECKLIST_PATH
+    text = checklist.read_text(encoding="utf-8").replace(
+        "- [ ] Exercise `PB-GATE`.",
+        "- [x] Exercise `PB-GATE`.",
+    )
+    checklist.write_text(text, encoding="utf-8")
+
+    with pytest.raises(PairBlockGateError, match="checkbox must be unchecked"):
+        validate_test_repository(repository)
+
+
+def test_accepted_dependency_releases_waiting_block(
+    repository_factory: RepositoryFactory,
+) -> None:
+    """Move a waiting block to drafting after its dependency reaches VIPER."""
+
+    dependency = PairBlockFixture(DEPENDENCY_PAIR_BLOCK_ID, "Implementation")
+    repository = repository_factory(
+        command=passing_command(),
+        status=f"Waiting for {DEPENDENCY_PAIR_BLOCK_ID}",
+        dependencies=(DEPENDENCY_PAIR_BLOCK_ID,),
+        dependency=dependency,
+    )
+    advance_pairblock(
+        repository,
+        DEPENDENCY_PAIR_BLOCK_ID,
+        "accept",
+        EvidenceRef(
+            kind="test",
+            target="accepted implementation",
+            revision="test-revision",
+        ),
+        now=NOW,
+        adapter=TEST_ADAPTER,
+    )
+    rows, _ = validate_test_repository(repository)
+
+    assert rows[DEPENDENCY_PAIR_BLOCK_ID].status == "VIPER"
+    assert rows[PAIR_BLOCK_ID].status == "Drafting"
 
 
 def test_failing_gate_retains_receipt_without_changing_checklist(
@@ -237,9 +386,7 @@ def test_duplicate_status_anchor_is_rejected(
     checklist = repository / CHECKLIST_PATH
     text = checklist.read_text(encoding="utf-8")
     row = next(
-        line
-        for line in text.splitlines()
-        if f"status-{PAIR_BLOCK_ID.lower()}" in line
+        line for line in text.splitlines() if f"status-{PAIR_BLOCK_ID.lower()}" in line
     )
     checklist.write_text(text.replace(row, row + "\n" + row), encoding="utf-8")
 
@@ -286,9 +433,7 @@ def test_missing_owner_is_rejected(
 
     repository = repository_factory(command=passing_command())
     contract = repository / CONTRACT_PATH
-    text = contract.read_text(encoding="utf-8").replace(
-        "Test author.", ""
-    )
+    text = contract.read_text(encoding="utf-8").replace("Test author.", "")
     contract.write_text(text, encoding="utf-8")
 
     with pytest.raises(PairBlockGateError, match="implementation owner is missing"):
@@ -335,10 +480,7 @@ def test_gate_must_name_every_observing_test(
 ) -> None:
     """Require the focused command to execute every declared observing test."""
 
-    command = (
-        "python -c 'print(\"2 passed in 0.01s\")' "
-        f"{TEST_PATH.name}"
-    )
+    command = f"python -c 'print(\"2 passed in 0.01s\")' {TEST_PATH.name}"
     repository = repository_factory(command=command)
 
     with pytest.raises(PairBlockGateError, match="focused check does not name"):
@@ -500,9 +642,9 @@ def test_execution_identity_drift_invalidates_pass(
         path = paths[target]
         command = (
             "python -c 'from pathlib import Path; "
-            f"path = Path(\"{path}\"); "
-            "path.write_bytes(path.read_bytes() + b\"\\n\"); "
-            "print(\"2 passed in 0.01s\")' "
+            f'path = Path("{path}"); '
+            'path.write_bytes(path.read_bytes() + b"\\n"); '
+            'print("2 passed in 0.01s")\' '
             f"{SOURCE_PATH.as_posix()} {TEST_PATH.as_posix()}"
         )
     contract = repository / CONTRACT_PATH
@@ -513,9 +655,7 @@ def test_execution_identity_drift_invalidates_pass(
 
     receipt_path = run_test_gate(repository, validator_path=validator)
     receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
-    checklist = (
-        repository / CHECKLIST_PATH
-    ).read_text(encoding="utf-8")
+    checklist = (repository / CHECKLIST_PATH).read_text(encoding="utf-8")
 
     assert receipt["result"] == "invalidated"
     assert receipt["status_after"] == TEST_PROFILE.lifecycle.drafting_status
@@ -532,7 +672,7 @@ def test_active_modules_and_definitions_have_docstrings() -> None:
         root / "tools/checklist_profile.py",
         root / "tools/execution_identity.py",
         root / "tools/profile.py",
-        root / "tools/run_pairblock_gate.py",
+        root / "tools/pairblock_controller.py",
         root / "tests/conftest.py",
         Path(__file__),
     ]

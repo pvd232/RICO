@@ -1,4 +1,4 @@
-"""Run one validated proposal gate, retain its receipt, and update its status."""
+"""Run PairBlock gates and record evidence-backed lifecycle transitions."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ import shlex
 import subprocess
 import tempfile
 from collections.abc import Sequence
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from datetime import datetime, timezone
 from itertools import pairwise
 from pathlib import Path
@@ -83,6 +83,62 @@ class GateReceipt:
     identity_drift: dict[str, dict[str, object]]
     normalized_manifest: dict[str, object]
     normalized_manifest_sha256: str
+
+
+@dataclass(frozen=True, slots=True)
+class EvidenceRef:
+    """Identify one artifact, command, test, or external lifecycle observation.
+
+    Attributes:
+        kind: Global master-checklist evidence kind.
+        target: File, command, test, or external result that was observed.
+        revision: Commit, graph identity, or immutable revision of that result.
+    """
+
+    kind: str
+    target: str
+    revision: str
+
+    def __post_init__(self) -> None:
+        """Reject evidence that the global manifest cannot represent."""
+
+        if self.kind not in {"artifact", "command", "external", "test"}:
+            raise PairBlockGateError(f"invalid evidence kind: {self.kind}")
+        if not self.target.strip() or not self.revision.strip():
+            raise PairBlockGateError("evidence target and revision must not be empty")
+
+
+@dataclass(frozen=True, slots=True)
+class LifecycleReceipt:
+    """Persist one accepted PairBlock lifecycle event and its predecessor.
+
+    Attributes:
+        schema_version: Version of this receipt structure.
+        pair_block_id: PairBlock advanced by the event.
+        event: Profile event applied to the previous status.
+        result: ``applied`` or ``rejected``.
+        status_before: Checklist status read before the event.
+        status_after: Status selected by the lifecycle policy.
+        recorded_at: UTC time at which the transition began.
+        repository_head: RICO commit checked out for the transition.
+        checklist_before_sha256: Digest of the checklist read by the controller.
+        checklist_written_sha256: Digest of the projected checklist, if valid.
+        evidence: Observation that authorizes this event.
+        previous_receipt: Receipt linked by the previous status row, if any.
+    """
+
+    schema_version: int
+    pair_block_id: str
+    event: str
+    result: str
+    status_before: str
+    status_after: str
+    recorded_at: str
+    repository_head: str
+    checklist_before_sha256: str
+    checklist_written_sha256: str | None
+    evidence: EvidenceRef
+    previous_receipt: str | None
 
 
 def _atomic_write(path: Path, content: bytes) -> None:
@@ -224,6 +280,7 @@ def run_gate(
             os.path.relpath(receipt_path, checklist_path.parent)
         ).as_posix()
         checklist_after = adapter.record_gate_result(
+            repository,
             checklist_text,
             row,
             test_count=int(passed.group(1)),
@@ -286,26 +343,164 @@ def run_gate(
     return receipt_path
 
 
+def advance_pairblock(
+    repository: Path,
+    pair_block_id: str,
+    event: str,
+    evidence: EvidenceRef,
+    *,
+    now: datetime | None = None,
+    validator_path: Path = DEFAULT_MASTER_CHECKLIST_VALIDATOR,
+    adapter: MarkdownChecklistAdapter = MANTRA_PHASE0_ADAPTER,
+) -> Path:
+    """Apply one legal lifecycle event and render every derived status."""
+
+    repository = repository.resolve()
+    profile = adapter.profile
+    checklist_path = repository / profile.checklist_path
+    checklist_before = checklist_path.read_bytes()
+    checklist_text = checklist_before.decode("utf-8")
+    rows, _ = adapter.validate_traceability(
+        repository,
+        validator_path=validator_path,
+    )
+    try:
+        row = rows[pair_block_id]
+    except KeyError as error:
+        raise PairBlockGateError(f"unknown PairBlock: {pair_block_id}") from error
+    try:
+        status_after = profile.lifecycle.advance(row.status, event)
+    except ValueError as error:
+        raise PairBlockGateError(str(error)) from error
+
+    recorded = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
+    stamp = recorded.strftime("%Y%m%dT%H%M%S.%fZ")
+    receipt_path = (
+        repository
+        / "evidence"
+        / "pairblock-lifecycle"
+        / pair_block_id.lower()
+        / f"{stamp}-{event}.json"
+    )
+    if receipt_path.exists():
+        raise PairBlockGateError(f"receipt already exists: {receipt_path}")
+    relative_receipt = Path(
+        os.path.relpath(receipt_path, checklist_path.parent)
+    ).as_posix()
+    repository_head = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=repository,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    receipt = LifecycleReceipt(
+        schema_version=1,
+        pair_block_id=pair_block_id,
+        event=event,
+        result="applied",
+        status_before=row.status,
+        status_after=status_after,
+        recorded_at=recorded.isoformat(),
+        repository_head=repository_head,
+        checklist_before_sha256=sha256_bytes(checklist_before),
+        checklist_written_sha256=None,
+        evidence=evidence,
+        previous_receipt=adapter.current_receipt(row),
+    )
+    _atomic_write(
+        receipt_path,
+        (json.dumps(asdict(receipt), indent=2, sort_keys=True) + "\n").encode(),
+    )
+
+    try:
+        checklist_after = adapter.render_transition(
+            repository,
+            checklist_text,
+            row,
+            receipt_path=relative_receipt,
+            status=status_after,
+        )
+        projected_text = checklist_after.decode("utf-8")
+        projected_rows = adapter.parse_pair_block_rows(projected_text)
+        projected_manifest = adapter.compile_normalized_manifest(
+            repository,
+            projected_text,
+            projected_rows,
+        )
+        validate_normalized_manifest(
+            repository,
+            projected_manifest,
+            validator_path.resolve(),
+        )
+    except Exception:
+        rejected = replace(receipt, result="rejected")
+        _atomic_write(
+            receipt_path,
+            (json.dumps(asdict(rejected), indent=2, sort_keys=True) + "\n").encode(),
+        )
+        raise
+
+    receipt = replace(
+        receipt,
+        checklist_written_sha256=sha256_bytes(checklist_after),
+    )
+    _atomic_write(
+        receipt_path,
+        (json.dumps(asdict(receipt), indent=2, sort_keys=True) + "\n").encode(),
+    )
+    _atomic_write(checklist_path, checklist_after)
+    adapter.validate_traceability(
+        repository,
+        validator_path=validator_path,
+    )
+    return receipt_path
+
+
 def main(argv: Sequence[str] | None = None) -> int:
-    """Parse the CLI request and return success only for a passing gate."""
+    """Run a proposal gate or record one later lifecycle transition."""
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("pair_block_id")
     parser.add_argument("--repository", type=Path, default=Path.cwd())
     parser.add_argument(
         "--master-validator",
         type=Path,
         default=DEFAULT_MASTER_CHECKLIST_VALIDATOR,
     )
-    arguments = parser.parse_args(argv)
-    receipt_path = run_gate(
-        arguments.repository,
-        arguments.pair_block_id,
-        validator_path=arguments.master_validator,
+    commands = parser.add_subparsers(dest="operation", required=True)
+    gate = commands.add_parser("gate")
+    gate.add_argument("pair_block_id")
+    advance = commands.add_parser("advance")
+    advance.add_argument("pair_block_id")
+    advance.add_argument(
+        "event",
+        choices=MANTRA_PHASE0_ADAPTER.profile.lifecycle.transition_events,
     )
+    advance.add_argument("--evidence-kind", required=True)
+    advance.add_argument("--evidence-target", required=True)
+    advance.add_argument("--evidence-revision", required=True)
+    arguments = parser.parse_args(argv)
+    if arguments.operation == "gate":
+        receipt_path = run_gate(
+            arguments.repository,
+            arguments.pair_block_id,
+            validator_path=arguments.master_validator,
+        )
+    else:
+        receipt_path = advance_pairblock(
+            arguments.repository,
+            arguments.pair_block_id,
+            arguments.event,
+            EvidenceRef(
+                kind=arguments.evidence_kind,
+                target=arguments.evidence_target,
+                revision=arguments.evidence_revision,
+            ),
+            validator_path=arguments.master_validator,
+        )
     receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
     print(receipt_path)
-    return 0 if receipt["result"] == "passed" else 1
+    return 0 if receipt["result"] in {"applied", "passed"} else 1
 
 
 if __name__ == "__main__":

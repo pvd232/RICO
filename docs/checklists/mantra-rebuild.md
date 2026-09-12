@@ -42,17 +42,14 @@ current status, review points, and completion evidence.
 
 ## Current focus
 
-**Active drafting tranche:** Phase 0C, restoration planning. Phase 0B remains
-the implementation gate because the MIL artifact table is incomplete.
+**Active tranche:** repair `P0-PB-10`, then review `P0-PB-04A` and
+`P0-PB-04B` while Codex revises `P0-PB-05A` and drafts `P0-PB-05B`.
 
-| Actor | Next action | Result |
-|---|---|---|
-| Codex | Gate [`P0-PB-04B`](../contracts/mantra-rebuild-phase-0.md#p0-pb-04b-declaration). | Retained proposal receipt and automatic transition to user review. |
-| User | Review [`P0-PB-04A`](../contracts/mantra-rebuild-phase-0.md#p0-pb-04a-declaration), [`P0-PB-05A`](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a-declaration), and [`P0-PB-10`](../contracts/mantra-rebuild-phase-0.md#p0-pb-10-declaration). | Approved blocks or named corrections. |
-| Codex and user | Review each approved block; the user implements it in MANTRA; Codex reviews the applied diff and gate output. | Accepted MANTRA implementation with retained evidence. |
-
-`P0-PB-04B` and the two reviews can proceed in parallel. `P0-PB-05B` starts
-after `P0-PB-04B` resolves the archive chunks required by the approved paths.
+The resolution table identifies the next owner. `Review` requires the user's
+decision. `Implementation` covers the user's MANTRA edit and Codex's applied
+code review. `VIPER` means the applied code is accepted and awaits provenance
+registration. `Complete` requires the final receipt and a checked execution
+box.
 
 **`P0-PB-04B` inspection evidence:** Project release revision
 `51cb27990244f1f418e8b7cd11cd98672d18919a` pins control revision
@@ -74,20 +71,20 @@ owned by `historical_and_shared_experiments` and two owned by
 
 | PairBlock | Proposal gate | Resolution status | Depends on | Contract declaration | Proposed code |
 |---|---|---|---|---|---|
-| <a id="status-p0-pb-01"></a>`P0-PB-01` | Environment check passed | Accepted; awaiting VIPER registration | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-01-declaration) | [Accepted implementation](../contracts/mantra-rebuild-phase-0.md#p0-pb-01-accepted-implementation) |
-| <a id="status-p0-pb-02"></a>`P0-PB-02` | Hopfield artifact table approved | Artifact table approved; graph freeze open | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-02-declaration) | [Work description](../contracts/mantra-rebuild-phase-0.md#replay-traces-awaiting-approval) |
-| <a id="status-p0-pb-03"></a>`P0-PB-03` | Pending | Codex tracing | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-03-declaration) | [Work description](../contracts/mantra-rebuild-phase-0.md#replay-traces-awaiting-approval) |
+| <a id="status-p0-pb-01"></a>`P0-PB-01` | Environment check passed | VIPER | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-01-declaration) | [Accepted implementation](../contracts/mantra-rebuild-phase-0.md#p0-pb-01-accepted-implementation) |
+| <a id="status-p0-pb-02"></a>`P0-PB-02` | Hopfield artifact table approved | Drafting | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-02-declaration) | [Work description](../contracts/mantra-rebuild-phase-0.md#replay-traces-awaiting-approval) |
+| <a id="status-p0-pb-03"></a>`P0-PB-03` | Pending | Drafting | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-03-declaration) | [Work description](../contracts/mantra-rebuild-phase-0.md#replay-traces-awaiting-approval) |
 | <a id="status-p0-pb-04"></a>`P0-PB-04` | Pending | Waiting for `P0-PB-04A`, `P0-PB-04B` | `P0-PB-04A`, `P0-PB-04B` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-04-declaration) | [Child blocks](../contracts/mantra-rebuild-phase-0.md#p0-pb-04-declaration) |
-| <a id="status-p0-pb-04a"></a>`P0-PB-04A` | Passed: `17` tests | Awaiting user review | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-04a-declaration) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-04a-proposed-code) |
-| <a id="status-p0-pb-04b"></a>`P0-PB-04B` | Passed: `42` tests ([receipt](../../evidence/pairblock-gates/p0-pb-04b/20260912T025100.211753Z.json)) | Awaiting user review | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-04b-declaration) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-04b-proposed-code) |
+| <a id="status-p0-pb-04a"></a>`P0-PB-04A` | Passed: `17` tests | Review | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-04a-declaration) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-04a-proposed-code) |
+| <a id="status-p0-pb-04b"></a>`P0-PB-04B` | Passed: `42` tests ([receipt](../../evidence/pairblock-gates/p0-pb-04b/20260912T025100.211753Z.json)) | Review | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-04b-declaration) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-04b-proposed-code) |
 | <a id="status-p0-pb-05"></a>`P0-PB-05` | Pending | Waiting for `P0-PB-05A`, `P0-PB-05B` | `P0-PB-05A`, `P0-PB-05B` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-05-declaration) | [Child blocks](../contracts/mantra-rebuild-phase-0.md#p0-pb-05-declaration) |
-| <a id="status-p0-pb-05a"></a>`P0-PB-05A` | Passed: `9` tests | Awaiting user review | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a-declaration) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a-proposed-code) |
+| <a id="status-p0-pb-05a"></a>`P0-PB-05A` | Passed: `9` tests | Review | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a-declaration) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a-proposed-code) |
 | <a id="status-p0-pb-05b"></a>`P0-PB-05B` | Pending | Waiting for `P0-PB-04B` | `P0-PB-04B` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-05b-declaration) | Pending |
 | <a id="status-p0-pb-06"></a>`P0-PB-06` | Pending | Waiting for `P0-PB-04`, `P0-PB-05` | `P0-PB-04`, `P0-PB-05` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-06-declaration) | Pending |
 | <a id="status-p0-pb-07"></a>`P0-PB-07` | Pending | Waiting for `P0-PB-06` | `P0-PB-06` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-07-declaration) | Pending |
 | <a id="status-p0-pb-08"></a>`P0-PB-08` | Pending | Waiting for `P0-PB-06` | `P0-PB-06` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-08-declaration) | Pending |
 | <a id="status-p0-pb-09"></a>`P0-PB-09` | Pending | Waiting for `P0-PB-07`, `P0-PB-08`, `P0-PB-10` | `P0-PB-07`, `P0-PB-08`, `P0-PB-10` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-09-declaration) | Pending |
-| <a id="status-p0-pb-10"></a>`P0-PB-10` | Passed: `32` tests ([receipt](../../evidence/pairblock-gates/p0-pb-10/20260912T025304.628824Z.json)) | Awaiting user review | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-10-declaration) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-10-proposed-code) |
+| <a id="status-p0-pb-10"></a>`P0-PB-10` | Passed: `40` tests ([receipt](../../evidence/pairblock-gates/p0-pb-10/20260912T032028.024353Z.json)) | Review | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-10-declaration) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-10-proposed-code) |
 
 ## Terminal outcome
 
@@ -112,17 +109,14 @@ it, Codex reviews the applied diff, the focused gate passes, Git records the
 accepted increment, and VIPER records the required run evidence. A prose claim
 or proposed code block remains open.
 
-The PairBlock resolution table is the only source of lifecycle status. Contract
-requirements, block declarations, and review-source records expose that status
-through links to the table. The `P0-PB-10` Markdown adapter compiles this RICO
-document into the established normalized master-checklist manifest and invokes
-the existing `/Users/machina/.agents/scripts/validate-master-checklist.py`
-validator. Its RICO checks cover the detailed PairBlock dependencies, named
-owners, proposed files, observing tests, focused gates, and status links. A
-passing proposal gate retains a receipt and advances a drafted block to
-`Awaiting user review`. A failing gate retains a receipt without changing the
-checklist. User approval, MANTRA implementation, applied-code tests, Git
-evidence, and VIPER evidence control the later transitions.
+The PairBlock resolution row is the source of its lifecycle stage. One linked
+receipt supports each transition. The RICO profile derives the checkbox,
+requirement state, dependent-block readiness, and contract state from those
+rows, then invokes the global master-checklist validator. A passing proposal
+gate advances `Drafting` to `Review`. User approval advances `Review` to
+`Implementation`; accepted MANTRA code advances `Implementation` to `VIPER`;
+VIPER registration advances `VIPER` to `Complete`. A failed gate or illegal
+transition preserves the checklist.
 
 For each review cycle, Codex updates this file in the same RICO commit that
 records any changed contract status. MANTRA implementation commits remain in
@@ -165,8 +159,8 @@ This table schedules every requirement in the approved Phase 0 contract once.
 | Requirement | State | Phase | Depends on | Gate |
 |---|---|---|---|---|
 | `P0-REQ-01` | In progress | 0B | None | The approved Hopfield and MIL portions of graph $B$ contain every required file, producer, and edge and exclude parity graph $Q$. |
-| `P0-REQ-02` | Planned | 0C | `P0-REQ-01` | Every absent file in $B$ resolves through exactly one valid `RestorationBinding`. |
-| `P0-REQ-03` | Planned | 0C | `P0-REQ-01` | The capacity receipt records every term in $R_{max}$ and measured free space is at least $R_{max}$. |
+| `P0-REQ-02` | In progress | 0C | `P0-REQ-01` | Every absent file in $B$ resolves through exactly one valid `RestorationBinding`. |
+| `P0-REQ-03` | In progress | 0C | `P0-REQ-01` | The capacity receipt records every term in $R_{max}$ and measured free space is at least $R_{max}$. |
 | `P0-REQ-04` | Planned | 0D | `P0-REQ-02`, `P0-REQ-03` | Every restored canonical file matches its approved byte count and SHA-256. |
 | `P0-REQ-05` | In progress | 0D | `P0-REQ-02`, `P0-REQ-03` | Restoration runs from the MANTRA root through the verified `mantra` environment, and VIPER retains the environment receipt. |
 | `P0-REQ-06` | Planned | 0D | `P0-REQ-04`, `P0-REQ-05` | VIPER verifies graph $B$; deleting one required node or edge makes verification fail. |
@@ -303,7 +297,7 @@ gate passes.
       <!-- pair-block: P0-PB-09 -->
       <!-- pair-block-contract: P0-PB-09 contract=docs/contracts/mantra-rebuild-phase-0.md -->
 
-**Gate:** `P0-VR-09` passes, the user approves the evidence set, and all nine
+**Gate:** `P0-VR-09` passes, the user approves the evidence set, and all ten
 Phase 0 requirements are complete.
 
 **Commit boundary:** Update the Phase 0 contract status and this checklist in

@@ -18,6 +18,8 @@ DEFAULT_MASTER_CHECKLIST_VALIDATOR = (
 )
 _ROW_ID = re.compile(r'^<a id="status-([a-z0-9_.-]+)"></a>`([^`]+)`$')
 _LINK = re.compile(r"^\[[^]]+\]\(([^)#]+)(?:#([^)]+))?\)$")
+_RECEIPT_LINK = re.compile(r"\[receipt\]\(([^)]+)\)")
+_CHECKBOX = re.compile(r"^\s*- \[([ xX])\] ")
 
 
 class PairBlockGateError(RuntimeError):
@@ -37,6 +39,15 @@ class PairBlockRow:
 
 
 @dataclass(frozen=True, slots=True)
+class PairBlockPlacement:
+    """Locate one PairBlock checkbox and record whether it is checked."""
+
+    section: str
+    checkbox_line: int
+    checked: bool
+
+
+@dataclass(frozen=True, slots=True)
 class ProposalContract:
     """Represent one proposed code boundary and its contract-declared command."""
 
@@ -53,12 +64,16 @@ class MarkdownChecklistDialect:
         pair_block_table_header: Exact PairBlock status-table header.
         requirement_table_header: Exact requirement-assignment table header.
         requirement_map_header: Exact contract requirement-map table header.
+        contract_table_header: Exact checklist contract-coverage table header.
+        contract_link_prefix: Link cell that selects this profile's contract.
         proposed_code_link_prefix: Link text that identifies runnable code.
     """
 
     pair_block_table_header: str
     requirement_table_header: str
     requirement_map_header: str
+    contract_table_header: str
+    contract_link_prefix: str
     proposed_code_link_prefix: str
 
     def __post_init__(self) -> None:
@@ -68,6 +83,8 @@ class MarkdownChecklistDialect:
             ("pair_block_table_header", self.pair_block_table_header),
             ("requirement_table_header", self.requirement_table_header),
             ("requirement_map_header", self.requirement_map_header),
+            ("contract_table_header", self.contract_table_header),
+            ("contract_link_prefix", self.contract_link_prefix),
             ("proposed_code_link_prefix", self.proposed_code_link_prefix),
         ):
             if not value.strip():
@@ -95,6 +112,14 @@ class MarkdownChecklistAdapter:
         """Return whether a status row links to runnable proposed code."""
 
         return row.proposed_code.startswith(self.dialect.proposed_code_link_prefix)
+
+    def current_receipt(self, row: PairBlockRow) -> str | None:
+        """Return the receipt linked from a PairBlock row, when present."""
+
+        links = _RECEIPT_LINK.findall(row.gate)
+        if len(links) > 1:
+            raise PairBlockGateError(f"{row.pair_block_id} gate links several receipts")
+        return links[0] if links else None
 
     def load_proposal_contract(
         self,
@@ -129,6 +154,7 @@ class MarkdownChecklistAdapter:
 
     def record_gate_result(
         self,
+        repository: Path,
         checklist_text: str,
         row: PairBlockRow,
         *,
@@ -139,12 +165,39 @@ class MarkdownChecklistAdapter:
         """Render one gate result into the configured PairBlock table."""
 
         gate = f"Passed: `{test_count}` tests ([receipt]({receipt_path}))"
-        return _replace_status_row(
+        rendered = _replace_status_row(
             checklist_text,
             pair_block_id=row.pair_block_id,
             gate=gate,
             status=status,
+        )
+        return _render_derived_states(
+            repository,
+            rendered,
+            self.profile,
+            self.dialect,
         ).encode("utf-8")
+
+    def render_transition(
+        self,
+        repository: Path,
+        checklist_text: str,
+        row: PairBlockRow,
+        *,
+        receipt_path: str,
+        status: str,
+    ) -> bytes:
+        """Render one lifecycle transition and every derived checklist state."""
+
+        return render_transition(
+            repository,
+            checklist_text,
+            row,
+            receipt_path=receipt_path,
+            status=status,
+            profile=self.profile,
+            dialect=self.dialect,
+        )
 
     def validate_traceability(
         self,
@@ -196,6 +249,126 @@ def _replace_status_row(
     lines[line_index] = "| " + " | ".join(cells) + " |"
     suffix = "\n" if checklist_text.endswith("\n") else ""
     return "\n".join(lines) + suffix
+
+
+def _replace_checkbox(
+    checklist_text: str,
+    placement: PairBlockPlacement,
+    *,
+    checked: bool,
+) -> str:
+    """Render one PairBlock checkbox from its lifecycle completion state."""
+
+    lines = checklist_text.splitlines()
+    line = lines[placement.checkbox_line]
+    match = _CHECKBOX.match(line)
+    if match is None:
+        raise PairBlockGateError("PairBlock marker is not preceded by a checkbox")
+    mark = "x" if checked else " "
+    lines[placement.checkbox_line] = (
+        line[: match.start(1)] + mark + line[match.end(1) :]
+    )
+    suffix = "\n" if checklist_text.endswith("\n") else ""
+    return "\n".join(lines) + suffix
+
+
+def _replace_requirement_states(
+    checklist_text: str,
+    states: dict[str, str],
+    dialect: MarkdownChecklistDialect,
+) -> str:
+    """Render all requirement states derived from their mapped PairBlocks."""
+
+    lines = checklist_text.splitlines()
+    try:
+        header_index = lines.index(dialect.requirement_table_header)
+    except ValueError as error:
+        raise PairBlockGateError("requirement table header is missing") from error
+    seen: set[str] = set()
+    for line_index in range(header_index + 2, len(lines)):
+        if not lines[line_index].startswith("|"):
+            break
+        cells = _split_row(lines[line_index])
+        requirement_id = cells[0].strip("`")
+        if requirement_id not in states:
+            continue
+        cells[1] = states[requirement_id]
+        lines[line_index] = "| " + " | ".join(cells) + " |"
+        seen.add(requirement_id)
+    if seen != set(states):
+        raise PairBlockGateError(
+            f"requirement rows differ: missing={sorted(set(states) - seen)}"
+        )
+    suffix = "\n" if checklist_text.endswith("\n") else ""
+    return "\n".join(lines) + suffix
+
+
+def _replace_contract_state(
+    checklist_text: str,
+    state: str,
+    dialect: MarkdownChecklistDialect,
+) -> str:
+    """Render the derived contract state in its coverage-table row."""
+
+    lines = checklist_text.splitlines()
+    try:
+        header_index = lines.index(dialect.contract_table_header)
+    except ValueError as error:
+        raise PairBlockGateError("contract table header is missing") from error
+    matches: list[tuple[int, list[str]]] = []
+    for line_index in range(header_index + 2, len(lines)):
+        if not lines[line_index].startswith("|"):
+            break
+        cells = _split_row(lines[line_index])
+        if cells[0].startswith(dialect.contract_link_prefix):
+            matches.append((line_index, cells))
+    if len(matches) != 1:
+        raise PairBlockGateError("expected one contract coverage row")
+    line_index, cells = matches[0]
+    cells[1] = state
+    lines[line_index] = "| " + " | ".join(cells) + " |"
+    suffix = "\n" if checklist_text.endswith("\n") else ""
+    return "\n".join(lines) + suffix
+
+
+def _rendered_contract_state(
+    checklist_text: str,
+    profile: ChecklistProfile,
+    dialect: MarkdownChecklistDialect,
+) -> str:
+    """Read the project contract's state from the coverage table."""
+
+    matches = [
+        cells
+        for cells in _table_rows(checklist_text, dialect.contract_table_header)
+        if cells[0].startswith(dialect.contract_link_prefix)
+    ]
+    if len(matches) != 1:
+        raise PairBlockGateError("expected one contract coverage row")
+    return _normalized_state(matches[0][1], profile)
+
+
+def _display_state(state: str) -> str:
+    """Return the checklist label for one normalized global state."""
+
+    return {
+        "planned": "Planned",
+        "in_progress": "In progress",
+        "complete": "Complete",
+        "deferred": "Deferred",
+    }[state]
+
+
+def _contract_state(states: list[str]) -> str:
+    """Derive one contract state from its requirement and PairBlock states."""
+
+    if all(state == "complete" for state in states):
+        return "complete"
+    if all(state == "planned" for state in states):
+        return "planned"
+    if all(state == "deferred" for state in states):
+        return "deferred"
+    return "in_progress"
 
 
 def _parse_dependencies(
@@ -313,7 +486,11 @@ def _proposal_section(text: str, pair_block_id: str) -> str:
         )
     remainder = text[start + len(marker) :]
     next_heading = re.search(r"(?m)^#{3,4} ", remainder)
-    end = len(text) if next_heading is None else start + len(marker) + next_heading.start()
+    end = (
+        len(text)
+        if next_heading is None
+        else start + len(marker) + next_heading.start()
+    )
     return text[start:end]
 
 
@@ -368,7 +545,9 @@ def validate_declaration(
     if not contract_path.is_relative_to(repository):
         raise PairBlockGateError("contract path escapes the repository")
     if anchor is None:
-        raise PairBlockGateError(f"declaration anchor is missing for {row.pair_block_id}")
+        raise PairBlockGateError(
+            f"declaration anchor is missing for {row.pair_block_id}"
+        )
     _ownership_row(
         contract_path.read_text(encoding="utf-8"),
         anchor,
@@ -393,7 +572,9 @@ def load_proposal_contract(
         raise PairBlockGateError("contract path escapes the repository")
     contract_text = contract_path.read_text(encoding="utf-8")
     if declaration_anchor is None:
-        raise PairBlockGateError(f"declaration anchor is missing for {row.pair_block_id}")
+        raise PairBlockGateError(
+            f"declaration anchor is missing for {row.pair_block_id}"
+        )
     _ownership_row(contract_text, declaration_anchor, row.pair_block_id)
 
     proposed_path, proposed_fragment = _resolve_link(
@@ -438,7 +619,9 @@ def load_proposal_contract(
         raise PairBlockGateError(f"code boundary is empty for {row.pair_block_id}")
     linked_paths = code_links + fixture_links
     if len(linked_paths) != len(set(linked_paths)):
-        raise PairBlockGateError(f"proposal repeats a source path for {row.pair_block_id}")
+        raise PairBlockGateError(
+            f"proposal repeats a source path for {row.pair_block_id}"
+        )
     source_paths = tuple(
         (contract_path.parent / linked_path).resolve() for linked_path in linked_paths
     )
@@ -454,7 +637,10 @@ def load_proposal_contract(
         raise PairBlockGateError(f"code boundary lacks a test for {row.pair_block_id}")
     for relative_source_path in code_sources:
         relative_source = relative_source_path.as_posix()
-        if relative_source_path.name.startswith("test_") and relative_source not in command:
+        if (
+            relative_source_path.name.startswith("test_")
+            and relative_source not in command
+        ):
             raise PairBlockGateError(
                 f"focused check does not name observing test {relative_source}"
             )
@@ -503,8 +689,10 @@ def _requirement_records(
     checklist_text: str,
     profile: ChecklistProfile,
     dialect: MarkdownChecklistDialect,
+    states: dict[str, str],
+    evidence: dict[str, list[dict[str, str]]],
 ) -> list[dict[str, object]]:
-    """Compile requirement-assignment rows without reproducing global validation."""
+    """Compile requirement rows and require their rendered states to agree."""
 
     rows = _table_rows(
         checklist_text,
@@ -525,13 +713,22 @@ def _requirement_records(
         if not profile.accepts_requirement_id(requirement_id):
             raise PairBlockGateError(f"invalid requirement ID: {requirement_id}")
         invalid_dependencies = [
-            item
-            for item in dependencies
-            if not profile.accepts_requirement_id(item)
+            item for item in dependencies if not profile.accepts_requirement_id(item)
         ]
         if invalid_dependencies:
             raise PairBlockGateError(
                 f"invalid requirement dependency IDs: {invalid_dependencies}"
+            )
+        try:
+            expected_state = states[requirement_id]
+        except KeyError as error:
+            raise PairBlockGateError(
+                f"requirement {requirement_id} has no mapped PairBlock"
+            ) from error
+        rendered_state = _normalized_state(cells[1], profile)
+        if rendered_state != expected_state:
+            raise PairBlockGateError(
+                f"requirement {requirement_id} state must be {expected_state}"
             )
         records.append(
             {
@@ -540,9 +737,9 @@ def _requirement_records(
                 "phase": phase,
                 "order": order,
                 "depends_on": dependencies,
-                "state": _normalized_state(cells[1], profile),
+                "state": expected_state,
                 "gate": {"kind": "external", "target": cells[4]},
-                "completion_evidence": [],
+                "completion_evidence": evidence[requirement_id],
             }
         )
     return records
@@ -581,35 +778,216 @@ def _contract_requirement_map(
     return requirement_ids, requirements_by_block
 
 
-def _pair_block_section(
+def _completion_evidence(
+    repository: Path,
+    checklist_path: Path,
+    row: PairBlockRow,
+    state: str,
+    profile: ChecklistProfile,
+) -> list[dict[str, str]]:
+    """Load the final lifecycle receipt for one completed PairBlock."""
+
+    if state != "complete":
+        return []
+    links = _RECEIPT_LINK.findall(row.gate)
+    if len(links) != 1:
+        raise PairBlockGateError(
+            f"complete PairBlock {row.pair_block_id} needs one receipt link"
+        )
+    receipt_path = (checklist_path.parent / links[0]).resolve()
+    if not receipt_path.is_relative_to(repository) or not receipt_path.is_file():
+        raise PairBlockGateError(
+            f"completion receipt is missing for {row.pair_block_id}"
+        )
+    receipt = _validate_completion_chain(
+        repository,
+        checklist_path,
+        receipt_path,
+        row.pair_block_id,
+        profile,
+    )
+    revision = receipt.get("repository_head")
+    if not isinstance(revision, str) or not revision:
+        raise PairBlockGateError(
+            f"completion receipt lacks repository_head for {row.pair_block_id}"
+        )
+    return [
+        {
+            "kind": "artifact",
+            "target": receipt_path.relative_to(repository).as_posix(),
+            "revision": revision,
+        }
+    ]
+
+
+def _load_receipt(
+    repository: Path, checklist_path: Path, link: str
+) -> dict[str, object]:
+    """Load one repository-owned receipt linked from the checklist directory."""
+
+    path = (checklist_path.parent / link).resolve()
+    if not path.is_relative_to(repository) or not path.is_file():
+        raise PairBlockGateError(f"lifecycle receipt is missing: {link}")
+    try:
+        receipt = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise PairBlockGateError(f"lifecycle receipt is invalid: {link}") from error
+    if not isinstance(receipt, dict):
+        raise PairBlockGateError(f"lifecycle receipt is not an object: {link}")
+    return receipt
+
+
+def _validate_completion_chain(
+    repository: Path,
+    checklist_path: Path,
+    receipt_path: Path,
+    pair_block_id: str,
+    profile: ChecklistProfile,
+) -> dict[str, object]:
+    """Require the declared lifecycle receipts and passing proposal gate in order."""
+
+    try:
+        current = json.loads(receipt_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise PairBlockGateError(
+            f"completion receipt is invalid for {pair_block_id}"
+        ) from error
+    if not isinstance(current, dict):
+        raise PairBlockGateError(
+            f"completion receipt is not an object for {pair_block_id}"
+        )
+    final = current
+    expected = reversed(profile.lifecycle.transitions)
+    for event, status_before, status_after in expected:
+        if (
+            current.get("pair_block_id") != pair_block_id
+            or current.get("event") != event
+            or current.get("result") != "applied"
+            or current.get("status_before") != status_before
+            or current.get("status_after") != status_after
+        ):
+            raise PairBlockGateError(
+                f"completion receipt chain differs for {pair_block_id} at {event}"
+            )
+        evidence = current.get("evidence")
+        if not isinstance(evidence, dict) or set(evidence) != {
+            "kind",
+            "target",
+            "revision",
+        }:
+            raise PairBlockGateError(
+                f"completion receipt lacks evidence for {pair_block_id} at {event}"
+            )
+        if (
+            evidence["kind"] not in {"artifact", "command", "external", "test"}
+            or not isinstance(evidence["target"], str)
+            or not evidence["target"].strip()
+            or not isinstance(evidence["revision"], str)
+            or not evidence["revision"].strip()
+        ):
+            raise PairBlockGateError(
+                f"completion receipt has invalid evidence for {pair_block_id} at {event}"
+            )
+        previous = current.get("previous_receipt")
+        if not isinstance(previous, str) or not previous:
+            raise PairBlockGateError(
+                f"completion receipt chain ends before {event} for {pair_block_id}"
+            )
+        current = _load_receipt(repository, checklist_path, previous)
+    if (
+        current.get("pair_block_id") != pair_block_id
+        or current.get("result") != "passed"
+        or current.get("status_after") != profile.lifecycle.review_status
+    ):
+        raise PairBlockGateError(
+            f"completion receipt chain lacks a passing proposal gate for {pair_block_id}"
+        )
+    return final
+
+
+def _derive_requirement_records(
+    requirement_ids: list[str],
+    requirements_by_block: dict[str, list[str]],
+    pair_blocks: list[dict[str, object]],
+) -> tuple[dict[str, str], dict[str, list[dict[str, str]]]]:
+    """Derive each requirement state and evidence from its mapped PairBlocks."""
+
+    blocks_by_requirement: dict[str, list[dict[str, object]]] = {
+        requirement_id: [] for requirement_id in requirement_ids
+    }
+    for block in pair_blocks:
+        block_id = str(block["pair_block_id"])
+        for requirement_id in requirements_by_block.get(block_id, []):
+            blocks_by_requirement[requirement_id].append(block)
+
+    states: dict[str, str] = {}
+    evidence: dict[str, list[dict[str, str]]] = {}
+    for requirement_id, blocks in blocks_by_requirement.items():
+        if not blocks:
+            raise PairBlockGateError(
+                f"requirement {requirement_id} has no mapped PairBlock"
+            )
+        block_states = [str(block["state"]) for block in blocks]
+        if all(state == "complete" for state in block_states):
+            state = "complete"
+        elif all(state == "planned" for state in block_states):
+            state = "planned"
+        elif all(state == "deferred" for state in block_states):
+            state = "deferred"
+        else:
+            state = "in_progress"
+        states[requirement_id] = state
+        records: list[dict[str, str]] = []
+        if state == "complete":
+            for block in blocks:
+                records.extend(block["completion_evidence"])  # type: ignore[arg-type]
+        evidence[requirement_id] = records
+    return states, evidence
+
+
+def _pair_block_placement(
     checklist_text: str,
     pair_block_id: str,
     contract_path: Path,
-) -> str:
-    """Resolve the standard PairBlock markers to one checklist section."""
+) -> PairBlockPlacement:
+    """Resolve one standard PairBlock marker to its checkbox and section."""
 
     marker = f"<!-- pair-block: {pair_block_id} -->"
     lines = checklist_text.splitlines()
     matches = [index for index, line in enumerate(lines) if marker in line]
     if len(matches) != 1:
-        raise PairBlockGateError(
-            f"{pair_block_id} must map to one checklist checkbox"
-        )
+        raise PairBlockGateError(f"{pair_block_id} must map to one checklist checkbox")
     contract_marker = (
         f"<!-- pair-block-contract: {pair_block_id} "
         f"contract={contract_path.as_posix()} -->"
     )
     marker_index = matches[0]
+    checkbox_line = -1
+    checkbox_match: re.Match[str] | None = None
+    for candidate_index in range(marker_index - 1, -1, -1):
+        if lines[candidate_index].startswith("## "):
+            break
+        candidate = _CHECKBOX.match(lines[candidate_index])
+        if candidate is not None:
+            checkbox_line = candidate_index
+            checkbox_match = candidate
+            break
+    if checkbox_match is None:
+        raise PairBlockGateError(
+            f"{pair_block_id} marker is not preceded by a checkbox"
+        )
     following_lines = [
         line.strip() for line in lines[marker_index + 1 : marker_index + 3]
     ]
     if contract_marker not in following_lines:
-        raise PairBlockGateError(
-            f"{pair_block_id} lacks its standard contract marker"
-        )
+        raise PairBlockGateError(f"{pair_block_id} lacks its standard contract marker")
     for line in reversed(lines[:marker_index]):
         if line.startswith("## "):
-            return line.removeprefix("## ")
+            return PairBlockPlacement(
+                section=line.removeprefix("## "),
+                checkbox_line=checkbox_line,
+                checked=checkbox_match.group(1).lower() == "x",
+            )
     raise PairBlockGateError(f"checklist section is missing for {pair_block_id}")
 
 
@@ -636,6 +1014,155 @@ def _validate_block_inventory(
         )
 
 
+def _release_ready_rows(
+    checklist_text: str,
+    profile: ChecklistProfile,
+    dialect: MarkdownChecklistDialect,
+) -> str:
+    """Move dependency-ready waiting rows into drafting."""
+
+    rows = parse_pair_block_rows(checklist_text, profile, dialect)
+    rendered = checklist_text
+    for row in rows.values():
+        if not row.status.startswith(profile.lifecycle.waiting_prefix):
+            continue
+        if all(
+            rows[dependency].status in profile.lifecycle.resolved_dependency_states
+            for dependency in row.dependencies
+        ):
+            rendered = _replace_status_row(
+                rendered,
+                pair_block_id=row.pair_block_id,
+                gate=row.gate,
+                status=profile.lifecycle.drafting_status,
+            )
+    return rendered
+
+
+def _render_derived_states(
+    repository: Path,
+    checklist_text: str,
+    profile: ChecklistProfile,
+    dialect: MarkdownChecklistDialect,
+) -> str:
+    """Render readiness, requirement states, and contract state from blocks."""
+
+    rendered = _release_ready_rows(checklist_text, profile, dialect)
+    rows = parse_pair_block_rows(rendered, profile, dialect)
+    contract_text = (repository / profile.contract_path).read_text(encoding="utf-8")
+    requirement_ids, requirements_by_block = _contract_requirement_map(
+        contract_text,
+        profile,
+        dialect,
+    )
+    pair_blocks = _pair_block_records(
+        repository,
+        rendered,
+        rows,
+        requirements_by_block,
+        profile,
+    )
+    requirement_states, _ = _derive_requirement_records(
+        requirement_ids,
+        requirements_by_block,
+        pair_blocks,
+    )
+    display_states = {
+        requirement_id: _display_state(state)
+        for requirement_id, state in requirement_states.items()
+    }
+    rendered = _replace_requirement_states(rendered, display_states, dialect)
+    contract_state = _contract_state(
+        list(requirement_states.values())
+        + [str(block["state"]) for block in pair_blocks]
+    )
+    return _replace_contract_state(
+        rendered,
+        _display_state(contract_state),
+        dialect,
+    )
+
+
+def render_transition(
+    repository: Path,
+    checklist_text: str,
+    row: PairBlockRow,
+    *,
+    receipt_path: str,
+    status: str,
+    profile: ChecklistProfile,
+    dialect: MarkdownChecklistDialect,
+) -> bytes:
+    """Render one lifecycle receipt and all states derived from its block."""
+
+    rendered = _replace_status_row(
+        checklist_text,
+        pair_block_id=row.pair_block_id,
+        gate=f"Lifecycle ([receipt]({receipt_path}))",
+        status=status,
+    )
+    placement = _pair_block_placement(
+        rendered,
+        row.pair_block_id,
+        profile.contract_path,
+    )
+    rendered = _replace_checkbox(
+        rendered,
+        placement,
+        checked=status == profile.lifecycle.complete_status,
+    )
+    return _render_derived_states(
+        repository,
+        rendered,
+        profile,
+        dialect,
+    ).encode("utf-8")
+
+
+def _pair_block_records(
+    repository: Path,
+    checklist_text: str,
+    rows: dict[str, PairBlockRow],
+    requirements_by_block: dict[str, list[str]],
+    profile: ChecklistProfile,
+) -> list[dict[str, object]]:
+    """Compile PairBlock rows, checkboxes, placements, and final receipts."""
+
+    checklist_path = repository / profile.checklist_path
+    records: list[dict[str, object]] = []
+    for row in rows.values():
+        state = _normalized_state(row.status, profile)
+        placement = _pair_block_placement(
+            checklist_text,
+            row.pair_block_id,
+            profile.contract_path,
+        )
+        if placement.checked != (state == "complete"):
+            expected = "checked" if state == "complete" else "unchecked"
+            raise PairBlockGateError(f"{row.pair_block_id} checkbox must be {expected}")
+        records.append(
+            {
+                "pair_block_id": row.pair_block_id,
+                "contract_id": profile.contract_id,
+                "section": placement.section,
+                "requirement_ids": requirements_by_block.get(
+                    row.pair_block_id,
+                    [],
+                ),
+                "state": state,
+                "gate": {"kind": "external", "target": row.gate},
+                "completion_evidence": _completion_evidence(
+                    repository,
+                    checklist_path,
+                    row,
+                    state,
+                    profile,
+                ),
+            }
+        )
+    return records
+
+
 def compile_normalized_manifest(
     repository: Path,
     checklist_text: str,
@@ -653,32 +1180,29 @@ def compile_normalized_manifest(
         profile,
         dialect,
     )
-    requirements = _requirement_records(checklist_text, profile, dialect)
-    pair_blocks = [
-        {
-            "pair_block_id": row.pair_block_id,
-            "contract_id": profile.contract_id,
-            "section": _pair_block_section(
-                checklist_text,
-                row.pair_block_id,
-                profile.contract_path,
-            ),
-            "requirement_ids": requirements_by_block.get(row.pair_block_id, []),
-            "state": _normalized_state(row.status, profile),
-            "gate": {"kind": "external", "target": row.gate},
-            "completion_evidence": [],
-        }
-        for row in rows.values()
-    ]
-    states = [record["state"] for record in requirements + pair_blocks]
-    if states and all(state == "complete" for state in states):
-        contract_state = "complete"
-    elif states and all(state == "planned" for state in states):
-        contract_state = "planned"
-    elif states and all(state == "deferred" for state in states):
-        contract_state = "deferred"
-    else:
-        contract_state = "in_progress"
+    pair_blocks = _pair_block_records(
+        repository,
+        checklist_text,
+        rows,
+        requirements_by_block,
+        profile,
+    )
+    requirement_states, requirement_evidence = _derive_requirement_records(
+        requirement_ids,
+        requirements_by_block,
+        pair_blocks,
+    )
+    requirements = _requirement_records(
+        checklist_text,
+        profile,
+        dialect,
+        requirement_states,
+        requirement_evidence,
+    )
+    states = [str(record["state"]) for record in requirements + pair_blocks]
+    contract_state = _contract_state(states)
+    if _rendered_contract_state(checklist_text, profile, dialect) != contract_state:
+        raise PairBlockGateError(f"contract state must be {contract_state}")
     return {
         "schema_version": 2,
         "checklist_id": profile.checklist_id,
@@ -767,9 +1291,11 @@ MANTRA_PHASE0_DIALECT = MarkdownChecklistDialect(
         "Contract declaration | Proposed code |"
     ),
     requirement_table_header="| Requirement | State | Phase | Depends on | Gate |",
-    requirement_map_header=(
-        "| ID | Contract boundary | Owning block declarations |"
+    requirement_map_header=("| ID | Contract boundary | Owning block declarations |"),
+    contract_table_header=(
+        "| Work unit | Current state | Owning phase | Completion evidence |"
     ),
+    contract_link_prefix="[Phase 0 contract]",
     proposed_code_link_prefix="[Source and tests]",
 )
 

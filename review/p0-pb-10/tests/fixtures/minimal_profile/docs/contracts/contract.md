@@ -19,7 +19,7 @@
 **Code boundary:**
 
 - [checklist_profile.py]({{SOURCE_LINK}})
-- [test_run_pairblock_gate.py]({{TEST_LINK}})
+- [test_pairblock_controller.py]({{TEST_LINK}})
 
 **Focused check:**
 

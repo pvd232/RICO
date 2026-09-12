@@ -20,8 +20,10 @@ class LifecyclePolicy:
         drafting_status: Status assigned while Codex prepares a proposal.
         review_status: Status assigned after the proposal gate passes.
         proposal_gate_states: Statuses from which the proposal gate may run.
-        resolved_dependency_states: Statuses that satisfy another PairBlock's
-            dependency.
+        transitions: Evidence events paired with their required current and
+            resulting statuses.
+        resolved_dependency_states: Statuses that make a dependent PairBlock
+            ready for drafting.
     """
 
     normalized_states: tuple[tuple[str, str], ...]
@@ -29,6 +31,7 @@ class LifecyclePolicy:
     drafting_status: str
     review_status: str
     proposal_gate_states: frozenset[str]
+    transitions: tuple[tuple[str, str, str], ...]
     resolved_dependency_states: frozenset[str]
 
     def __post_init__(self) -> None:
@@ -38,16 +41,23 @@ class LifecyclePolicy:
         if len(labels) != len(set(labels)):
             raise ValueError("lifecycle status labels must be unique")
         invalid_states = [
-            state
-            for _, state in self.normalized_states
-            if state not in _GLOBAL_STATES
+            state for _, state in self.normalized_states if state not in _GLOBAL_STATES
         ]
         if invalid_states:
             raise ValueError(f"invalid normalized lifecycle states: {invalid_states}")
         declared = set(labels)
+        transition_events = [event for event, _, _ in self.transitions]
+        if len(transition_events) != len(set(transition_events)):
+            raise ValueError("lifecycle transition events must be unique")
+        transition_statuses = {
+            status
+            for _, before, after in self.transitions
+            for status in (before, after)
+        }
         referenced = (
             set(self.proposal_gate_states)
             | set(self.resolved_dependency_states)
+            | transition_statuses
             | {self.drafting_status, self.review_status}
         )
         if not referenced <= declared:
@@ -61,6 +71,18 @@ class LifecyclePolicy:
             raise ValueError("proposal gate states must include drafting and review")
         if not self.waiting_prefix:
             raise ValueError("waiting prefix must not be empty")
+        expected_before = self.review_status
+        for event, before, after in self.transitions:
+            if not event:
+                raise ValueError("lifecycle transition event must not be empty")
+            if before != expected_before:
+                raise ValueError(
+                    f"lifecycle transition chain expected {expected_before}, "
+                    f"received {before}"
+                )
+            expected_before = after
+        if self.normalize(expected_before) != "complete":
+            raise ValueError("lifecycle transition chain must end at complete")
 
     def normalize(self, status: str) -> str:
         """Return the global checklist state represented by one project status."""
@@ -72,6 +94,33 @@ class LifecyclePolicy:
             return states[status]
         except KeyError as error:
             raise ValueError(f"unknown lifecycle status: {status}") from error
+
+    def advance(self, status: str, event: str) -> str:
+        """Return the next status for one evidence-backed lifecycle event."""
+
+        transitions = {
+            transition_event: (before, after)
+            for transition_event, before, after in self.transitions
+        }
+        try:
+            before, after = transitions[event]
+        except KeyError as error:
+            raise ValueError(f"unknown lifecycle event: {event}") from error
+        if status != before:
+            raise ValueError(f"{event} cannot advance {status}; expected {before}")
+        return after
+
+    @property
+    def complete_status(self) -> str:
+        """Return the project label that normalizes to the completed state."""
+
+        return self.transitions[-1][2]
+
+    @property
+    def transition_events(self) -> tuple[str, ...]:
+        """Return legal evidence events in lifecycle order."""
+
+        return tuple(event for event, _, _ in self.transitions)
 
 
 @dataclass(frozen=True, slots=True)
@@ -164,27 +213,20 @@ MANTRA_PHASE0_PROFILE = ChecklistProfile(
             ("In progress", "in_progress"),
             ("Complete", "complete"),
             ("Deferred", "deferred"),
-            ("Codex drafting", "planned"),
-            ("Codex tracing", "in_progress"),
-            ("Awaiting user review", "in_progress"),
-            ("Artifact table approved; graph freeze open", "in_progress"),
-            ("Approved for MANTRA implementation", "in_progress"),
-            ("Implemented; awaiting applied-code review", "in_progress"),
-            ("Accepted; awaiting VIPER registration", "in_progress"),
+            ("Drafting", "in_progress"),
+            ("Review", "in_progress"),
+            ("Implementation", "in_progress"),
+            ("VIPER", "in_progress"),
         ),
         waiting_prefix="Waiting for ",
-        drafting_status="Codex drafting",
-        review_status="Awaiting user review",
-        proposal_gate_states=frozenset(
-            {"Codex drafting", "Awaiting user review"}
+        drafting_status="Drafting",
+        review_status="Review",
+        proposal_gate_states=frozenset({"Drafting", "Review"}),
+        transitions=(
+            ("approve", "Review", "Implementation"),
+            ("accept", "Implementation", "VIPER"),
+            ("register", "VIPER", "Complete"),
         ),
-        resolved_dependency_states=frozenset(
-            {
-                "Approved for MANTRA implementation",
-                "Implemented; awaiting applied-code review",
-                "Accepted; awaiting VIPER registration",
-                "Complete",
-            }
-        ),
+        resolved_dependency_states=frozenset({"VIPER", "Complete"}),
     ),
 )

@@ -21,11 +21,11 @@ REQUIREMENT_ID = "REQ-GATE"
 CHECKLIST_PATH = Path("docs/checklists/checklist.md")
 CONTRACT_PATH = Path("docs/contracts/contract.md")
 SOURCE_PATH = Path("review/gate/tools/checklist_profile.py")
-TEST_PATH = Path("review/gate/tests/test_run_pairblock_gate.py")
+TEST_PATH = Path("review/gate/tests/test_pairblock_controller.py")
 FIXTURE_SOURCE_PATH = Path("review/gate/fixtures/profile.md")
 SOURCE_COPIES = {
     PROPOSAL_ROOT / "tools/checklist_profile.py": SOURCE_PATH,
-    PROPOSAL_ROOT / "tests/test_run_pairblock_gate.py": TEST_PATH,
+    PROPOSAL_ROOT / "tests/test_pairblock_controller.py": TEST_PATH,
 }
 
 TEST_PROFILE = ChecklistProfile(
@@ -43,19 +43,21 @@ TEST_PROFILE = ChecklistProfile(
             ("In progress", "in_progress"),
             ("Complete", "complete"),
             ("Deferred", "deferred"),
-            ("Drafting", "planned"),
-            ("Review ready", "in_progress"),
-            ("Approved", "in_progress"),
-            ("Implemented", "in_progress"),
-            ("Accepted", "in_progress"),
+            ("Drafting", "in_progress"),
+            ("Review", "in_progress"),
+            ("Implementation", "in_progress"),
+            ("VIPER", "in_progress"),
         ),
         waiting_prefix="Waiting for ",
         drafting_status="Drafting",
-        review_status="Review ready",
-        proposal_gate_states=frozenset({"Drafting", "Review ready"}),
-        resolved_dependency_states=frozenset(
-            {"Approved", "Implemented", "Accepted", "Complete"}
+        review_status="Review",
+        proposal_gate_states=frozenset({"Drafting", "Review"}),
+        transitions=(
+            ("approve", "Review", "Implementation"),
+            ("accept", "Implementation", "VIPER"),
+            ("register", "VIPER", "Complete"),
         ),
+        resolved_dependency_states=frozenset({"VIPER", "Complete"}),
     ),
 )
 
@@ -65,9 +67,11 @@ TEST_DIALECT = MarkdownChecklistDialect(
         "Contract declaration | Proposed code |"
     ),
     requirement_table_header="| Requirement | State | Phase | Depends on | Gate |",
-    requirement_map_header=(
-        "| ID | Contract boundary | Owning block declarations |"
+    requirement_map_header=("| ID | Contract boundary | Owning block declarations |"),
+    contract_table_header=(
+        "| Work unit | Current state | Owning phase | Completion evidence |"
     ),
+    contract_link_prefix="[Contract]",
     proposed_code_link_prefix="[Source and tests]",
 )
 
@@ -144,8 +148,9 @@ def _ownership_row(block: PairBlockFixture, *, proposed: bool) -> str:
 def _checkbox(block: PairBlockFixture) -> str:
     """Render one globally validated PairBlock checkbox marker."""
 
+    mark = "x" if block.status == TEST_PROFILE.lifecycle.complete_status else " "
     return (
-        f"- [ ] Exercise `{block.pair_block_id}`.\n"
+        f"- [{mark}] Exercise `{block.pair_block_id}`.\n"
         f"      <!-- pair-block: {block.pair_block_id} -->\n"
         f"      <!-- pair-block-contract: {block.pair_block_id} "
         f"contract={CONTRACT_PATH.as_posix()} -->"
@@ -180,6 +185,15 @@ class RepositoryFactory:
             status or TEST_PROFILE.lifecycle.drafting_status,
         )
         blocks = [target] if dependency is None else [dependency, target]
+        normalized_states = [
+            TEST_PROFILE.lifecycle.normalize(block.status) for block in blocks
+        ]
+        if all(state == "planned" for state in normalized_states):
+            requirement_state = "Planned"
+        elif all(state == "complete" for state in normalized_states):
+            requirement_state = "Complete"
+        else:
+            requirement_state = "In progress"
         pair_block_rows = []
         ownership_rows = []
         block_links = []
@@ -196,8 +210,7 @@ class RepositoryFactory:
             )
             ownership_rows.append(_ownership_row(block, proposed=is_target))
             block_links.append(
-                f"[`{block.pair_block_id}`]"
-                f"(#{block.pair_block_id.lower()}-declaration)"
+                f"[`{block.pair_block_id}`](#{block.pair_block_id.lower()}-declaration)"
             )
             checkboxes.append(_checkbox(block))
 
@@ -205,6 +218,8 @@ class RepositoryFactory:
             CHECKLIST_PATH: {
                 "{{PAIR_BLOCK_ROWS}}": "\n".join(pair_block_rows),
                 "{{REQUIREMENT_ID}}": REQUIREMENT_ID,
+                "{{REQUIREMENT_STATE}}": requirement_state,
+                "{{CONTRACT_STATE}}": requirement_state,
                 "{{CHECKBOXES}}": "\n\n".join(checkboxes),
             },
             CONTRACT_PATH: {
