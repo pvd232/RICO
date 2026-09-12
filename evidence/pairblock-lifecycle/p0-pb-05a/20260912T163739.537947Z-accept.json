@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "0eba1685e206edf8dc66345546b6bbb0c81cb9f9a10eac8c36c320a21e66d548",
+  "checklist_written_sha256": "b3679bc295e7032a08737a55402ac646a4d7cb3656ddcdfa7e9adeb9c1f0fa79",
+  "event": "accept",
+  "evidence": {
+    "kind": "artifact",
+    "revision": "af4e589451a90a88f59c806b12a90e74e2bba043",
+    "target": "MANTRA src/mantra/rebuild/capacity.py and src/mantra/rebuild/tests/test_capacity.py"
+  },
+  "pair_block_id": "P0-PB-05A",
+  "previous_receipt": "../../evidence/pairblock-lifecycle/p0-pb-05a/20260912T035904.894879Z-approve.json",
+  "recorded_at": "2026-09-12T16:37:39.537947+00:00",
+  "repository_head": "c43b56244402ee4c5a907fd6172dd9427d4fe090",
+  "result": "applied",
+  "schema_version": 1,
+  "status_after": "Applied",
+  "status_before": "Approved"
+}

@@ -8,7 +8,7 @@
 
 This contract governs artifact discovery, capacity planning, restoration, and provenance capture before the Hopfield or MIL rebuild begins. The model rebuild remains out of scope until every Phase 0 acceptance condition passes. The user actively reviews each PairBlock's scope, proposed work, observed result, and gate evidence before the next PairBlock begins.
 
-The [Mantra rebuild master checklist](../checklists/mantra-rebuild.md) owns execution order, current status, and the next action. This contract owns Phase 0 requirements, PairBlock definitions, source proposals, and gates.
+The [Mantra rebuild master checklist](../checklists/mantra-rebuild.md) owns execution order, current status, and the next action. This contract owns Phase 0 requirements, PairBlock definitions, and gates. Before a block reaches `Applied`, its staging files contain the proposal under review. At `Applied`, the active source at the cited Git commit becomes the implementation authority. A review finding cannot add an acceptance requirement: a new obligation must first enter this contract with its observing gate.
 
 ## Table of contents
 
@@ -277,11 +277,11 @@ Resolution status lives in the [master checklist](../checklists/mantra-rebuild.m
 | [`P0-PB-01`](../checklists/mantra-rebuild.md#pairblock-resolution) | Mark and verify the MANTRA workspace. | Codex reviews; user implements. | [Accepted implementation](#p0-pb-01-accepted-implementation) | `P0-VR-05` |
 | [`P0-PB-02`](../checklists/mantra-rebuild.md#pairblock-resolution) | Trace the Hopfield replay. | Codex traces; user approves. | [Work description](#p0-pb-02) | Hopfield portion of `P0-VR-01` |
 | [`P0-PB-03`](../checklists/mantra-rebuild.md#pairblock-resolution) | Trace the MIL replay. | Codex traces; user approves. | [Work description](#p0-pb-03) | MIL portion of `P0-VR-01` |
-| [`P0-PB-04`](../checklists/mantra-rebuild.md#pairblock-resolution) | Produce every restoration binding. | User implements approved code; Codex reviews it. | [`P0-PB-04A`](#p0-pb-04a-proposed-code); [`P0-PB-04B`](#p0-pb-04b-proposed-code) | `P0-VR-02` |
-| [`P0-PB-04A`](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/restoration.py) | Define and validate `RestorationBinding`. | User reviews and implements. | [Source](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/restoration.py) · [Tests](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/tests/test_restoration.py) | Reject malformed bindings and incomplete coverage. |
-| [`P0-PB-04B`](../../../mantra/staging/p0-pb-04b/src/mantra/rebuild/restoration.py) | Resolve a MANTRA path through signed controls to one archive member. | Codex proposes; user reviews and implements. | [Source](../../../mantra/staging/p0-pb-04b/src/mantra/rebuild/restoration.py) · [Tests](../../../mantra/staging/p0-pb-04b/src/mantra/rebuild/tests/test_control_resolution.py) | Resolve the eight approved Hopfield restorations; reject broken path, symlink, file-identity, object-identity, and archive joins. |
-| [`P0-PB-05`](../checklists/mantra-rebuild.md#pairblock-resolution) | Prove capacity and produce the download plan. | User implements approved code; Codex reviews it. | [`P0-PB-05A`](#p0-pb-05a-proposed-code); [`P0-PB-05B`](#p0-pb-05b-proposed-code) | `P0-VR-03` |
-| [`P0-PB-05A`](../../../mantra/staging/p0-pb-05a/src/mantra/rebuild/capacity.py) | Calculate capacity and write its receipt. | User reviews and implements. | [Source](../../../mantra/staging/p0-pb-05a/src/mantra/rebuild/capacity.py) · [Tests](../../../mantra/staging/p0-pb-05a/src/mantra/rebuild/tests/test_capacity.py) | Report every term in $R_{max}$ and reject insufficient space. |
+| [`P0-PB-04`](../checklists/mantra-rebuild.md#pairblock-resolution) | Produce every restoration binding. | User implements approved code; Codex reviews it. | [`P0-PB-04A`](#p0-pb-04a-accepted-implementation); [`P0-PB-04B`](#p0-pb-04b-accepted-implementation) | `P0-VR-02` |
+| [`P0-PB-04A`](../../../mantra/src/mantra/rebuild/restoration.py) | Define and validate `RestorationBinding`. | User implemented; Codex reviewed MANTRA commit `2304674e1fc9730801d1afe39edc7585c81081f4`. | [Source](../../../mantra/src/mantra/rebuild/restoration.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_restoration.py) | Reject malformed bindings and incomplete coverage. |
+| [`P0-PB-04B`](../../../mantra/src/mantra/rebuild/restoration.py) | Resolve a MANTRA path through signed controls to one archive member. | User implemented; Codex reviewed MANTRA commit `2304674e1fc9730801d1afe39edc7585c81081f4`. | [Source](../../../mantra/src/mantra/rebuild/restoration.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_control_resolution.py) | Resolve the eight approved Hopfield restorations; reject broken path, symlink, file-identity, object-identity, and archive joins. |
+| [`P0-PB-05`](../checklists/mantra-rebuild.md#pairblock-resolution) | Prove capacity and produce the download plan. | User implements approved code; Codex reviews it. | [`P0-PB-05A`](#p0-pb-05a-accepted-implementation); [`P0-PB-05B`](#p0-pb-05b-proposed-code) | `P0-VR-03` |
+| [`P0-PB-05A`](../../../mantra/src/mantra/rebuild/capacity.py) | Calculate capacity and write its receipt. | User implemented; Codex reviewed and accepted MANTRA commit `af4e589451a90a88f59c806b12a90e74e2bba043`. | [Source](../../../mantra/src/mantra/rebuild/capacity.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_capacity.py) | Report every term in $R_{max}$ and reject insufficient space. |
 | [`P0-PB-05B`](../checklists/mantra-rebuild.md#pairblock-resolution) | Derive the ordered archive-part plan from the signed archive index. | User reviews and implements; Codex reviews the applied diff. | [Source](../../../mantra/staging/p0-pb-05b/src/mantra/rebuild/archive_plan.py) · [Tests](../../../mantra/staging/p0-pb-05b/src/mantra/rebuild/tests/test_archive_plan.py) | Select 34 verified parts and expose the measured capacity values. |
 | [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | Restore files and verify graph $B$. | User reviews, implements, and runs; Codex reviews the applied diff and evidence. | [Extraction](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/archive_restore.py) · [VIPER workflow](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/viper_restore.py) · [Extraction tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_archive_restore.py) · [VIPER tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_viper_restore.py) | `P0-VR-04` and `P0-VR-06` |
 | [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay Hopfield. | User reviews, implements, and runs; Codex reviews the applied diff and evidence. | [Source](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/tests/test_hopfield_replay.py) | `P0-VR-07` |
@@ -317,12 +317,12 @@ Targets the v1952 seed-123460 `without_control` result in `experiments/v1952_dir
 
 Closes when its two implementation blocks produce every restoration binding:
 
-- [`P0-PB-04A` source](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/restoration.py) · [tests](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/tests/test_restoration.py)
-- [`P0-PB-04B` source](../../../mantra/staging/p0-pb-04b/src/mantra/rebuild/restoration.py) · [tests](../../../mantra/staging/p0-pb-04b/src/mantra/rebuild/tests/test_control_resolution.py)
+- [`P0-PB-04A` source](../../../mantra/src/mantra/rebuild/restoration.py) · [tests](../../../mantra/src/mantra/rebuild/tests/test_restoration.py)
+- [`P0-PB-04B` source](../../../mantra/src/mantra/rebuild/restoration.py) · [tests](../../../mantra/src/mantra/rebuild/tests/test_control_resolution.py)
 
 #### P0-PB-05
 
-Closes when [`P0-PB-05A` source](../../../mantra/staging/p0-pb-05a/src/mantra/rebuild/capacity.py) and its [tests](../../../mantra/staging/p0-pb-05a/src/mantra/rebuild/tests/test_capacity.py) prove capacity and `P0-PB-05B` fixes the archive-chunk order.
+Closes when [`P0-PB-05A` source](../../../mantra/src/mantra/rebuild/capacity.py) and its [tests](../../../mantra/src/mantra/rebuild/tests/test_capacity.py) prove capacity and `P0-PB-05B` fixes the archive-chunk order.
 
 #### P0-PB-05B
 
@@ -338,9 +338,11 @@ into `src/mantra/rebuild/tests/test_archive_plan.py`.
 
 The real plan must report 34 parts, a 4,294,967,296-byte largest part, a
 141,178,724,468-byte download upper bound, and 123,227,387 restored bytes.
-`P0-PB-05A` must then record a 4,616,380,582-byte maximum simultaneous local
-requirement: one cached part, two retained copies of the restored files, one
-64,472,752-byte temporary file, and the approved 10 MiB reserve.
+The approved retain-all plan keeps every verified archive part locally.
+`P0-PB-05A` must therefore record a 141,500,137,754-byte maximum simultaneous
+local requirement: the complete archive cache, two retained copies of the
+restored files, one 64,472,752-byte temporary file, and the approved 10 MiB
+reserve.
 
 **Focused check:**
 
@@ -355,8 +357,9 @@ from the values above, or the `P0-PB-05A` capacity receipt fails.
 
 #### P0-PB-06
 
-Streams the signed part plan through MANTRA's existing `RemotePartReader`,
-writes only the eight bound objects, and verifies each byte count and SHA-256.
+Downloads and retains the signed part plan, reads it through MANTRA's existing
+`RemotePartReader`, writes only the eight bound objects, and verifies each byte
+count and SHA-256.
 The VIPER stage declares the signed controls and bindings as inputs and the
 eight restored files plus the extraction receipt as outputs. After the run
 succeeds, `execution.restore()` materializes each output at its canonical
@@ -532,10 +535,10 @@ choices.
 | [`P0-PB-02`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Block](#p0-pb-02) |
 | [`P0-PB-03`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Block](#p0-pb-03) |
 | [`P0-PB-04`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Block](#p0-pb-04) |
-| [`P0-PB-04A`](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/restoration.py) | [Source](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/restoration.py) · [Tests](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/tests/test_restoration.py) |
-| [`P0-PB-04B`](../../../mantra/staging/p0-pb-04b/src/mantra/rebuild/restoration.py) | [Source](../../../mantra/staging/p0-pb-04b/src/mantra/rebuild/restoration.py) · [Tests](../../../mantra/staging/p0-pb-04b/src/mantra/rebuild/tests/test_control_resolution.py) |
+| [`P0-PB-04A`](../../../mantra/src/mantra/rebuild/restoration.py) | [Accepted source](../../../mantra/src/mantra/rebuild/restoration.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_restoration.py) · MANTRA `2304674e1fc9730801d1afe39edc7585c81081f4` |
+| [`P0-PB-04B`](../../../mantra/src/mantra/rebuild/restoration.py) | [Accepted source](../../../mantra/src/mantra/rebuild/restoration.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_control_resolution.py) · MANTRA `2304674e1fc9730801d1afe39edc7585c81081f4` |
 | [`P0-PB-05`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Block](#p0-pb-05) |
-| [`P0-PB-05A`](../../../mantra/staging/p0-pb-05a/src/mantra/rebuild/capacity.py) | [Source](../../../mantra/staging/p0-pb-05a/src/mantra/rebuild/capacity.py) · [Tests](../../../mantra/staging/p0-pb-05a/src/mantra/rebuild/tests/test_capacity.py) |
+| [`P0-PB-05A`](../../../mantra/src/mantra/rebuild/capacity.py) | [Accepted source](../../../mantra/src/mantra/rebuild/capacity.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_capacity.py) · MANTRA `af4e589451a90a88f59c806b12a90e74e2bba043` |
 | [`P0-PB-05B`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/staging/p0-pb-05b/src/mantra/rebuild/archive_plan.py) · [Tests](../../../mantra/staging/p0-pb-05b/src/mantra/rebuild/tests/test_archive_plan.py) · [Gate](#p0-pb-05b-proposed-code) |
 | [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Extraction](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/archive_restore.py) · [VIPER workflow](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/viper_restore.py) · [Extraction tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_archive_restore.py) · [VIPER tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_viper_restore.py) · [Gate](#p0-pb-06-proposed-code) |
 | [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/tests/test_hopfield_replay.py) · [Gate](#p0-pb-07-proposed-code) |
@@ -601,13 +604,13 @@ python -c 'from pathlib import Path; from viper.repository import resolve_root; 
 
 **Dependency:** The `RestorationBinding` definition in Section 4 and the approved missing-file identities in graph $B$.
 
-##### `P0-PB-04A` proposed code
+##### `P0-PB-04A` accepted implementation
 
 **Code boundary:** MANTRA owns these implementation paths:
 
-- [`src/mantra/rebuild/__init__.py`](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/__init__.py)
-- [`src/mantra/rebuild/restoration.py`](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/restoration.py)
-- [`src/mantra/rebuild/tests/test_restoration.py`](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/tests/test_restoration.py)
+- [`src/mantra/rebuild/__init__.py`](../../../mantra/src/mantra/rebuild/__init__.py)
+- [`src/mantra/rebuild/restoration.py`](../../../mantra/src/mantra/rebuild/restoration.py)
+- [`src/mantra/rebuild/tests/test_restoration.py`](../../../mantra/src/mantra/rebuild/tests/test_restoration.py)
 
 **Focused check:**
 
@@ -634,14 +637,14 @@ python -m pytest \
 
 **Dependency:** The `RestorationBinding` value type proposed in `P0-PB-04A`; the signed release, archive index, filesystem manifest, and required object manifests identified in the Phase 0 inspection evidence.
 
-##### `P0-PB-04B` proposed code
+##### `P0-PB-04B` accepted implementation
 
 **Code boundary:** MANTRA owns the cumulative implementation at these paths:
 
-- [`src/mantra/rebuild/__init__.py`](../../../mantra/staging/p0-pb-04b/src/mantra/rebuild/__init__.py)
-- [`src/mantra/rebuild/restoration.py`](../../../mantra/staging/p0-pb-04b/src/mantra/rebuild/restoration.py)
-- [`src/mantra/rebuild/tests/test_restoration.py`](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/tests/test_restoration.py)
-- [`src/mantra/rebuild/tests/test_control_resolution.py`](../../../mantra/staging/p0-pb-04b/src/mantra/rebuild/tests/test_control_resolution.py)
+- [`src/mantra/rebuild/__init__.py`](../../../mantra/src/mantra/rebuild/__init__.py)
+- [`src/mantra/rebuild/restoration.py`](../../../mantra/src/mantra/rebuild/restoration.py)
+- [`src/mantra/rebuild/tests/test_restoration.py`](../../../mantra/src/mantra/rebuild/tests/test_restoration.py)
+- [`src/mantra/rebuild/tests/test_control_resolution.py`](../../../mantra/src/mantra/rebuild/tests/test_control_resolution.py)
 
 **Focused check:**
 
@@ -670,12 +673,12 @@ python -m pytest \
 
 **Dependency:** The capacity formula in Section 4. `P0-PB-05B` supplies the measured archive-plan values used in the real receipt.
 
-##### `P0-PB-05A` proposed code
+##### `P0-PB-05A` accepted implementation
 
 **Code boundary:** MANTRA owns these implementation paths:
 
-- [`src/mantra/rebuild/capacity.py`](../../../mantra/staging/p0-pb-05a/src/mantra/rebuild/capacity.py)
-- [`src/mantra/rebuild/tests/test_capacity.py`](../../../mantra/staging/p0-pb-05a/src/mantra/rebuild/tests/test_capacity.py)
+- [`src/mantra/rebuild/capacity.py`](../../../mantra/src/mantra/rebuild/capacity.py)
+- [`src/mantra/rebuild/tests/test_capacity.py`](../../../mantra/src/mantra/rebuild/tests/test_capacity.py)
 
 **Focused check:**
 
@@ -688,11 +691,11 @@ python -m pytest \
   src/mantra/rebuild/tests/test_capacity.py -q
 ```
 
-**Gate:** The focused tests observe the exact-boundary pass, below-boundary failure, rejection of invalid plan terms and measured free bytes, and every serialized contract term.
+**Gate:** The focused tests observe the exact-boundary pass, below-boundary failure, rejection of invalid plan terms and supplied free-byte measurements, and every serialized contract term. `P0-PB-05B` supplies the archive totals; the real `P0-PB-05` capacity receipt calls `measure_capacity()` and records the filesystem's observed free bytes before download.
 
 **Stop condition:** Return the proposal for revision when the receipt omits a capacity term or any input can understate `required_bytes`.
 
-**Evidence:** The proposal gate passed `9` tests before approval. That receipt supports the approved proposal. The MANTRA implementation receipt defined above supports `Applied`; VIPER registration supports `Complete`.
+**Evidence:** MANTRA commit `af4e589451a90a88f59c806b12a90e74e2bba043` contains the accepted implementation. The declared gate passed `12` tests, Ruff passed, the diff check passed, and the reviewed diff SHA-256 was `2ce583f37affefc5eb1af2c7435b6e75cf4cdc4740d34332fa2c18e95049e73b`. The later real capacity receipt observes filesystem free bytes and VIPER registration supports `Complete`.
 
 ### P0-PB-05B implementation record
 
@@ -737,10 +740,10 @@ unverified, non-contiguous, or different from the signed identity.
 
 **Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
 
-**Requirement:** Stream the signed archive parts, authenticate and retain the
-eight bound files as VIPER outputs, materialize them at their canonical MANTRA
-paths, and prove graph $B$ fails verification after one required edge is
-removed.
+**Requirement:** Download and retain the signed archive parts, authenticate and
+retain the eight bound files as VIPER outputs, materialize them at their
+canonical MANTRA paths, and prove graph $B$ fails verification after one
+required edge is removed.
 
 **Dependency:** completed `P0-PB-04` bindings and the passing `P0-PB-05`
 capacity receipt.
@@ -930,7 +933,7 @@ python -m pytest tests/pairblock_status/test_pairblock_controller.py -q
 
 **Stop condition:** Return the proposal for revision if a gate can run outside its declared code or runtime boundary, bypass an unresolved dependency, change status after failure or identity drift, accept an illegal lifecycle event, or leave a rendered status inconsistent with its evidence.
 
-**Evidence:** Global commit `58b59175e2a4a949bc8dd33302099cf780249c75` repairs incremental PairBlock closure and passes its three focused tests, normalized-manifest validation, and Ruff. The RICO implementation reuses that validator. `ChecklistProfile` owns project paths and lifecycle events; `MarkdownChecklistAdapter` owns RICO parsing and rendering; `pairblock_controller.py` runs proposal gates and records later evidence events while the adapter parses Markdown. The current focused RICO check passes `43` cases. Historical receipts retain the paths and file identities captured when they were written; current links resolve to the accepted functional paths above. The [master-checklist resolution table](../checklists/mantra-rebuild.md#pairblock-resolution) owns the current lifecycle state and links its supporting receipt.
+**Evidence:** Global commit `58b59175e2a4a949bc8dd33302099cf780249c75` repairs incremental PairBlock closure and passes its three focused tests, normalized-manifest validation, and Ruff. The RICO implementation reuses that validator. `ChecklistProfile` owns project paths and lifecycle events; `MarkdownChecklistAdapter` owns RICO parsing and rendering; `pairblock_controller.py` runs proposal gates and records later evidence events while the adapter parses Markdown. The current focused RICO check passes `44` cases. Historical receipts retain the paths and file identities captured when they were written; current links resolve to the accepted functional paths above. The [master-checklist resolution table](../checklists/mantra-rebuild.md#pairblock-resolution) owns the current lifecycle state and links its supporting receipt.
 
 ## 11. Sources
 

@@ -76,10 +76,10 @@ owned by `historical_and_shared_experiments` and two owned by
 | `P0-PB-02` | Hopfield artifact table approved | Drafting | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-02) | [Work description](../contracts/mantra-rebuild-phase-0.md#p0-pb-02) |
 | `P0-PB-03` | Pending | Drafting | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-03) | [Work description](../contracts/mantra-rebuild-phase-0.md#p0-pb-03) |
 | `P0-PB-04` | Pending | Drafting | `P0-PB-04A`, `P0-PB-04B` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-04) | [Child blocks](../contracts/mantra-rebuild-phase-0.md#p0-pb-04) |
-| `P0-PB-04A` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-04a/20260912T070755.867088Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-04a) | [Source](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/restoration.py) · [Tests](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/tests/test_restoration.py) |
-| `P0-PB-04B` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-04b/20260912T070756.106235Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-04b) | [Source](../../../mantra/staging/p0-pb-04b/src/mantra/rebuild/restoration.py) · [Base tests](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/tests/test_restoration.py) · [Resolver tests](../../../mantra/staging/p0-pb-04b/src/mantra/rebuild/tests/test_control_resolution.py) |
+| `P0-PB-04A` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-04a/20260912T070755.867088Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-04a) | [Source](../../../mantra/src/mantra/rebuild/restoration.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_restoration.py) |
+| `P0-PB-04B` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-04b/20260912T070756.106235Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-04b) | [Source](../../../mantra/src/mantra/rebuild/restoration.py) · [Base tests](../../../mantra/src/mantra/rebuild/tests/test_restoration.py) · [Resolver tests](../../../mantra/src/mantra/rebuild/tests/test_control_resolution.py) |
 | `P0-PB-05` | Pending | Waiting for `P0-PB-05A`, `P0-PB-05B` | `P0-PB-05A`, `P0-PB-05B` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05) | [Child blocks](../contracts/mantra-rebuild-phase-0.md#p0-pb-05) |
-| `P0-PB-05A` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05a/20260912T070756.315136Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a) | [Source](../../../mantra/staging/p0-pb-05a/src/mantra/rebuild/capacity.py) · [Tests](../../../mantra/staging/p0-pb-05a/src/mantra/rebuild/tests/test_capacity.py) |
+| `P0-PB-05A` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05a/20260912T163739.537947Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a) | [Source](../../../mantra/src/mantra/rebuild/capacity.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_capacity.py) |
 | `P0-PB-05B` | Pending | Drafting | `P0-PB-04B` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05b) | [Source](../../../mantra/staging/p0-pb-05b/src/mantra/rebuild/archive_plan.py) · [Tests](../../../mantra/staging/p0-pb-05b/src/mantra/rebuild/tests/test_archive_plan.py) |
 | `P0-PB-06` | Pending | Waiting for `P0-PB-04`, `P0-PB-05` | `P0-PB-04`, `P0-PB-05` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-06) | [Extraction](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/archive_restore.py) · [VIPER workflow](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/viper_restore.py) · [Extraction tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_archive_restore.py) · [VIPER tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_viper_restore.py) |
 | `P0-PB-07` | Pending | Waiting for `P0-PB-06` | `P0-PB-06` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-07) | [Source](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/tests/test_hopfield_replay.py) |
@@ -118,6 +118,12 @@ gate advances `Drafting` to `Review`. User approval advances `Review` to
 `Approved`; acceptance of the applied diff, tests, and Git evidence advances
 `Approved` to `Applied`; VIPER registration advances `Applied` to `Complete`.
 A failed gate or illegal transition preserves the checklist.
+
+The contract is the only authority for required behavior and gates. The
+checklist is the only authority for current lifecycle status. Staging files
+hold proposals through `Approved`; after acceptance, the active source at the
+cited Git commit is authoritative. Review findings may identify contract gaps,
+but they do not become blockers until the contract declares them.
 
 For each review cycle, Codex updates this file in the same RICO commit that
 records any changed contract status. MANTRA implementation commits remain in

@@ -205,6 +205,17 @@ def test_mantra_profile_compiles_current_contract() -> None:
     assert manifest["checklist_id"] == MANTRA_PHASE0_PROFILE.checklist_id
 
 
+def test_applied_blocks_do_not_link_staging_proposals() -> None:
+    """Require accepted blocks to point at active code or contract records."""
+
+    repository = Path(__file__).parents[2]
+    rows, _ = MANTRA_PHASE0_ADAPTER.validate_traceability(repository)
+
+    for row in rows.values():
+        if row.status in {"Applied", "Complete"}:
+            assert "/staging/" not in row.proposed_code
+
+
 def test_passing_gate_writes_receipt_and_advances_one_status(
     repository_factory: RepositoryFactory,
 ) -> None:
