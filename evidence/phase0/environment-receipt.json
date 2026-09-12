@@ -1,0 +1,14 @@
+{
+  "schema_version": "rico.mantra_environment.v1",
+  "observed_at": "2026-09-12T21:35:00Z",
+  "workspace": "/Users/machina/Developer/ChatGPT/mantra",
+  "workspace_commit": "2849006816f7dc4e58c94b1f06b76cf4ac42457f",
+  "conda_environment": "mantra",
+  "python_executable": "/Users/machina/miniconda3/envs/mantra/bin/python",
+  "python_version": "3.13.15",
+  "viper_distribution": "viper-provenance",
+  "viper_version": "0.1.0a4",
+  "viper_module_path": "/Users/machina/Developer/ChatGPT/viper/src/viper/__init__.py",
+  "viper_source_commit": "0d550bdb8b61b769c81c989b16e966d37a80a93f",
+  "observation_command": "python -c 'import os, sys, viper; from importlib.metadata import version; print(os.environ.get(\"CONDA_DEFAULT_ENV\"), sys.executable, sys.version, version(\"viper-provenance\"), viper.__file__)'"
+}
