@@ -280,13 +280,13 @@ Resolution status lives in the [master checklist](../checklists/mantra-rebuild.m
 | [`P0-PB-04`](../checklists/mantra-rebuild.md#pairblock-resolution) | Produce every restoration binding. | User implements approved code; Codex reviews it. | [`P0-PB-04A`](#p0-pb-04a-proposed-code); [`P0-PB-04B`](#p0-pb-04b-proposed-code) | `P0-VR-02` |
 | [`P0-PB-04A`](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/restoration.py) | Define and validate `RestorationBinding`. | User reviews and implements. | [Source](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/restoration.py) · [Tests](../../../mantra/staging/p0-pb-04a/src/mantra/rebuild/tests/test_restoration.py) | Reject malformed bindings and incomplete coverage. |
 | [`P0-PB-04B`](../../../mantra/staging/p0-pb-04b/src/mantra/rebuild/restoration.py) | Resolve a MANTRA path through signed controls to one archive member. | Codex proposes; user reviews and implements. | [Source](../../../mantra/staging/p0-pb-04b/src/mantra/rebuild/restoration.py) · [Tests](../../../mantra/staging/p0-pb-04b/src/mantra/rebuild/tests/test_control_resolution.py) | Resolve the eight approved Hopfield restorations; reject broken path, symlink, file-identity, object-identity, and archive joins. |
-| [`P0-PB-05`](../checklists/mantra-rebuild.md#pairblock-resolution) | Prove capacity and produce the download plan. | User implements approved code; Codex reviews it. | [`P0-PB-05A`](#p0-pb-05a-proposed-code); `P0-PB-05B` pending | `P0-VR-03` |
+| [`P0-PB-05`](../checklists/mantra-rebuild.md#pairblock-resolution) | Prove capacity and produce the download plan. | User implements approved code; Codex reviews it. | [`P0-PB-05A`](#p0-pb-05a-proposed-code); [`P0-PB-05B`](#p0-pb-05b-proposed-code) | `P0-VR-03` |
 | [`P0-PB-05A`](../../../mantra/staging/p0-pb-05a/src/mantra/rebuild/capacity.py) | Calculate capacity and write its receipt. | User reviews and implements. | [Source](../../../mantra/staging/p0-pb-05a/src/mantra/rebuild/capacity.py) · [Tests](../../../mantra/staging/p0-pb-05a/src/mantra/rebuild/tests/test_capacity.py) | Report every term in $R_{max}$ and reject insufficient space. |
-| [`P0-PB-05B`](../checklists/mantra-rebuild.md#pairblock-resolution) | Order the required archive chunks. | Codex proposes; user approves cache timing. | Pending proposal | Identify every chunk by revision, byte count, and digest. |
-| [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | Restore files and verify graph $B$. | User runs approved code; Codex reviews evidence. | Pending proposal | `P0-VR-04` and `P0-VR-06` |
-| [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay Hopfield. | User runs approved code; Codex reviews evidence. | Pending proposal | `P0-VR-07` |
-| [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay MIL. | User runs approved code; Codex reviews evidence. | Pending proposal | `P0-VR-08` |
-| [`P0-PB-09`](../checklists/mantra-rebuild.md#pairblock-resolution) | Freeze evidence and assess VIPER. | Codex compiles; user approves. | Pending proposal | `P0-VR-09` |
+| [`P0-PB-05B`](../checklists/mantra-rebuild.md#pairblock-resolution) | Derive the ordered archive-part plan from the signed archive index. | User reviews and implements; Codex reviews the applied diff. | [Source](../../../mantra/staging/p0-pb-05b/src/mantra/rebuild/archive_plan.py) · [Tests](../../../mantra/staging/p0-pb-05b/src/mantra/rebuild/tests/test_archive_plan.py) | Select 34 verified parts and expose the measured capacity values. |
+| [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | Restore files and verify graph $B$. | User reviews, implements, and runs; Codex reviews the applied diff and evidence. | [Extraction](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/archive_restore.py) · [VIPER workflow](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/viper_restore.py) · [Extraction tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_archive_restore.py) · [VIPER tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_viper_restore.py) | `P0-VR-04` and `P0-VR-06` |
+| [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay Hopfield. | User reviews, implements, and runs; Codex reviews the applied diff and evidence. | [Source](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/tests/test_hopfield_replay.py) | `P0-VR-07` |
+| [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay standalone MIL application. | User reviews, implements, and runs; Codex reviews the applied diff and evidence. | [Source](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/tests/test_mil_replay.py) | `P0-VR-08` |
+| [`P0-PB-09`](../checklists/mantra-rebuild.md#pairblock-resolution) | Freeze evidence and assess VIPER. | Codex compiles; user approves. | [Source](../../staging/p0-pb-09/tools/freeze_phase0.py) · [Tests](../../staging/p0-pb-09/tests/test_freeze_phase0.py) | `P0-VR-09` |
 | [`P0-PB-10`](../checklists/mantra-rebuild.md#pairblock-resolution) | Validate staged PairBlock traceability, run one proposal gate, retain its receipt, and apply its legal checklist transition. | Codex proposes; user reviews. | [Source and tests](#p0-pb-10-proposed-code) | `P0-VR-10` |
 
 ### Blocks
@@ -326,23 +326,95 @@ Closes when [`P0-PB-05A` source](../../../mantra/staging/p0-pb-05a/src/mantra/re
 
 #### P0-PB-05B
 
-Identifies the required archive chunks and their immutable identities.
+Reads the signed `ARCHIVE_INDEX.json` and the eight approved restoration
+bindings. It selects every part of each required archive because the archive
+format has no object-to-part index. The selected order is the nine
+`historical_and_shared_experiments` parts followed by the twenty-five
+`sota_reproducer` parts, with part numbers increasing inside each archive.
+
+**Start here:** type the [proposed source](../../../mantra/staging/p0-pb-05b/src/mantra/rebuild/archive_plan.py)
+into `src/mantra/rebuild/archive_plan.py`, then type the [observing tests](../../../mantra/staging/p0-pb-05b/src/mantra/rebuild/tests/test_archive_plan.py)
+into `src/mantra/rebuild/tests/test_archive_plan.py`.
+
+The real plan must report 34 parts, a 4,294,967,296-byte largest part, a
+141,178,724,468-byte download upper bound, and 123,227,387 restored bytes.
+`P0-PB-05A` must then record a 4,616,380,582-byte maximum simultaneous local
+requirement: one cached part, two retained copies of the restored files, one
+64,472,752-byte temporary file, and the approved 10 MiB reserve.
+
+**Focused check:**
+
+```bash
+pytest src/mantra/rebuild/tests/test_archive_plan.py -q
+ruff check src/mantra/rebuild/archive_plan.py src/mantra/rebuild/tests/test_archive_plan.py
+```
+
+**Stop condition:** stop before downloading an archive part if the signed part
+sequence is incomplete, a readback identity differs, the real values differ
+from the values above, or the `P0-PB-05A` capacity receipt fails.
 
 #### P0-PB-06
 
-Restores the approved files and verifies graph $B$ in VIPER.
+Streams the signed part plan through MANTRA's existing `RemotePartReader`,
+writes only the eight bound objects, and verifies each byte count and SHA-256.
+The VIPER stage declares the signed controls and bindings as inputs and the
+eight restored files plus the extraction receipt as outputs. After the run
+succeeds, `execution.restore()` materializes each output at its canonical
+MANTRA destination.
+
+**Start here:** type the [extraction source](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/archive_restore.py),
+the [VIPER workflow](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/viper_restore.py),
+the [extraction tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_archive_restore.py),
+and the [VIPER tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_viper_restore.py)
+into the matching `src/mantra/rebuild/` paths.
+
+**Gate:** the focused tests authenticate selected payloads, reject a missing or
+changed target, prove the declared VIPER inputs and outputs, and prove that
+each canonical destination matches its binding. VIPER verification must pass
+for the real run and fail after removing either a required input edge or a
+restored-file output edge.
 
 #### P0-PB-07
 
-Replays the selected Hopfield result.
+Runs one selected historical row through two VIPER stages. Prediction reads the
+saved encoder and the ten non-scoring data inputs, then calls
+`load_arrays_for_scale(1.3, ...)`, `load_saved_encoder(...)`, and
+`predict_raw_gene_readout(..., memory_splits=("fit",), topk=1600,
+temperature=0.055)`. Evaluation adds the hold truth, calls the historical
+scorer, and compares the new hold PearsonDelta with `0.5861640938949398`.
+
+**Start here:** type the [proposed source](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/hopfield_replay.py)
+and [observing tests](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/tests/test_hopfield_replay.py)
+into the matching `src/mantra/rebuild/` paths. The full historical sweep and
+its output paths remain untouched. CPU execution is supported; acceptance uses
+the user-approved numerical tolerance because the historical report omits its
+device.
 
 #### P0-PB-08
 
-Replays the selected standalone MIL result.
+Loads the v1953 application runtime that binds the saved v1952 seed-123460 MIL
+prototype. It redirects the run name and experiment output root, checks the
+selected Step02 and Step03 settings, and calls the maintained
+`runtime.pipeline.run_result()` path. This application replay skips teacher and
+student training and consumes no Hopfield-rebuild output.
+
+**Start here:** type the [proposed source](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/mil_replay.py)
+and [observing tests](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/tests/test_mil_replay.py)
+into the matching `src/mantra/rebuild/` paths. The GPU parity gate compares the
+four rewritten NPZ hashes and the Step02 and Step03 hold scores before closing
+the block. A CPU run may establish numerical parity but does not claim the
+L4-produced NPZ container hashes.
 
 #### P0-PB-09
 
-Freezes the Phase 0 evidence and VIPER usefulness ledger.
+Hashes the capacity, restoration, graph-verification, severed-graph,
+Hopfield-replay, and MIL-replay receipts into one Phase 0 index. It also hashes
+the VIPER usefulness ledger and rejects a confirmed-defect entry that lacks an
+independent check.
+
+**Start here:** review the [evidence freezer](../../staging/p0-pb-09/tools/freeze_phase0.py)
+and its [tests](../../staging/p0-pb-09/tests/test_freeze_phase0.py). This block
+runs in RICO after `P0-PB-07` and `P0-PB-08` close.
 
 #### Approved Hopfield artifact set
 
@@ -464,11 +536,11 @@ choices.
 | [`P0-PB-04B`](../../../mantra/staging/p0-pb-04b/src/mantra/rebuild/restoration.py) | [Source](../../../mantra/staging/p0-pb-04b/src/mantra/rebuild/restoration.py) · [Tests](../../../mantra/staging/p0-pb-04b/src/mantra/rebuild/tests/test_control_resolution.py) |
 | [`P0-PB-05`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Block](#p0-pb-05) |
 | [`P0-PB-05A`](../../../mantra/staging/p0-pb-05a/src/mantra/rebuild/capacity.py) | [Source](../../../mantra/staging/p0-pb-05a/src/mantra/rebuild/capacity.py) · [Tests](../../../mantra/staging/p0-pb-05a/src/mantra/rebuild/tests/test_capacity.py) |
-| [`P0-PB-05B`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Block](#p0-pb-05b) |
-| [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Block](#p0-pb-06) |
-| [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Block](#p0-pb-07) |
-| [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Block](#p0-pb-08) |
-| [`P0-PB-09`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Block](#p0-pb-09) |
+| [`P0-PB-05B`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/staging/p0-pb-05b/src/mantra/rebuild/archive_plan.py) · [Tests](../../../mantra/staging/p0-pb-05b/src/mantra/rebuild/tests/test_archive_plan.py) · [Gate](#p0-pb-05b-proposed-code) |
+| [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Extraction](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/archive_restore.py) · [VIPER workflow](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/viper_restore.py) · [Extraction tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_archive_restore.py) · [VIPER tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_viper_restore.py) · [Gate](#p0-pb-06-proposed-code) |
+| [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/tests/test_hopfield_replay.py) · [Gate](#p0-pb-07-proposed-code) |
+| [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/tests/test_mil_replay.py) · [Gate](#p0-pb-08-proposed-code) |
+| [`P0-PB-09`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../staging/p0-pb-09/tools/freeze_phase0.py) · [Tests](../../staging/p0-pb-09/tests/test_freeze_phase0.py) · [Gate](#p0-pb-09-proposed-code) |
 | [`P0-PB-10`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Active implementation](#p0-pb-10-proposed-code) |
 
 A pending row links its block definition and checklist state while omitting an implementation body.
@@ -621,6 +693,188 @@ python -m pytest \
 **Stop condition:** Return the proposal for revision when the receipt omits a capacity term or any input can understate `required_bytes`.
 
 **Evidence:** The proposal gate passed `9` tests before approval. That receipt supports the approved proposal. The MANTRA implementation receipt defined above supports `Applied`; VIPER registration supports `Complete`.
+
+### P0-PB-05B implementation record
+
+**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
+
+**Requirement:** Join each approved restoration binding to a complete,
+ordered sequence of remotely verified archive parts and expose the byte counts
+used by `P0-PB-05A`.
+
+**Dependency:** `P0-PB-04B` supplies the eight restoration bindings. The
+signed `ARCHIVE_INDEX.json` supplies each part's repository, data revision,
+path, byte count, upload state, readback state, and SHA-256.
+
+##### `P0-PB-05B` proposed code
+
+**Code boundary:**
+
+- [archive plan source](../../../mantra/staging/p0-pb-05b/src/mantra/rebuild/archive_plan.py)
+- [archive plan tests](../../../mantra/staging/p0-pb-05b/src/mantra/rebuild/tests/test_archive_plan.py)
+
+**Implementation:** `build_archive_plan()` selects the archives named by the
+bindings, requires a contiguous one-based part sequence, and retains the
+remote identity of every part. `ArchivePlan` exposes the largest cached part,
+the full-download upper bound, and the restored-file total.
+
+**Focused check:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/mantra
+pytest src/mantra/rebuild/tests/test_archive_plan.py -q
+ruff check src/mantra/rebuild/archive_plan.py src/mantra/rebuild/tests/test_archive_plan.py
+```
+
+**Gate:** the unit tests pass, and the real signed controls produce 34 parts,
+4,294,967,296 largest-part bytes, 141,178,724,468 upper-bound download bytes,
+and 123,227,387 restored bytes.
+
+**Stop condition:** do not begin `P0-PB-06` when a selected part is absent,
+unverified, non-contiguous, or different from the signed identity.
+
+### P0-PB-06 implementation record
+
+**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
+
+**Requirement:** Stream the signed archive parts, authenticate and retain the
+eight bound files as VIPER outputs, materialize them at their canonical MANTRA
+paths, and prove graph $B$ fails verification after one required edge is
+removed.
+
+**Dependency:** completed `P0-PB-04` bindings and the passing `P0-PB-05`
+capacity receipt.
+
+##### `P0-PB-06` proposed code
+
+**Code boundary:** [archive extraction](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/archive_restore.py),
+[VIPER workflow](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/viper_restore.py),
+the [extraction tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_archive_restore.py),
+and the [VIPER tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_viper_restore.py).
+
+**Focused check:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/mantra
+pytest \
+  src/mantra/rebuild/tests/test_archive_restore.py \
+  src/mantra/rebuild/tests/test_viper_restore.py -q
+ruff check \
+  src/mantra/rebuild/archive_restore.py \
+  src/mantra/rebuild/viper_restore.py \
+  src/mantra/rebuild/tests/test_archive_restore.py \
+  src/mantra/rebuild/tests/test_viper_restore.py
+```
+
+**Gate:** the focused check passes; the real restoration receipt identifies
+every downloaded part and all eight restored identities; `verify_run()` passes;
+and the retained severed-edge fixture fails verification.
+
+**Stop condition:** stop before either replay when one canonical identity or
+one required provenance edge differs.
+
+### P0-PB-07 implementation record
+
+**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
+
+**Requirement:** Run the selected historical Hopfield prediction once, retain
+the new six-array prediction NPZ, and evaluate it separately with the hold
+truth.
+
+**Dependency:** `P0-PB-06` restores the six missing data files and saved
+encoder. The user approves the numerical tolerance before the real replay.
+
+##### `P0-PB-07` proposed code
+
+**Code boundary:** [Hopfield replay source](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/hopfield_replay.py)
+and [observing tests](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/tests/test_hopfield_replay.py).
+
+**Focused check:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/mantra
+pytest src/mantra/rebuild/tests/test_hopfield_replay.py -q
+ruff check \
+  src/mantra/rebuild/hopfield_replay.py \
+  src/mantra/rebuild/tests/test_hopfield_replay.py
+```
+
+**Gate:** the tests prove the selected call arguments, output schema, CPU
+path, effective donor count, and parity decision. The real run retains the
+prediction, attention summaries, score receipt, and VIPER prediction-to-
+evaluation edge.
+
+**Stop condition:** reject any invocation of the historical grid search, any
+historical output destination, an undeclared file read, or a score outside the
+approved tolerance from `0.5861640938949398`.
+
+### P0-PB-08 implementation record
+
+**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
+
+**Requirement:** Apply the saved v1952 seed-123460 MIL prototype through the
+v1953 Step02 and Step03 runtime in a fresh output root.
+
+**Dependency:** the standalone MIL restoration bindings close independently
+of the Hopfield replay. They include the prototype, two historical Step01
+predictions, and the Step02 input-root files named below.
+
+##### `P0-PB-08` proposed code
+
+**Code boundary:** [MIL replay source](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/mil_replay.py)
+and [observing tests](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/tests/test_mil_replay.py).
+
+**Focused check:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/mantra
+pytest src/mantra/rebuild/tests/test_mil_replay.py -q
+ruff check \
+  src/mantra/rebuild/mil_replay.py \
+  src/mantra/rebuild/tests/test_mil_replay.py
+```
+
+**Gate:** the focused check rejects drift from the selected settings and
+confirms output isolation. The real L4 run reproduces Step02 hold
+`0.5924883417873266` and Step03 hold `0.6025499488874759` within `1e-8`, then
+compares the four declared NPZ hashes.
+
+**Stop condition:** stop when the runtime tries to train a teacher or student,
+reads a Hopfield-rebuild output, reuses an existing run root, or changes a
+selected setting or input identity.
+
+### P0-PB-09 implementation record
+
+**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
+
+**Requirement:** Freeze each Phase 0 result receipt and every VIPER usefulness
+assessment into one digest-bound index.
+
+**Dependency:** completed `P0-PB-07`, `P0-PB-08`, and the active traceability
+controller from `P0-PB-10`.
+
+##### `P0-PB-09` proposed code
+
+**Code boundary:** [evidence freezer](../../staging/p0-pb-09/tools/freeze_phase0.py)
+and [observing tests](../../staging/p0-pb-09/tests/test_freeze_phase0.py).
+
+**Focused check:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/RICO
+PYTHONPATH=staging/p0-pb-09 python -m pytest \
+  staging/p0-pb-09/tests/test_freeze_phase0.py -q
+ruff check \
+  staging/p0-pb-09/tools/freeze_phase0.py \
+  staging/p0-pb-09/tests/test_freeze_phase0.py
+```
+
+**Gate:** all six result roles are present, every retained file identity is
+recomputed, every confirmed VIPER defect names an independent check, and VIPER
+records the final index.
+
+**Stop condition:** Phase 0 remains open while any receipt, ledger row,
+independent confirmation, or final VIPER record is absent.
 
 #### P0-PB-10
 
