@@ -70,12 +70,12 @@ zero.
 
 ## PairBlock resolution
 
-| PairBlock | Resolution status | Contract declaration | Proposed code |
-|---|---|---|---|
-| <a id="status-p0-pb-04a"></a>`P0-PB-04A` | Awaiting user review | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-04a-declaration) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-04a-proposed-code) |
-| <a id="status-p0-pb-04b"></a>`P0-PB-04B` | Codex drafting | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-04b-declaration) | Pending |
-| <a id="status-p0-pb-05a"></a>`P0-PB-05A` | Awaiting user review | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a-declaration) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a-proposed-code) |
-| <a id="status-p0-pb-05b"></a>`P0-PB-05B` | Waiting for `P0-PB-04B` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-05b-declaration) | Pending |
+| PairBlock | Proposal gate | Resolution status | Contract declaration | Proposed code |
+|---|---|---|---|---|
+| <a id="status-p0-pb-04a"></a>`P0-PB-04A` | Passed: `15` tests | Awaiting user review | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-04a-declaration) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-04a-proposed-code) |
+| <a id="status-p0-pb-04b"></a>`P0-PB-04B` | Pending | Codex drafting | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-04b-declaration) | Pending |
+| <a id="status-p0-pb-05a"></a>`P0-PB-05A` | Passed: `9` tests | Awaiting user review | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a-declaration) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a-proposed-code) |
+| <a id="status-p0-pb-05b"></a>`P0-PB-05B` | Pending | Waiting for `P0-PB-04B` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-05b-declaration) | Pending |
 
 ## Terminal outcome
 
