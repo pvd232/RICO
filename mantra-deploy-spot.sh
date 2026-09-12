@@ -394,6 +394,38 @@ for ZONE in "${VALID_ZONES[@]}"; do
 
   # Code 0 means hardware was found AND the network bound successfully
   if [[ $STATUS -eq 0 ]]; then
+    BOOT_DISK_NAME=$(gcloud compute instances describe "$INSTANCE_NAME" \
+      --project="$PROJECT" \
+      --zone="$ZONE" \
+      --format='value(disks[0].source.basename())')
+    if [[ -z "$BOOT_DISK_NAME" ]]; then
+      echo "[!] Error: The VM was created, but its boot disk could not be identified."
+      echo "[!] Inspect or delete it with:"
+      echo "gcloud compute instances delete $INSTANCE_NAME --project=$PROJECT --zone=$ZONE"
+      exit 1
+    fi
+    if ! gcloud compute instances set-disk-auto-delete "$INSTANCE_NAME" \
+      --project="$PROJECT" \
+      --zone="$ZONE" \
+      --disk="$BOOT_DISK_NAME" \
+      --auto-delete \
+      --quiet; then
+      echo "[!] Error: The VM was created, but boot-disk auto-delete could not be enabled."
+      echo "[!] Inspect or delete it with:"
+      echo "gcloud compute instances delete $INSTANCE_NAME --project=$PROJECT --zone=$ZONE"
+      exit 1
+    fi
+    BOOT_DISK_AUTO_DELETE=$(gcloud compute instances describe "$INSTANCE_NAME" \
+      --project="$PROJECT" \
+      --zone="$ZONE" \
+      --format='value(disks[0].autoDelete)')
+    if [[ "$BOOT_DISK_AUTO_DELETE" != "True" ]]; then
+      echo "[!] Error: The VM was created with boot-disk auto-delete disabled."
+      echo "[!] Inspect or delete it with:"
+      echo "gcloud compute instances delete $INSTANCE_NAME --project=$PROJECT --zone=$ZONE"
+      exit 1
+    fi
+
     if ! REGION=$(gcloud compute zones describe "$ZONE" \
       --project="$PROJECT" \
       --format='value(region.basename())'); then
