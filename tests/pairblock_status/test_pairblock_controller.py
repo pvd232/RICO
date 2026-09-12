@@ -69,7 +69,12 @@ def run_test_gate(
     )
 
 
-def advance_test_block(repository: Path, event: str) -> Path:
+def advance_test_block(
+    repository: Path,
+    event: str,
+    *,
+    evidence_kind: str = "external",
+) -> Path:
     """Advance the test PairBlock with one compact evidence reference."""
 
     return advance_pairblock(
@@ -77,7 +82,7 @@ def advance_test_block(repository: Path, event: str) -> Path:
         PAIR_BLOCK_ID,
         event,
         EvidenceRef(
-            kind="external",
+            kind=evidence_kind,
             target=f"{event} evidence",
             revision="test-revision",
         ),
@@ -131,6 +136,13 @@ def test_lifecycle_policy_rejects_disconnected_transition_chain() -> None:
             TEST_PROFILE.lifecycle,
             transitions=(("approve", "Approved", "Applied"),),
         )
+
+
+def test_lifecycle_policy_rejects_duplicate_non_code_event() -> None:
+    """Keep non-code and implementation event names unambiguous."""
+
+    with pytest.raises(ValueError, match="transition events must be unique"):
+        replace(TEST_PROFILE.lifecycle, non_code_complete_event="approve")
 
 
 def test_checklist_profile_requires_two_phase_capture_groups() -> None:
@@ -297,6 +309,48 @@ def test_lifecycle_completion_updates_every_derived_status(
     assert block["state"] == requirement["state"] == "complete"
     assert block["completion_evidence"] == requirement["completion_evidence"]
     assert manifest["contracts"][0]["state"] == "complete"
+
+
+def test_non_code_review_completion_updates_every_derived_status(
+    repository_factory: RepositoryFactory,
+) -> None:
+    """Complete a documentation-only block from two external review receipts."""
+
+    repository = repository_factory(command=passing_command(), proposed=False)
+    submitted = advance_test_block(repository, "submit")
+    confirmed = advance_test_block(repository, "confirm")
+    rows, manifest = validate_test_repository(repository)
+    checklist = (repository / CHECKLIST_PATH).read_text(encoding="utf-8")
+
+    assert json.loads(submitted.read_text(encoding="utf-8"))["status_after"] == "Review"
+    assert json.loads(confirmed.read_text(encoding="utf-8"))["status_after"] == "Complete"
+    assert rows[PAIR_BLOCK_ID].status == "Complete"
+    assert "- [x] Exercise `PB-GATE`." in checklist
+    assert manifest["pair_blocks"][0]["state"] == "complete"
+    assert manifest["requirements"][0]["state"] == "complete"
+    assert manifest["contracts"][0]["state"] == "complete"
+
+
+def test_non_code_review_rejects_runnable_proposal(
+    repository_factory: RepositoryFactory,
+) -> None:
+    """Require executable proposals to reach review through their test gate."""
+
+    repository = repository_factory(command=passing_command())
+
+    with pytest.raises(PairBlockGateError, match="run its gate"):
+        advance_test_block(repository, "submit")
+
+
+def test_non_code_review_requires_external_evidence(
+    repository_factory: RepositoryFactory,
+) -> None:
+    """Require a person or external review system to submit a non-code block."""
+
+    repository = repository_factory(command=passing_command(), proposed=False)
+
+    with pytest.raises(PairBlockGateError, match="external review evidence"):
+        advance_test_block(repository, "submit", evidence_kind="test")
 
 
 def test_completion_rejects_a_broken_receipt_chain(

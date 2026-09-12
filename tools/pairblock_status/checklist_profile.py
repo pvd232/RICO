@@ -956,8 +956,15 @@ def _validate_completion_chain(
             f"completion receipt is not an object for {pair_block_id}"
         )
     final = current
-    expected = reversed(profile.lifecycle.transitions)
-    for event, status_before, status_after in expected:
+    try:
+        transitions = profile.lifecycle.completion_transitions(current.get("event"))
+    except ValueError as error:
+        raise PairBlockGateError(
+            f"completion receipt chain differs for {pair_block_id}: {error}"
+        ) from error
+    requires_proposal_gate = transitions == profile.lifecycle.transitions
+    reverse_transitions = tuple(reversed(transitions))
+    for index, (event, status_before, status_after) in enumerate(reverse_transitions):
         if (
             current.get("pair_block_id") != pair_block_id
             or current.get("event") != event
@@ -988,12 +995,18 @@ def _validate_completion_chain(
                 f"completion receipt has invalid evidence for {pair_block_id} at {event}"
             )
         previous = current.get("previous_receipt")
-        if not isinstance(previous, str) or not previous:
+        expects_previous = index < len(reverse_transitions) - 1 or requires_proposal_gate
+        if expects_previous:
+            if not isinstance(previous, str) or not previous:
+                raise PairBlockGateError(
+                    f"completion receipt chain ends before {event} for {pair_block_id}"
+                )
+            current = _load_receipt(repository, checklist_path, previous)
+        elif previous is not None:
             raise PairBlockGateError(
-                f"completion receipt chain ends before {event} for {pair_block_id}"
+                f"non-code receipt chain has an unexpected predecessor for {pair_block_id}"
             )
-        current = _load_receipt(repository, checklist_path, previous)
-    if (
+    if requires_proposal_gate and (
         current.get("pair_block_id") != pair_block_id
         or current.get("result") != "passed"
         or current.get("status_after") != profile.lifecycle.review_status

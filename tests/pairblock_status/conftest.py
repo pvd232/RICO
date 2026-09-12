@@ -56,6 +56,8 @@ TEST_PROFILE = ChecklistProfile(
         drafting_status="Drafting",
         review_status="Review",
         proposal_gate_states=frozenset({"Drafting", "Review"}),
+        non_code_review_event="submit",
+        non_code_complete_event="confirm",
         transitions=(
             ("approve", "Review", "Approved"),
             ("accept", "Approved", "Applied"),
@@ -172,6 +174,7 @@ class RepositoryFactory:
         status: str | None = None,
         dependencies: tuple[str, ...] = (),
         dependency: PairBlockFixture | None = None,
+        proposed: bool = True,
     ) -> Path:
         """Render one scenario, copy the reviewed source, and commit the result."""
 
@@ -208,10 +211,12 @@ class RepositoryFactory:
                 _pair_block_row(
                     block,
                     dependencies=block_dependencies,
-                    proposed=is_target,
+                    proposed=is_target and proposed,
                 )
             )
-            ownership_rows.append(_ownership_row(block, proposed=is_target))
+            ownership_rows.append(
+                _ownership_row(block, proposed=is_target and proposed)
+            )
             declaration_headings.append(f"#### {block.pair_block_id}")
             block_links.append(
                 f"[`{block.pair_block_id}`](#{block.pair_block_id.lower()})"

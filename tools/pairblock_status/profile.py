@@ -20,6 +20,8 @@ class LifecyclePolicy:
         drafting_status: Status assigned while Codex prepares a proposal.
         review_status: Status assigned after the proposal gate passes.
         proposal_gate_states: Statuses from which the proposal gate may run.
+        non_code_review_event: Event that submits a block without runnable code.
+        non_code_complete_event: Event that accepts that reviewed block.
         transitions: Evidence events paired with their required current and
             resulting statuses.
         resolved_dependency_states: Statuses that make a dependent PairBlock
@@ -31,6 +33,8 @@ class LifecyclePolicy:
     drafting_status: str
     review_status: str
     proposal_gate_states: frozenset[str]
+    non_code_review_event: str
+    non_code_complete_event: str
     transitions: tuple[tuple[str, str, str], ...]
     resolved_dependency_states: frozenset[str]
 
@@ -46,9 +50,15 @@ class LifecyclePolicy:
         if invalid_states:
             raise ValueError(f"invalid normalized lifecycle states: {invalid_states}")
         declared = set(labels)
-        transition_events = [event for event, _, _ in self.transitions]
+        transition_events = [
+            self.non_code_review_event,
+            self.non_code_complete_event,
+            *(event for event, _, _ in self.transitions),
+        ]
         if len(transition_events) != len(set(transition_events)):
             raise ValueError("lifecycle transition events must be unique")
+        if any(not event for event in transition_events):
+            raise ValueError("lifecycle transition event must not be empty")
         transition_statuses = {
             status
             for _, before, after in self.transitions
@@ -73,8 +83,6 @@ class LifecyclePolicy:
             raise ValueError("waiting prefix must not be empty")
         expected_before = self.review_status
         for event, before, after in self.transitions:
-            if not event:
-                raise ValueError("lifecycle transition event must not be empty")
             if before != expected_before:
                 raise ValueError(
                     f"lifecycle transition chain expected {expected_before}, "
@@ -102,6 +110,14 @@ class LifecyclePolicy:
             transition_event: (before, after)
             for transition_event, before, after in self.transitions
         }
+        transitions[self.non_code_review_event] = (
+            self.drafting_status,
+            self.review_status,
+        )
+        transitions[self.non_code_complete_event] = (
+            self.review_status,
+            self.complete_status,
+        )
         try:
             before, after = transitions[event]
         except KeyError as error:
@@ -120,7 +136,40 @@ class LifecyclePolicy:
     def transition_events(self) -> tuple[str, ...]:
         """Return legal evidence events in lifecycle order."""
 
-        return tuple(event for event, _, _ in self.transitions)
+        return (
+            self.non_code_review_event,
+            self.non_code_complete_event,
+            *(event for event, _, _ in self.transitions),
+        )
+
+    @property
+    def non_code_transitions(self) -> tuple[tuple[str, str, str], ...]:
+        """Return the external-review route for a block without runnable code."""
+
+        return (
+            (
+                self.non_code_review_event,
+                self.drafting_status,
+                self.review_status,
+            ),
+            (
+                self.non_code_complete_event,
+                self.review_status,
+                self.complete_status,
+            ),
+        )
+
+    def completion_transitions(
+        self,
+        final_event: object,
+    ) -> tuple[tuple[str, str, str], ...]:
+        """Return the complete lifecycle route selected by its final event."""
+
+        if final_event == self.non_code_complete_event:
+            return self.non_code_transitions
+        if final_event == self.transitions[-1][0]:
+            return self.transitions
+        raise ValueError(f"unknown completion event: {final_event}")
 
 
 @dataclass(frozen=True, slots=True)
@@ -228,6 +277,8 @@ MANTRA_PHASE0_PROFILE = ChecklistProfile(
         drafting_status="Drafting",
         review_status="Review",
         proposal_gate_states=frozenset({"Drafting", "Review"}),
+        non_code_review_event="submit",
+        non_code_complete_event="confirm",
         transitions=(
             ("approve", "Review", "Approved"),
             ("accept", "Approved", "Applied"),

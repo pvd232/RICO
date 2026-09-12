@@ -42,11 +42,10 @@ current status, review points, and completion evidence.
 
 ## Current focus
 
-**Active tranche:** [`P0-PB-05B`](../contracts/mantra-rebuild-phase-0.md#p0-pb-05b-proposed-code) fixes the archive-part order while
-[`P0-PB-05C`](../contracts/mantra-rebuild-phase-0.md#p0-pb-05c-proposed-code)
-adds verified file-access evidence to VIPER stages. `P0-PB-06` begins after
-both pass and restores the eight approved Hopfield artifacts. The resolution
-table owns each PairBlock's current lifecycle state.
+**Active tranche:** [`P0-PB-05B`](../contracts/mantra-rebuild-phase-0.md#p0-pb-05b-proposed-code)
+fixes the archive-part order. The staged `P0-PB-06` restoration proposal is
+under review and begins after its dependencies close. The resolution table
+owns each PairBlock's current lifecycle state.
 
 The resolution table identifies the next action. `Review` requires the user's
 decision. `Approved` authorizes the user to apply the proposal. `Applied`
@@ -119,7 +118,9 @@ rows, then invokes the global master-checklist validator. A passing proposal
 gate advances `Drafting` to `Review`. User approval advances `Review` to
 `Approved`; acceptance of the applied diff, tests, and Git evidence advances
 `Approved` to `Applied`; VIPER registration advances `Applied` to `Complete`.
-A failed gate or illegal transition preserves the checklist.
+A block without runnable code uses external review evidence: `submit` advances
+`Drafting` to `Review`, and `confirm` advances `Review` to `Complete`. A failed
+gate or illegal transition preserves the checklist.
 
 The contract is the only authority for required behavior and gates. The
 checklist is the only authority for current lifecycle status. Staging files

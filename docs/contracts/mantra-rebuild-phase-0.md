@@ -39,7 +39,7 @@ The [Mantra rebuild master checklist](../checklists/mantra-rebuild.md) owns exec
 | `P0-REQ-07` | Replay the historical Hopfield raw-gene readout from its saved encoder and restored inputs. | [`P0-PB-07`](#p0-pb-07) |
 | `P0-REQ-08` | Replay the v1952 MIL seed-123460 `without_control` result from restored inputs. | [`P0-PB-08`](#p0-pb-08) |
 | `P0-REQ-09` | Maintain an independent usefulness ledger for VIPER checks, failures, costs, and confirmed findings. | [`P0-PB-09`](#p0-pb-09) |
-| `P0-REQ-10` | Compile the RICO checklist into the global master-checklist manifest and propagate each evidence-backed PairBlock transition through its checkbox, requirements, dependent blocks, and contract state. | [`P0-PB-10`](#p0-pb-10) |
+| `P0-REQ-10` | Compile the RICO checklist into the global master-checklist manifest and propagate tested code transitions or externally reviewed non-code transitions through each PairBlock's checkbox, requirements, dependent blocks, and contract state. | [`P0-PB-10`](#p0-pb-10) |
 | `P0-REQ-11` | Make each governed VIPER stage reject undeclared CPython-visible file-open attempts and retain each successful Python file open, including one read-open for every declared input. | [`P0-PB-05C`](#p0-pb-05c) |
 
 ## 2. Required claim
@@ -315,7 +315,7 @@ Resolution status lives in the [master checklist](../checklists/mantra-rebuild.m
 | [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay Hopfield. | User reviews, implements, and runs; Codex reviews the applied diff and evidence. | [Source](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/tests/test_hopfield_replay.py) | `P0-VR-07` |
 | [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay standalone MIL application. | User reviews, implements, and runs; Codex reviews the applied diff and evidence. | [Source](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/tests/test_mil_replay.py) | `P0-VR-08` |
 | [`P0-PB-09`](../checklists/mantra-rebuild.md#pairblock-resolution) | Freeze evidence and assess VIPER. | Codex compiles; user approves. | [Source](../../staging/p0-pb-09/tools/freeze_phase0.py) · [Tests](../../staging/p0-pb-09/tests/test_freeze_phase0.py) | `P0-VR-09` |
-| [`P0-PB-10`](../checklists/mantra-rebuild.md#pairblock-resolution) | Validate staged PairBlock traceability, run one proposal gate, retain its receipt, and apply its legal checklist transition. | RICO owns the active controller; the user reviews lifecycle changes. | [Active source and tests](#p0-pb-10-accepted-implementation) | `P0-VR-10` |
+| [`P0-PB-10`](../checklists/mantra-rebuild.md#pairblock-resolution) | Validate PairBlock traceability and retain each tested-code or externally reviewed non-code lifecycle transition. | RICO owns the active controller; the user reviews lifecycle changes. | [Active source and tests](#p0-pb-10-accepted-implementation) | `P0-VR-10` |
 
 ### Blocks
 
@@ -563,6 +563,24 @@ commands from the already activated Conda environment named `mantra`.
      --evidence-target 'User approval in the Codex task' \
      --evidence-revision 'CODEX_MESSAGE_ID'
    ```
+
+A block without runnable code uses two external-evidence transitions. `submit`
+moves the completed trace to `Review`; `confirm` records the user's decision
+and closes the block:
+
+```bash
+cd /Users/machina/Developer/ChatGPT/RICO
+python -m tools.pairblock_status.pairblock_controller \
+  --repository "$PWD" advance BLOCK_ID submit \
+  --evidence-kind external \
+  --evidence-target 'Completed contract trace' \
+  --evidence-revision 'CONTRACT_REVISION'
+python -m tools.pairblock_status.pairblock_controller \
+  --repository "$PWD" advance BLOCK_ID confirm \
+  --evidence-kind external \
+  --evidence-target 'User approval in the Codex task' \
+  --evidence-revision 'CODEX_MESSAGE_ID'
+```
 
 4. The user types the proposal into the active paths and runs the block's
    **Applied check**. Codex reviews that exact diff, commits and pushes the
@@ -1264,11 +1282,11 @@ VIPER check, or independent defect confirmation is absent.
 |---|---|
 | Python lint | `ruff check` over the active controller package and its tests |
 | Project policy and lifecycle validity | `test_lifecycle_policy_rejects_undeclared_transition_status`; `test_checklist_profile_requires_two_phase_capture_groups`; `test_project_profile_excludes_markdown_dialect`; `test_markdown_dialect_rejects_empty_markers` |
-| Global lifecycle contract | `test_profile_fixture_compiles_with_global_validator`; `test_mantra_profile_compiles_current_contract`; `test_lifecycle_completion_updates_every_derived_status`; `test_checkbox_must_match_pairblock_completion` |
+| Global lifecycle contract | `test_profile_fixture_compiles_with_global_validator`; `test_mantra_profile_compiles_current_contract`; `test_lifecycle_completion_updates_every_derived_status`; `test_non_code_review_completion_updates_every_derived_status`; `test_checkbox_must_match_pairblock_completion` |
 | Complete PairBlock inventory and requirement mapping | `test_every_contract_pair_block_requires_one_status_row`; `test_unmapped_pair_block_is_rejected`; `test_duplicate_status_row_is_rejected`; `test_standard_pair_block_contract_marker_is_required`; `test_external_document_fragment_is_outside_repository_validation` |
 | PairBlock dependency order | `test_unknown_dependency_is_rejected`; `test_unresolved_pair_block_dependency_blocks_gate`; `test_accepted_dependency_releases_waiting_block` |
 | Owner, code, and fixture boundaries | `test_missing_owner_is_rejected`; `test_missing_proposed_source_is_rejected`; `test_missing_fixture_source_is_rejected`; `test_proposed_code_must_stay_in_governing_contract` |
-| Gate and lifecycle behavior | `test_gate_must_name_every_observing_test`; `test_failing_gate_retains_receipt_without_changing_checklist`; `test_nested_conda_run_is_rejected_before_gate_execution`; `test_illegal_lifecycle_event_changes_no_status` |
+| Gate and lifecycle behavior | `test_gate_must_name_every_observing_test`; `test_failing_gate_retains_receipt_without_changing_checklist`; `test_nested_conda_run_is_rejected_before_gate_execution`; `test_illegal_lifecycle_event_changes_no_status`; `test_non_code_review_rejects_runnable_proposal`; `test_non_code_review_requires_external_evidence` |
 | Sibling-repository proposals | `test_profile_may_name_a_sibling_proposal_owner`; `test_proposal_module_overrides_active_module`; `test_requires_both_source_roots` |
 | Active environment | `test_gate_preserves_the_controller_python_environment` |
 | Controller and Markdown-adapter boundary | `test_gate_controller_does_not_parse_or_render_markdown`; `test_passing_gate_writes_receipt_and_advances_one_status` |
@@ -1303,7 +1321,7 @@ validator. `ChecklistProfile` owns project paths, proposal-owner roots, and
 lifecycle events; `MarkdownChecklistAdapter` owns RICO parsing and rendering;
 `pairblock_controller.py` runs proposal gates in the active environment; and
 `python_overlay.py` tests staged files against the active package. The current
-focused RICO check passes `49` cases. Historical receipts retain the paths and
+focused RICO check passes `54` cases. Historical receipts retain the paths and
 file identities captured when they were written; current links resolve to the
 accepted functional paths above. The [master-checklist resolution table](../checklists/mantra-rebuild.md#pairblock-resolution)
 owns the current lifecycle state and links its supporting receipt.

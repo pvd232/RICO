@@ -20,6 +20,7 @@ from .checklist_profile import (
     MANTRA_PHASE0_ADAPTER,
     MarkdownChecklistAdapter,
     PairBlockGateError,
+    PairBlockRow,
     validate_normalized_manifest,
 )
 from .execution_identity import (
@@ -27,6 +28,7 @@ from .execution_identity import (
     compare_execution_identities,
     sha256_bytes,
 )
+from .profile import ChecklistProfile
 
 _PASSED = re.compile(r"(?m)(\d+) passed(?:,| in )")
 
@@ -185,6 +187,22 @@ def _reject_nested_conda_run(command: str) -> None:
         )
 
 
+def _require_resolved_dependencies(
+    row: PairBlockRow,
+    rows: dict[str, PairBlockRow],
+    profile: ChecklistProfile,
+) -> None:
+    """Require every declared predecessor to permit dependent work."""
+
+    for dependency in row.dependencies:
+        dependency_status = rows[dependency].status
+        if dependency_status not in profile.lifecycle.resolved_dependency_states:
+            raise PairBlockGateError(
+                f"{row.pair_block_id} dependency {dependency} is not resolved: "
+                f"{dependency_status}"
+            )
+
+
 def run_gate(
     repository: Path,
     pair_block_id: str,
@@ -213,13 +231,7 @@ def run_gate(
         raise PairBlockGateError(f"unknown PairBlock: {pair_block_id}") from error
     if not adapter.has_proposed_code(row):
         raise PairBlockGateError(f"{pair_block_id} has no proposed code")
-    for dependency in row.dependencies:
-        dependency_status = rows[dependency].status
-        if dependency_status not in profile.lifecycle.resolved_dependency_states:
-            raise PairBlockGateError(
-                f"{pair_block_id} dependency {dependency} is not resolved: "
-                f"{dependency_status}"
-            )
+    _require_resolved_dependencies(row, rows, profile)
     if row.status not in profile.lifecycle.proposal_gate_states:
         raise PairBlockGateError(f"proposal gate cannot run from status: {row.status}")
 
@@ -368,6 +380,21 @@ def advance_pairblock(
         row = rows[pair_block_id]
     except KeyError as error:
         raise PairBlockGateError(f"unknown PairBlock: {pair_block_id}") from error
+    non_code_events = {
+        profile.lifecycle.non_code_review_event,
+        profile.lifecycle.non_code_complete_event,
+    }
+    if event in non_code_events:
+        if adapter.has_proposed_code(row):
+            raise PairBlockGateError(
+                f"{pair_block_id} has runnable proposed code; run its gate"
+            )
+        if evidence.kind != "external":
+            raise PairBlockGateError(
+                f"{event} requires external review evidence"
+            )
+        if event == profile.lifecycle.non_code_review_event:
+            _require_resolved_dependencies(row, rows, profile)
     try:
         status_after = profile.lifecycle.advance(row.status, event)
     except ValueError as error:
