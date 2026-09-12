@@ -246,8 +246,12 @@ modules. The tests must reject malformed paths, identities, duplicate or absent
 control mappings, and insufficient free space.
 
 ```bash
-conda run -n mantra python -m pytest \
+PYTHONPATH="$PWD/src" PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+python -m pytest \
+  --rootdir="$PWD/src" \
+  --confcutdir="$PWD/src" \
   src/mantra/rebuild/tests/test_restoration.py \
+  src/mantra/rebuild/tests/test_control_resolution.py \
   src/mantra/rebuild/tests/test_capacity.py -q
 ```
 

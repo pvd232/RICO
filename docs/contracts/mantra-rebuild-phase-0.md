@@ -541,10 +541,8 @@ python -c 'from pathlib import Path; from viper.repository import resolve_root; 
 
 ```bash
 cd /Users/machina/Developer/ChatGPT/mantra
-conda run -n mantra env \
-  PYTHONPATH="$PWD/src" \
-  PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
-  python -m pytest \
+PYTHONPATH="$PWD/src" PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+python -m pytest \
   --rootdir="$PWD/src" \
   --confcutdir="$PWD/src" \
   src/mantra/rebuild/tests/test_restoration.py -q
@@ -577,11 +575,9 @@ conda run -n mantra env \
 
 ```bash
 cd /Users/machina/Developer/ChatGPT/mantra
-conda run -n mantra python -m ruff check src/mantra/rebuild && \
-conda run -n mantra env \
-  PYTHONPATH="$PWD/src" \
-  PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
-  python -m pytest \
+python -m ruff check src/mantra/rebuild && \
+PYTHONPATH="$PWD/src" PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+python -m pytest \
   --rootdir="$PWD/src" \
   --confcutdir="$PWD/src" \
   src/mantra/rebuild/tests/test_restoration.py \
@@ -613,10 +609,8 @@ conda run -n mantra env \
 
 ```bash
 cd /Users/machina/Developer/ChatGPT/mantra
-conda run -n mantra env \
-  PYTHONPATH="$PWD/src" \
-  PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
-  python -m pytest \
+PYTHONPATH="$PWD/src" PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+python -m pytest \
   --rootdir="$PWD/src" \
   --confcutdir="$PWD/src" \
   src/mantra/rebuild/tests/test_capacity.py -q
@@ -672,12 +666,11 @@ conda run -n mantra env \
 
 ```bash
 cd /Users/machina/Developer/ChatGPT/RICO
-conda run -n mantra python -m ruff check \
+python -m ruff check \
   review/p0-pb-10/tools \
   review/p0-pb-10/tests/conftest.py \
   review/p0-pb-10/tests/test_pairblock_controller.py &&
-PYTHONPATH=review/p0-pb-10 conda run -n mantra \
-  python -m pytest \
+PYTHONPATH=review/p0-pb-10 python -m pytest \
   review/p0-pb-10/tests/test_pairblock_controller.py -q
 ```
 
