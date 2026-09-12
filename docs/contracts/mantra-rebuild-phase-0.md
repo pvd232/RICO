@@ -38,7 +38,7 @@ The [Mantra rebuild master checklist](../checklists/mantra-rebuild.md) owns exec
 | `P0-REQ-06` | Record and verify $B$ in the VIPER provenance graph. | [`P0-PB-06`](#p0-pb-06) |
 | `P0-REQ-07` | Replay the historical Hopfield raw-gene readout from its saved encoder and restored inputs. | [`P0-PB-07`](#p0-pb-07) |
 | `P0-REQ-08` | Replay the v1952 MIL seed-123460 `without_control` result from restored inputs. | [`P0-PB-08`](#p0-pb-08) |
-| `P0-REQ-09` | Maintain an independent usefulness ledger for VIPER checks, failures, costs, and confirmed findings. | [`P0-PB-09`](#p0-pb-09) |
+| `P0-REQ-09` | Maintain an independent usefulness ledger for VIPER checks, failures, costs, and confirmed findings. | [`P0-PB-09`](#p0-pb-09), [`P0-PB-09A`](#p0-pb-09a) |
 | `P0-REQ-10` | Compile the RICO checklist into the global master-checklist manifest and propagate tested code transitions or externally reviewed non-code transitions through each PairBlock's checkbox, requirements, dependent blocks, and contract state. | [`P0-PB-10`](#p0-pb-10) |
 | `P0-REQ-11` | Make each governed VIPER stage reject undeclared CPython-visible file-open attempts and retain each successful Python file open, including one read-open for every declared input. | [`P0-PB-05C`](#p0-pb-05c) |
 | `P0-REQ-12` | Permit an unbenchmarked VIPER run to select a `model` artifact from a non-training stage while retaining the training-stage requirement for benchmarked runs. | [`P0-PB-05D`](#p0-pb-05d) |
@@ -267,7 +267,7 @@ The dependency graph, restoration bindings, environment receipt, capacity receip
 | `P0-VR-06` | The VIPER graph contains every member of $B$, and severing one required node or edge makes verification fail. | [`P0-PB-06`](#p0-pb-06) |
 | `P0-VR-07` | The Hopfield replay reproduces the selected raw-gene readout score `0.5861640938949398` within the approved tolerance and retains its produced predictions. | [`P0-PB-07`](#p0-pb-07) |
 | `P0-VR-08` | The MIL replay reproduces the v1952 seed-123460 `without_control` hold PearsonDelta `0.6025499488874759` and its declared prediction-array hashes. | [`P0-PB-08`](#p0-pb-08) |
-| `P0-VR-09` | Every assessed VIPER check has a usefulness-ledger row and independent evidence for any confirmed defect. | [`P0-PB-09`](#p0-pb-09) |
+| `P0-VR-09` | Every assessed VIPER check has a usefulness-ledger row and independent evidence for any confirmed defect; one RICO-rooted VIPER run verifies every frozen evidence identity. | [`P0-PB-09`](#p0-pb-09), [`P0-PB-09A`](#p0-pb-09a) |
 | `P0-VR-10` | The global master-checklist validator accepts incremental sibling-block closure. The RICO profile rejects an unsupported transition or any disagreement among a PairBlock row, checkbox, mapped requirement, dependent-block readiness, completion evidence, and contract state. | [`P0-PB-10`](#p0-pb-10) |
 | `P0-VR-11` | A stage using `file_access="declared"` fails after a declared input lacks a successful Python read-open, an undeclared read-open or write-open attempt, a directory change, or a Python thread or child-process launch. Its verified invocation receipt contains only successful opens permitted by the frozen inputs, outputs, and metric declarations. | [`P0-PB-05C`](#p0-pb-05c) |
 | `P0-VR-12` | Plan verification accepts a `model` artifact produced by a build stage when the run has no benchmark. It rejects a missing selected artifact and retains the training-stage requirement when the run has a benchmark. | [`P0-PB-05D`](#p0-pb-05d) |
@@ -297,6 +297,7 @@ Phase 0 fails when $B$ contains an unnecessary node, omits a required node or ed
 | `P0-PB-07` | Hopfield VIPER adapter, focused test, and historical raw-gene readout replay | `P0-VR-07`. |
 | `P0-PB-08` | v1952 MIL seed-123460 `without_control` replay | `P0-VR-08`. |
 | `P0-PB-09` | Phase 0 evidence freeze and usefulness assessment | `P0-VR-09` and user approval. |
+| `P0-PB-09A` | RICO-rooted registration of the frozen Phase 0 evidence | `P0-VR-09`. |
 | `P0-PB-10` | Traceability validation, proposal-gate receipts, and legal checklist transitions | `P0-VR-10`. |
 
 ### Phase 0 ownership record
@@ -320,6 +321,7 @@ Resolution status lives in the [master checklist](../checklists/mantra-rebuild.m
 | [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay Hopfield. | Codex implemented and independently reviewed MANTRA commits `0d06e069` and `e1025457`. | [Source](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py) · [Review](../../evidence/pairblock-reviews/p0-pb-07/e10254570214e92ef1785b92794752222387e9a1.json) | `P0-VR-07` |
 | [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay standalone MIL application. | Codex implemented and independently reviewed MANTRA commit `28490068`. | [Source](../../../mantra/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py) · [Review](../../evidence/pairblock-reviews/p0-pb-08/2849006816f7dc4e58c94b1f06b76cf4ac42457f.json) | `P0-VR-08` |
 | [`P0-PB-09`](../checklists/mantra-rebuild.md#pairblock-resolution) | Freeze evidence and assess VIPER. | Codex implemented and independently reviewed RICO commit `64964135`. | [Source](../../tools/freeze_phase0.py) · [Tests](../../tests/test_freeze_phase0.py) · [Review](../../evidence/pairblock-reviews/p0-pb-09/64964135b66a4706501d9e768527241941397566.json) | `P0-VR-09` |
+| [`P0-PB-09A`](../checklists/mantra-rebuild.md#pairblock-resolution) | Register and verify the frozen evidence through VIPER. | Codex implements and independently reviews; the real run supplies completion evidence. | [Proposed source](../../staging/p0-pb-09a/tools/register_phase0.py) · [Tests](../../staging/p0-pb-09a/tests/test_register_phase0.py) | `P0-VR-09` |
 | [`P0-PB-10`](../checklists/mantra-rebuild.md#pairblock-resolution) | Validate PairBlock traceability and retain each tested-code or externally reviewed non-code lifecycle transition. | RICO owns the active controller; the user reviews lifecycle changes. | [Active source and tests](#p0-pb-10-accepted-implementation) | `P0-VR-10` |
 
 ### Blocks
@@ -479,6 +481,16 @@ independent check.
 The accepted [evidence freezer](../../tools/freeze_phase0.py) and its
 [tests](../../tests/test_freeze_phase0.py) implement this boundary. The real
 index is written after restoration and both replay runs supply their receipts.
+
+#### P0-PB-09A
+
+Runs one RICO-rooted VIPER stage after the index is frozen. The stage consumes
+the restoration evidence bundle and replay receipts through prior-run artifact
+references, consumes the RICO evidence directly, verifies every indexed byte
+count and SHA-256, and emits the terminal Phase 0 registration receipt.
+
+**Start here:** review the [proposed source](../../staging/p0-pb-09a/tools/register_phase0.py)
+and [observing tests](../../staging/p0-pb-09a/tests/test_register_phase0.py).
 
 #### Approved Hopfield artifact set
 
@@ -733,6 +745,7 @@ choices.
 | [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py) · [Gate](#p0-pb-07-accepted-implementation) · [Review](../../evidence/pairblock-reviews/p0-pb-07/e10254570214e92ef1785b92794752222387e9a1.json) |
 | [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py) · [Gate](#p0-pb-08-accepted-implementation) · [Review](../../evidence/pairblock-reviews/p0-pb-08/2849006816f7dc4e58c94b1f06b76cf4ac42457f.json) |
 | [`P0-PB-09`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../tools/freeze_phase0.py) · [Tests](../../tests/test_freeze_phase0.py) · [Gate](#p0-pb-09-accepted-implementation) · [Review](../../evidence/pairblock-reviews/p0-pb-09/64964135b66a4706501d9e768527241941397566.json) |
+| [`P0-PB-09A`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../staging/p0-pb-09a/tools/register_phase0.py) · [Tests](../../staging/p0-pb-09a/tests/test_register_phase0.py) · [Gate](#p0-pb-09a-proposed-code) |
 | [`P0-PB-10`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Active implementation](#p0-pb-10-accepted-implementation) |
 
 A pending row links its block definition and checklist state while omitting an implementation body.
@@ -1349,6 +1362,59 @@ python -m pytest tests/test_freeze_phase0.py -q
 
 **Stop condition:** keep Phase 0 open when an input receipt, digest, assessed
 VIPER check, or independent defect confirmation is absent.
+
+### P0-PB-09A implementation record
+
+**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
+
+**Requirement:** Verify the complete frozen Phase 0 evidence set in one
+RICO-rooted VIPER run and retain its registration receipt.
+
+**Dependency:** applied `P0-PB-07`, `P0-PB-08`, and `P0-PB-09`; their real
+runs and evidence index must exist before registration executes.
+
+##### `P0-PB-09A` proposed code
+
+**Code boundary:** [Registration source](../../staging/p0-pb-09a/tools/register_phase0.py),
+[observing tests](../../staging/p0-pb-09a/tests/test_register_phase0.py),
+[workspace marker](../../staging/p0-pb-09a/viper.toml), and
+[runtime dependency](../../staging/p0-pb-09a/requirements.txt).
+
+**Implementation requirements:** consume the restoration evidence bundle,
+restoration bindings, Hopfield receipt, and MIL receipt through prior-run
+artifact references; consume the remaining indexed RICO evidence directly;
+verify every indexed byte count and SHA-256; run with `file_access="declared"`;
+and emit one terminal registration receipt.
+
+**Focused check:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/RICO
+python -m ruff check \
+  staging/p0-pb-09a/tools/register_phase0.py \
+  staging/p0-pb-09a/tests/test_register_phase0.py && \
+PYTHONPATH="$PWD/staging/p0-pb-09a:$PWD" PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+python -m pytest staging/p0-pb-09a/tests/test_register_phase0.py -q
+```
+
+**Gate:** Ruff and the focused tests pass. The real run verifies through
+VIPER, its lineage reaches all three MANTRA producer runs and every RICO
+evidence input, and its receipt reports `passed: true`.
+
+**Applied paths:** `tools/register_phase0.py` and
+`tests/test_register_phase0.py` in RICO.
+
+**Applied check:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/RICO
+python -m ruff check tools/register_phase0.py tests/test_register_phase0.py && \
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+python -m pytest tests/test_register_phase0.py -q
+```
+
+**Stop condition:** keep Phase 0 open when an indexed identity differs or the
+verified lineage omits a required MANTRA producer run or RICO evidence input.
 
 #### P0-PB-10
 

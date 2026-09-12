@@ -89,6 +89,7 @@ controls. The completed set contains 27 Hopfield and MIL destinations in
 | `P0-PB-07` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-07/20260912T205719.212980Z-accept.json)) | Applied | `P0-PB-06` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-07) | [Source](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py) |
 | `P0-PB-08` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-08/20260912T210907.846992Z-accept.json)) | Applied | `P0-PB-06` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-08) | [Source](../../../mantra/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py) |
 | `P0-PB-09` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-09/20260912T212259.707579Z-accept.json)) | Applied | `P0-PB-07`, `P0-PB-08`, `P0-PB-10` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-09) | [Source](../../tools/freeze_phase0.py) · [Tests](../../tests/test_freeze_phase0.py) |
+| `P0-PB-09A` | Passed: `16` tests ([receipt](../../evidence/pairblock-gates/p0-pb-09a/20260912T214629.378023Z.json)) | Review | `P0-PB-07`, `P0-PB-08`, `P0-PB-09` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-09a) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-09a-proposed-code) · [Source](../../staging/p0-pb-09a/tools/register_phase0.py) · [Tests](../../staging/p0-pb-09a/tests/test_register_phase0.py) |
 | `P0-PB-10` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-10/20260912T035542.464393Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-10) | [Controller](../../tools/pairblock_status/pairblock_controller.py) · [Tests](../../tests/pairblock_status/test_pairblock_controller.py) |
 
 ## Terminal outcome
@@ -335,8 +336,11 @@ gate passes.
       artifact, and obtain the user's approval to begin reconstruction.
       <!-- pair-block: P0-PB-09 -->
       <!-- pair-block-contract: P0-PB-09 contract=docs/contracts/mantra-rebuild-phase-0.md -->
+- [ ] Verify the frozen evidence index in one RICO-rooted VIPER run.
+      <!-- pair-block: P0-PB-09A -->
+      <!-- pair-block-contract: P0-PB-09A contract=docs/contracts/mantra-rebuild-phase-0.md -->
 
-**Gate:** `P0-VR-09` passes, the user approves the evidence set, and all eleven
+**Gate:** `P0-VR-09` passes, the user approves the evidence set, and all twelve
 Phase 0 requirements are complete.
 
 **Commit boundary:** Update the Phase 0 contract status and this checklist in
