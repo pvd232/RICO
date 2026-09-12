@@ -500,6 +500,7 @@ The [Phase 0 ownership record](#phase-0-ownership-record) records each block's s
 
 ### Repeatable block loop
 
+This section instantiates `MC-07` from the global master-checklist contract.
 Use the same sequence for every proposed implementation below. Run these
 commands from the already activated Conda environment named `mantra`.
 
