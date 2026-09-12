@@ -1008,8 +1008,11 @@ authenticate and retain the eight bound files as VIPER outputs, materialize
 them at their canonical MANTRA paths, and prove graph $B$ fails verification
 after one required edge is removed.
 
-**Dependency:** completed `P0-PB-04` bindings, the passing `P0-PB-05`
-capacity receipt, and accepted `P0-PB-05C` file-access enforcement.
+**Dependency:** applied `P0-PB-04A` and `P0-PB-04B` binding code, applied
+`P0-PB-05A` and `P0-PB-05B` capacity and archive-plan code, and applied
+`P0-PB-05C` file-access enforcement. This block produces the real binding and
+capacity receipts that later close the aggregate `P0-PB-04` and `P0-PB-05`
+records.
 
 ##### `P0-PB-06` proposed code
 
