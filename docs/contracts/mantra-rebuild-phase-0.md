@@ -598,7 +598,7 @@ conda run -n mantra env \
 
 **Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
 
-**Requirement:** Represent every term in $R_{max}$, measure free bytes on the target filesystem, and expose the resulting pass or fail decision in a serializable receipt.
+**Requirement:** Represent every term in $R_{max}$, measure free bytes on the target filesystem, reject a negative or non-integer measurement, and expose the resulting pass or fail decision in a serializable receipt.
 
 **Dependency:** The capacity formula in Section 4. `P0-PB-05B` supplies the measured archive-plan values used in the real receipt.
 
@@ -622,7 +622,7 @@ conda run -n mantra env \
   src/mantra/rebuild/tests/test_capacity.py -q
 ```
 
-**Gate:** The focused tests observe the exact-boundary pass, below-boundary failure, rejection of negative terms, and every serialized contract term.
+**Gate:** The focused tests observe the exact-boundary pass, below-boundary failure, rejection of invalid plan terms and measured free bytes, and every serialized contract term.
 
 **Stop condition:** Return the proposal for revision when the receipt omits a capacity term or any input can understate `required_bytes`.
 
