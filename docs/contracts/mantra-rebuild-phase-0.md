@@ -42,6 +42,7 @@ The [Mantra rebuild master checklist](../checklists/mantra-rebuild.md) owns exec
 | `P0-REQ-10` | Compile the RICO checklist into the global master-checklist manifest and propagate tested code transitions or externally reviewed non-code transitions through each PairBlock's checkbox, requirements, dependent blocks, and contract state. | [`P0-PB-10`](#p0-pb-10) |
 | `P0-REQ-11` | Make each governed VIPER stage reject undeclared CPython-visible file-open attempts and retain each successful Python file open, including one read-open for every declared input. | [`P0-PB-05C`](#p0-pb-05c) |
 | `P0-REQ-12` | Permit an unbenchmarked VIPER run to select a `model` artifact from a non-training stage while retaining the training-stage requirement for benchmarked runs. | [`P0-PB-05D`](#p0-pb-05d) |
+| `P0-REQ-13` | Bind an approved runtime destination absent from the signed filesystem manifest only when its required digest exists in its approved signed archive. | [`P0-PB-04B`](#p0-pb-04b), [`P0-PB-06`](#p0-pb-06) |
 
 ## 2. Required claim
 
@@ -309,13 +310,13 @@ Resolution status lives in the [master checklist](../checklists/mantra-rebuild.m
 | [`P0-PB-03`](../checklists/mantra-rebuild.md#pairblock-resolution) | Trace the MIL replay. | Codex traces; user approves. | [Work description](#p0-pb-03) | MIL portion of `P0-VR-01` |
 | [`P0-PB-04`](../checklists/mantra-rebuild.md#pairblock-resolution) | Produce every restoration binding. | User implements approved code; Codex reviews it. | [`P0-PB-04A`](#p0-pb-04a-accepted-implementation); [`P0-PB-04B`](#p0-pb-04b-accepted-implementation) | `P0-VR-02` |
 | [`P0-PB-04A`](../../../mantra/src/mantra/rebuild/restoration.py) | Define and validate `RestorationBinding`. | User implemented; Codex reviewed MANTRA commit `2304674e1fc9730801d1afe39edc7585c81081f4`. | [Source](../../../mantra/src/mantra/rebuild/restoration.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_restoration.py) | Reject malformed bindings and incomplete coverage. |
-| [`P0-PB-04B`](../../../mantra/src/mantra/rebuild/restoration.py) | Resolve a MANTRA path through signed controls to one archive member. | User implemented; Codex reviewed MANTRA commit `2304674e1fc9730801d1afe39edc7585c81081f4`. | [Source](../../../mantra/src/mantra/rebuild/restoration.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_control_resolution.py) | Resolve the eight approved Hopfield restorations; reject broken path, symlink, file-identity, object-identity, and archive joins. |
+| [`P0-PB-04B`](../../../mantra/src/mantra/rebuild/restoration.py) | Resolve an approved MANTRA destination and identity through signed controls to one archive member. | User implemented the original resolver; Codex repaired and reviewed MANTRA commit `75e7ce38dc85918c1f593886f20ed33601daa288`. | [Source](../../../mantra/src/mantra/rebuild/restoration.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_control_resolution.py) | Resolve all 27 restorations; require manifest agreement when a destination exists and an approved archive-object match when it does not. |
 | [`P0-PB-05`](../checklists/mantra-rebuild.md#pairblock-resolution) | Prove capacity and produce the download plan. | User implements approved code; Codex reviews it. | [`P0-PB-05A`](#p0-pb-05a-accepted-implementation); [`P0-PB-05B`](../../../mantra/src/mantra/rebuild/archive_plan.py) | `P0-VR-03` |
 | [`P0-PB-05A`](../../../mantra/src/mantra/rebuild/capacity.py) | Calculate capacity and write its receipt. | User implemented; Codex reviewed and accepted MANTRA commit `af4e589451a90a88f59c806b12a90e74e2bba043`. | [Source](../../../mantra/src/mantra/rebuild/capacity.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_capacity.py) | Report every term in $R_{max}$ and reject insufficient space. |
-| [`P0-PB-05B`](../checklists/mantra-rebuild.md#pairblock-resolution) | Derive the ordered archive-part plan from the signed archive index. | Codex implemented and independently reviewed MANTRA commit `3ea3a042e71f3ed71c804839698dde51b36f64bf`. | [Source](../../../mantra/src/mantra/rebuild/archive_plan.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_archive_plan.py) | Select 34 verified parts and expose the measured capacity values. |
+| [`P0-PB-05B`](../checklists/mantra-rebuild.md#pairblock-resolution) | Derive the ordered archive-part plan from the signed archive index. | Codex implemented and independently reviewed MANTRA commit `3ea3a042e71f3ed71c804839698dde51b36f64bf`. | [Source](../../../mantra/src/mantra/rebuild/archive_plan.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_archive_plan.py) | Select 36 verified parts for the completed artifact set and expose the measured capacity values. |
 | [`P0-PB-05C`](../checklists/mantra-rebuild.md#pairblock-resolution) | Enforce and retain each governed VIPER stage's declared file boundary. | Codex implements in VIPER; user reviews the guarantee, workflow cost, measured overhead, and applied diff. | [Protocol](../../../viper/src/viper/stages.py) · [Authoring](../../../viper/src/viper/authoring.py) · [Observer](../../../viper/src/viper/_workers/file_access.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Verifier](../../../viper/src/viper/_verification/attempt.py) · [Tests](../../../viper/tests/test_stage_file_access.py) | `P0-VR-11` and the framework tradeoff review pass. |
 | [`P0-PB-05D`](../checklists/mantra-rebuild.md#pairblock-resolution) | Permit a build stage to supply an unbenchmarked run's selected `model` artifact. | Codex implements and independently reviews the VIPER change. | [Verifier](../../../viper/src/viper/_verification/plan.py) · [Tests](../../../viper/tests/test_verification.py) · [Test map](../../../viper/tests/declaration_observers.toml) | `P0-VR-12` |
-| [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | Restore files and verify graph $B$. | User reviews, implements, and runs; Codex reviews the applied diff and evidence. | [Control helper](../../../mantra/cleanup/reinstantiation_archive.py) · [Control tests](../../../mantra/cleanup/tests/test_reinstantiation_archive.py) · [Extraction](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/archive_restore.py) · [VIPER workflow](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/viper_restore.py) · [Extraction tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_archive_restore.py) · [VIPER tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_viper_restore.py) | `P0-VR-04` and `P0-VR-06` |
+| [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | Restore files and verify graph $B$. | Codex implements, runs, and independently reviews each bounded commit. | [Bindings](../../../mantra/src/mantra/rebuild/restoration.py) · [Extraction](../../../mantra/src/mantra/rebuild/archive_restore.py) · [VIPER workflow](../../../mantra/src/mantra/rebuild/viper_restore.py) · [Tests](../../../mantra/src/mantra/rebuild/tests) | `P0-VR-04`, `P0-VR-06`, and `P0-REQ-13` |
 | [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay Hopfield. | User reviews, implements, and runs; Codex reviews the applied diff and evidence. | [Source](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/tests/test_hopfield_replay.py) | `P0-VR-07` |
 | [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay standalone MIL application. | User reviews, implements, and runs; Codex reviews the applied diff and evidence. | [Source](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/tests/test_mil_replay.py) | `P0-VR-08` |
 | [`P0-PB-09`](../checklists/mantra-rebuild.md#pairblock-resolution) | Freeze evidence and assess VIPER. | Codex compiles; user approves. | [Source](../../staging/p0-pb-09/tools/freeze_phase0.py) · [Tests](../../staging/p0-pb-09/tests/test_freeze_phase0.py) | `P0-VR-09` |
@@ -345,6 +346,13 @@ Traces the selected Hopfield computation. It reads eleven data files and one sav
 
 Targets the v1952 seed-123460 `without_control` result in `experiments/v1952_direct_mil_control_term_ablation/diagnostics/CONTROL_TERM_MULTISEED_RESULTS.json`. Its hold PearsonDelta is `0.6025499488874759`. The scorer reads the saved single-query MIL prototype, saved teacher representations, biological descriptor files, coefficient targets, and gene labels. Its input set excludes Hopfield predictions. The runner's CUDA guard makes the historical GPU replay and CPU evaluation of stored predictions separate gates.
 
+The standalone MIL compute graph has fifteen inputs: the base and projected
+Step01 prediction files, the seed-123460 prototype, and the twelve files under
+the selected Step02 `input_root` recorded in the [approved MIL artifact
+set](#approved-mil-artifact-set). Its parity graph adds the historical Step02
+prediction and weights and the historical Step03 prediction and weights.
+These files belong to the MIL run; no edge connects them to the Hopfield replay.
+
 #### P0-PB-04
 
 Closes when its two implementation blocks produce every restoration binding:
@@ -358,22 +366,22 @@ Closes when [`P0-PB-05A` source](../../../mantra/src/mantra/rebuild/capacity.py)
 
 #### P0-PB-05B
 
-Reads the signed `ARCHIVE_INDEX.json` and the eight approved restoration
+Reads the signed `ARCHIVE_INDEX.json` and the 27 approved restoration
 bindings. It selects every part of each required archive because the archive
 format has no object-to-part index. The selected order is the nine
 `historical_and_shared_experiments` parts followed by the twenty-five
-`sota_reproducer` parts, with part numbers increasing inside each archive.
+`sota_reproducer` parts and two `later_experiments` parts, with part numbers
+increasing inside each archive.
 
-**Start here:** type the [proposed source](../../../mantra/staging/p0-pb-05b/src/mantra/rebuild/archive_plan.py)
-into `src/mantra/rebuild/archive_plan.py`, then type the [observing tests](../../../mantra/staging/p0-pb-05b/src/mantra/rebuild/tests/test_archive_plan.py)
-into `src/mantra/rebuild/tests/test_archive_plan.py`.
+**Implementation:** inspect the [accepted source](../../../mantra/src/mantra/rebuild/archive_plan.py)
+and [observing tests](../../../mantra/src/mantra/rebuild/tests/test_archive_plan.py).
 
-The real plan must report 34 parts, a 4,294,967,296-byte largest part, a
-141,178,724,468-byte download upper bound, and 123,227,387 restored bytes.
+The real plan must report 36 parts, a 4,294,967,296-byte largest part, a
+145,574,762,417-byte download upper bound, and 811,130,091 restored bytes.
 The bounded reader keeps at most one verified archive part locally.
-`P0-PB-05A` must therefore record a 4,739,607,969-byte maximum simultaneous
-local requirement: one 4,294,967,296-byte part, the 123,227,387 canonical
-bytes, two 123,227,387-byte VIPER copies, one 64,472,752-byte temporary file,
+`P0-PB-05A` must therefore record a 6,960,083,757-byte maximum simultaneous
+local requirement: one 4,294,967,296-byte part, the 811,130,091 canonical
+bytes, two 811,130,091-byte VIPER copies, one 221,240,428-byte temporary file,
 and the 10 MiB reserve.
 
 **Focused check:**
@@ -408,21 +416,22 @@ consumes that trained model. [Review the implementation and gate](#p0-pb-05d-pro
 
 The first VIPER stage reads the repository's signed root release, signature,
 and public key. It downloads and authenticates the pinned project controls,
-resolves the eight bindings, and writes a control receipt. The second stage
+resolves the 27 bindings, and writes a control receipt. The second stage
 reads that control bundle and the resolved bindings through MANTRA's existing
-`RemotePartReader`. It writes the eight bound objects and verifies each byte
+`RemotePartReader`. It writes the 27 bound destinations and verifies each byte
 count and SHA-256. The reader removes each consumed part before opening the
 next one.
-The second stage produces the eight restored files and an evidence bundle
+The second stage produces the 27 restored files and an evidence bundle
 containing the archive plan, capacity receipt, and extraction receipt. After
 the verified run succeeds, `execution.restore()` materializes each file at its
 canonical MANTRA destination.
 
-**Start here:** type the [extraction source](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/archive_restore.py),
-the [VIPER workflow](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/viper_restore.py),
-the [extraction tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_archive_restore.py),
-and the [VIPER tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_viper_restore.py)
-into the matching `src/mantra/rebuild/` paths.
+**Implementation:** review the active [extraction source](../../../mantra/src/mantra/rebuild/archive_restore.py),
+[binding resolver](../../../mantra/src/mantra/rebuild/restoration.py),
+[VIPER workflow](../../../mantra/src/mantra/rebuild/viper_restore.py),
+[extraction tests](../../../mantra/src/mantra/rebuild/tests/test_archive_restore.py),
+[resolver tests](../../../mantra/src/mantra/rebuild/tests/test_control_resolution.py),
+and [VIPER tests](../../../mantra/src/mantra/rebuild/tests/test_viper_restore.py).
 
 **Gate:** the focused tests authenticate selected payloads, reject a missing or
 changed target, prove the declared VIPER inputs and outputs, and prove that
@@ -503,6 +512,44 @@ The Hopfield parity set $Q_H$ is:
 | `experiments/v1938_sota_clean_repro/runs/clean_shared_mil_proto_hyperparam_sweep_20260714T063000Z/base_step01/base_lr2e4/candidates/mixed_src_snk_ripple_raw_pen1_base_lr2e4/diagnostics/BASE_STEP01_RESULT_REPORT.json` | 6,268 | `8e690f5e1ba18846e34cccec3f48a84d4adf013d7ef64731b13ff06cca9c4529` | Present |
 | `experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/diagnostics/RAW_GENE_READOUT_TUNING_FIT_ONLY_RESULTS.json` | 656,400 | `cbb3d786ff85ce15eed5e16335cf7d9a28c7ad3f076b6f019c58e4a16c140a10` | Present |
 | `experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/out/raw_gene_readout_tuning_fit_only/best/RAW_GENE_PREDICTIONS.npz` | 38,397,104 | `d7180c4669a11b0b2fb184814aafb48ebafe75b02e4bd07998c337aa64dc59b7` | Restore |
+
+#### Approved MIL artifact set
+
+The exact destination, archive, byte count, and SHA-256 for each row live in
+[`MIL_RESTORATIONS`](../../../mantra/src/mantra/rebuild/viper_restore.py). The
+fifteen compute inputs are:
+
+| Name | MANTRA destination |
+|---|---|
+| Base Step01 predictions | `experiments/v1938_sota_clean_repro/runs/checkpoint_bootstrap_20260713T030000Z/base_step01/candidates/mixed_src_snk_ripple_raw_pen1_directw2p0_local/checkpoints/mean/HOPFIELD_PREDICTIONS.npz` |
+| Projected Step01 predictions | `experiments/v1938_sota_clean_repro/runs/checkpoint_bootstrap_20260713T030000Z/projected_step01/candidates/aggregate_proto64_scale2p8_temp0p095/checkpoints/mean/HOPFIELD_PREDICTIONS.npz` |
+| Seed-123460 prototype | `experiments/v1952_direct_mil_control_term_ablation/runs/control_ablation_seed_123460/checkpoints/transformed_training_memory/derived/mil_proto/mil_proto_identity_vectors.npz` |
+| Core83 features | `experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/core83/features.npz` |
+| Family64 features | `experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/family64/features.npz` |
+| Response40 features | `experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/response40/features.npz` |
+| Control-program features | `experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/control_state/ot_matched_control_program_features.npz` |
+| Coefficient targets | `experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/coefficient_targets/fit_tune_response_coefficients.npz` |
+| Fit/tune gene deltas | `experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/gene_delta_labels/fit_tune_ctrl19_matched_log1p_cp10k_gene_deltas.npz` |
+| Hold gene deltas | `experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/gene_delta_labels/hold_global_control_log1p_cp10k_gene_deltas.npz` |
+| Hold control shift | `experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/control_state/ot_matched_control_program_gene_shift.npz` |
+| Response-block contract | `experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/response_programs/response_program_block_contract_16.npz` |
+| Response rotation | `experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/response_programs/response_program_rotation_210d.npz` |
+| Cell-program projections | `experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/cellwise/cell_program_projections.npz` |
+| Matched cell programs | `experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/cellwise/ot_matched_cell_programs.npz` |
+
+The four parity files are:
+
+| Name | MANTRA destination |
+|---|---|
+| Step02 predictions | `experiments/v1953_direct_mil_simplified_scorer_promotion/runs/simplified_scorer_full_stack_20260725T000500Z/step02_step03/checkpoints/mean/STEP02_SLOT_COUPLED_PREDICTIONS.npz` |
+| Step02 weights | `experiments/v1953_direct_mil_simplified_scorer_promotion/runs/simplified_scorer_full_stack_20260725T000500Z/step02_step03/checkpoints/weights/STEP02_MODEL_WEIGHTS.npz` |
+| Step03 predictions | `experiments/v1953_direct_mil_simplified_scorer_promotion/runs/simplified_scorer_full_stack_20260725T000500Z/step02_step03/checkpoints/mean/STEP03_GENE_PREDICTIONS.npz` |
+| Step03 weights | `experiments/v1953_direct_mil_simplified_scorer_promotion/runs/simplified_scorer_full_stack_20260725T000500Z/step02_step03/checkpoints/weights/STEP03_RIDGE_WEIGHTS.npz` |
+
+Seven compute destinations have no row in the signed filesystem manifest.
+Their approved archive and digest select a signed content-object row directly.
+The other twelve files also require their filesystem row to agree with the
+approved archive and digest.
 
 The selected Hopfield source closure contains the following seventeen present, tracked Python files. Its source-restoration set is empty.
 
@@ -677,13 +724,13 @@ choices.
 | [`P0-PB-03`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Block](#p0-pb-03) |
 | [`P0-PB-04`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Block](#p0-pb-04) |
 | [`P0-PB-04A`](../../../mantra/src/mantra/rebuild/restoration.py) | [Accepted source](../../../mantra/src/mantra/rebuild/restoration.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_restoration.py) · MANTRA `2304674e1fc9730801d1afe39edc7585c81081f4` |
-| [`P0-PB-04B`](../../../mantra/src/mantra/rebuild/restoration.py) | [Accepted source](../../../mantra/src/mantra/rebuild/restoration.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_control_resolution.py) · MANTRA `2304674e1fc9730801d1afe39edc7585c81081f4` |
+| [`P0-PB-04B`](../../../mantra/src/mantra/rebuild/restoration.py) | [Accepted source](../../../mantra/src/mantra/rebuild/restoration.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_control_resolution.py) · [Latest review](../../evidence/pairblock-reviews/p0-pb-04b/75e7ce38dc85918c1f593886f20ed33601daa288.json) |
 | [`P0-PB-05`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Block](#p0-pb-05) |
 | [`P0-PB-05A`](../../../mantra/src/mantra/rebuild/capacity.py) | [Accepted source](../../../mantra/src/mantra/rebuild/capacity.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_capacity.py) · MANTRA `af4e589451a90a88f59c806b12a90e74e2bba043` |
 | [`P0-PB-05B`](../../../mantra/src/mantra/rebuild/archive_plan.py) | [Accepted source](../../../mantra/src/mantra/rebuild/archive_plan.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_archive_plan.py) · [Review receipt](../../evidence/pairblock-reviews/p0-pb-05b/3ea3a042e71f3ed71c804839698dde51b36f64bf.json) |
 | [`P0-PB-05C`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Protocol](../../../viper/src/viper/stages.py) · [Authoring](../../../viper/src/viper/authoring.py) · [Observer](../../../viper/src/viper/_workers/file_access.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Verifier](../../../viper/src/viper/_verification/attempt.py) · [Tests](../../../viper/tests/test_stage_file_access.py) · [Gate](#p0-pb-05c-proposed-code) |
 | [`P0-PB-05D`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Verifier](../../../viper/src/viper/_verification/plan.py) · [Tests](../../../viper/tests/test_verification.py) · [Test map](../../../viper/tests/declaration_observers.toml) · [Gate](#p0-pb-05d-proposed-code) |
-| [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Control helper](../../../mantra/cleanup/reinstantiation_archive.py) · [Control tests](../../../mantra/cleanup/tests/test_reinstantiation_archive.py) · [Extraction](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/archive_restore.py) · [VIPER workflow](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/viper_restore.py) · [Extraction tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_archive_restore.py) · [VIPER tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_viper_restore.py) · [Gate](#p0-pb-06-proposed-code) |
+| [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Bindings](../../../mantra/src/mantra/rebuild/restoration.py) · [Extraction](../../../mantra/src/mantra/rebuild/archive_restore.py) · [VIPER workflow](../../../mantra/src/mantra/rebuild/viper_restore.py) · [Tests](../../../mantra/src/mantra/rebuild/tests) · [Gate](#p0-pb-06-proposed-code) · [Review receipt](../../evidence/pairblock-reviews/p0-pb-06/75e7ce38dc85918c1f593886f20ed33601daa288.json) |
 | [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/tests/test_hopfield_replay.py) · [Gate](#p0-pb-07-proposed-code) |
 | [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/tests/test_mil_replay.py) · [Gate](#p0-pb-08-proposed-code) |
 | [`P0-PB-09`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../staging/p0-pb-09/tools/freeze_phase0.py) · [Tests](../../staging/p0-pb-09/tests/test_freeze_phase0.py) · [Gate](#p0-pb-09-proposed-code) |
@@ -806,7 +853,12 @@ python -m pytest \
 
 **Stop condition:** Return the proposal for revision unless each required destination stays inside the archived MANTRA root, resolves through one path and object row, matches graph $B$ byte identity, and has a signed archive-index owner.
 
-**Evidence:** The proposal resolved all eight approved Hopfield restorations against the authenticated historical controls: six content objects in `historical_and_shared_experiments` and two in `sota_reproducer`. Archive payload downloads remained at zero. The MANTRA implementation receipt defined above supports `Applied`; VIPER registration supports `Complete`.
+**Evidence:** The original proposal resolved the eight Hopfield restorations.
+The completed Phase 0 set resolves 27 destinations across
+`historical_and_shared_experiments`, `sota_reproducer`, and
+`later_experiments`. Archive payload downloads remained at zero during control
+resolution. The MANTRA implementation receipt supports `Applied`; the
+restoration run later supports `Complete`.
 
 #### P0-PB-05A
 
@@ -848,16 +900,16 @@ python -m pytest \
 ordered sequence of remotely verified archive parts and expose the byte counts
 used by `P0-PB-05A`.
 
-**Dependency:** `P0-PB-04B` supplies the eight restoration bindings. The
+**Dependency:** `P0-PB-04B` supplies the 27 restoration bindings. The
 signed `ARCHIVE_INDEX.json` supplies each part's repository, data revision,
 path, byte count, upload state, readback state, and SHA-256.
 
-##### `P0-PB-05B` proposed code
+##### `P0-PB-05B` accepted code
 
 **Code boundary:**
 
-- [archive plan source](../../../mantra/staging/p0-pb-05b/src/mantra/rebuild/archive_plan.py)
-- [archive plan tests](../../../mantra/staging/p0-pb-05b/src/mantra/rebuild/tests/test_archive_plan.py)
+- [archive plan source](../../../mantra/src/mantra/rebuild/archive_plan.py)
+- [archive plan tests](../../../mantra/src/mantra/rebuild/tests/test_archive_plan.py)
 
 **Fixture boundary:** [Python overlay runner](../../tools/pairblock_status/python_overlay.py)
 
@@ -870,29 +922,24 @@ path, byte count, upload state, readback state, and SHA-256.
   selected count to equal each signed archive count.
 - `ArchivePlan.to_dict()` records every remote part identity, the part count,
   largest part, full-download upper bound, and restored-file total.
-- The real signed controls yield 34 parts, `4,294,967,296` largest-part bytes,
-  `141,178,724,468` download bytes, and `123,227,387` restored bytes.
+- The real signed controls yield 36 parts, `4,294,967,296` largest-part bytes,
+  `145,574,762,417` download bytes, and `811,130,091` restored bytes.
 
 **Focused check:**
 
 ```bash
 cd /Users/machina/Developer/ChatGPT/mantra
 python -m ruff check \
-  staging/p0-pb-05b/src/mantra/rebuild/archive_plan.py \
-  staging/p0-pb-05b/src/mantra/rebuild/tests/test_archive_plan.py && \
-PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
-python /Users/machina/Developer/ChatGPT/RICO/tools/pairblock_status/python_overlay.py \
-  --active-root src \
-  --proposal-root staging/p0-pb-05b/src -- \
-  python -m pytest \
-    --rootdir="$PWD/src" \
-    --confcutdir="$PWD/src" \
-    staging/p0-pb-05b/src/mantra/rebuild/tests/test_archive_plan.py -q
+  src/mantra/rebuild/archive_plan.py \
+  src/mantra/rebuild/tests/test_archive_plan.py
+PYTHONPATH="$PWD/src" PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+python -m pytest --rootdir="$PWD/src" --confcutdir="$PWD/src" \
+  src/mantra/rebuild/tests/test_archive_plan.py -q
 ```
 
-**Gate:** Ruff and the staging tests pass. The real signed controls produce 34 parts,
-4,294,967,296 largest-part bytes, 141,178,724,468 upper-bound download bytes,
-and 123,227,387 restored bytes.
+**Gate:** Ruff and the tests pass. The real signed controls produce 36 parts,
+4,294,967,296 largest-part bytes, 145,574,762,417 upper-bound download bytes,
+and 811,130,091 restored bytes.
 
 **Applied paths:** `src/mantra/rebuild/archive_plan.py` and
 `src/mantra/rebuild/tests/test_archive_plan.py`.
@@ -1069,7 +1116,7 @@ or a benchmark whose estimator comes from a non-training stage.
 **Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
 
 **Requirement:** Download the signed archive parts with a one-part cache,
-authenticate and retain the eight bound files as VIPER outputs, materialize
+authenticate and retain the 27 bound files as VIPER outputs, materialize
 them at their canonical MANTRA paths, and prove graph $B$ fails verification
 after one required edge is removed.
 
@@ -1083,37 +1130,37 @@ records.
 
 **Code boundary:** the existing [control-package helper](../../../mantra/cleanup/reinstantiation_archive.py),
 its [tests](../../../mantra/cleanup/tests/test_reinstantiation_archive.py),
-[archive extraction](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/archive_restore.py),
-[VIPER workflow](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/viper_restore.py),
-the [extraction tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_archive_restore.py),
-and the [VIPER tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_viper_restore.py).
+[binding resolver](../../../mantra/src/mantra/rebuild/restoration.py),
+[archive extraction](../../../mantra/src/mantra/rebuild/archive_restore.py),
+[VIPER workflow](../../../mantra/src/mantra/rebuild/viper_restore.py),
+and the [rebuild tests](../../../mantra/src/mantra/rebuild/tests).
 
 **Fixture boundary:** [Python overlay runner](../../tools/pairblock_status/python_overlay.py)
 
 **Implementation requirements:**
 
 - Download exactly the five signed control files named by this block.
-- Build the signed 34-part plan and call `measure_capacity()` before the first
+- Build the signed 36-part plan and call `measure_capacity()` before the first
   archive-part download. Persist the capacity receipt and require `passed`.
   Count one compressed part, the canonical files, the persistent VIPER store,
   the VIPER attempt workspace, one largest-file temporary write, and the 10 MiB
   reserve.
 - Declare a preparation stage that consumes the signed root release, detached
   signature, and public key. It authenticates the pinned project release and
-  control package, resolves all eight bindings from the filesystem and content
+  control package, resolves all 27 bindings from the filesystem and content
   object manifests, and emits a control bundle, binding file, and receipt.
 - Run control preparation with unrestricted file access because Hugging Face
   network retrieval and OpenSSL signature verification cross the declared-file
   observer's cooperative Python boundary. Retain this limitation in the VIPER
   usefulness ledger.
-- Require all eight approved destination, byte-count, SHA-256, repository,
+- Require all 27 approved destination, byte-count, SHA-256, repository,
   control-revision, and archive identities before archive planning.
 - `RemotePartReader` downloads each selected part at its signed revision and
   verifies its byte count and SHA-256 before the tar reader consumes it.
-- Extract exactly the eight bound members and verify each restored identity.
+- Extract every distinct bound member and verify all 27 restored identities.
   Remove each consumed part before opening the next one.
 - The restoration stage consumes the authenticated control bundle, binding
-  file, and control receipt. It declares the eight restored files as file
+  file, and control receipt. It declares the 27 restored files as file
   outputs and the archive plan, capacity receipt, extraction receipt, and
   transient part cache as one evidence-bundle output.
 - Run restoration with `file_access="declared"`. Every local read and write
@@ -1129,20 +1176,14 @@ and the [VIPER tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/
 
 ```bash
 cd /Users/machina/Developer/ChatGPT/mantra
-python -m ruff check staging/p0-pb-06/src/mantra/rebuild && \
-PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
-python /Users/machina/Developer/ChatGPT/RICO/tools/pairblock_status/python_overlay.py \
-  --active-root src \
-  --proposal-root staging/p0-pb-06/src -- \
-  python -m pytest \
-    --rootdir="$PWD/src" \
-    --confcutdir="$PWD/src" \
-    staging/p0-pb-06/src/mantra/rebuild/tests/test_archive_restore.py \
-    staging/p0-pb-06/src/mantra/rebuild/tests/test_viper_restore.py -q
+python -m ruff check src/mantra/rebuild cleanup/tests/test_reinstantiation_archive.py
+PYTHONPATH="$PWD/src:$PWD" PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+python -m pytest --rootdir="$PWD/src" --confcutdir="$PWD/src" \
+  src/mantra/rebuild/tests -q
 ```
 
-**Gate:** Ruff and the sixteen focused tests pass; the real restoration receipt identifies
-every downloaded part and all eight restored identities; `verify_run()` passes;
+**Gate:** Ruff and the focused tests pass; the real restoration receipt identifies
+every downloaded part and all 27 restored identities; `verify_run()` passes;
 and the retained severed-edge fixture fails verification.
 
 **Applied paths:** `cleanup/reinstantiation_archive.py`,

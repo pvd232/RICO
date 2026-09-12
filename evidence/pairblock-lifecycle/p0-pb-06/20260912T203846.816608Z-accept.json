@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "5d7e8f3157a3e328480eca8b778c68f5f36f508f83dda68e575a375ea8619671",
+  "checklist_written_sha256": "1686be0c40e2f95987734154ae6a5cfe63031708b2e51ea1c21bf7465efee7ad",
+  "event": "accept",
+  "evidence": {
+    "kind": "artifact",
+    "revision": "75e7ce38dc85918c1f593886f20ed33601daa288",
+    "target": "https://github.com/pvd232/MANTRA.git src/mantra/rebuild"
+  },
+  "pair_block_id": "P0-PB-06",
+  "previous_receipt": "../../evidence/pairblock-lifecycle/p0-pb-06/20260912T192604.690678Z-approve.json",
+  "recorded_at": "2026-09-12T20:38:46.816608+00:00",
+  "repository_head": "ed4a809bd76da56f38231ecfdc865e8b71de63c3",
+  "result": "applied",
+  "schema_version": 1,
+  "status_after": "Applied",
+  "status_before": "Approved"
+}

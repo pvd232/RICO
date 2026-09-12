@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-04B",
+  "requirement_ids": [
+    "P0-REQ-02",
+    "P0-REQ-13"
+  ],
+  "repository": "https://github.com/pvd232/MANTRA.git",
+  "base_commit": "f9914ebfc6067b19a89e73b55977ec0d0d1ff072",
+  "result_commit": "75e7ce38dc85918c1f593886f20ed33601daa288",
+  "owned_paths": [
+    "src/mantra/rebuild/restoration.py",
+    "src/mantra/rebuild/tests/test_control_resolution.py",
+    "src/mantra/rebuild/viper_restore.py"
+  ],
+  "diff_sha256": "9d9ae79a7fea5133ee1a6151084dd1ab20ecd86f7a03ef1e39741967dab9ec4d",
+  "invariants": [
+    "Every required destination declares one byte identity and one archive identifier.",
+    "A destination present in the signed filesystem manifest must match its approved digest, byte count, and archive.",
+    "A destination absent from the filesystem manifest resolves only when its approved digest exists in its approved signed archive.",
+    "Every resolved binding names the content-addressed archive member for its expected SHA-256."
+  ],
+  "findings": [
+    {
+      "severity": "P1",
+      "status": "resolved",
+      "summary": "Seven required MIL runtime paths lacked filesystem-manifest rows although their signed content objects existed.",
+      "repair": "Require an archive identifier beside every requested identity and resolve an absent destination through that exact signed archive object.",
+      "observer": "src/mantra/rebuild/tests/test_control_resolution.py::test_absent_destination_resolves_through_approved_archive_object"
+    }
+  ],
+  "mechanical_evidence": {
+    "command": "PYTHONPATH=$PWD/src:$PWD PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest --rootdir=$PWD/src --confcutdir=$PWD/src src/mantra/rebuild/tests/test_restoration.py src/mantra/rebuild/tests/test_control_resolution.py src/mantra/rebuild/tests/test_viper_restore.py -q",
+    "result": "54 passed",
+    "ruff": "passed",
+    "git_diff_check": "passed",
+    "upstream_match": "passed"
+  },
+  "exclusions": [
+    "The P0-PB-06 run authenticates and extracts the selected archive objects."
+  ],
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-12T20:36:00Z"
+}

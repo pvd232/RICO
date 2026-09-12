@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-06",
+  "requirement_ids": [
+    "P0-REQ-04",
+    "P0-REQ-05",
+    "P0-REQ-06",
+    "P0-REQ-13"
+  ],
+  "repository": "https://github.com/pvd232/MANTRA.git",
+  "base_commit": "3ea3a042e71f3ed71c804839698dde51b36f64bf",
+  "result_commit": "75e7ce38dc85918c1f593886f20ed33601daa288",
+  "owned_paths": [
+    ".gitignore",
+    "cleanup/reinstantiation_archive.py",
+    "cleanup/tests/test_reinstantiation_archive.py",
+    "src/mantra/rebuild/archive_restore.py",
+    "src/mantra/rebuild/restoration.py",
+    "src/mantra/rebuild/tests/test_archive_restore.py",
+    "src/mantra/rebuild/tests/test_control_resolution.py",
+    "src/mantra/rebuild/tests/test_viper_restore.py",
+    "src/mantra/rebuild/viper_restore.py"
+  ],
+  "diff_sha256": "96afb05f0539f400a9d5d203e34f98d54bc754e7afc027ec69794641e09609c2",
+  "invariants": [
+    "The control stage downloads exactly five signed control files before resolving bindings.",
+    "The archive plan is measured before the first part download and retains at most one verified part.",
+    "All 27 restored destinations match their approved byte counts and SHA-256 values.",
+    "One archive object may serve multiple destinations only through equal authenticated content identity.",
+    "The restoration stage declares every restored file and its evidence bundle as VIPER outputs."
+  ],
+  "findings": [
+    {
+      "severity": "P1",
+      "status": "resolved",
+      "summary": "The first multi-destination extractor buffered every selected payload, including 221 MiB objects.",
+      "repair": "Stream unique objects directly and buffer only an object that serves multiple destinations.",
+      "observer": "src/mantra/rebuild/tests/test_archive_restore.py::test_one_member_can_restore_multiple_declared_destinations"
+    },
+    {
+      "severity": "P1",
+      "status": "resolved",
+      "summary": "The first combined run could not bind seven MIL runtime destinations absent from the filesystem manifest.",
+      "repair": "Use the P0-PB-04B approved-archive resolver boundary recorded in its separate review receipt.",
+      "observer": "src/mantra/rebuild/tests/test_control_resolution.py::test_absent_destination_resolves_through_approved_archive_object"
+    }
+  ],
+  "mechanical_evidence": {
+    "command": "PYTHONPATH=$PWD/src:$PWD PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest --rootdir=$PWD/src --confcutdir=$PWD/src src/mantra/rebuild/tests/test_archive_restore.py src/mantra/rebuild/tests/test_viper_restore.py -q",
+    "result": "15 passed; signed-control target test passed separately",
+    "ruff": "passed",
+    "git_diff_check": "passed",
+    "upstream_match": "passed"
+  },
+  "exclusions": [
+    "The real restoration run, VIPER verification, and severed-edge rejection remain the P0-PB-06 completion gate."
+  ],
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-12T20:36:00Z"
+}
