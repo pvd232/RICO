@@ -314,7 +314,7 @@ Resolution status lives in the [master checklist](../checklists/mantra-rebuild.m
 | [`P0-PB-05A`](../../../mantra/src/mantra/rebuild/capacity.py) | Calculate capacity and write its receipt. | User implemented; Codex reviewed and accepted MANTRA commit `af4e589451a90a88f59c806b12a90e74e2bba043`. | [Source](../../../mantra/src/mantra/rebuild/capacity.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_capacity.py) | Report every term in $R_{max}$ and reject insufficient space. |
 | [`P0-PB-05B`](../checklists/mantra-rebuild.md#pairblock-resolution) | Derive the ordered archive-part plan from the signed archive index. | Codex implemented and independently reviewed MANTRA commit `3ea3a042e71f3ed71c804839698dde51b36f64bf`. | [Source](../../../mantra/src/mantra/rebuild/archive_plan.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_archive_plan.py) | Select 34 verified parts and expose the measured capacity values. |
 | [`P0-PB-05C`](../checklists/mantra-rebuild.md#pairblock-resolution) | Enforce and retain each governed VIPER stage's declared file boundary. | Codex implements in VIPER; user reviews the guarantee, workflow cost, measured overhead, and applied diff. | [Protocol](../../../viper/src/viper/stages.py) · [Authoring](../../../viper/src/viper/authoring.py) · [Observer](../../../viper/src/viper/_workers/file_access.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Verifier](../../../viper/src/viper/_verification/attempt.py) · [Tests](../../../viper/tests/test_stage_file_access.py) | `P0-VR-11` and the framework tradeoff review pass. |
-| [`P0-PB-05D`](../checklists/mantra-rebuild.md#pairblock-resolution) | Permit a build stage to supply an unbenchmarked run's selected `model` artifact. | Codex implements and independently reviews the VIPER change. | [Verifier](../../../viper/src/viper/_verification/plan.py) · [Tests](../../../viper/tests/test_verification.py) | `P0-VR-12` |
+| [`P0-PB-05D`](../checklists/mantra-rebuild.md#pairblock-resolution) | Permit a build stage to supply an unbenchmarked run's selected `model` artifact. | Codex implements and independently reviews the VIPER change. | [Verifier](../../../viper/src/viper/_verification/plan.py) · [Tests](../../../viper/tests/test_verification.py) · [Test map](../../../viper/tests/declaration_observers.toml) | `P0-VR-12` |
 | [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | Restore files and verify graph $B$. | User reviews, implements, and runs; Codex reviews the applied diff and evidence. | [Extraction](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/archive_restore.py) · [VIPER workflow](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/viper_restore.py) · [Extraction tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_archive_restore.py) · [VIPER tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_viper_restore.py) | `P0-VR-04` and `P0-VR-06` |
 | [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay Hopfield. | User reviews, implements, and runs; Codex reviews the applied diff and evidence. | [Source](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/tests/test_hopfield_replay.py) | `P0-VR-07` |
 | [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay standalone MIL application. | User reviews, implements, and runs; Codex reviews the applied diff and evidence. | [Source](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/tests/test_mil_replay.py) | `P0-VR-08` |
@@ -682,7 +682,7 @@ choices.
 | [`P0-PB-05A`](../../../mantra/src/mantra/rebuild/capacity.py) | [Accepted source](../../../mantra/src/mantra/rebuild/capacity.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_capacity.py) · MANTRA `af4e589451a90a88f59c806b12a90e74e2bba043` |
 | [`P0-PB-05B`](../../../mantra/src/mantra/rebuild/archive_plan.py) | [Accepted source](../../../mantra/src/mantra/rebuild/archive_plan.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_archive_plan.py) · [Review receipt](../../evidence/pairblock-reviews/p0-pb-05b/3ea3a042e71f3ed71c804839698dde51b36f64bf.json) |
 | [`P0-PB-05C`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Protocol](../../../viper/src/viper/stages.py) · [Authoring](../../../viper/src/viper/authoring.py) · [Observer](../../../viper/src/viper/_workers/file_access.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Verifier](../../../viper/src/viper/_verification/attempt.py) · [Tests](../../../viper/tests/test_stage_file_access.py) · [Gate](#p0-pb-05c-proposed-code) |
-| [`P0-PB-05D`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Verifier](../../../viper/src/viper/_verification/plan.py) · [Tests](../../../viper/tests/test_verification.py) · [Gate](#p0-pb-05d-proposed-code) |
+| [`P0-PB-05D`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Verifier](../../../viper/src/viper/_verification/plan.py) · [Tests](../../../viper/tests/test_verification.py) · [Test map](../../../viper/tests/declaration_observers.toml) · [Gate](#p0-pb-05d-proposed-code) |
 | [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Extraction](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/archive_restore.py) · [VIPER workflow](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/viper_restore.py) · [Extraction tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_archive_restore.py) · [VIPER tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_viper_restore.py) · [Gate](#p0-pb-06-proposed-code) |
 | [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/tests/test_hopfield_replay.py) · [Gate](#p0-pb-07-proposed-code) |
 | [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/tests/test_mil_replay.py) · [Gate](#p0-pb-08-proposed-code) |
@@ -1030,8 +1030,9 @@ study has no benchmark and restores an existing model through a build stage.
 
 ##### `P0-PB-05D` proposed code
 
-**Code boundary:** [plan relationship verifier](../../../viper/src/viper/_verification/plan.py)
-and [relationship tests](../../../viper/tests/test_verification.py).
+**Code boundary:** [plan relationship verifier](../../../viper/src/viper/_verification/plan.py),
+[relationship tests](../../../viper/tests/test_verification.py), and the
+[declaration-to-test map](../../../viper/tests/declaration_observers.toml).
 
 **Implementation requirements:**
 
@@ -1049,11 +1050,10 @@ source .venv/bin/activate
 python -m ruff check src/viper/_verification/plan.py tests/test_verification.py
 python -m pytest \
   tests/test_verification.py::RunPlanRelationshipTests::test_unbenchmarked_build_may_supply_the_model \
-  tests/test_verification.py::RunPlanRelationshipTests::test_selected_model_must_exist \
   tests/test_verification.py::RunPlanRelationshipTests::test_benchmark_estimator_requires_training -q
 ```
 
-**Gate:** All three relationship cases and Ruff pass. The patch adds no field,
+**Gate:** The two tests cover three relationship cases and Ruff passes. The patch adds no field,
 configuration, observer, or runtime branch outside plan verification.
 
 **Applied check:** Repeat the focused check against the committed VIPER source,
