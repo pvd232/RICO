@@ -151,7 +151,7 @@ Phase 0 uses three storage roles:
 
 | Role | Local path | Retention rule |
 |---|---|---|
-| Download cache | `/Users/machina/Developer/ChatGPT/mantra-restoration-cache/` | Holds Hugging Face archive chunks during restoration. A cache file may be removed only after its download and extraction evidence is present in VIPER and the user authorizes removal. |
+| Download cache | The `part_cache/` directory inside the restoration stage's evidence output | Holds one verified Hugging Face archive part while the tar reader consumes it. The reader removes the part before opening the next one; the stage receipt retains its signed identity. |
 | Canonical restored files | `/Users/machina/Developer/ChatGPT/mantra/` at each documented repository-relative destination | Holds the verified files consumed by MANTRA. Historical names and paths remain unchanged. |
 | VIPER evidence | `/Users/machina/Developer/ChatGPT/mantra/.viper/store/` and `/Users/machina/Developer/ChatGPT/mantra/.viper/catalog.sqlite3` | Holds the provenance objects and graph catalog produced by governed runs. |
 
@@ -171,7 +171,7 @@ $$
 | $D$ | Extracted canonical footprint. |
 | $V$ | Additional bytes retained by VIPER. |
 | $T$ | Peak temporary extraction space. |
-| $H$ | 20 GiB reserved free space. |
+| $H$ | 10 MiB reserved free space. |
 
 The download gate passes only when observed free space is at least $R_{max}$. Shared archive chunks count once.
 
@@ -366,11 +366,11 @@ into `src/mantra/rebuild/tests/test_archive_plan.py`.
 
 The real plan must report 34 parts, a 4,294,967,296-byte largest part, a
 141,178,724,468-byte download upper bound, and 123,227,387 restored bytes.
-The approved retain-all plan keeps every verified archive part locally.
-`P0-PB-05A` must therefore record a 141,500,137,754-byte maximum simultaneous
-local requirement: the complete archive cache, two retained copies of the
-restored files, one 64,472,752-byte temporary file, and the approved 10 MiB
-reserve.
+The bounded reader keeps at most one verified archive part locally.
+`P0-PB-05A` must therefore record a 4,739,607,969-byte maximum simultaneous
+local requirement: one 4,294,967,296-byte part, the 123,227,387 canonical
+bytes, two 123,227,387-byte VIPER copies, one 64,472,752-byte temporary file,
+and the 10 MiB reserve.
 
 **Focused check:**
 
@@ -395,13 +395,17 @@ implementation and gate](#p0-pb-05c-proposed-code).
 
 #### P0-PB-06
 
-Downloads and retains the signed part plan, reads it through MANTRA's existing
-`RemotePartReader`, writes only the eight bound objects, and verifies each byte
-count and SHA-256.
-The VIPER stage declares the signed controls and bindings as inputs and the
-eight restored files plus the extraction receipt as outputs. After the run
-succeeds, `execution.restore()` materializes each output at its canonical
-MANTRA destination.
+The first VIPER stage reads the repository's signed root release, signature,
+and public key. It downloads and authenticates the pinned project controls,
+resolves the eight bindings, and writes a control receipt. The second stage
+reads that control bundle and the resolved bindings through MANTRA's existing
+`RemotePartReader`. It writes the eight bound objects and verifies each byte
+count and SHA-256. The reader removes each consumed part before opening the
+next one.
+The second stage produces the eight restored files and an evidence bundle
+containing the archive plan, capacity receipt, and extraction receipt. After
+the verified run succeeds, `execution.restore()` materializes each file at its
+canonical MANTRA destination.
 
 **Start here:** type the [extraction source](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/archive_restore.py),
 the [VIPER workflow](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/viper_restore.py),
@@ -992,10 +996,10 @@ loaders bypass the observer.
 
 **Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
 
-**Requirement:** Download and retain the signed archive parts, authenticate and
-retain the eight bound files as VIPER outputs, materialize them at their
-canonical MANTRA paths, and prove graph $B$ fails verification after one
-required edge is removed.
+**Requirement:** Download the signed archive parts with a one-part cache,
+authenticate and retain the eight bound files as VIPER outputs, materialize
+them at their canonical MANTRA paths, and prove graph $B$ fails verification
+after one required edge is removed.
 
 **Dependency:** completed `P0-PB-04` bindings, the passing `P0-PB-05`
 capacity receipt, and accepted `P0-PB-05C` file-access enforcement.
@@ -1012,14 +1016,32 @@ and the [VIPER tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/
 **Implementation requirements:**
 
 - Build the signed 34-part plan and call `measure_capacity()` before the first
-  remote read; persist the capacity receipt and require `passed`.
+  remote read. Persist the capacity receipt and require `passed`. Count one
+  compressed part, the canonical files, the persistent VIPER store, the VIPER
+  attempt workspace, one largest-file temporary write, and the 10 MiB reserve.
+- Declare a preparation stage that consumes the signed root release, detached
+  signature, and public key. It authenticates the pinned project release and
+  control package, resolves all eight bindings from the filesystem and content
+  object manifests, and emits a control bundle, binding file, and receipt.
+- Run control preparation with unrestricted file access because Hugging Face
+  network retrieval and OpenSSL signature verification cross the declared-file
+  observer's cooperative Python boundary. Retain this limitation in the VIPER
+  usefulness ledger.
+- Require all eight approved destination, byte-count, SHA-256, repository,
+  control-revision, and archive identities before archive planning.
 - `RemotePartReader` downloads each selected part at its signed revision and
   verifies its byte count and SHA-256 before the tar reader consumes it.
-- Extract exactly the eight bound members, verify each restored identity, and
-  retain all downloaded parts in the approved cache.
-- The VIPER stage declares the signed controls and binding set as inputs and
-  the eight restored files, archive plan, capacity receipt, and extraction
-  receipt as outputs.
+- Extract exactly the eight bound members and verify each restored identity.
+  Remove each consumed part before opening the next one.
+- The restoration stage consumes the authenticated control bundle, binding
+  file, and control receipt. It declares the eight restored files as file
+  outputs and the archive plan, capacity receipt, extraction receipt, and
+  transient part cache as one evidence-bundle output.
+- Run restoration with `file_access="declared"`. Every local read and write
+  must resolve beneath those declared inputs and outputs.
+- Launch the worker with Hugging Face implicit-token lookup and Xet disabled.
+  The public download path then reads and writes only beneath the declared
+  evidence output; a pinned small-file probe must pass before archive download.
 - Materialize each verified output at its canonical MANTRA path, run VIPER
   verification, then retain a severed-edge verification failure for one input
   edge and one restored-file output edge.
@@ -1040,7 +1062,7 @@ python /Users/machina/Developer/ChatGPT/RICO/tools/pairblock_status/python_overl
     staging/p0-pb-06/src/mantra/rebuild/tests/test_viper_restore.py -q
 ```
 
-**Gate:** the focused check passes; the real restoration receipt identifies
+**Gate:** Ruff and the thirteen focused tests pass; the real restoration receipt identifies
 every downloaded part and all eight restored identities; `verify_run()` passes;
 and the retained severed-edge fixture fails verification.
 
