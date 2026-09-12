@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "d635f63705d3bef6c3bb1df972471fc80e40742dd30cf6659ffd257e6d442756",
+  "checklist_written_sha256": "f07053a1da181d9e5a6b650f36344a13b68f6ae0b87d8d6a9cd6bd28640a99e8",
+  "event": "accept",
+  "evidence": {
+    "kind": "artifact",
+    "revision": "0d550bdb8b61b769c81c989b16e966d37a80a93f",
+    "target": "https://github.com/pvd232/viper.git src/viper/_verification/plan.py tests/test_verification.py tests/declaration_observers.toml"
+  },
+  "pair_block_id": "P0-PB-05D",
+  "previous_receipt": "../../evidence/pairblock-lifecycle/p0-pb-05d/20260912T195229.300408Z-approve.json",
+  "recorded_at": "2026-09-12T19:52:29.538244+00:00",
+  "repository_head": "82f38bad333d7e339e0e42e28cbea9b9716ba0fe",
+  "result": "applied",
+  "schema_version": 1,
+  "status_after": "Applied",
+  "status_before": "Approved"
+}
