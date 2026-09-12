@@ -22,7 +22,7 @@ The [Mantra rebuild master checklist](../checklists/mantra-rebuild.md) owns exec
 - [Acceptance boundary](#8-acceptance-boundary)
 - [PairBlock order](#9-pairblock-order)
   - [Phase 0 ownership record](#phase-0-ownership-record)
-- [Proposed implementation](#10-proposed-implementation)
+- [Implementation records](#10-implementation-records)
 - [Sources](#11-sources)
 
 | ID | Implementation obligation |
@@ -231,69 +231,13 @@ Phase 0 fails when $B$ contains an unnecessary node, omits a required node or ed
 | `P0-PB-08` | v1952 MIL seed-123460 `without_control` replay | `P0-VR-08`. |
 | `P0-PB-09` | Phase 0 evidence freeze and usefulness assessment | `P0-VR-09` and user approval. |
 
-### Approved MANTRA integration boundary
-
-**Status:** Approved
-
-**Requirement:** Make the existing MANTRA Git repository discoverable as the VIPER workspace, then connect the historical Hopfield replay through one MANTRA-owned VIPER adapter.
-
-**Dependency:** The approved Hopfield target is `0.5861640938949398`; the approved MIL target is `0.6025499488874759`.
-
-**Files introduced across `P0-PB-01`, `P0-PB-02`, and `P0-PB-07`:**
-
-- `viper.toml` marks the MANTRA Git root as the VIPER workspace.
-- `src/mantra/rebuild/hopfield_replay.py` will own the thin VIPER adapter for the historical replay.
-- `src/mantra/rebuild/tests/test_hopfield_replay.py` will observe workspace resolution, declared input custody, the historical call boundary, and the produced replay receipt.
-
-Context: MANTRA already owns its package, tests, configuration, and historical experiment code. `viper init` targets empty directories and would generate competing project structure here. The adapter will call the historical Hopfield implementation at its existing path. `P0-PB-02` first identifies the complete Hopfield input set; `P0-PB-07` then requires the adapter to declare that entire set.
-
-### `P0-PB-01` workspace marker and environment
-
-**Status:** Passed locally and committed in MANTRA; awaiting later VIPER graph registration
-
-**Requirement:** Mark the MANTRA Git root as the VIPER workspace and verify the Conda environment named `mantra` uses Python 3.13 with `viper-provenance` installed.
-
-**Dependency:** The Conda environment named `mantra` exists.
-
-**File: `viper.toml`**
-
-```toml
-[workspace]
-schema_version = 2
-```
-
-**Install:**
-
-```bash
-cd /Users/machina/Developer/ChatGPT/mantra
-conda activate mantra
-python -m pip install viper-provenance
-```
-
-**Focused check:**
-
-```bash
-cd /Users/machina/Developer/ChatGPT/mantra
-conda activate mantra
-python -c 'import os; print(os.environ.get("CONDA_DEFAULT_ENV"))'
-python -c 'import sys; print(sys.executable); print(sys.version)'
-python -c 'from importlib.metadata import version; import viper; print(version("viper-provenance")); print(viper.__file__)'
-python -c 'from pathlib import Path; from viper.repository import resolve_root; print(resolve_root(Path.cwd()))'
-```
-
-**Gate:** The commands identify `mantra` as the active Conda environment, Python 3.13, the installed `viper-provenance` version, a `viper` module under that environment, and `/Users/machina/Developer/ChatGPT/mantra` as the resolved VIPER root. `P0-PB-06` must register this output in the VIPER graph before Phase 0 closes.
-
-**Stop condition:** Stop before `P0-PB-02` if any value differs. Stop before `P0-PB-07` if its focused test shows that the adapter reads an undeclared input.
-
-**Git evidence:** MANTRA commit `467d7d3dcdfcbcaaf40ab40a419ef89096bd465f` contains `viper.toml`. The environment check resolved the Conda environment `mantra`, Python 3.13.15, `viper-provenance` 0.1.0a3, and the MANTRA Git root.
-
 ### Phase 0 ownership record
 
 Resolution status lives in the [master checklist](../checklists/mantra-rebuild.md#pairblock-resolution).
 
 | Block | Work | Review or implementation owner | Proposed code | Gate |
 |---|---|---|---|---|
-| [`P0-PB-01`](../checklists/mantra-rebuild.md#phase-0a-verify-the-mantra-workspace-and-environment) | Mark and verify the MANTRA workspace. | Codex reviews; user implements. | [Declaration](#p0-pb-01-workspace-marker-and-environment) | `P0-VR-05` |
+| [`P0-PB-01`](../checklists/mantra-rebuild.md#phase-0a-verify-the-mantra-workspace-and-environment) | Mark and verify the MANTRA workspace. | Codex reviews; user implements. | [Accepted implementation](#p0-pb-01-accepted-implementation) | `P0-VR-05` |
 | [`P0-PB-02`](../checklists/mantra-rebuild.md#phase-0b-freeze-the-two-independent-replay-graphs) | Trace the Hopfield replay. | Codex traces; user approves. | [Work description](#replay-traces-awaiting-approval) | Hopfield portion of `P0-VR-01` |
 | [`P0-PB-03`](../checklists/mantra-rebuild.md#phase-0b-freeze-the-two-independent-replay-graphs) | Trace the MIL replay. | Codex traces; user approves. | [Work description](#replay-traces-awaiting-approval) | MIL portion of `P0-VR-01` |
 | [`P0-PB-04`](../checklists/mantra-rebuild.md#phase-0c-implement-restoration-bindings-and-capacity-planning) | Produce every restoration binding. | User implements approved code; Codex reviews it. | `P0-PB-04A` and `P0-PB-04B` | `P0-VR-02` |
@@ -307,13 +251,29 @@ Resolution status lives in the [master checklist](../checklists/mantra-rebuild.m
 | [`P0-PB-08`](../checklists/mantra-rebuild.md#phase-0e-replay-hopfield-and-mil) | Replay MIL. | User runs approved code; Codex reviews evidence. | Pending proposal | `P0-VR-08` |
 | [`P0-PB-09`](../checklists/mantra-rebuild.md#phase-0f-freeze-evidence-and-assess-viper) | Freeze evidence and assess VIPER. | Codex compiles; user approves. | Pending proposal | `P0-VR-09` |
 
-### Replay traces awaiting approval
+### Work descriptions
+
+#### Approved MANTRA integration boundary
+
+**Requirement:** Make the existing MANTRA Git repository discoverable as the VIPER workspace, then connect the historical Hopfield replay through one MANTRA-owned VIPER adapter.
+
+**Dependency:** The approved Hopfield target is `0.5861640938949398`; the approved MIL target is `0.6025499488874759`.
+
+**Files introduced across `P0-PB-01`, `P0-PB-02`, and `P0-PB-07`:**
+
+- `viper.toml` marks the MANTRA Git root as the VIPER workspace.
+- `src/mantra/rebuild/hopfield_replay.py` will own the thin VIPER adapter for the historical replay.
+- `src/mantra/rebuild/tests/test_hopfield_replay.py` will observe workspace resolution, declared input custody, the historical call boundary, and the produced replay receipt.
+
+MANTRA already owns its package, tests, configuration, and historical experiment code. `viper init` targets empty directories and would generate competing structure here. The adapter will call the historical Hopfield implementation at its existing path. `P0-PB-02` identifies the complete Hopfield input set; `P0-PB-07` requires the adapter to declare that set.
+
+#### Replay traces awaiting approval
 
 `P0-PB-02` traced the selected Hopfield computation. It reads eleven data files and one saved encoder. Five data files are present and hash-match; six data files and the encoder are absent and restorable. The adapter will call the selected helper path with `memory=("fit",)`, `topk=1600`, and `temperature=0.055`. It will write a new prediction and receipt. Its boundary excludes the historical ten-encoder, 42-readout-per-encoder sweep. The historical prediction and report remain unchanged in $Q$.
 
 `P0-PB-03` targets the v1952 seed-123460 `without_control` result in `experiments/v1952_direct_mil_control_term_ablation/diagnostics/CONTROL_TERM_MULTISEED_RESULTS.json`. Its hold PearsonDelta is `0.6025499488874759`. The scorer reads the saved single-query MIL prototype, saved teacher representations, biological descriptor files, coefficient targets, and gene labels. Its input set excludes Hopfield predictions. The runner's CUDA guard makes the historical GPU replay and CPU evaluation of stored predictions separate gates.
 
-### Approved Hopfield artifact set
+#### Approved Hopfield artifact set
 
 The eleven data files below are relative to `experiments/v1938_sota_clean_repro/inputs/`.
 
@@ -367,7 +327,7 @@ experiments/v1938_sota_clean_repro/src/step01/hopfield/loader.py
 experiments/v1938_sota_clean_repro/src/step01/hopfield/spec.py
 ```
 
-### MIL compute finding
+#### MIL compute finding
 
 The v1952 training entrypoint contains an explicit CUDA guard:
 
@@ -388,11 +348,55 @@ fused=(device.type == "cuda" and bool(config.training.optimizer_fused_on_cuda))
 
 The inspected teacher, student, and proposal paths contain zero unconditional `.cuda()` calls. Phase 0 therefore separates two claims: an L4-class GPU is required for acceptance-level historical replay, while a later CPU portability probe may remove only the guard and measure whether one seed completes within local memory. The recorded L4 run remains the parity reference.
 
-## 10. Proposed implementation
+## 10. Implementation records
 
-This section contains proposed MANTRA code. The [Phase 0 ownership record](#phase-0-ownership-record) records each block's scope, owner, code link, and gate. The master checklist records resolution status.
+The [Phase 0 ownership record](#phase-0-ownership-record) records each block's scope, owner, implementation link, and gate. The master checklist records resolution status.
 
-### `P0-PB-04A` proposed code
+### Accepted implementation
+
+#### `P0-PB-01` accepted implementation
+
+**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#phase-0a-verify-the-mantra-workspace-and-environment)
+
+**Requirement:** Mark the MANTRA Git root as the VIPER workspace and verify the Conda environment named `mantra` uses Python 3.13 with `viper-provenance` installed.
+
+**Dependency:** The Conda environment named `mantra` exists.
+
+**File: `viper.toml`**
+
+```toml
+[workspace]
+schema_version = 2
+```
+
+**Install:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/mantra
+conda activate mantra
+python -m pip install viper-provenance
+```
+
+**Focused check:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/mantra
+conda activate mantra
+python -c 'import os; print(os.environ.get("CONDA_DEFAULT_ENV"))'
+python -c 'import sys; print(sys.executable); print(sys.version)'
+python -c 'from importlib.metadata import version; import viper; print(version("viper-provenance")); print(viper.__file__)'
+python -c 'from pathlib import Path; from viper.repository import resolve_root; print(resolve_root(Path.cwd()))'
+```
+
+**Gate:** The commands identify `mantra` as the active Conda environment, Python 3.13, the installed `viper-provenance` version, a `viper` module under that environment, and `/Users/machina/Developer/ChatGPT/mantra` as the resolved VIPER root. `P0-PB-06` must register this output in the VIPER graph before Phase 0 closes.
+
+**Stop condition:** Stop before `P0-PB-02` if any value differs. Stop before `P0-PB-07` if its focused test shows that the adapter reads an undeclared input.
+
+**Git evidence:** MANTRA commit `467d7d3dcdfcbcaaf40ab40a419ef89096bd465f` contains `viper.toml`. The environment check resolved the Conda environment `mantra`, Python 3.13.15, `viper-provenance` 0.1.0a3, and the MANTRA Git root.
+
+### Proposed implementation
+
+#### `P0-PB-04A` proposed code
 
 **Declaration:** [`P0-PB-04A`](#p0-pb-04a-declaration)
 
@@ -773,7 +777,7 @@ PYTHONPATH=src python -m pytest \
   src/mantra/rebuild/tests/test_restoration.py -q
 ```
 
-### `P0-PB-05A` proposed code
+#### `P0-PB-05A` proposed code
 
 **Declaration:** [`P0-PB-05A`](#p0-pb-05a-declaration)
 
