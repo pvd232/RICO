@@ -42,11 +42,10 @@ current status, review points, and completion evidence.
 
 ## Current focus
 
-**Active tranche:** the user applies `P0-PB-04A`, `P0-PB-04B`, and
-`P0-PB-05A` in MANTRA while Codex reviews each resulting diff. `P0-PB-10` is
-applied. VIPER 0.1.0a4 is installed from the reviewed local checkout, and the
-MANTRA-to-RICO local-store probe passes. `P0-PB-06` will register this evidence
-and close `P0-PB-10`.
+**Active tranche:** `P0-PB-05B` fixes the archive-part order and supplies the
+measured values for the capacity receipt. `P0-PB-06` then restores the eight
+approved Hopfield artifacts and records graph $B$ in VIPER. The resolution
+table owns each PairBlock's current lifecycle state.
 
 The resolution table identifies the next action. `Review` requires the user's
 decision. `Approved` authorizes the user to apply the proposal. `Applied`
@@ -477,9 +476,7 @@ specification passes.
 
 | Owner action | First consumer | Result unlocked |
 |---|---|---|
-| Review [`P0-PB-04A`](../contracts/mantra-rebuild-phase-0.md#p0-pb-04a) and [`P0-PB-05A`](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a). | Phase 0C | MANTRA implementation of the first two proposed blocks. |
-| Review [`P0-PB-04B`](../contracts/mantra-rebuild-phase-0.md#p0-pb-04b) after Codex drafts it. | Phase 0C | Signed-control resolution and complete binding records. |
-| Approve cache deletion timing and the archive download plan. | Phase 0C | First archive download. |
+| Review the [`P0-PB-05B`](../contracts/mantra-rebuild-phase-0.md#p0-pb-05b) archive-part plan and capacity receipt. | Phase 0C | First archive download. |
 | Provide or authorize the L4-class execution environment if local replay fails the historical gate. | Phase 0E | Acceptance-level MIL replay and later training runs. |
 | Approve each reconstruction contract and its PairBlocks. | Phases 1A, 2A, and 3 | Implementation of each model generation. |
 
