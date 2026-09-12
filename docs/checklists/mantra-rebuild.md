@@ -19,6 +19,20 @@ the implementation gate because the MIL artifact table is incomplete.
 `P0-PB-04B` and the two reviews can proceed in parallel. `P0-PB-05B` starts
 after `P0-PB-04B` resolves the archive chunks required by the approved paths.
 
+**`P0-PB-04B` inspection evidence:** Project release revision
+`51cb27990244f1f418e8b7cd11cd98672d18919a` pins control revision
+`a3c7405f375ba2f18f856fbfebe6480e98792df0`; both signatures verify with
+`reinstantiation/CONTROL_SIGNING_PUBLIC_KEY.pem`.
+The signed checksums match `ARCHIVE_INDEX.json`,
+`FILESYSTEM_MANIFEST.jsonl.zst`, and the two inspected object manifests. Six
+missing Hopfield inputs belong to `historical_and_shared_experiments`; the
+saved encoder and historical prediction belong to `sota_reproducer`. The
+`fit_tune_ctrl19_matched_log1p_cp10k_gene_deltas.npz` destination is an
+absolute historical symlink whose target file carries the approved byte count
+and SHA-256. The reader must resolve that link inside the historical MANTRA
+root and reject links that escape it. Archive payload downloads remain at
+zero.
+
 ## Terminal outcome
 
 The program closes when this path passes:
