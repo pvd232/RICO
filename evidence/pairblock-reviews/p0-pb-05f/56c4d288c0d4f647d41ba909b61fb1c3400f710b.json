@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-05F",
+  "requirement_ids": [
+    "P0-REQ-15"
+  ],
+  "repository": "https://github.com/pvd232/viper.git",
+  "base_commit": "c998104ac4b419e1de5c4e9b692b7a7a4dd095e8",
+  "result_commit": "56c4d288c0d4f647d41ba909b61fb1c3400f710b",
+  "owned_paths": [
+    "src/viper/_workers/file_access.py",
+    "tests/declaration_observers.toml",
+    "tests/test_stage_file_access.py"
+  ],
+  "diff_sha256": "a8bd14327f5e2a28abf9c4340549bee4ce46c6f7e40803b336b6d51ae07a7fb9",
+  "invariants": [
+    "Only the exact path resolved from os.devnull is exempt from the declared data boundary.",
+    "Null-device reads and writes create no retained file-access evidence.",
+    "Null-device reads cannot satisfy a declared-input read requirement.",
+    "Every other undeclared device path remains governed by the existing rejection."
+  ],
+  "findings": [],
+  "mechanical_evidence": {
+    "focused_command": "python -m pytest tests/test_stage_file_access.py::test_null_device_is_runtime_plumbing tests/test_stage_file_access.py::test_undeclared_device_is_rejected -q",
+    "focused_result": "2 passed",
+    "one_hop_command": "python -m pytest tests/test_stage_file_access.py -q",
+    "one_hop_result": "23 passed",
+    "ruff": "passed",
+    "git_diff_check": "passed",
+    "upstream_match": "passed"
+  },
+  "exclusions": [
+    "The full integration and distribution suites remain session-closure gates."
+  ],
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-12T23:04:01Z"
+}
