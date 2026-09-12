@@ -119,11 +119,11 @@ MANTRA. The RICO checklist cites their commit IDs and gate outputs.
 | MIL reconstruction contract | Pending | Phase 2A | User-approved contract with exact intermediate and final parity gates. |
 | Graph encoder contract | Design complete; contract pending | Phase 3A | User-approved contract covering identity, topology, features, training, evaluation, and VIPER evidence. |
 
-The checklist uses the Phase 0 contract stored in RICO commit `f5f9e72` with
+The checklist uses the Phase 0 contract stored in RICO commit `26d798e` with
 SHA-256
-`c755917d1b69edd8beff9cfc34b25c6784029ca27905a6f96c06a492c6423ece`.
+`df3cc471457836809484baf3d22e6938d65c4194d664ac86576ff8be3cd5af14`.
 
-<!-- contract-baseline: P0 path=docs/contracts/mantra-rebuild-phase-0.md revision=f5f9e72 sha256=c755917d1b69edd8beff9cfc34b25c6784029ca27905a6f96c06a492c6423ece -->
+<!-- contract-baseline: P0 path=docs/contracts/mantra-rebuild-phase-0.md revision=26d798e sha256=df3cc471457836809484baf3d22e6938d65c4194d664ac86576ff8be3cd5af14 -->
 
 ## Verified baseline
 
@@ -461,8 +461,8 @@ specification passes.
 ## Sources
 
 - [Phase 0 contract](../contracts/mantra-rebuild-phase-0.md), RICO commit
-  `f5f9e72`, SHA-256
-  `c755917d1b69edd8beff9cfc34b25c6784029ca27905a6f96c06a492c6423ece`.
+  `26d798e`, SHA-256
+  `df3cc471457836809484baf3d22e6938d65c4194d664ac86576ff8be3cd5af14`.
 - [Model rebuild handoff](../mantra-viper-rebuild-handoff.md).
 - [Graph encoder design specification](../Biologically_Grounded_Graph_Encoder_Design_Specification.pdf),
   Part XIX and Part XX.
