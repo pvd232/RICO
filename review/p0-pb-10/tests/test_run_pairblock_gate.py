@@ -440,6 +440,29 @@ def test_unresolved_pair_block_dependency_blocks_gate(
         run_test_gate(repository)
 
 
+def test_nested_conda_run_is_rejected_before_gate_execution(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    repository_factory: RepositoryFactory,
+) -> None:
+    """Keep the controller environment from overriding a declared Conda target."""
+
+    execution_marker = tmp_path / "nested-conda-ran"
+    command = (
+        "conda run -n mantra python -c 'from pathlib import Path; "
+        f'Path("{execution_marker}").touch(); print("2 passed in 0.01s")\' '
+        f"{SOURCE_PATH.as_posix()} {TEST_PATH.as_posix()}"
+    )
+    repository = repository_factory(command=command)
+    monkeypatch.setenv("CONDA_DEFAULT_ENV", "mantra")
+
+    with pytest.raises(PairBlockGateError, match="must run outside"):
+        run_test_gate(repository)
+
+    assert not execution_marker.exists()
+    assert not (repository / "evidence").exists()
+
+
 @pytest.mark.parametrize(
     ("target", "drift_field"),
     [

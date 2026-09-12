@@ -6,11 +6,13 @@ import argparse
 import json
 import os
 import re
+import shlex
 import subprocess
 import tempfile
 from collections.abc import Sequence
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
+from itertools import pairwise
 from pathlib import Path
 
 from .checklist_profile import (
@@ -103,6 +105,30 @@ def _atomic_write(path: Path, content: bytes) -> None:
             temporary.unlink()
 
 
+def _reject_nested_conda_run(command: str) -> None:
+    """Reject a Conda-owned gate that would invoke another ``conda run``.
+
+    A proposal command owns its declared environment. Starting this controller
+    inside a different non-base Conda environment can cause a nested
+    ``conda run`` to reuse the controller interpreter instead of the declared
+    target. Refusing that launch preserves the proposal's runtime boundary.
+    """
+
+    active_environment = os.environ.get("CONDA_DEFAULT_ENV")
+    if not active_environment or active_environment == "base":
+        return
+    tokens = shlex.split(command)
+    invokes_conda_run = any(
+        Path(executable).name == "conda" and operation == "run"
+        for executable, operation in pairwise(tokens)
+    )
+    if invokes_conda_run:
+        raise PairBlockGateError(
+            "gate controller must run outside a non-base Conda environment "
+            f"before executing a declared conda run; active={active_environment}"
+        )
+
+
 def run_gate(
     repository: Path,
     pair_block_id: str,
@@ -142,6 +168,7 @@ def run_gate(
         raise PairBlockGateError(f"proposal gate cannot run from status: {row.status}")
 
     proposal = adapter.load_proposal_contract(repository, checklist_path, row)
+    _reject_nested_conda_run(proposal.command)
     resolved_validator = validator_path.resolve()
     identity_before = capture_execution_identity(
         repository,
