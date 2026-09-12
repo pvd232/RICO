@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-09",
+  "requirement_ids": [
+    "P0-REQ-09"
+  ],
+  "repository": "https://github.com/pvd232/RICO.git",
+  "base_commit": "48bdbf4878acacc1cad72e81727ecac2e5f79709",
+  "result_commit": "64964135b66a4706501d9e768527241941397566",
+  "owned_paths": [
+    "tools/freeze_phase0.py",
+    "tests/test_freeze_phase0.py"
+  ],
+  "diff_sha256": "5be7214bff20b8cc51d8e5b97119ac5f134e495c5b6f6c262451d269cfb8ad14",
+  "invariants": [
+    "The index contains exactly the eleven evidence roles named by the Phase 0 contract.",
+    "Each evidence identity records its repository owner, normalized relative path, byte count, and SHA-256.",
+    "The usefulness ledger contains one unique assessment row for every declared assessed check.",
+    "Each confirmed framework or implementation defect names an independent check.",
+    "The output is deterministic and cannot overwrite an indexed evidence file."
+  ],
+  "findings": [
+    {
+      "severity": "P1",
+      "status": "resolved before commit",
+      "summary": "The first proposal accepted malformed assessment field types, including Boolean elapsed time and unknown defect classifications.",
+      "repair": "Validate every assessment field, classification, collection element, and finite nonnegative elapsed time.",
+      "observer": "tests/test_freeze_phase0.py::test_rejects_malformed_assessment_field"
+    },
+    {
+      "severity": "P1",
+      "status": "resolved before commit",
+      "summary": "Two repository labels could identify the same custody root.",
+      "repair": "Require each repository label to resolve to a distinct directory.",
+      "observer": "tests/test_freeze_phase0.py::test_rejects_repository_aliases"
+    },
+    {
+      "severity": "P1",
+      "status": "resolved before commit",
+      "summary": "The first output API allowed the index to overwrite an evidence input.",
+      "repair": "Represent the output as an EvidenceLocation and reject any input-output location collision.",
+      "observer": "tests/test_freeze_phase0.py::test_rejects_output_that_overwrites_evidence"
+    }
+  ],
+  "mechanical_evidence": {
+    "command": "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest tests/test_freeze_phase0.py -q",
+    "result": "20 passed",
+    "ruff": "passed",
+    "git_diff_check": "passed",
+    "upstream_match": "passed"
+  },
+  "exclusions": [
+    "The real evidence index waits for the restoration, Hopfield replay, MIL replay, and their VIPER registrations."
+  ],
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-12T21:24:00Z"
+}

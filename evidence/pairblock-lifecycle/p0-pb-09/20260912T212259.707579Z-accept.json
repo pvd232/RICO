@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "bab927ecb976b79c3ac65cfa26ca429a5275966de16e7805a93b16a27cc42ebd",
+  "checklist_written_sha256": "0ec8ce294e1eea48b380f126c62f2ffe4ffbce957040781bc6a0239c077d7a46",
+  "event": "accept",
+  "evidence": {
+    "kind": "artifact",
+    "revision": "64964135b66a4706501d9e768527241941397566",
+    "target": "https://github.com/pvd232/RICO.git:tools/freeze_phase0.py"
+  },
+  "pair_block_id": "P0-PB-09",
+  "previous_receipt": "../../evidence/pairblock-lifecycle/p0-pb-09/20260912T212115.168756Z-approve.json",
+  "recorded_at": "2026-09-12T21:22:59.707579+00:00",
+  "repository_head": "64964135b66a4706501d9e768527241941397566",
+  "result": "applied",
+  "schema_version": 1,
+  "status_after": "Applied",
+  "status_before": "Approved"
+}

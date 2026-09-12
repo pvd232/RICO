@@ -319,7 +319,7 @@ Resolution status lives in the [master checklist](../checklists/mantra-rebuild.m
 | [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | Restore files and verify graph $B$. | Codex implements, runs, and independently reviews each bounded commit. | [Bindings](../../../mantra/src/mantra/rebuild/restoration.py) · [Extraction](../../../mantra/src/mantra/rebuild/archive_restore.py) · [VIPER workflow](../../../mantra/src/mantra/rebuild/viper_restore.py) · [Tests](../../../mantra/src/mantra/rebuild/tests) | `P0-VR-04`, `P0-VR-06`, and `P0-REQ-13` |
 | [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay Hopfield. | Codex implemented and independently reviewed MANTRA commits `0d06e069` and `e1025457`. | [Source](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py) · [Review](../../evidence/pairblock-reviews/p0-pb-07/e10254570214e92ef1785b92794752222387e9a1.json) | `P0-VR-07` |
 | [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay standalone MIL application. | Codex implemented and independently reviewed MANTRA commit `28490068`. | [Source](../../../mantra/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py) · [Review](../../evidence/pairblock-reviews/p0-pb-08/2849006816f7dc4e58c94b1f06b76cf4ac42457f.json) | `P0-VR-08` |
-| [`P0-PB-09`](../checklists/mantra-rebuild.md#pairblock-resolution) | Freeze evidence and assess VIPER. | Codex compiles; user approves. | [Source](../../staging/p0-pb-09/tools/freeze_phase0.py) · [Tests](../../staging/p0-pb-09/tests/test_freeze_phase0.py) | `P0-VR-09` |
+| [`P0-PB-09`](../checklists/mantra-rebuild.md#pairblock-resolution) | Freeze evidence and assess VIPER. | Codex implemented and independently reviewed RICO commit `64964135`. | [Source](../../tools/freeze_phase0.py) · [Tests](../../tests/test_freeze_phase0.py) · [Review](../../evidence/pairblock-reviews/p0-pb-09/64964135b66a4706501d9e768527241941397566.json) | `P0-VR-09` |
 | [`P0-PB-10`](../checklists/mantra-rebuild.md#pairblock-resolution) | Validate PairBlock traceability and retain each tested-code or externally reviewed non-code lifecycle transition. | RICO owns the active controller; the user reviews lifecycle changes. | [Active source and tests](#p0-pb-10-accepted-implementation) | `P0-VR-10` |
 
 ### Blocks
@@ -476,9 +476,9 @@ Hopfield-replay, and MIL-replay receipts into one Phase 0 index. It also hashes
 the VIPER usefulness ledger and rejects a confirmed-defect entry that lacks an
 independent check.
 
-**Start here:** review the [evidence freezer](../../staging/p0-pb-09/tools/freeze_phase0.py)
-and its [tests](../../staging/p0-pb-09/tests/test_freeze_phase0.py). This block
-runs in RICO after `P0-PB-07` and `P0-PB-08` close.
+The accepted [evidence freezer](../../tools/freeze_phase0.py) and its
+[tests](../../tests/test_freeze_phase0.py) implement this boundary. The real
+index is written after restoration and both replay runs supply their receipts.
 
 #### Approved Hopfield artifact set
 
@@ -732,7 +732,7 @@ choices.
 | [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Bindings](../../../mantra/src/mantra/rebuild/restoration.py) · [Extraction](../../../mantra/src/mantra/rebuild/archive_restore.py) · [VIPER workflow](../../../mantra/src/mantra/rebuild/viper_restore.py) · [Tests](../../../mantra/src/mantra/rebuild/tests) · [Gate](#p0-pb-06-proposed-code) · [Review receipt](../../evidence/pairblock-reviews/p0-pb-06/75e7ce38dc85918c1f593886f20ed33601daa288.json) |
 | [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py) · [Gate](#p0-pb-07-accepted-implementation) · [Review](../../evidence/pairblock-reviews/p0-pb-07/e10254570214e92ef1785b92794752222387e9a1.json) |
 | [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py) · [Gate](#p0-pb-08-accepted-implementation) · [Review](../../evidence/pairblock-reviews/p0-pb-08/2849006816f7dc4e58c94b1f06b76cf4ac42457f.json) |
-| [`P0-PB-09`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../staging/p0-pb-09/tools/freeze_phase0.py) · [Tests](../../staging/p0-pb-09/tests/test_freeze_phase0.py) · [Gate](#p0-pb-09-proposed-code) |
+| [`P0-PB-09`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../tools/freeze_phase0.py) · [Tests](../../tests/test_freeze_phase0.py) · [Gate](#p0-pb-09-accepted-implementation) · [Review](../../evidence/pairblock-reviews/p0-pb-09/64964135b66a4706501d9e768527241941397566.json) |
 | [`P0-PB-10`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Active implementation](#p0-pb-10-accepted-implementation) |
 
 A pending row links its block definition and checklist state while omitting an implementation body.
@@ -1310,7 +1310,7 @@ python -m pytest \
   src/mantra/rebuild/tests/test_mil_replay.py -q
 ```
 
-### P0-PB-09 implementation record
+### P0-PB-09 accepted implementation
 
 **Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
 
@@ -1320,27 +1320,15 @@ assessment into one digest-bound index.
 **Dependency:** completed `P0-PB-07`, `P0-PB-08`, and the active traceability
 controller from `P0-PB-10`.
 
-##### `P0-PB-09` proposed code
+**Code boundary:** [Phase 0 freezer](../../tools/freeze_phase0.py)
+and [observing tests](../../tests/test_freeze_phase0.py).
 
-**Code boundary:** [Phase 0 freezer](../../staging/p0-pb-09/tools/freeze_phase0.py)
-and [observing tests](../../staging/p0-pb-09/tests/test_freeze_phase0.py).
-
-**Implementation requirements:** read the completed capacity, restoration,
-graph-verification, severed-edge, Hopfield, MIL, and lifecycle receipts; verify
-their declared identities; require one usefulness-ledger record for every
-assessed VIPER check; require independent evidence for each confirmed defect;
-and write one deterministic digest-bound Phase 0 index.
-
-**Focused check:**
-
-```bash
-cd /Users/machina/Developer/ChatGPT/RICO
-python -m ruff check \
-  staging/p0-pb-09/tools/freeze_phase0.py \
-  staging/p0-pb-09/tests/test_freeze_phase0.py && \
-PYTHONPATH="$PWD/staging/p0-pb-09" PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
-python -m pytest staging/p0-pb-09/tests/test_freeze_phase0.py -q
-```
+**Implementation requirements:** index the eleven evidence roles in Section 6
+across their RICO and MANTRA repository owners; bind each file to its repository,
+normalized relative path, byte count, and SHA-256; require one usefulness-ledger
+assessment for every declared assessed check; require independent evidence for
+each confirmed framework or implementation defect; preserve every indexed
+input; and write one deterministic Phase 0 index.
 
 **Gate:** Ruff and the focused tests pass. The real Phase 0 index resolves
 every required receipt and ledger record at its recorded identity.
