@@ -1,0 +1,36 @@
+{
+  "schema_version": "rico.retired_restoration_runs.v1",
+  "workspace": "/Users/machina/Developer/ChatGPT/mantra",
+  "retired_at": "2026-09-12T21:30:00Z",
+  "recovery": "macOS Trash",
+  "runs": [
+    {
+      "run_id": "01M2BJ8AQ5AK2R34KZYXW58C1H",
+      "status": "failed",
+      "reason": "plan preflight failed: plan.relationships",
+      "disk_kibibytes": 24,
+      "attempt_receipt_sha256": "793fc63ee34e0924aefaefaba5f9370f3de8114402029a8b7167c438fcffb29c"
+    },
+    {
+      "run_id": "01M2BJW8BHHFY9J2VXTJMMJN43",
+      "status": "cancelled",
+      "reason": "The control-package download was cancelled after the block excluded the archived Git bundle.",
+      "disk_kibibytes": 1993824,
+      "attempt_receipt_sha256": "3aad6699c016e0a0e2a1a8ab06f3ffac6e80f2a1e996dd1a586ab9d1c2d9c2f9"
+    },
+    {
+      "run_id": "01M2BKE148FYE3YN1T76DS3GFT",
+      "status": "cancelled",
+      "reason": "The Hopfield-only restoration was cancelled after the approved boundary expanded to the independent MIL artifact set.",
+      "disk_kibibytes": 2101624,
+      "attempt_receipt_sha256": "fee6b0ebaab5798dd2282a10b6e71e9957157ef10ecb37db958d4595a7e6ad01"
+    },
+    {
+      "run_id": "01M2BMWVGZYR99EWN03JA3W7BV",
+      "status": "failed",
+      "reason": "The filesystem manifest omitted one required MIL file; binding resolution was repaired to use the authenticated content-object index.",
+      "disk_kibibytes": 53588,
+      "attempt_receipt_sha256": "61f1df8bcc1cffb056513ea9435a627be1484fb111879251f603bd850a6585a0"
+    }
+  ]
+}
