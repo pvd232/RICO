@@ -42,10 +42,11 @@ current status, review points, and completion evidence.
 
 ## Current focus
 
-**Active tranche:** [`P0-PB-05B`](../contracts/mantra-rebuild-phase-0.md#p0-pb-05b-proposed-code)
-fixes the archive-part order. The staged `P0-PB-06` restoration proposal is
-under review and begins after its dependencies close. The resolution table
-owns each PairBlock's current lifecycle state.
+**Active tranche:** [`P0-PB-06`](../contracts/mantra-rebuild-phase-0.md#p0-pb-06-proposed-code)
+restores the approved files and verifies graph $B$. Its child dependencies have
+applied implementations; the aggregate `P0-PB-04` and `P0-PB-05` records close
+before the restoration gate runs. The resolution table owns each PairBlock's
+current lifecycle state.
 
 The resolution table identifies the next action. `Review` requires the user's
 decision. `Approved` authorizes the user to apply the proposal. `Applied`
@@ -78,9 +79,9 @@ owned by `historical_and_shared_experiments` and two owned by
 | `P0-PB-04` | Pending | Drafting | `P0-PB-04A`, `P0-PB-04B` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-04) | [Child blocks](../contracts/mantra-rebuild-phase-0.md#p0-pb-04) |
 | `P0-PB-04A` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-04a/20260912T070755.867088Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-04a) | [Source](../../../mantra/src/mantra/rebuild/restoration.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_restoration.py) |
 | `P0-PB-04B` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-04b/20260912T070756.106235Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-04b) | [Source](../../../mantra/src/mantra/rebuild/restoration.py) · [Base tests](../../../mantra/src/mantra/rebuild/tests/test_restoration.py) · [Resolver tests](../../../mantra/src/mantra/rebuild/tests/test_control_resolution.py) |
-| `P0-PB-05` | Pending | Waiting for `P0-PB-05A`, `P0-PB-05B` | `P0-PB-05A`, `P0-PB-05B` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05) | [Child blocks](../contracts/mantra-rebuild-phase-0.md#p0-pb-05) |
+| `P0-PB-05` | Pending | Drafting | `P0-PB-05A`, `P0-PB-05B` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05) | [Child blocks](../contracts/mantra-rebuild-phase-0.md#p0-pb-05) |
 | `P0-PB-05A` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05a/20260912T163739.537947Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a) | [Source](../../../mantra/src/mantra/rebuild/capacity.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_capacity.py) |
-| `P0-PB-05B` | Passed: `8` tests ([receipt](../../evidence/pairblock-gates/p0-pb-05b/20260912T164907.686145Z.json)) | Review | `P0-PB-04B` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05b) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-05b-proposed-code) · [Source](../../../mantra/staging/p0-pb-05b/src/mantra/rebuild/archive_plan.py) · [Tests](../../../mantra/staging/p0-pb-05b/src/mantra/rebuild/tests/test_archive_plan.py) |
+| `P0-PB-05B` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05b/20260912T192242.315993Z-accept.json)) | Applied | `P0-PB-04B` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05b) | [Source](../../../mantra/src/mantra/rebuild/archive_plan.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_archive_plan.py) |
 | `P0-PB-05C` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05c/20260912T183000.036271Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05c) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-05c-proposed-code) · [Observer](../../../viper/src/viper/_workers/file_access.py) · [Tests](../../../viper/tests/test_stage_file_access.py) |
 | `P0-PB-06` | Pending | Waiting for `P0-PB-04`, `P0-PB-05`, `P0-PB-05C` | `P0-PB-04`, `P0-PB-05`, `P0-PB-05C` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-06) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-06-proposed-code) · [Extraction](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/archive_restore.py) · [VIPER](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/viper_restore.py) · [Tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_archive_restore.py) |
 | `P0-PB-07` | Pending | Waiting for `P0-PB-06` | `P0-PB-06` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-07) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-07-proposed-code) · [Source](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/tests/test_hopfield_replay.py) |

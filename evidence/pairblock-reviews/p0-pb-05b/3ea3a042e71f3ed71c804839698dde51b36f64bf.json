@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-05B",
+  "requirement_ids": [
+    "P0-REQ-03"
+  ],
+  "repository": "https://github.com/pvd232/MANTRA.git",
+  "base_commit": "8b3a0d4860b03f62ebbd20f0e068d43ab0eedac2",
+  "result_commit": "3ea3a042e71f3ed71c804839698dde51b36f64bf",
+  "owned_paths": [
+    "src/mantra/rebuild/archive_plan.py",
+    "src/mantra/rebuild/tests/test_archive_plan.py"
+  ],
+  "diff_sha256": "4c47e88c811130553d3f08cac67a8135a814c97cf08b3a5cec9144aaa51e6306",
+  "invariants": [
+    "Each selected archive contributes every one-based part exactly once and in part-number order.",
+    "Each ArchivePart retains the repository, revision, path, byte count, and SHA-256 authenticated by the signed archive index.",
+    "ArchivePlan reports the selected part count, largest part, download upper bound, and restored-file total consumed by the capacity check."
+  ],
+  "findings": [
+    {
+      "severity": "P2",
+      "status": "resolved",
+      "summary": "The Applied lifecycle transition retained staging links in the checklist row.",
+      "repair": "Point the P0-PB-05B checklist and contract implementation records at the active MANTRA source and tests.",
+      "observer": "tests/pairblock_status/test_pairblock_controller.py::test_applied_blocks_do_not_link_staging_proposals"
+    }
+  ],
+  "mechanical_evidence": {
+    "command": "PYTHONPATH=$PWD/src PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest --rootdir=$PWD/src --confcutdir=$PWD/src src/mantra/rebuild/tests/test_archive_plan.py -q",
+    "result": "8 passed",
+    "ruff": "passed",
+    "git_diff_check": "passed",
+    "upstream_match": "passed"
+  },
+  "exclusions": [
+    "The P0-PB-06 run will evaluate the authenticated 34-part archive index and retain its measured totals."
+  ],
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-12T19:22:00Z"
+}
