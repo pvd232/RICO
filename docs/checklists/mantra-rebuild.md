@@ -1,9 +1,44 @@
 # Mantra rebuild master checklist
 
-This file is the execution authority for the Hopfield rebuild, the standalone
-MIL rebuild, and the first biologically grounded graph encoder. The owning
+This file is the execution authority for the Hopfield rebuild, the MIL rebuild,
+and the first biologically grounded graph encoder. The owning
 contracts define what each model must do. This checklist owns work order,
 current status, review points, and completion evidence.
+
+## Table of contents
+
+- [Current focus](#current-focus)
+- [PairBlock resolution](#pairblock-resolution)
+- [Terminal outcome](#terminal-outcome)
+- [Checklist semantics](#checklist-semantics)
+- [Governing sources](#governing-sources)
+- [Verified baseline](#verified-baseline)
+- [Phase 0 requirement assignments](#phase-0-requirement-assignments)
+- [Phase 0A: MANTRA workspace and environment](#phase-0a-verify-the-mantra-workspace-and-environment)
+- [Phase 0B: replay graphs](#phase-0b-freeze-the-two-independent-replay-graphs)
+- [Phase 0C: restoration planning](#phase-0c-implement-restoration-bindings-and-capacity-planning)
+- [Phase 0D: restoration and graph B](#phase-0d-restore-files-and-verify-graph-b-in-viper)
+- [Phase 0E: parity replays](#phase-0e-replay-hopfield-and-mil)
+- [Phase 0F: evidence freeze](#phase-0f-freeze-evidence-and-assess-viper)
+- [Phase 1: Hopfield](#phase-1-rebuild-hopfield)
+  - [1A: contract](#phase-1a-approve-the-hopfield-reconstruction-contract)
+  - [1B: preprocessing](#phase-1b-rebuild-preprocessing-and-training-inputs)
+  - [1C: encoder and readout](#phase-1c-rebuild-the-encoder-and-raw-gene-readout)
+- [Phase 2: MIL](#phase-2-rebuild-mil)
+  - [2A: contract](#phase-2a-approve-the-mil-reconstruction-contract)
+  - [2B: teacher and student](#phase-2b-rebuild-teacher-and-student-training)
+  - [2C: retrieval and correction](#phase-2c-rebuild-retrieval-and-final-correction)
+- [Phase 3: graph identities and baselines](#phase-3-freeze-graph-encoder-identities-and-baselines)
+- [Phase 4: topology and features](#phase-4-select-topology-and-build-v1-features)
+  - [4A: topology diagnostics](#phase-4a-run-topology-diagnostics)
+  - [4B: V1 features](#phase-4b-build-the-v1-feature-pipeline)
+- [Phase 5: V1 graph encoder](#phase-5-train-and-evaluate-the-v1-graph-encoder)
+  - [5A: first encoder](#phase-5a-train-the-first-encoder)
+  - [5B: graph construction](#phase-5b-run-the-graph-construction-study)
+  - [5C: V1 acceptance](#phase-5c-apply-the-v1-acceptance-gate)
+- [Owner actions](#owner-actions)
+- [Deferred scope](#deferred-scope)
+- [Sources](#sources)
 
 ## Current focus
 
@@ -12,9 +47,9 @@ the implementation gate because the MIL artifact table is incomplete.
 
 | Actor | Next action | Result |
 |---|---|---|
-| Codex | Draft `P0-PB-04B`: read the signed restoration controls, resolve each approved MANTRA path to one content-addressed archive member, and test absent and duplicate mappings. | Complete proposed source and tests in the Phase 0 contract. |
-| User | Review the proposed `P0-PB-04A` and `P0-PB-05A` blocks already in the Phase 0 contract. | Approved blocks or named corrections. |
-| Codex and user | Code-review each approved block; the user implements it in MANTRA; Codex reviews the applied diff and gate output. | Accepted MANTRA implementation with retained evidence. |
+| Codex | Draft [`P0-PB-04B`](../contracts/mantra-rebuild-phase-0.md#p0-pb-04b-declaration). | Complete proposed source and tests in the Phase 0 contract. |
+| User | Review [`P0-PB-04A`](../contracts/mantra-rebuild-phase-0.md#p0-pb-04a-declaration) and [`P0-PB-05A`](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a-declaration). | Approved blocks or named corrections. |
+| Codex and user | Review each approved block; the user implements it in MANTRA; Codex reviews the applied diff and gate output. | Accepted MANTRA implementation with retained evidence. |
 
 `P0-PB-04B` and the two reviews can proceed in parallel. `P0-PB-05B` starts
 after `P0-PB-04B` resolves the archive chunks required by the approved paths.
@@ -33,6 +68,15 @@ and SHA-256. The reader must resolve that link inside the historical MANTRA
 root and reject links that escape it. Archive payload downloads remain at
 zero.
 
+## PairBlock resolution
+
+| PairBlock | Resolution status | Contract declaration | Proposed code |
+|---|---|---|---|
+| <a id="status-p0-pb-04a"></a>`P0-PB-04A` | Awaiting user review | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-04a-declaration) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-04a-proposed-code) |
+| <a id="status-p0-pb-04b"></a>`P0-PB-04B` | Codex drafting | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-04b-declaration) | Pending |
+| <a id="status-p0-pb-05a"></a>`P0-PB-05A` | Awaiting user review | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a-declaration) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a-proposed-code) |
+| <a id="status-p0-pb-05b"></a>`P0-PB-05B` | Waiting for `P0-PB-04B` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-05b-declaration) | Pending |
+
 ## Terminal outcome
 
 The program closes when this path passes:
@@ -41,15 +85,13 @@ The program closes when this path passes:
 restore every required MANTRA input and record graph B in VIPER
 -> reproduce Hopfield PearsonDelta 0.5861640938949398
 -> rebuild Hopfield preprocessing, training, retrieval, and correction
--> reproduce standalone MIL PearsonDelta 0.6025499488874759
--> rebuild standalone MIL training, retrieval, and correction
+-> reproduce MIL PearsonDelta 0.6025499488874759
+-> rebuild MIL training, retrieval, and correction
 -> build and train the V1 biologically grounded graph encoder
 -> pass the V1 acceptance criteria and reproduce every result from VIPER records
 ```
 
-Hopfield and MIL are independent models. The checklist places MIL after
-Hopfield because the user selected that execution order. The MIL input graph
-excludes every Hopfield output.
+The MIL input graph excludes every Hopfield output.
 
 ## Checklist semantics
 
@@ -68,7 +110,7 @@ MANTRA. The RICO checklist cites their commit IDs and gate outputs.
 |---|---|---|---|
 | [Phase 0 contract](../contracts/mantra-rebuild-phase-0.md) | In progress | Phase 0 | `P0-REQ-01` through `P0-REQ-09` and every mapped PairBlock close. |
 | Hopfield reconstruction contract | Pending | Phase 1A | User-approved contract with exact intermediate and final parity gates. |
-| Standalone MIL reconstruction contract | Pending | Phase 2A | User-approved contract with exact intermediate and final parity gates. |
+| MIL reconstruction contract | Pending | Phase 2A | User-approved contract with exact intermediate and final parity gates. |
 | Graph encoder contract | Design complete; contract pending | Phase 3A | User-approved contract covering identity, topology, features, training, evaluation, and VIPER evidence. |
 
 The checklist uses the Phase 0 contract stored in RICO commit `f54e35b` with
@@ -84,7 +126,7 @@ SHA-256
       3.13.15, imports `viper-provenance` 0.1.0a3, and resolves the MANTRA Git
       root as the VIPER workspace.
 - [x] The Phase 0 contract identifies the selected Hopfield result as
-      `0.5861640938949398` and the standalone MIL result as
+      `0.5861640938949398` and the MIL result as
       `0.6025499488874759` for v1952 seed 123460 `without_control`.
 
 ## Phase 0 requirement assignments
@@ -124,7 +166,7 @@ The environment receipt enters VIPER during Phase 0D. That registration closes
       encoder to the selected raw-gene prediction.
       <!-- pair-block: P0-PB-02 -->
       <!-- pair-block-contract: P0-PB-02 contract=docs/contracts/mantra-rebuild-phase-0.md -->
-- [ ] Approve the complete standalone MIL path for v1952 seed 123460
+- [ ] Approve the complete MIL path for v1952 seed 123460
       `without_control`, excluding every Hopfield output from its inputs.
       <!-- pair-block: P0-PB-03 -->
       <!-- pair-block-contract: P0-PB-03 contract=docs/contracts/mantra-rebuild-phase-0.md -->
@@ -199,18 +241,15 @@ after the full Phase 0 artifact set is known.
 **Commit boundary:** Commit the MANTRA restoration code and checked-in receipts
 after the focused tests and graph rejection test pass.
 
-## Phase 0E. Replay Hopfield and standalone MIL
+## Phase 0E. Replay Hopfield and MIL
 
 **Depends on:** Phase 0D
-
-The two replay jobs may run in parallel. Each job reads its own inputs and
-produces its own predictions.
 
 - [ ] Replay the selected Hopfield raw-gene readout and compare the generated
       predictions and score with parity graph $Q_H$.
       <!-- pair-block: P0-PB-07 -->
       <!-- pair-block-contract: P0-PB-07 contract=docs/contracts/mantra-rebuild-phase-0.md -->
-- [ ] Replay standalone v1952 seed 123460 `without_control` on the historical
+- [ ] Replay v1952 seed 123460 `without_control` on the historical
       L4-class environment and compare its output with the approved MIL parity
       references.
       <!-- pair-block: P0-PB-08 -->
@@ -278,11 +317,11 @@ training begins.
 **Gate:** The rebuilt Hopfield path passes every intermediate tolerance and the
 final `PearsonDelta` gate.
 
-## Phase 2. Rebuild standalone MIL
+## Phase 2. Rebuild MIL
 
-**Depends on:** Phase 1C by chosen work order only
+**Depends on:** Phase 1C
 
-### Phase 2A. Approve the standalone MIL reconstruction contract
+### Phase 2A. Approve the MIL reconstruction contract
 
 - [ ] Define the teacher-bag, conditioning, teacher, donor-embedding,
       single-query student, covariance-shrinkage, teacher-neighbor smoothing,
@@ -292,7 +331,7 @@ final `PearsonDelta` gate.
       dormant `proto_count: 11` value from the active architecture.
 - [ ] Map every MIL PairBlock into this checklist before implementation.
 
-**Gate:** The user approves the standalone MIL contract with exact intermediate
+**Gate:** The user approves the MIL contract with exact intermediate
 artifacts, tolerances, and tests.
 
 ### Phase 2B. Rebuild teacher and student training
@@ -310,7 +349,7 @@ artifacts, tolerances, and tests.
       residual correction, reference shift, and per-gene calibration.
 - [ ] Compare each intermediate array before evaluating the final prediction.
 
-**Gate:** The standalone rebuild reproduces `PearsonDelta`
+**Gate:** The MIL rebuild reproduces `PearsonDelta`
 `0.6025499488874759` and all approved prediction-array identities or numerical
 tolerances.
 
@@ -398,8 +437,8 @@ specification passes.
 
 | Owner action | First consumer | Result unlocked |
 |---|---|---|
-| Review `P0-PB-04A` and `P0-PB-05A`. | Phase 0C | MANTRA implementation of the first two proposed blocks. |
-| Review `P0-PB-04B` after Codex drafts it. | Phase 0C | Signed-control resolution and complete binding records. |
+| Review [`P0-PB-04A`](../contracts/mantra-rebuild-phase-0.md#p0-pb-04a-declaration) and [`P0-PB-05A`](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a-declaration). | Phase 0C | MANTRA implementation of the first two proposed blocks. |
+| Review [`P0-PB-04B`](../contracts/mantra-rebuild-phase-0.md#p0-pb-04b-declaration) after Codex drafts it. | Phase 0C | Signed-control resolution and complete binding records. |
 | Approve cache deletion timing and the archive download plan. | Phase 0C | First archive download. |
 | Provide or authorize the L4-class execution environment if local replay fails the historical gate. | Phase 0E | Acceptance-level MIL replay and later training runs. |
 | Approve each reconstruction contract and its PairBlocks. | Phases 1A, 2A, and 3 | Implementation of each model generation. |

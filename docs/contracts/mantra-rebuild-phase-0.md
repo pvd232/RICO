@@ -10,6 +10,21 @@ This contract governs artifact discovery, capacity planning, restoration, and pr
 
 The [Mantra rebuild master checklist](../checklists/mantra-rebuild.md) owns execution order, current status, and the next action. This contract owns Phase 0 requirements, PairBlock definitions, source proposals, and gates.
 
+## Table of contents
+
+- [Status](#1-status)
+- [Required claim](#2-required-claim)
+- [Current gap](#3-current-gap)
+- [Restoration and storage contract](#4-restoration-and-storage-contract)
+- [Phase 0 dependency model](#5-phase-0-dependency-model)
+- [Persisted evidence](#6-persisted-evidence)
+- [Verification](#7-verification)
+- [Acceptance boundary](#8-acceptance-boundary)
+- [PairBlock order](#9-pairblock-order)
+  - [Phase 0 ownership record](#phase-0-ownership-record)
+- [Proposed implementation](#10-proposed-implementation)
+- [Sources](#11-sources)
+
 | ID | Implementation obligation |
 |---|---|
 | `P0-REQ-01` | Define $B$ for the selected Hopfield and MIL outputs. |
@@ -19,7 +34,7 @@ The [Mantra rebuild master checklist](../checklists/mantra-rebuild.md) owns exec
 | `P0-REQ-05` | Run restoration from the MANTRA workspace with `viper-provenance` installed in MANTRA's `venv`. |
 | `P0-REQ-06` | Record and verify $B$ in the VIPER provenance graph. |
 | `P0-REQ-07` | Replay the historical Hopfield raw-gene readout from its saved encoder and restored inputs. |
-| `P0-REQ-08` | Replay the standalone v1952 MIL seed-123460 `without_control` result from restored inputs. |
+| `P0-REQ-08` | Replay the v1952 MIL seed-123460 `without_control` result from restored inputs. |
 | `P0-REQ-09` | Maintain an independent usefulness ledger for VIPER checks, failures, costs, and confirmed findings. |
 
 ## 2. Required claim
@@ -189,7 +204,7 @@ The dependency graph, restoration bindings, environment receipt, capacity receip
 | `P0-VR-05` | The active Conda environment is named `mantra`, uses Python 3.13, and imports its installed `viper-provenance` package. |
 | `P0-VR-06` | The VIPER graph contains every member of $B$, and severing one required node or edge makes verification fail. |
 | `P0-VR-07` | The Hopfield replay reproduces the selected raw-gene readout score `0.5861640938949398` within the approved tolerance and retains its produced predictions. |
-| `P0-VR-08` | The standalone MIL replay reproduces the v1952 seed-123460 `without_control` hold PearsonDelta `0.6025499488874759` and its declared prediction-array hashes. |
+| `P0-VR-08` | The MIL replay reproduces the v1952 seed-123460 `without_control` hold PearsonDelta `0.6025499488874759` and its declared prediction-array hashes. |
 | `P0-VR-09` | Every assessed VIPER check has a usefulness-ledger row and independent evidence for any confirmed defect. |
 
 ## 8. Acceptance boundary
@@ -213,7 +228,7 @@ Phase 0 fails when $B$ contains an unnecessary node, omits a required node or ed
 | `P0-PB-05` | Capacity receipt and download plan | `P0-VR-03`. |
 | `P0-PB-06` | Verified restoration and graph-completeness rejection test | `P0-VR-04` and `P0-VR-06`. |
 | `P0-PB-07` | Hopfield VIPER adapter, focused test, and historical raw-gene readout replay | `P0-VR-07`. |
-| `P0-PB-08` | Standalone v1952 MIL seed-123460 `without_control` replay | `P0-VR-08`. |
+| `P0-PB-08` | v1952 MIL seed-123460 `without_control` replay | `P0-VR-08`. |
 | `P0-PB-09` | Phase 0 evidence freeze and usefulness assessment | `P0-VR-09` and user approval. |
 
 ### Approved MANTRA integration boundary
@@ -274,45 +289,29 @@ python -c 'from pathlib import Path; from viper.repository import resolve_root; 
 
 ### Phase 0 ownership record
 
-The dependency order is:
+Resolution status lives in the [master checklist](../checklists/mantra-rebuild.md#pairblock-resolution).
 
-```text
-P0-PB-01 -> (P0-PB-02 and P0-PB-03) -> (P0-PB-04 and P0-PB-05) -> P0-PB-06
-```
-
-| Block | Codex owns | User owns | Deliverable | Gate |
+| Block | Work | Review or implementation owner | Proposed code | Gate |
 |---|---|---|---|---|
-| `P0-PB-01` | Review the applied marker and environment output. | Commit only `viper.toml` in MANTRA. | Git identity for the workspace marker. | The MANTRA commit contains `viper.toml`; the unrelated `requirements.txt` and existing changes remain outside that commit. |
-| `P0-PB-02` | Trace every file read and producer executed by the selected Hopfield replay. Classify each file as present, restorable, produced, or parity-only. | Review necessity and reject every node absent from the replay's reads. | Approved Hopfield portion of $B$. | Every file and program reaches the selected Hopfield prediction; removing one required member breaks the path. |
-| `P0-PB-03` | Trace the standalone v1952 MIL seed-123460 `without_control` result through its specification, training, scorer, and files. | Review necessity and confirm that the MIL graph contains no Hopfield output. | Approved MIL portion of $B$. | Every file and program reaches the selected MIL prediction; no Hopfield output appears in the MIL graph. |
-| `P0-PB-04` | Draft complete `RestorationBinding` source, tests, and one binding record for each missing file in the approved $B$. | Review the code blocks, then implement the approved files. | Executable bindings for the missing Hopfield and MIL files. | Each missing file has one binding; altered destination, archive member, byte count, or SHA-256 fails validation. |
-| `P0-PB-05` | Read the approved archive metadata and calculate $C$, $D$, $V$, $T$, $H$, and $R_{max}$. | Review the retention assumptions and approve the download boundary. | Capacity receipt and ordered download plan. | Measured free space is at least $R_{max}$. |
-| `P0-PB-06` | Draft and code-review the restoration stages and graph-completeness test. Inspect each resulting receipt. | Implement the approved code and run the restoration command. | Restored canonical files and verified graph $B$. | Every restored file matches its binding, graph verification passes, and the severed-edge case fails. |
-
-`P0-PB-02` and `P0-PB-03` run concurrently after the MANTRA marker commit. `P0-PB-04` and `P0-PB-05` run concurrently after both graph portions are approved. The user reviews each block before its output becomes an input to the next dependency layer.
-
-For each PairBlock, Codex drafts the proposed contract or source, the user reviews it, Codex performs the agreed code review, the user implements approved code, and Codex reviews the applied diff and focused gate. A PairBlock closes only when the implementation, test result, Git evidence, and VIPER evidence agree.
+| [`P0-PB-01`](../checklists/mantra-rebuild.md#phase-0a-verify-the-mantra-workspace-and-environment) | Mark and verify the MANTRA workspace. | Codex reviews; user implements. | [Declaration](#p0-pb-01-workspace-marker-and-environment) | `P0-VR-05` |
+| [`P0-PB-02`](../checklists/mantra-rebuild.md#phase-0b-freeze-the-two-independent-replay-graphs) | Trace the Hopfield replay. | Codex traces; user approves. | [Work description](#replay-traces-awaiting-approval) | Hopfield portion of `P0-VR-01` |
+| [`P0-PB-03`](../checklists/mantra-rebuild.md#phase-0b-freeze-the-two-independent-replay-graphs) | Trace the MIL replay. | Codex traces; user approves. | [Work description](#replay-traces-awaiting-approval) | MIL portion of `P0-VR-01` |
+| [`P0-PB-04`](../checklists/mantra-rebuild.md#phase-0c-implement-restoration-bindings-and-capacity-planning) | Produce every restoration binding. | User implements approved code; Codex reviews it. | `P0-PB-04A` and `P0-PB-04B` | `P0-VR-02` |
+| <a id="p0-pb-04a-declaration"></a>[`P0-PB-04A`](../checklists/mantra-rebuild.md#status-p0-pb-04a) | Define and validate `RestorationBinding`. | User reviews and implements. | [Source and tests](#p0-pb-04a-proposed-code) | Reject malformed bindings and incomplete coverage. |
+| <a id="p0-pb-04b-declaration"></a>[`P0-PB-04B`](../checklists/mantra-rebuild.md#status-p0-pb-04b) | Resolve a MANTRA path through signed controls to one archive member. | Codex proposes; user reviews and implements. | Pending proposal | Resolve one known path; reject absent or duplicate paths. |
+| [`P0-PB-05`](../checklists/mantra-rebuild.md#phase-0c-implement-restoration-bindings-and-capacity-planning) | Prove capacity and produce the download plan. | User implements approved code; Codex reviews it. | `P0-PB-05A` and `P0-PB-05B` | `P0-VR-03` |
+| <a id="p0-pb-05a-declaration"></a>[`P0-PB-05A`](../checklists/mantra-rebuild.md#status-p0-pb-05a) | Calculate capacity and write its receipt. | User reviews and implements. | [Source and tests](#p0-pb-05a-proposed-code) | Report every term in $R_{max}$ and reject insufficient space. |
+| <a id="p0-pb-05b-declaration"></a>[`P0-PB-05B`](../checklists/mantra-rebuild.md#status-p0-pb-05b) | Order the required archive chunks. | Codex proposes; user approves cache timing. | Pending proposal | Identify every chunk by revision, byte count, and digest. |
+| [`P0-PB-06`](../checklists/mantra-rebuild.md#phase-0d-restore-files-and-verify-graph-b-in-viper) | Restore files and verify graph $B$. | User runs approved code; Codex reviews evidence. | Pending proposal | `P0-VR-04` and `P0-VR-06` |
+| [`P0-PB-07`](../checklists/mantra-rebuild.md#phase-0e-replay-hopfield-and-mil) | Replay Hopfield. | User runs approved code; Codex reviews evidence. | Pending proposal | `P0-VR-07` |
+| [`P0-PB-08`](../checklists/mantra-rebuild.md#phase-0e-replay-hopfield-and-mil) | Replay MIL. | User runs approved code; Codex reviews evidence. | Pending proposal | `P0-VR-08` |
+| [`P0-PB-09`](../checklists/mantra-rebuild.md#phase-0f-freeze-evidence-and-assess-viper) | Freeze evidence and assess VIPER. | Codex compiles; user approves. | Pending proposal | `P0-VR-09` |
 
 ### Replay traces awaiting approval
 
-`P0-PB-02` traced the selected Hopfield computation. It reads eleven data files and one saved encoder. Five data files are present and hash-match; six data files and the encoder are absent and restorable. The adapter will call the selected helper path with `memory=("fit",)`, `topk=1600`, and `temperature=0.055`. It will write a new prediction and receipt. It will not execute the historical ten-encoder, 42-readout-per-encoder sweep or overwrite the historical report. The historical prediction and report remain in $Q$.
+`P0-PB-02` traced the selected Hopfield computation. It reads eleven data files and one saved encoder. Five data files are present and hash-match; six data files and the encoder are absent and restorable. The adapter will call the selected helper path with `memory=("fit",)`, `topk=1600`, and `temperature=0.055`. It will write a new prediction and receipt. Its boundary excludes the historical ten-encoder, 42-readout-per-encoder sweep. The historical prediction and report remain unchanged in $Q$.
 
-The first `P0-PB-03` trace followed the wrong result. The v1953 application wraps Direct-MIL around a projected Hopfield prediction and is excluded from the standalone MIL rebuild. The replacement target is the v1952 seed-123460 `without_control` result recorded in `experiments/v1952_direct_mil_control_term_ablation/diagnostics/CONTROL_TERM_MULTISEED_RESULTS.json`. Its hold PearsonDelta is `0.6025499488874759`.
-
-The v1952 scorer is standalone: it reads the saved single-query MIL prototype, saved teacher representations, biological descriptor files, coefficient targets, and gene labels. It does not read a Hopfield prediction. The saved scorer explicitly requires CUDA, so CPU evaluation of stored predictions and a GPU replay are separate gates.
-
-### Phase 0 implementation blocks
-
-The next work is divided into four reviewable code blocks:
-
-| Block | Complete source proposed by Codex | User action after review | Focused gate |
-|---|---|---|---|
-| `P0-PB-04A` | `RestorationBinding` value type and validation tests | Implement the approved source and tests. | Reject an absolute destination, `..` traversal, an unknown archive, a malformed digest, a negative byte count, and an incomplete source identity. |
-| `P0-PB-04B` | Signed-control reader that maps a MANTRA path to its content object and archive member | Implement the approved source and tests. | A known path resolves to one archive member; an absent or duplicate path fails. |
-| `P0-PB-05A` | Capacity calculator and receipt writer | Implement the approved source and tests. | The receipt reports measured free space and each term in $R_{max}$; lowering free space below $R_{max}$ fails. |
-| `P0-PB-05B` | Ordered download plan for only the archive chunks needed by approved bindings | Review and approve cache deletion timing before any archive download. | The plan fits local capacity and every planned chunk is identified by its own immutable revision, byte count, and digest. |
-
-`P0-PB-04A`, `P0-PB-04B`, and `P0-PB-05A` can be implemented in parallel after the two replay traces are approved. `P0-PB-05B` depends on the path-to-member results from `P0-PB-04B`.
+`P0-PB-03` targets the v1952 seed-123460 `without_control` result in `experiments/v1952_direct_mil_control_term_ablation/diagnostics/CONTROL_TERM_MULTISEED_RESULTS.json`. Its hold PearsonDelta is `0.6025499488874759`. The scorer reads the saved single-query MIL prototype, saved teacher representations, biological descriptor files, coefficient targets, and gene labels. Its input set excludes Hopfield predictions. The runner's CUDA guard makes the historical GPU replay and CPU evaluation of stored predictions separate gates.
 
 ### Approved Hopfield artifact set
 
@@ -346,7 +345,7 @@ The Hopfield parity set $Q_H$ is:
 | `experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/diagnostics/RAW_GENE_READOUT_TUNING_FIT_ONLY_RESULTS.json` | 656,400 | `cbb3d786ff85ce15eed5e16335cf7d9a28c7ad3f076b6f019c58e4a16c140a10` | Present |
 | `experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/out/raw_gene_readout_tuning_fit_only/best/RAW_GENE_PREDICTIONS.npz` | 38,397,104 | `d7180c4669a11b0b2fb184814aafb48ebafe75b02e4bd07998c337aa64dc59b7` | Restore |
 
-The selected Hopfield source closure contains the following seventeen present, tracked Python files. No Hopfield Python source requires restoration.
+The selected Hopfield source closure contains the following seventeen present, tracked Python files. Its source-restoration set is empty.
 
 ```text
 experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/scripts/run_raw_gene_readout_tuning.py
@@ -381,19 +380,27 @@ if device.type != "cuda":
     raise RuntimeError("CUDA is required")
 ```
 
-That guard establishes the historical execution policy, not an intrinsic tensor-operation requirement. The active training code selects fused optimizers only on CUDA:
+That guard establishes the historical execution policy. The active training code selects fused optimizers only on CUDA:
 
 ```python
 fused=(device.type == "cuda" and bool(config.training.optimizer_fused_on_cuda))
 ```
 
-No unconditional `.cuda()` call has been found in the active teacher, student, or proposal path. Phase 0 therefore separates two claims: an L4-class GPU is required for acceptance-level historical replay, while a later CPU portability probe may remove only the guard and measure whether one seed completes within local memory. A CPU result cannot establish byte or numerical parity with the recorded L4 run.
+The inspected teacher, student, and proposal paths contain zero unconditional `.cuda()` calls. Phase 0 therefore separates two claims: an L4-class GPU is required for acceptance-level historical replay, while a later CPU portability probe may remove only the guard and measure whether one seed completes within local memory. The recorded L4 run remains the parity reference.
 
-### Proposed `P0-PB-04A` source
+## 10. Proposed implementation
 
-**Review state:** Awaiting user review. Do not implement until approved.
+This section contains proposed MANTRA code. The [Phase 0 ownership record](#phase-0-ownership-record) records each block's scope, owner, code link, and gate. The master checklist records resolution status.
 
-The focused tests require `pytest`, which is not currently installed in the Conda environment `mantra`:
+### `P0-PB-04A` proposed code
+
+**Declaration:** [`P0-PB-04A`](#p0-pb-04a-declaration)
+
+**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
+
+**Code boundary:** The three complete files below form the review proposal. MANTRA implementation follows approval.
+
+Install `pytest` in the Conda environment `mantra` before running the focused tests:
 
 ```bash
 conda activate mantra
@@ -766,9 +773,13 @@ PYTHONPATH=src python -m pytest \
   src/mantra/rebuild/tests/test_restoration.py -q
 ```
 
-### Proposed `P0-PB-05A` source
+### `P0-PB-05A` proposed code
 
-**Review state:** Awaiting user review. It can be implemented in parallel with `P0-PB-04A`.
+**Declaration:** [`P0-PB-05A`](#p0-pb-05a-declaration)
+
+**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
+
+**Code boundary:** The two complete files below form the review proposal. MANTRA implementation follows approval.
 
 **File: `src/mantra/rebuild/capacity.py`**
 
@@ -939,7 +950,7 @@ def test_receipt_exposes_every_contract_term() -> None:
 PYTHONPATH=src python -m pytest src/mantra/rebuild/tests -q
 ```
 
-## 10. Sources
+## 11. Sources
 
 - MANTRA: `reinstantiation/README.md`
 - MANTRA: `reinstantiation/REINSTANTIATION_ROOT_RELEASE.json`
