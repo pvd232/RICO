@@ -312,6 +312,631 @@ The next work is divided into four reviewable code blocks:
 
 `P0-PB-04A`, `P0-PB-04B`, and `P0-PB-05A` can be implemented in parallel after the two replay traces are approved. `P0-PB-05B` depends on the path-to-member results from `P0-PB-04B`.
 
+### Approved Hopfield artifact set
+
+The eleven data files below are relative to `experiments/v1938_sota_clean_repro/inputs/`.
+
+| Relative path | Bytes | SHA-256 | Local state |
+|---|---:|---|---|
+| `core83/features.npz` | 652,627 | `a5830b935877fa9cfdbe42d294ebf036a362a20a62958d2a8b8c17e193389f8c` | Present |
+| `response40/features.npz` | 320,705 | `f3b4f9e5c828b383821323c43246121fe166fbf62562b9753e9b9d679348f441` | Present |
+| `family64/features.npz` | 506,130 | `766eb05aae7ab17556fb737524bc95659399d7a82f08d6f7baaf99045ebb8f57` | Present |
+| `gene_shift/features.npz` | 34,605,824 | `744ae998b0158c672a0bc8adcbe7a417cf8a99b0915d71a713be6a116529a6f7` | Present |
+| `response_programs/response_program_blocks_16.json` | 23,092 | `67ec90e5a39b008067f6ac85958053b6c67fca029c00f2be6c724378e3b78fff` | Present |
+| `coefficient_targets/fit_tune_ctrl19_matched_response_coefficients.npz` | 9,470,125 | `387b195778ce7c5a5b33024b3a841fdb9a294bc44ff35ab19d32d8b07da1e5fd` | Restore |
+| `gene_delta_labels/fit_tune_ctrl19_matched_log1p_cp10k_gene_deltas.npz` | 64,472,752 | `4df4d1fd20e26f43a19c2108d6432a8597aecaee99838af09eed91f178cde5b3` | Restore |
+| `gene_delta_labels/hold_global_control_log1p_cp10k_gene_deltas.npz` | 5,087,281 | `30ab233c4563a27afbb8680ca44ead200db1066da1cb6a64c0f7496e8adf1585` | Restore |
+| `response_programs/response_program_block_contract_16.npz` | 4,504 | `a7e551e8e2f5a637ba5c8801d50b9109007e225536a213bd3bca2894c6331166` | Restore |
+| `response_programs/response_program_rotation_210d.npz` | 4,102,000 | `85cf1d7dff2ece81b9cbe7d9bb2b9bcb2aaed3dba48d948a4234a9f275301364` | Restore |
+| `response_programs/response_program_similarity_graph.npz` | 609,109 | `a9680ddf0082a1072328e0329bb8e0c63b251375c3d22ec7ff4b342605f9ec10` | Restore |
+
+The selected encoder is:
+
+`experiments/v1938_sota_clean_repro/runs/clean_shared_mil_proto_hyperparam_sweep_20260714T063000Z/base_step01/base_lr2e4/candidates/mixed_src_snk_ripple_raw_pen1_base_lr2e4/checkpoints/weights/BASE_STEP01_MODEL_WEIGHTS.npz`
+
+Its byte count is `1,084,512`; its SHA-256 is `2433527c3b23b66a16cedc0f7bc43867e4298af4d7a0733b202a8018ba876610`; it requires restoration.
+
+The Hopfield parity set $Q_H$ is:
+
+| Artifact path | Bytes | SHA-256 | Local state |
+|---|---:|---|---|
+| `experiments/v1938_sota_clean_repro/runs/clean_shared_mil_proto_hyperparam_sweep_20260714T063000Z/base_step01/base_lr2e4/candidates/mixed_src_snk_ripple_raw_pen1_base_lr2e4/diagnostics/BASE_STEP01_RESULT_REPORT.json` | 6,268 | `8e690f5e1ba18846e34cccec3f48a84d4adf013d7ef64731b13ff06cca9c4529` | Present |
+| `experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/diagnostics/RAW_GENE_READOUT_TUNING_FIT_ONLY_RESULTS.json` | 656,400 | `cbb3d786ff85ce15eed5e16335cf7d9a28c7ad3f076b6f019c58e4a16c140a10` | Present |
+| `experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/out/raw_gene_readout_tuning_fit_only/best/RAW_GENE_PREDICTIONS.npz` | 38,397,104 | `d7180c4669a11b0b2fb184814aafb48ebafe75b02e4bd07998c337aa64dc59b7` | Restore |
+
+The selected Hopfield source closure contains the following seventeen present, tracked Python files. No Hopfield Python source requires restoration.
+
+```text
+experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/scripts/run_raw_gene_readout_tuning.py
+experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/scripts/run_raw_gene_readout_tuning_fit_only.py
+experiments/v1938_sota_clean_repro/src/runtime/config.py
+experiments/v1938_sota_clean_repro/src/runtime/layout.py
+experiments/v1938_sota_clean_repro/src/shared/io.py
+experiments/v1938_sota_clean_repro/src/shared/logging.py
+experiments/v1938_sota_clean_repro/src/shared/metrics.py
+experiments/v1938_sota_clean_repro/src/shared/determinism.py
+experiments/v1938_sota_clean_repro/src/shared/splits.py
+experiments/v1938_sota_clean_repro/src/shared/normalization.py
+experiments/v1938_sota_clean_repro/src/step01/hopfield/encoder.py
+experiments/v1938_sota_clean_repro/src/step01/hopfield/config.py
+experiments/v1938_sota_clean_repro/src/step01/hopfield/contract.py
+experiments/v1938_sota_clean_repro/src/step01/hopfield/inputs.py
+experiments/v1938_sota_clean_repro/src/step01/hopfield/transforms.py
+experiments/v1938_sota_clean_repro/src/step01/hopfield/loader.py
+experiments/v1938_sota_clean_repro/src/step01/hopfield/spec.py
+```
+
+### MIL compute finding
+
+The v1952 training entrypoint contains an explicit CUDA guard:
+
+```python
+device = configure_reproducible_torch(
+    seed=int(specification["training"]["seeds"][0]),
+    device=torch.device("cuda" if torch.cuda.is_available() else "cpu"),
+)
+if device.type != "cuda":
+    raise RuntimeError("CUDA is required")
+```
+
+That guard establishes the historical execution policy, not an intrinsic tensor-operation requirement. The active training code selects fused optimizers only on CUDA:
+
+```python
+fused=(device.type == "cuda" and bool(config.training.optimizer_fused_on_cuda))
+```
+
+No unconditional `.cuda()` call has been found in the active teacher, student, or proposal path. Phase 0 therefore separates two claims: an L4-class GPU is required for acceptance-level historical replay, while a later CPU portability probe may remove only the guard and measure whether one seed completes within local memory. A CPU result cannot establish byte or numerical parity with the recorded L4 run.
+
+### Proposed `P0-PB-04A` source
+
+**Review state:** Awaiting user review. Do not implement until approved.
+
+The focused tests require `pytest`, which is not currently installed in the Conda environment `mantra`:
+
+```bash
+conda activate mantra
+python -m pip install pytest
+```
+
+**File: `src/mantra/rebuild/__init__.py`**
+
+```python
+"""MANTRA rebuild orchestration."""
+
+from .restoration import (
+    HuggingFaceArchiveMember,
+    RestorationBinding,
+    RestorationBindingError,
+    RestoredFileIdentity,
+    load_restoration_bindings,
+    validate_restoration_bindings,
+)
+
+__all__ = [
+    "HuggingFaceArchiveMember",
+    "RestorationBinding",
+    "RestorationBindingError",
+    "RestoredFileIdentity",
+    "load_restoration_bindings",
+    "validate_restoration_bindings",
+]
+```
+
+**File: `src/mantra/rebuild/restoration.py`**
+
+```python
+"""Validated bindings from MANTRA paths to archived content objects."""
+
+from __future__ import annotations
+
+import json
+import re
+from collections.abc import Mapping, Sequence
+from dataclasses import dataclass
+from pathlib import Path, PurePosixPath
+from typing import Any
+
+_COMMIT = re.compile(r"^[0-9a-f]{40}$")
+_SHA256 = re.compile(r"^[0-9a-f]{64}$")
+_REPO_ID = re.compile(
+    r"^[A-Za-z0-9][A-Za-z0-9._-]*/[A-Za-z0-9][A-Za-z0-9._-]*$"
+)
+_ARCHIVE_ID = re.compile(r"^[a-z0-9][a-z0-9_-]*$")
+
+
+class RestorationBindingError(ValueError):
+    """A restoration binding does not satisfy the Phase 0 contract."""
+
+
+def _require_string(value: object, field: str) -> str:
+    if not isinstance(value, str) or not value:
+        raise RestorationBindingError(f"{field} must be a non-empty string")
+    return value
+
+
+def _require_exact_fields(
+    value: Mapping[str, Any],
+    expected: set[str],
+    context: str,
+) -> None:
+    actual = set(value)
+    if actual != expected:
+        missing = sorted(expected - actual)
+        unknown = sorted(actual - expected)
+        raise RestorationBindingError(
+            f"{context} fields differ: missing={missing}, unknown={unknown}"
+        )
+
+
+def _validate_relative_path(value: object, field: str) -> str:
+    text = _require_string(value, field)
+    path = PurePosixPath(text)
+    if (
+        path.is_absolute()
+        or text != path.as_posix()
+        or path == PurePosixPath(".")
+        or ".." in path.parts
+        or "\\" in text
+    ):
+        raise RestorationBindingError(
+            f"{field} must be a normalized repository-relative POSIX path"
+        )
+    return text
+
+
+@dataclass(frozen=True, slots=True)
+class HuggingFaceArchiveMember:
+    """One content-addressed member of a signed Hugging Face archive."""
+
+    repo_id: str
+    control_revision: str
+    archive_id: str
+    member: str
+
+    def __post_init__(self) -> None:
+        if not _REPO_ID.fullmatch(_require_string(self.repo_id, "repo_id")):
+            raise RestorationBindingError("repo_id must have namespace/name form")
+        if not _COMMIT.fullmatch(
+            _require_string(self.control_revision, "control_revision")
+        ):
+            raise RestorationBindingError(
+                "control_revision must be a lowercase 40-character commit hash"
+            )
+        if not _ARCHIVE_ID.fullmatch(
+            _require_string(self.archive_id, "archive_id")
+        ):
+            raise RestorationBindingError("archive_id has an invalid form")
+        _validate_relative_path(self.member, "member")
+
+    @classmethod
+    def from_mapping(
+        cls,
+        value: Mapping[str, Any],
+    ) -> HuggingFaceArchiveMember:
+        _require_exact_fields(
+            value,
+            {"repo_id", "control_revision", "archive_id", "member"},
+            "source",
+        )
+        return cls(
+            repo_id=value["repo_id"],
+            control_revision=value["control_revision"],
+            archive_id=value["archive_id"],
+            member=value["member"],
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class RestoredFileIdentity:
+    """Expected byte identity of one restored file."""
+
+    byte_count: int
+    sha256: str
+
+    def __post_init__(self) -> None:
+        if isinstance(self.byte_count, bool) or not isinstance(self.byte_count, int):
+            raise RestorationBindingError("byte_count must be an integer")
+        if self.byte_count < 0:
+            raise RestorationBindingError("byte_count cannot be negative")
+        if not _SHA256.fullmatch(_require_string(self.sha256, "sha256")):
+            raise RestorationBindingError(
+                "sha256 must be 64 lowercase hexadecimal characters"
+            )
+
+    @classmethod
+    def from_mapping(cls, value: Mapping[str, Any]) -> RestoredFileIdentity:
+        _require_exact_fields(value, {"byte_count", "sha256"}, "expected")
+        return cls(
+            byte_count=value["byte_count"],
+            sha256=value["sha256"],
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class RestorationBinding:
+    """Archive source and verified destination for one required MANTRA file."""
+
+    destination: str
+    source: HuggingFaceArchiveMember
+    expected: RestoredFileIdentity
+
+    def __post_init__(self) -> None:
+        _validate_relative_path(self.destination, "destination")
+        required_member = (
+            f"objects/sha256/{self.expected.sha256[:2]}/{self.expected.sha256}"
+        )
+        if self.source.member != required_member:
+            raise RestorationBindingError(
+                f"member must equal the content-addressed path {required_member}"
+            )
+
+    @classmethod
+    def from_mapping(cls, value: Mapping[str, Any]) -> RestorationBinding:
+        _require_exact_fields(
+            value,
+            {"destination", "source", "expected"},
+            "binding",
+        )
+        source = value["source"]
+        expected = value["expected"]
+        if not isinstance(source, Mapping):
+            raise RestorationBindingError("source must be an object")
+        if not isinstance(expected, Mapping):
+            raise RestorationBindingError("expected must be an object")
+        return cls(
+            destination=value["destination"],
+            source=HuggingFaceArchiveMember.from_mapping(source),
+            expected=RestoredFileIdentity.from_mapping(expected),
+        )
+
+
+def load_restoration_bindings(path: Path) -> tuple[RestorationBinding, ...]:
+    """Load strict binding records from one JSON array."""
+
+    payload = json.loads(Path(path).read_text(encoding="utf-8"))
+    if not isinstance(payload, list):
+        raise RestorationBindingError("binding file must contain a JSON array")
+    bindings = []
+    for index, row in enumerate(payload):
+        if not isinstance(row, Mapping):
+            raise RestorationBindingError(f"binding {index} must be an object")
+        bindings.append(RestorationBinding.from_mapping(row))
+    return tuple(bindings)
+
+
+def validate_restoration_bindings(
+    bindings: Sequence[RestorationBinding],
+    *,
+    required_restorations: Mapping[str, RestoredFileIdentity],
+) -> tuple[RestorationBinding, ...]:
+    """Require one canonically ordered binding for every missing file in B."""
+
+    destinations = [binding.destination for binding in bindings]
+    if len(destinations) != len(set(destinations)):
+        raise RestorationBindingError("binding destinations must be unique")
+    if destinations != sorted(destinations):
+        raise RestorationBindingError("bindings must be ordered by destination")
+
+    required = set(required_restorations)
+    observed = set(destinations)
+    if observed != required:
+        raise RestorationBindingError(
+            "binding coverage differs: "
+            f"missing={sorted(required - observed)}, "
+            f"unexpected={sorted(observed - required)}"
+        )
+
+    for binding in bindings:
+        expected = required_restorations[binding.destination]
+        if binding.expected != expected:
+            raise RestorationBindingError(
+                f"file identity differs for {binding.destination}"
+            )
+
+    return tuple(bindings)
+```
+
+**File: `src/mantra/rebuild/tests/test_restoration.py`**
+
+```python
+from __future__ import annotations
+
+import json
+from dataclasses import replace
+
+import pytest
+
+from mantra.rebuild.restoration import (
+    HuggingFaceArchiveMember,
+    RestorationBinding,
+    RestorationBindingError,
+    RestoredFileIdentity,
+    load_restoration_bindings,
+    validate_restoration_bindings,
+)
+
+DIGEST = "a" * 64
+REVISION = "b" * 40
+DESTINATION = "experiments/example/input.npz"
+
+
+def valid_binding() -> RestorationBinding:
+    identity = RestoredFileIdentity(byte_count=123, sha256=DIGEST)
+    return RestorationBinding(
+        destination=DESTINATION,
+        source=HuggingFaceArchiveMember(
+            repo_id="pvd232/k562-gwps-raw-v18",
+            control_revision=REVISION,
+            archive_id="sota_reproducer",
+            member=f"objects/sha256/{DIGEST[:2]}/{DIGEST}",
+        ),
+        expected=identity,
+    )
+
+
+@pytest.mark.parametrize(
+    "destination",
+    ["/tmp/input.npz", "../input.npz", "experiments//input.npz"],
+)
+def test_destination_cannot_escape_or_change_form(destination: str) -> None:
+    with pytest.raises(RestorationBindingError):
+        replace(valid_binding(), destination=destination)
+
+
+def test_negative_byte_count_is_rejected() -> None:
+    with pytest.raises(RestorationBindingError):
+        RestoredFileIdentity(byte_count=-1, sha256=DIGEST)
+
+
+@pytest.mark.parametrize("digest", ["A" * 64, "a" * 63, "not-a-digest"])
+def test_malformed_digest_is_rejected(digest: str) -> None:
+    with pytest.raises(RestorationBindingError):
+        RestoredFileIdentity(byte_count=1, sha256=digest)
+
+
+def test_member_must_match_content_identity() -> None:
+    binding = valid_binding()
+    bad_source = replace(binding.source, member="objects/sha256/aa/wrong")
+    with pytest.raises(RestorationBindingError):
+        replace(binding, source=bad_source)
+
+
+def test_duplicate_destination_is_rejected() -> None:
+    binding = valid_binding()
+    with pytest.raises(RestorationBindingError):
+        validate_restoration_bindings(
+            [binding, binding],
+            required_restorations={DESTINATION: binding.expected},
+        )
+
+
+def test_missing_and_unexpected_destinations_are_rejected() -> None:
+    binding = valid_binding()
+    with pytest.raises(RestorationBindingError):
+        validate_restoration_bindings(
+            [binding],
+            required_restorations={
+                "experiments/another/input.npz": binding.expected
+            },
+        )
+
+
+def test_bindings_must_be_ordered() -> None:
+    first = valid_binding()
+    second = replace(first, destination="experiments/z/input.npz")
+    with pytest.raises(RestorationBindingError):
+        validate_restoration_bindings(
+            [second, first],
+            required_restorations={
+                first.destination: first.expected,
+                second.destination: second.expected,
+            },
+        )
+
+
+def test_loader_rejects_unknown_fields(tmp_path) -> None:
+    binding = valid_binding()
+    payload = {
+        "destination": binding.destination,
+        "source": {
+            "repo_id": binding.source.repo_id,
+            "control_revision": binding.source.control_revision,
+            "archive_id": binding.source.archive_id,
+            "member": binding.source.member,
+        },
+        "expected": {
+            "byte_count": binding.expected.byte_count,
+            "sha256": binding.expected.sha256,
+        },
+        "status": "invented",
+    }
+    path = tmp_path / "bindings.json"
+    path.write_text(json.dumps([payload]), encoding="utf-8")
+
+    with pytest.raises(RestorationBindingError):
+        load_restoration_bindings(path)
+```
+
+**Focused check:**
+
+```bash
+PYTHONPATH=src python -m pytest \
+  src/mantra/rebuild/tests/test_restoration.py -q
+```
+
+### Proposed `P0-PB-05A` source
+
+**Review state:** Awaiting user review. It can be implemented in parallel with `P0-PB-04A`.
+
+**File: `src/mantra/rebuild/capacity.py`**
+
+```python
+"""Storage calculation for bounded MANTRA restoration."""
+
+from __future__ import annotations
+
+import shutil
+from dataclasses import asdict, dataclass
+from pathlib import Path
+
+GIB = 1024**3
+DEFAULT_RESERVED_BYTES = 20 * GIB
+
+
+@dataclass(frozen=True, slots=True)
+class CapacityPlan:
+    """Maximum simultaneous bytes retained during restoration."""
+
+    compressed_cache_bytes: int
+    canonical_bytes: int
+    viper_bytes: int
+    temporary_bytes: int
+    reserved_bytes: int = DEFAULT_RESERVED_BYTES
+
+    def __post_init__(self) -> None:
+        for field, value in asdict(self).items():
+            if isinstance(value, bool) or not isinstance(value, int):
+                raise TypeError(f"{field} must be an integer")
+            if value < 0:
+                raise ValueError(f"{field} cannot be negative")
+
+    @property
+    def required_bytes(self) -> int:
+        return (
+            self.compressed_cache_bytes
+            + self.canonical_bytes
+            + self.viper_bytes
+            + self.temporary_bytes
+            + self.reserved_bytes
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class CapacityReceipt:
+    """Observed free space and the resulting capacity decision."""
+
+    filesystem_path: str
+    free_bytes: int
+    plan: CapacityPlan
+
+    @property
+    def passed(self) -> bool:
+        return self.free_bytes >= self.plan.required_bytes
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "filesystem_path": self.filesystem_path,
+            "free_bytes": self.free_bytes,
+            "compressed_cache_bytes": self.plan.compressed_cache_bytes,
+            "canonical_bytes": self.plan.canonical_bytes,
+            "viper_bytes": self.plan.viper_bytes,
+            "temporary_bytes": self.plan.temporary_bytes,
+            "reserved_bytes": self.plan.reserved_bytes,
+            "required_bytes": self.plan.required_bytes,
+            "passed": self.passed,
+        }
+
+
+def measure_capacity(
+    filesystem_path: Path,
+    plan: CapacityPlan,
+) -> CapacityReceipt:
+    """Measure free space on the filesystem that will hold the restoration."""
+
+    path = Path(filesystem_path).resolve()
+    if not path.exists():
+        raise FileNotFoundError(path)
+    return CapacityReceipt(
+        filesystem_path=str(path),
+        free_bytes=shutil.disk_usage(path).free,
+        plan=plan,
+    )
+```
+
+**File: `src/mantra/rebuild/tests/test_capacity.py`**
+
+```python
+from __future__ import annotations
+
+from dataclasses import replace
+
+import pytest
+
+from mantra.rebuild.capacity import CapacityPlan, CapacityReceipt
+
+
+def plan() -> CapacityPlan:
+    return CapacityPlan(
+        compressed_cache_bytes=4,
+        canonical_bytes=3,
+        viper_bytes=2,
+        temporary_bytes=1,
+        reserved_bytes=10,
+    )
+
+
+def test_required_bytes_sum_every_storage_role() -> None:
+    assert plan().required_bytes == 20
+
+
+def test_capacity_passes_at_exact_boundary() -> None:
+    receipt = CapacityReceipt(
+        filesystem_path="/mantra",
+        free_bytes=20,
+        plan=plan(),
+    )
+    assert receipt.passed
+
+
+def test_capacity_fails_below_boundary() -> None:
+    receipt = CapacityReceipt(
+        filesystem_path="/mantra",
+        free_bytes=19,
+        plan=plan(),
+    )
+    assert not receipt.passed
+
+
+@pytest.mark.parametrize(
+    "field",
+    [
+        "compressed_cache_bytes",
+        "canonical_bytes",
+        "viper_bytes",
+        "temporary_bytes",
+        "reserved_bytes",
+    ],
+)
+def test_negative_storage_term_is_rejected(field: str) -> None:
+    with pytest.raises(ValueError):
+        replace(plan(), **{field: -1})
+
+
+def test_receipt_exposes_every_contract_term() -> None:
+    receipt = CapacityReceipt(
+        filesystem_path="/mantra",
+        free_bytes=21,
+        plan=plan(),
+    )
+    assert receipt.to_dict() == {
+        "filesystem_path": "/mantra",
+        "free_bytes": 21,
+        "compressed_cache_bytes": 4,
+        "canonical_bytes": 3,
+        "viper_bytes": 2,
+        "temporary_bytes": 1,
+        "reserved_bytes": 10,
+        "required_bytes": 20,
+        "passed": True,
+    }
+```
+
+**Focused check:**
+
+```bash
+PYTHONPATH=src python -m pytest src/mantra/rebuild/tests -q
+```
+
 ## 10. Sources
 
 - MANTRA: `reinstantiation/README.md`
