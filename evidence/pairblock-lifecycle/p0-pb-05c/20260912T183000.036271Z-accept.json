@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "9ebca957f618f79f2293e4c313dcbd8950e0ac0316348c03ed065bfa97a78a2d",
+  "checklist_written_sha256": "fa62dd11a6f6ff3998ec8ce0ef498a372951f771fd00f77de0057f084a60f4fc",
+  "event": "accept",
+  "evidence": {
+    "kind": "artifact",
+    "revision": "48a43a8a88f0171cd5489955fd138bdedaee9990",
+    "target": "VIPER P0-PB-05C declared file-access implementation and tests"
+  },
+  "pair_block_id": "P0-PB-05C",
+  "previous_receipt": "../../evidence/pairblock-lifecycle/p0-pb-05c/20260912T182941.781897Z-approve.json",
+  "recorded_at": "2026-09-12T18:30:00.036271+00:00",
+  "repository_head": "ca4a959e047381393249909be8db2e9bc54043f6",
+  "result": "applied",
+  "schema_version": 1,
+  "status_after": "Applied",
+  "status_before": "Approved"
+}

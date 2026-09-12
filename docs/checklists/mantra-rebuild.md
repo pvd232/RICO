@@ -42,9 +42,10 @@ current status, review points, and completion evidence.
 
 ## Current focus
 
-**Active tranche:** [`P0-PB-05B`](../contracts/mantra-rebuild-phase-0.md#p0-pb-05b-proposed-code) fixes the archive-part order and supplies the
-measured values for the capacity receipt. `P0-PB-06` then restores the eight
-approved Hopfield artifacts and records graph $B$ in VIPER. The resolution
+**Active tranche:** [`P0-PB-05B`](../contracts/mantra-rebuild-phase-0.md#p0-pb-05b-proposed-code) fixes the archive-part order while
+[`P0-PB-05C`](../contracts/mantra-rebuild-phase-0.md#p0-pb-05c-proposed-code)
+adds verified file-access evidence to VIPER stages. `P0-PB-06` begins after
+both pass and restores the eight approved Hopfield artifacts. The resolution
 table owns each PairBlock's current lifecycle state.
 
 The resolution table identifies the next action. `Review` requires the user's
@@ -81,7 +82,8 @@ owned by `historical_and_shared_experiments` and two owned by
 | `P0-PB-05` | Pending | Waiting for `P0-PB-05A`, `P0-PB-05B` | `P0-PB-05A`, `P0-PB-05B` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05) | [Child blocks](../contracts/mantra-rebuild-phase-0.md#p0-pb-05) |
 | `P0-PB-05A` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05a/20260912T163739.537947Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a) | [Source](../../../mantra/src/mantra/rebuild/capacity.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_capacity.py) |
 | `P0-PB-05B` | Passed: `8` tests ([receipt](../../evidence/pairblock-gates/p0-pb-05b/20260912T164907.686145Z.json)) | Review | `P0-PB-04B` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05b) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-05b-proposed-code) · [Source](../../../mantra/staging/p0-pb-05b/src/mantra/rebuild/archive_plan.py) · [Tests](../../../mantra/staging/p0-pb-05b/src/mantra/rebuild/tests/test_archive_plan.py) |
-| `P0-PB-06` | Pending | Waiting for `P0-PB-04`, `P0-PB-05` | `P0-PB-04`, `P0-PB-05` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-06) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-06-proposed-code) · [Extraction](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/archive_restore.py) · [VIPER](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/viper_restore.py) · [Tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_archive_restore.py) |
+| `P0-PB-05C` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05c/20260912T183000.036271Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05c) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-05c-proposed-code) · [Observer](../../../viper/src/viper/_workers/file_access.py) · [Tests](../../../viper/tests/test_stage_file_access.py) |
+| `P0-PB-06` | Pending | Waiting for `P0-PB-04`, `P0-PB-05`, `P0-PB-05C` | `P0-PB-04`, `P0-PB-05`, `P0-PB-05C` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-06) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-06-proposed-code) · [Extraction](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/archive_restore.py) · [VIPER](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/viper_restore.py) · [Tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_archive_restore.py) |
 | `P0-PB-07` | Pending | Waiting for `P0-PB-06` | `P0-PB-06` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-07) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-07-proposed-code) · [Source](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/tests/test_hopfield_replay.py) |
 | `P0-PB-08` | Pending | Waiting for `P0-PB-06` | `P0-PB-06` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-08) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-08-proposed-code) · [Source](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/tests/test_mil_replay.py) |
 | `P0-PB-09` | Pending | Waiting for `P0-PB-07`, `P0-PB-08`, `P0-PB-10` | `P0-PB-07`, `P0-PB-08`, `P0-PB-10` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-09) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-09-proposed-code) · [Source](../../staging/p0-pb-09/tools/freeze_phase0.py) · [Tests](../../staging/p0-pb-09/tests/test_freeze_phase0.py) |
@@ -145,7 +147,7 @@ applies only to branches and worktrees created for this rebuild.
 
 | Work unit | Current state | Owning phase | Completion evidence |
 |---|---|---|---|
-| [Phase 0 contract](../contracts/mantra-rebuild-phase-0.md) | In progress | Phase 0 | `P0-REQ-01` through `P0-REQ-10` and every mapped PairBlock close. |
+| [Phase 0 contract](../contracts/mantra-rebuild-phase-0.md) | In progress | Phase 0 | `P0-REQ-01` through `P0-REQ-11` and every mapped PairBlock close. |
 | Hopfield reconstruction contract | Pending | Phase 1A | User-approved contract with exact intermediate and final parity gates. |
 | MIL reconstruction contract | Pending | Phase 2A | User-approved contract with exact intermediate and final parity gates. |
 | Graph encoder contract | Design complete; contract pending | Phase 3A | User-approved contract covering identity, topology, features, training, evaluation, and VIPER evidence. |
@@ -182,6 +184,7 @@ This table schedules every requirement in the approved Phase 0 contract once.
 | `P0-REQ-08` | Planned | 0E | `P0-REQ-06` | Standalone v1952 seed-123460 `without_control` replay reproduces `0.6025499488874759` and the approved prediction hashes. |
 | `P0-REQ-09` | Planned | 0F | `P0-REQ-07`, `P0-REQ-08` | Every assessed VIPER check has a usefulness-ledger entry and independently confirmed findings. |
 | `P0-REQ-10` | In progress | 0C | None | A declared proposal gate retains its result and applies only its legal checklist transition; traceability validation rejects broken IDs, dependencies, owners, code links, tests, or gates. |
+| `P0-REQ-11` | In progress | 0C | None | A governed VIPER stage rejects undeclared CPython-visible file-open attempts and retains each successful Python file open, including one read-open for every declared input. |
 
 ## Phase 0A. Verify the MANTRA workspace and environment
 
@@ -239,6 +242,9 @@ definitions in RICO.
       user's approval for cache retention and deletion timing.
       <!-- pair-block: P0-PB-05B -->
       <!-- pair-block-contract: P0-PB-05B contract=docs/contracts/mantra-rebuild-phase-0.md -->
+- [ ] Add and verify the governed VIPER file-access mode in `P0-PB-05C`.
+      <!-- pair-block: P0-PB-05C -->
+      <!-- pair-block-contract: P0-PB-05C contract=docs/contracts/mantra-rebuild-phase-0.md -->
 - [ ] Measure free space and save a passing capacity receipt before download.
       <!-- pair-block: P0-PB-05 -->
       <!-- pair-block-contract: P0-PB-05 contract=docs/contracts/mantra-rebuild-phase-0.md -->
@@ -247,9 +253,10 @@ definitions in RICO.
       <!-- pair-block: P0-PB-10 -->
       <!-- pair-block-contract: P0-PB-10 contract=docs/contracts/mantra-rebuild-phase-0.md -->
 
-**Gate:** In the MANTRA environment, run the restoration and capacity test
-modules. The tests must reject malformed paths, identities, duplicate or absent
-control mappings, and insufficient free space.
+**Gate:** Run the MANTRA restoration and capacity tests and the separate
+`P0-PB-05C` VIPER focused check. The tests must reject malformed paths,
+identities, duplicate or absent control mappings, insufficient free space, and
+undeclared governed file-open access.
 
 ```bash
 PYTHONPATH="$PWD/src" PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
@@ -316,7 +323,7 @@ gate passes.
       <!-- pair-block: P0-PB-09 -->
       <!-- pair-block-contract: P0-PB-09 contract=docs/contracts/mantra-rebuild-phase-0.md -->
 
-**Gate:** `P0-VR-09` passes, the user approves the evidence set, and all ten
+**Gate:** `P0-VR-09` passes, the user approves the evidence set, and all eleven
 Phase 0 requirements are complete.
 
 **Commit boundary:** Update the Phase 0 contract status and this checklist in

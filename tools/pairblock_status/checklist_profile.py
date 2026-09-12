@@ -559,17 +559,35 @@ def _heading_fragments(markdown: str) -> set[str]:
     return fragments
 
 
-def validate_document_fragments(repository: Path, document_path: Path) -> None:
-    """Require each relative Markdown fragment to name a native heading."""
+def _allowed_owner_roots(
+    repository: Path,
+    profile: ChecklistProfile,
+) -> tuple[Path, ...]:
+    """Resolve the checklist repository and each approved source repository."""
+
+    return (repository,) + tuple(
+        (repository / root).resolve() for root in profile.proposal_source_roots
+    )
+
+
+def validate_document_fragments(
+    repository: Path,
+    document_path: Path,
+    profile: ChecklistProfile,
+) -> None:
+    """Require each relative fragment to name a heading in an approved owner."""
 
     document = document_path.read_text(encoding="utf-8")
+    allowed_roots = _allowed_owner_roots(repository, profile)
     for relative_target, fragment in _DOCUMENT_LINK.findall(document):
         parsed_target = urlsplit(relative_target)
         if parsed_target.scheme or parsed_target.netloc:
             continue
         target = (document_path.parent / relative_target).resolve()
-        if not target.is_relative_to(repository):
-            raise PairBlockGateError(f"document link escapes the repository: {target}")
+        if not any(target.is_relative_to(root) for root in allowed_roots):
+            raise PairBlockGateError(
+                f"document link escapes the approved owner roots: {target}"
+            )
         if not target.is_file():
             raise PairBlockGateError(f"document link target does not exist: {target}")
         if fragment not in _heading_fragments(target.read_text(encoding="utf-8")):
@@ -698,9 +716,7 @@ def load_proposal_contract(
     source_paths = tuple(
         (contract_path.parent / linked_path).resolve() for linked_path in linked_paths
     )
-    allowed_source_roots = (repository,) + tuple(
-        (repository / root).resolve() for root in profile.proposal_source_roots
-    )
+    allowed_source_roots = _allowed_owner_roots(repository, profile)
     validated_sources: list[Path] = []
     for source_path in source_paths:
         if not any(source_path.is_relative_to(root) for root in allowed_source_roots):
@@ -1360,8 +1376,12 @@ def validate_traceability(
             and dialect.proposed_code_link_prefix in row.proposed_code
         ):
             load_proposal_contract(repository, checklist_path, row, profile)
-    validate_document_fragments(repository, checklist_path)
-    validate_document_fragments(repository, repository / profile.contract_path)
+    validate_document_fragments(repository, checklist_path, profile)
+    validate_document_fragments(
+        repository,
+        repository / profile.contract_path,
+        profile,
+    )
     manifest = compile_normalized_manifest(
         repository,
         checklist_text,

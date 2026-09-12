@@ -40,6 +40,7 @@ The [Mantra rebuild master checklist](../checklists/mantra-rebuild.md) owns exec
 | `P0-REQ-08` | Replay the v1952 MIL seed-123460 `without_control` result from restored inputs. | [`P0-PB-08`](#p0-pb-08) |
 | `P0-REQ-09` | Maintain an independent usefulness ledger for VIPER checks, failures, costs, and confirmed findings. | [`P0-PB-09`](#p0-pb-09) |
 | `P0-REQ-10` | Compile the RICO checklist into the global master-checklist manifest and propagate each evidence-backed PairBlock transition through its checkbox, requirements, dependent blocks, and contract state. | [`P0-PB-10`](#p0-pb-10) |
+| `P0-REQ-11` | Make each governed VIPER stage reject undeclared CPython-visible file-open attempts and retain each successful Python file open, including one read-open for every declared input. | [`P0-PB-05C`](#p0-pb-05c) |
 
 ## 2. Required claim
 
@@ -51,7 +52,7 @@ The graph $B=(F,P,E)$ contains:
 - $P$ contains exact producer entrypoints. Each entrypoint is identified by repository commit, source path, symbol, source-file byte count, and source-file SHA-256.
 - $E$ contains `consumes` edges from files to producer entrypoints and `produces` edges from producer entrypoints to files.
 
-A `consumes` edge requires both a named stage input and an inspected read of that input by the producer. A `produces` edge requires both a declared stage output and a successful run receipt for that output. Every member of $F \cup P$ must lie on a directed path ending at the selected Hopfield or MIL output. Severing any required node or edge must make graph verification fail.
+A `consumes` edge requires both a named stage input and a successful Python read-open beneath that input path. A `produces` edge requires both a declared stage output and a successful run receipt for that output. Every member of $F \cup P$ must lie on a directed path ending at the selected Hopfield or MIL output. Severing any required node or edge must make graph verification fail.
 
 The Hopfield and MIL portions of $B$ are independent. Neither model consumes an output produced by the other model. A shared raw or derived data file may appear in both portions only when each model reads that file directly.
 
@@ -59,11 +60,34 @@ Historical predictions, checkpoints, and reports used only to compare the rebuil
 
 This claim establishes byte identity, executed-producer identity, and graph completeness. Historical training reproducibility and scientific correctness remain later acceptance boundaries.
 
+For a stage governed by `file_access="declared"`, graph completeness covers
+file-open attempts emitted through CPython's audit interface. The stage must
+successfully open every declared input for reading and may successfully open
+only declared outputs and attached metric files for writing. The policy forbids working-directory changes
+and Python thread or child-process launches. Interpreter-owned files beneath `sys.prefix` and
+`sys.base_prefix` belong to the recorded runtime environment and remain outside
+the stage receipt. A native-library file open appears in the receipt only when
+the library emits a CPython audit event; each Phase 0 replay gate
+must exercise its real loaders and show that every required input appears in
+the invocation receipt.
+
+A retained read-open establishes that a wrapped Python file-opening call
+returned successfully. Semantic use of particular bytes requires separate evidence. The receipt supports the graph edge by showing that cooperative stage
+code successfully opened the declared input; the artifact identity and stage
+result supply the separate byte and execution evidence. Python classifies
+`sys.addaudithook()` as an observation interface. Hostile code requires an
+operating-system sandbox.
+
 ## 3. Current gap
 
 The repository contains restoration controls, artifact pointers, application verification inputs, and historical producer code. The missing rebuild-specific graph must identify the selected result first, then trace only the files and producers required to rebuild it.
 
 The first missing result is therefore the complete graph $B$. When the signed Hugging Face records identify an absent local file's bytes, Phase 0 classifies that file as a restoration task. An unrecoverable classification requires a failed search of the signed restoration records.
+
+Current VIPER invocation evidence binds the declared paths to the stage context
+while leaving workspace reads unobserved. The same
+function can open another workspace path directly. `P0-PB-05C` closes this
+runtime-evidence gap before restoration begins.
 
 ## 4. Restoration and storage contract
 
@@ -224,6 +248,7 @@ flowchart TB
 | Hopfield replay receipt | Approved command, saved-encoder identity, input digests, produced predictions, metric, tolerance, and comparison result. |
 | MIL replay receipt | Exact command, environment, input digests, output digests, metrics, tolerances, and comparison result. |
 | Cross-workspace assessment | The original failure, defect classification, repair revision, producer and consumer store identities, retrieved byte identity, and project rule. |
+| Stage file-access receipt | The repository-relative reads and writes observed while a stage runs with `file_access="declared"`. |
 | VIPER usefulness ledger | Claimed check, real defect detected, independent confirmation, ordinary-test coverage, false alarms, infrastructure failures, time cost, and later reuse. |
 
 The dependency graph, restoration bindings, environment receipt, capacity receipt, restoration receipts, completeness report, both replay receipts, and usefulness ledger must themselves be registered in VIPER. Each checked-in evidence file requires a corresponding graph record.
@@ -242,16 +267,17 @@ The dependency graph, restoration bindings, environment receipt, capacity receip
 | `P0-VR-08` | The MIL replay reproduces the v1952 seed-123460 `without_control` hold PearsonDelta `0.6025499488874759` and its declared prediction-array hashes. | [`P0-PB-08`](#p0-pb-08) |
 | `P0-VR-09` | Every assessed VIPER check has a usefulness-ledger row and independent evidence for any confirmed defect. | [`P0-PB-09`](#p0-pb-09) |
 | `P0-VR-10` | The global master-checklist validator accepts incremental sibling-block closure. The RICO profile rejects an unsupported transition or any disagreement among a PairBlock row, checkbox, mapped requirement, dependent-block readiness, completion evidence, and contract state. | [`P0-PB-10`](#p0-pb-10) |
+| `P0-VR-11` | A stage using `file_access="declared"` fails after a declared input lacks a successful Python read-open, an undeclared read-open or write-open attempt, a directory change, or a Python thread or child-process launch. Its verified invocation receipt contains only successful opens permitted by the frozen inputs, outputs, and metric declarations. | [`P0-PB-05C`](#p0-pb-05c) |
 
 ## 8. Acceptance boundary
 
 ### Success
 
-Phase 0 passes when `P0-VR-01` through `P0-VR-10` pass, every required provenance record exists in VIPER, the user reviews the complete evidence set, and the repository contains a synced commit recording the approved contract and Phase 0 receipts.
+Phase 0 passes when `P0-VR-01` through `P0-VR-11` pass, every required provenance record exists in VIPER, the user reviews the complete evidence set, and the repository contains a synced commit recording the approved contract and Phase 0 receipts.
 
 ### Rejection
 
-Phase 0 fails when $B$ contains an unnecessary node, omits a required node or edge, admits a parity reference as a rebuild input, lacks a `RestorationBinding`, exceeds available storage, restores different bytes, or either replay exceeds its approved tolerance.
+Phase 0 fails when $B$ contains an unnecessary node, omits a required node or edge, admits a parity reference as a rebuild input, lacks a `RestorationBinding`, exceeds available storage, restores different bytes, permits an undeclared governed file-open attempt, lacks a successful Python read-open for a governed input, or either replay exceeds its approved tolerance.
 
 ## 9. PairBlock order
 
@@ -262,6 +288,7 @@ Phase 0 fails when $B$ contains an unnecessary node, omits a required node or ed
 | `P0-PB-03` | Complete MIL subgraph of $B$ | `P0-VR-01` for MIL. |
 | `P0-PB-04` | `RestorationBinding` implementation and reviewed records | `P0-VR-02`. |
 | `P0-PB-05` | Capacity receipt and download plan | `P0-VR-03`. |
+| `P0-PB-05C` | VIPER stage file-access enforcement and invocation evidence | `P0-VR-11`. |
 | `P0-PB-06` | Verified restoration and graph-completeness rejection test | `P0-VR-04` and `P0-VR-06`. |
 | `P0-PB-07` | Hopfield VIPER adapter, focused test, and historical raw-gene readout replay | `P0-VR-07`. |
 | `P0-PB-08` | v1952 MIL seed-123460 `without_control` replay | `P0-VR-08`. |
@@ -283,6 +310,7 @@ Resolution status lives in the [master checklist](../checklists/mantra-rebuild.m
 | [`P0-PB-05`](../checklists/mantra-rebuild.md#pairblock-resolution) | Prove capacity and produce the download plan. | User implements approved code; Codex reviews it. | [`P0-PB-05A`](#p0-pb-05a-accepted-implementation); [`P0-PB-05B`](#p0-pb-05b-proposed-code) | `P0-VR-03` |
 | [`P0-PB-05A`](../../../mantra/src/mantra/rebuild/capacity.py) | Calculate capacity and write its receipt. | User implemented; Codex reviewed and accepted MANTRA commit `af4e589451a90a88f59c806b12a90e74e2bba043`. | [Source](../../../mantra/src/mantra/rebuild/capacity.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_capacity.py) | Report every term in $R_{max}$ and reject insufficient space. |
 | [`P0-PB-05B`](../checklists/mantra-rebuild.md#pairblock-resolution) | Derive the ordered archive-part plan from the signed archive index. | User reviews and implements; Codex reviews the applied diff. | [Source](../../../mantra/staging/p0-pb-05b/src/mantra/rebuild/archive_plan.py) · [Tests](../../../mantra/staging/p0-pb-05b/src/mantra/rebuild/tests/test_archive_plan.py) | Select 34 verified parts and expose the measured capacity values. |
+| [`P0-PB-05C`](../checklists/mantra-rebuild.md#pairblock-resolution) | Enforce and retain each governed VIPER stage's declared file boundary. | Codex implements in VIPER; user reviews the guarantee, workflow cost, measured overhead, and applied diff. | [Protocol](../../../viper/src/viper/stages.py) · [Authoring](../../../viper/src/viper/authoring.py) · [Observer](../../../viper/src/viper/_workers/file_access.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Verifier](../../../viper/src/viper/_verification/attempt.py) · [Tests](../../../viper/tests/test_stage_file_access.py) | `P0-VR-11` and the framework tradeoff review pass. |
 | [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | Restore files and verify graph $B$. | User reviews, implements, and runs; Codex reviews the applied diff and evidence. | [Extraction](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/archive_restore.py) · [VIPER workflow](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/viper_restore.py) · [Extraction tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_archive_restore.py) · [VIPER tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_viper_restore.py) | `P0-VR-04` and `P0-VR-06` |
 | [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay Hopfield. | User reviews, implements, and runs; Codex reviews the applied diff and evidence. | [Source](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/tests/test_hopfield_replay.py) | `P0-VR-07` |
 | [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay standalone MIL application. | User reviews, implements, and runs; Codex reviews the applied diff and evidence. | [Source](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/tests/test_mil_replay.py) | `P0-VR-08` |
@@ -354,6 +382,16 @@ ruff check src/mantra/rebuild/archive_plan.py src/mantra/rebuild/tests/test_arch
 **Stop condition:** stop before downloading an archive part if the signed part
 sequence is incomplete, a readback identity differs, the real values differ
 from the values above, or the `P0-PB-05A` capacity receipt fails.
+
+#### P0-PB-05C
+
+Adds an optional `file_access="declared"` policy to a VIPER stage. The worker
+checks CPython-visible file-open attempts, rejects paths outside the stage's
+declared inputs, outputs, and metric files, and rejects a successful return
+unless every input produced a successful Python read-open. Verification checks
+the stored paths against the frozen stage specification. The observer checks cooperative
+code. Hostile stage code requires an operating-system sandbox. [Review the
+implementation and gate](#p0-pb-05c-proposed-code).
 
 #### P0-PB-06
 
@@ -597,6 +635,7 @@ choices.
 | [`P0-PB-05`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Block](#p0-pb-05) |
 | [`P0-PB-05A`](../../../mantra/src/mantra/rebuild/capacity.py) | [Accepted source](../../../mantra/src/mantra/rebuild/capacity.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_capacity.py) · MANTRA `af4e589451a90a88f59c806b12a90e74e2bba043` |
 | [`P0-PB-05B`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/staging/p0-pb-05b/src/mantra/rebuild/archive_plan.py) · [Tests](../../../mantra/staging/p0-pb-05b/src/mantra/rebuild/tests/test_archive_plan.py) · [Gate](#p0-pb-05b-proposed-code) |
+| [`P0-PB-05C`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Protocol](../../../viper/src/viper/stages.py) · [Authoring](../../../viper/src/viper/authoring.py) · [Observer](../../../viper/src/viper/_workers/file_access.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Verifier](../../../viper/src/viper/_verification/attempt.py) · [Tests](../../../viper/tests/test_stage_file_access.py) · [Gate](#p0-pb-05c-proposed-code) |
 | [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Extraction](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/archive_restore.py) · [VIPER workflow](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/viper_restore.py) · [Extraction tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_archive_restore.py) · [VIPER tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_viper_restore.py) · [Gate](#p0-pb-06-proposed-code) |
 | [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/tests/test_hopfield_replay.py) · [Gate](#p0-pb-07-proposed-code) |
 | [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/tests/test_mil_replay.py) · [Gate](#p0-pb-08-proposed-code) |
@@ -828,6 +867,109 @@ python -m pytest \
 **Stop condition:** do not begin `P0-PB-06` when a selected part is absent,
 unverified, non-contiguous, or different from the signed identity.
 
+### P0-PB-05C implementation record
+
+**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
+
+**Requirement:** A stage governed by `file_access="declared"` must retain every
+CPython-visible file-open attempt, reject undeclared read-opens and write-opens,
+and require a successful Python read-open for every declared input before a
+successful return.
+
+**Dependency:** None. `P0-PB-05C` and `P0-PB-05B` can proceed in parallel.
+`P0-PB-06` depends on both.
+
+##### `P0-PB-05C` proposed code
+
+**Code boundary:**
+
+- [protocol types](../../../viper/src/viper/stages.py)
+- [authoring API](../../../viper/src/viper/authoring.py)
+- [file-access observer](../../../viper/src/viper/_workers/file_access.py)
+- [stage worker](../../../viper/src/viper/_workers/stages.py)
+- [verification rule](../../../viper/src/viper/_verification/attempt.py)
+- [boundary tests](../../../viper/tests/test_stage_file_access.py)
+- [execution test](../../../viper/tests/test_run_execution.py)
+- [authoring test](../../../viper/tests/test_authoring.py)
+- [declaration observers](../../../viper/tests/declaration_observers.toml)
+- [user documentation](../../../viper/docs/how-to/stages.md)
+- [protocol reference](../../../viper/docs/reference/protocol.md)
+- [contribution protocol](../../../viper/CONTRIBUTING.md)
+
+The [framework-tradeoff review rule](../../../viper/CONTRIBUTING.md#review-a-framework-tradeoff)
+governs the user review of this block.
+
+**Implementation requirements:**
+
+- `stage()` and its frozen `ParameterizedSpec` expose
+  `file_access="unrestricted" | "declared"`; the default remains
+  `"unrestricted"`.
+- During a declared invocation, one process-wide audit observer permits
+  read-opens beneath declared input and output paths, permits write-opens
+  beneath declared output and attached metric paths, and rejects other
+  file-open operations.
+- Temporary wrappers around `builtins.open`, `io.open`, and `os.open` retain an
+  allowed access only after the underlying call returns successfully. The
+  worker restores all three functions when the governed call ends.
+- The observer rejects working-directory changes and Python thread or child-process
+  launches because those operations can move file access outside the recorded
+  boundary or outlive the observer.
+- `StageInvocationReceipt.file_access` stores unique, sorted,
+  repository-relative read and write paths on success and failure.
+- Verification reconstructs allowed paths from the frozen stage, input
+  binding, attempt, and metrics; it rejects missing evidence, undeclared paths,
+  and any declared input that lacks a successful Python read-open.
+- Documentation states that the CPython audit interface establishes a file-open
+  attempt. The retained receipt establishes a successful call through one of
+  the three wrapped Python APIs. Semantic byte consumption requires separate
+  evidence. Native-library
+  access appears only when the library emits a Python audit event. A Python
+  audit hook checks cooperative code; hostile code requires an operating-system
+  sandbox. Each real Phase 0 loader
+  must therefore pass an observing execution test before its graph edge is
+  accepted.
+
+**Measured runtime effect:** A local microbenchmark added about 30 microseconds
+per cached `Path.read_bytes()` open and about 125 microseconds per cached
+`torch.load()` of a 4 MiB checkpoint. Thirty CPU matrix multiplications stayed
+within timing noise. These measurements characterize the current machine; a
+performance guarantee requires measurements across supported environments.
+
+**Focused check:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/viper
+source .venv/bin/activate
+python -m ruff check \
+  src/viper/_workers/file_access.py \
+  src/viper/_workers/stages.py \
+  src/viper/_verification/attempt.py \
+  src/viper/authoring.py src/viper/stages.py \
+  tests/test_stage_file_access.py tests/test_run_execution.py \
+  tests/test_authoring.py tests/conftest.py && \
+python -m pytest \
+  tests/test_stage_file_access.py \
+  tests/test_run_execution.py::test_train_stage_captures_local_external_input \
+  tests/test_authoring.py::test_python_stage_drafts_replace_yaml_authoring \
+  tests/test_authoring.py::test_plan_freezes_declared_file_access -q
+```
+
+**Gate:** Ruff passes. The tests retain accepted paths and reject a missing
+read-open for a declared input, an undeclared read-open or write-open, a
+directory change, a Python thread or child process, and missing or tampered
+verification evidence. The authoring tests prove that the field reaches the
+frozen stage specification and a real execution receipt.
+
+**Applied paths:** The VIPER paths listed in the code boundary.
+
+**Applied check:** Run the focused check against the committed VIPER source,
+then use the accepted VIPER commit in MANTRA's `venv` before `P0-PB-06`.
+
+**Stop condition:** Return the patch for revision if the default execution path
+changes, the receipt can authorize itself independently of the frozen declarations, a
+declared input can disappear from verified evidence, or real Hopfield and MIL
+loaders bypass the observer.
+
 ### P0-PB-06 implementation record
 
 **Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
@@ -837,8 +979,8 @@ retain the eight bound files as VIPER outputs, materialize them at their
 canonical MANTRA paths, and prove graph $B$ fails verification after one
 required edge is removed.
 
-**Dependency:** completed `P0-PB-04` bindings and the passing `P0-PB-05`
-capacity receipt.
+**Dependency:** completed `P0-PB-04` bindings, the passing `P0-PB-05`
+capacity receipt, and accepted `P0-PB-05C` file-access enforcement.
 
 ##### `P0-PB-06` proposed code
 
@@ -1180,3 +1322,4 @@ owns the current lifecycle state and links its supporting receipt.
 - in-toto: [Statement v1](https://github.com/in-toto/attestation/blob/main/spec/v1/statement.md)
 - SLSA: [Provenance v1.2](https://slsa.dev/spec/v1.2/provenance)
 - W3C: [PROV-DM](https://www.w3.org/TR/prov-dm/)
+- Python: [`sys.addaudithook()`](https://docs.python.org/3/library/sys.html#sys.addaudithook) and the [audit-event table](https://docs.python.org/3/library/audit_events.html)

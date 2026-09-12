@@ -235,5 +235,5 @@ MANTRA_PHASE0_PROFILE = ChecklistProfile(
         ),
         resolved_dependency_states=frozenset({"Applied", "Complete"}),
     ),
-    proposal_source_roots=(Path("../mantra"),),
+    proposal_source_roots=(Path("../mantra"), Path("../viper")),
 )

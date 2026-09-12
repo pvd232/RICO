@@ -480,6 +480,26 @@ def test_external_document_fragment_is_outside_repository_validation(
     validate_test_repository(repository)
 
 
+def test_sibling_document_fragment_requires_approved_owner(
+    repository_factory: RepositoryFactory,
+) -> None:
+    """Reject a local fragment outside the checklist's approved owner roots."""
+
+    repository = repository_factory(command=passing_command())
+    sibling = repository.parent / "unapproved-owner"
+    sibling.mkdir()
+    (sibling / "guide.md").write_text("# Owner guide\n", encoding="utf-8")
+    checklist = repository / CHECKLIST_PATH
+    checklist.write_text(
+        checklist.read_text(encoding="utf-8")
+        + "\n[Owner guide](../../../unapproved-owner/guide.md#owner-guide)\n",
+        encoding="utf-8",
+    )
+
+    with pytest.raises(PairBlockGateError, match="approved owner roots"):
+        validate_test_repository(repository)
+
+
 def test_standard_pair_block_contract_marker_is_required(
     repository_factory: RepositoryFactory,
 ) -> None:
@@ -547,9 +567,11 @@ def test_profile_may_name_a_sibling_proposal_owner(
     source_owner = repository.parent / "source-owner"
     source = source_owner / "source.py"
     test = source_owner / "test_source.py"
+    guide = source_owner / "guide.md"
     source_owner.mkdir()
     source.write_text("VALUE = 1\n", encoding="utf-8")
     test.write_text("def test_value():\n    assert 1 == 1\n", encoding="utf-8")
+    guide.write_text("# Owner guide\n", encoding="utf-8")
 
     contract = repository / CONTRACT_PATH
     text = contract.read_text(encoding="utf-8")
@@ -561,6 +583,10 @@ def test_profile_may_name_a_sibling_proposal_owner(
         "../../../source-owner/test_source.py",
     )
     text = text.replace(passing_command(), f"python {source} {test}")
+    text = text.replace(
+        "# Contract",
+        "# Contract\n\n[Owner guide](../../../source-owner/guide.md#owner-guide)",
+    )
     contract.write_text(text, encoding="utf-8")
 
     profile = replace(
