@@ -133,10 +133,11 @@ records any changed contract status. MANTRA implementation commits remain in
 MANTRA. The RICO checklist cites their commit IDs and gate outputs.
 
 An approved review cycle closes before the next cycle begins. Codex runs the
-focused checks, commits only that cycle's owned paths, and pushes when the
-repository has a configured upstream. A repository whose upstream is
-unavailable closes the local cycle at the local commit and leaves publication
-blocked.
+focused checks, commits and pushes only that cycle's owned paths, then reviews
+the exact published revision. The review receipt records the base and result
+commits, owned paths, canonical diff digest, checked invariants, findings,
+mechanical evidence, exclusions, and verdict. Every finding produces a repaired
+commit and a new review receipt before acceptance.
 
 A task-created branch closes before its PairBlock closes. The owning
 repository's default branch must contain the accepted commit, the configured

@@ -586,9 +586,15 @@ python -m tools.pairblock_status.pairblock_controller \
   --evidence-revision 'CODEX_MESSAGE_ID'
 ```
 
-4. The user types the proposal into the active paths and runs the block's
-   **Applied check**. Codex reviews that exact diff, commits and pushes the
-   MANTRA or RICO change, then records the accepted commit:
+4. The implementation owner applies the proposal to the active paths and runs
+   the block's **Applied check**. Codex commits and pushes that bounded change,
+   then performs an independent code review of the exact base commit, result
+   commit, owned paths, and canonical diff digest. Codex records the checked
+   invariants, findings, mechanical evidence, exclusions, and verdict under
+   `evidence/pairblock-reviews/BLOCK_ID/`. Every finding is repaired, retested,
+   recommitted, and rereviewed before acceptance.
+
+5. An approving review receipt permits the `accept` transition:
 
    ```bash
    cd /Users/machina/Developer/ChatGPT/RICO
@@ -599,7 +605,7 @@ python -m tools.pairblock_status.pairblock_controller \
      --evidence-revision 'ACCEPTED_GIT_COMMIT'
    ```
 
-5. After the block's declared VIPER run exists and verifies, Codex records its
+6. After the block's declared VIPER run exists and verifies, Codex records its
    graph reference. This changes `Applied` to `Complete` and checks the block:
 
    ```bash
@@ -623,12 +629,13 @@ Phase 1 onward. A proposal-gate receipt supports `Review` or `Approved`. The
 implementation receipt proves that the repository named by the PairBlock's code
 boundary contains the accepted code.
 
-An `Applied` transition requires one implementation receipt with the owning
+An `Applied` transition requires one approving review receipt with the owning
 repository identity, verified base and result commits, exact owned paths, the
-canonical diff SHA-256, and the focused-test receipt. The canonical diff uses
-the command defined by the global master-checklist contract. The controller
-must recompute the commits and diff digest before changing status. A `Complete`
-transition then requires the VIPER record named by the block's gate.
+canonical diff SHA-256, focused-test result, checked invariants, findings,
+exclusions, and verdict. The canonical diff uses the command defined by the
+global master-checklist contract. Every finding requires a later repaired
+commit and approving review receipt. A `Complete` transition then requires the
+VIPER record named by the block's gate.
 
 Any task-created branch must be merged into the owning repository's default
 branch before the PairBlock closes. The closure gate compares the local and
