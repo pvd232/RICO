@@ -44,7 +44,9 @@ current status, review points, and completion evidence.
 
 **Active tranche:** the user applies `P0-PB-04A`, `P0-PB-04B`, and
 `P0-PB-05A` in MANTRA while Codex reviews each resulting diff. `P0-PB-10` is
-applied; `P0-PB-06` will register its evidence in VIPER and close it.
+applied. VIPER 0.1.0a4 is installed from the reviewed local checkout, and the
+MANTRA-to-RICO local-store probe passes. `P0-PB-06` will register this evidence
+and close `P0-PB-10`.
 
 The resolution table identifies the next action. `Review` requires the user's
 decision. `Approved` authorizes the user to apply the proposal. `Applied`
@@ -127,6 +129,12 @@ focused checks, commits only that cycle's owned paths, and pushes when the
 repository has a configured upstream. A repository whose upstream is
 unavailable closes the local cycle at the local commit and leaves publication
 blocked.
+
+A task-created branch closes before its PairBlock closes. The owning
+repository's default branch must contain the accepted commit, the configured
+upstream must identify the same default-branch commit, and no worktree may
+retain the task branch. Codex then removes that merged local branch. This gate
+applies only to branches and worktrees created for this rebuild.
 
 ## Governing sources
 

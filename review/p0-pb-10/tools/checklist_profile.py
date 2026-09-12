@@ -9,6 +9,7 @@ import sys
 import tempfile
 from dataclasses import dataclass
 from pathlib import Path
+from urllib.parse import urlsplit
 
 from .execution_identity import sha256_file
 from .profile import MANTRA_PHASE0_PROFILE, ChecklistProfile
@@ -544,6 +545,9 @@ def validate_document_fragments(repository: Path, document_path: Path) -> None:
 
     document = document_path.read_text(encoding="utf-8")
     for relative_target, fragment in _DOCUMENT_LINK.findall(document):
+        parsed_target = urlsplit(relative_target)
+        if parsed_target.scheme or parsed_target.netloc:
+            continue
         target = (document_path.parent / relative_target).resolve()
         if not target.is_relative_to(repository):
             raise PairBlockGateError(f"document link escapes the repository: {target}")

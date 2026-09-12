@@ -57,6 +57,25 @@
     }
   ],
   "missing_connector": "LocalFileRef contains no producer repository identity, and local compilation does not reject a reference created under another workspace root.",
-  "project_rule": "A LocalFileRef must not cross the MANTRA and RICO workspace roots. Cross-workspace consumption requires an immutable remote-backed VIPER reference or a verified custody copy in the consumer workspace.",
+  "repair": {
+    "verified_at": "2026-09-12T05:12:57Z",
+    "distribution_version": "0.1.0a4",
+    "source_commit": "1c7f9a6ae5afa37e461d42588bfdfec559491565",
+    "installation": "editable local checkout in the Conda environment named mantra",
+    "result": "passed",
+    "producer_reference": {
+      "workspace": "/Users/machina/Developer/ChatGPT/mantra",
+      "store_id": "ecbd2036aa84919bf76885e43d8e59b8",
+      "commit": "fc75d3a3ee6ddfee39839be8e6cdad928a11aff0066d6bbf6e8b52ca5592d418"
+    },
+    "consumer_pointer": {
+      "workspace": "/Users/machina/Developer/ChatGPT/RICO",
+      "store_id": "199c37ee034731dd11771b9f569e94fc",
+      "commit": "b8a314fe86f53807986d628aed9e35db0c2278812244bf05ff2659fbd52d5515"
+    },
+    "retrieved_sha256": "dfe03dd224bfecd930b6bcc03600b52c48bfdbde8c94e01adecd645c0b9b31ab",
+    "observed_connector": "The RICO pointer preserved the MANTRA workspace, store identity, immutable revision, and path; verifier retrieval returned the declared MANTRA bytes."
+  },
+  "project_rule": "A same-machine LocalFileRef may cross the MANTRA and RICO workspace roots when it records the producer workspace, store identity, immutable revision, and path, and retrieval validates that identity and the declared bytes. A remote-backed reference is required when the consumer cannot access that exact local workspace and store.",
   "viper_graph_status": "pending P0-PB-09 registration"
 }

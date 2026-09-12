@@ -88,8 +88,9 @@ historical source, Phase 0 restoration and replay adapters, and exact Hopfield
 and MIL replay evidence. RICO contains the contracts and receipts for Phase 0.
 RICO owns reconstructed model source, tests, VIPER declarations, and future
 graph encoders from Phase 1 onward. Restoration imports the installed VIPER
-distribution. The VIPER source checkout remains outside both execution paths
-and unchanged by this work.
+distribution. Framework repairs remain in the separate VIPER repository; the
+MANTRA environment may install a reviewed local VIPER checkout before the
+session-close release.
 
 The existing MANTRA Git repository is the VIPER workspace. A root `viper.toml` marks that boundary because `viper.repository.resolve_root()` requires the marker to equal the Git work-tree root. `viper init` serves empty targets by generating a Python package, build configuration, test tree, and example stages. MANTRA supplies those structures itself, so Phase 0 adds only the workspace marker and MANTRA-owned adapters.
 
@@ -99,28 +100,26 @@ New orchestration code belongs under `src/mantra/rebuild/`. It calls the histori
 
 ### Cross-workspace artifact handoff
 
-VIPER 0.1.0a3 intentionally confines `ExternalInputRef` to a file beneath the
+VIPER intentionally confines `ExternalInputRef` to a file beneath the
 active repository root. `capture_external_input()` then copies those bytes into
 the consuming attempt. This restriction gives the active workspace custody of
 the bytes it declares. The local [cross-workspace assessment](../../evidence/viper-assessments/local-prior-run-cross-workspace.json)
-identifies the inspected VIPER commit, files, symbols, and line ranges.
+records both the original 0.1.0a3 failure and the repaired behavior.
 
-Local prior-run references have a different limitation. `LocalFileRef` records
-the store path, content revision, and file path while omitting repository
-identity.
-`_freeze_input()` accepts that reference in a second local workspace, while
-`RunFetcher` resolves it against the second workspace's `LocalArtifactStore`.
-The [cross-workspace probe](../../evidence/viper-assessments/local-prior-run-cross-workspace.json)
-therefore compiled a consumer pointer and then failed with `local immutable file
-is missing` when the consumer fetched the producer run. This is a VIPER
-validation gap: the compiler accepts a local storage graph that execution fails
-to traverse.
+VIPER 0.1.0a4 binds each `LocalFileRef` to the producer workspace and persistent
+local-store identity as well as its immutable revision and path. Compilation
+retrieves and validates the producer run before publishing the consumer
+pointer. Every local retrieval resolves the store named by the reference and
+rejects a mismatched workspace or store identity.
 
-A `LocalFileRef` must remain within one workspace root. A Phase 1
-consumer may use a MANTRA artifact only through an immutable remote-backed
-VIPER reference or a verified custody copy inside RICO. Phase 0 must test and
-record the selected route before Phase 1 consumes it. `P0-PB-09` registers this
-assessment and its later route test in the VIPER graph.
+The repaired [cross-workspace probe](../../evidence/viper-assessments/local-prior-run-cross-workspace.json)
+created a MANTRA run reference, published its pointer in RICO, and retrieved
+the declared MANTRA bytes through that pointer. The receipt records both store
+identities, both immutable revisions, and the retrieved SHA-256. A same-machine
+`LocalFileRef` may therefore cross these workspace roots while the recorded
+MANTRA workspace and store remain available. A remote-backed reference remains
+necessary when the consumer cannot access that exact local store. `P0-PB-09`
+registers the assessment and repaired probe in the VIPER graph.
 
 ### Local storage
 
@@ -224,7 +223,7 @@ flowchart TB
 | Graph-completeness report | Missing members of $F$, $P$, or $E$, plus the pass or fail result. |
 | Hopfield replay receipt | Approved command, saved-encoder identity, input digests, produced predictions, metric, tolerance, and comparison result. |
 | MIL replay receipt | Exact command, environment, input digests, output digests, metrics, tolerances, and comparison result. |
-| Cross-workspace assessment | The installed VIPER version, source revision, accepted local pointer, failed cross-workspace fetch, classification, and project rule. |
+| Cross-workspace assessment | The original failure, defect classification, repair revision, producer and consumer store identities, retrieved byte identity, and project rule. |
 | VIPER usefulness ledger | Claimed check, real defect detected, independent confirmation, ordinary-test coverage, false alarms, infrastructure failures, time cost, and later reuse. |
 
 The dependency graph, restoration bindings, environment receipt, capacity receipt, restoration receipts, completeness report, both replay receipts, and usefulness ledger must themselves be registered in VIPER. Each checked-in evidence file requires a corresponding graph record.
@@ -436,6 +435,13 @@ the command defined by the global master-checklist contract. The controller
 must recompute the commits and diff digest before changing status. A `Complete`
 transition then requires the VIPER record named by the block's gate.
 
+Any task-created branch must be merged into the owning repository's default
+branch before the PairBlock closes. The closure gate compares the local and
+upstream default-branch commits, confirms that the default branch contains the
+accepted implementation commit, confirms that no worktree retains the task
+branch, and then removes the merged local branch. The gate never operates on a
+branch or worktree that predates this rebuild.
+
 This project rule instantiates the global lifecycle-evidence contract. Git
 supplies the immutable commit identities and commit comparison. in-toto and
 SLSA supply the digest-bound attestation model. W3C PROV supplies the distinction
@@ -636,7 +642,7 @@ conda run -n mantra python -m pytest \
 | Python lint | `ruff check` over all seven executable review files |
 | Project policy and lifecycle validity | `test_lifecycle_policy_rejects_undeclared_transition_status`; `test_checklist_profile_requires_two_phase_capture_groups`; `test_project_profile_excludes_markdown_dialect`; `test_markdown_dialect_rejects_empty_markers` |
 | Global lifecycle contract | `test_profile_fixture_compiles_with_global_validator`; `test_mantra_profile_compiles_current_contract`; `test_lifecycle_completion_updates_every_derived_status`; `test_checkbox_must_match_pairblock_completion` |
-| Complete PairBlock inventory and requirement mapping | `test_every_contract_pair_block_requires_one_status_row`; `test_unmapped_pair_block_is_rejected`; `test_duplicate_status_row_is_rejected`; `test_standard_pair_block_contract_marker_is_required` |
+| Complete PairBlock inventory and requirement mapping | `test_every_contract_pair_block_requires_one_status_row`; `test_unmapped_pair_block_is_rejected`; `test_duplicate_status_row_is_rejected`; `test_standard_pair_block_contract_marker_is_required`; `test_external_document_fragment_is_outside_repository_validation` |
 | PairBlock dependency order | `test_unknown_dependency_is_rejected`; `test_unresolved_pair_block_dependency_blocks_gate`; `test_accepted_dependency_releases_waiting_block` |
 | Owner, code, and fixture boundaries | `test_missing_owner_is_rejected`; `test_missing_proposed_source_is_rejected`; `test_missing_fixture_source_is_rejected`; `test_proposed_code_must_stay_in_governing_contract` |
 | Gate and lifecycle behavior | `test_gate_must_name_every_observing_test`; `test_failing_gate_retains_receipt_without_changing_checklist`; `test_nested_conda_run_is_rejected_before_gate_execution`; `test_illegal_lifecycle_event_changes_no_status` |
@@ -661,7 +667,7 @@ PYTHONPATH=review/p0-pb-10 conda run -n mantra \
 
 **Stop condition:** Return the proposal for revision if a gate can run outside its declared code or runtime boundary, bypass an unresolved dependency, change status after failure or identity drift, accept an illegal lifecycle event, or leave a rendered status inconsistent with its evidence.
 
-**Evidence:** Global commit `58b59175e2a4a949bc8dd33302099cf780249c75` repairs incremental PairBlock closure and passes its three focused tests, normalized-manifest validation, and Ruff. The RICO implementation reuses that validator. `ChecklistProfile` owns project paths and lifecycle events; `MarkdownChecklistAdapter` owns RICO parsing and rendering; `pairblock_controller.py` runs proposal gates and records later evidence events while the adapter parses Markdown. The current focused RICO check passes `42` cases. The [master-checklist resolution table](../checklists/mantra-rebuild.md#pairblock-resolution) owns the current lifecycle state and links its supporting receipt.
+**Evidence:** Global commit `58b59175e2a4a949bc8dd33302099cf780249c75` repairs incremental PairBlock closure and passes its three focused tests, normalized-manifest validation, and Ruff. The RICO implementation reuses that validator. `ChecklistProfile` owns project paths and lifecycle events; `MarkdownChecklistAdapter` owns RICO parsing and rendering; `pairblock_controller.py` runs proposal gates and records later evidence events while the adapter parses Markdown. The current focused RICO check passes `43` cases. The [master-checklist resolution table](../checklists/mantra-rebuild.md#pairblock-resolution) owns the current lifecycle state and links its supporting receipt.
 
 ## 11. Sources
 

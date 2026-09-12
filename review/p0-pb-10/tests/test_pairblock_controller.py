@@ -427,6 +427,22 @@ def test_broken_document_fragment_is_rejected(
         validate_test_repository(repository)
 
 
+def test_external_document_fragment_is_outside_repository_validation(
+    repository_factory: RepositoryFactory,
+) -> None:
+    """Leave an HTTPS fragment for its remote document to resolve."""
+
+    repository = repository_factory(command=passing_command())
+    checklist = repository / CHECKLIST_PATH
+    checklist.write_text(
+        checklist.read_text(encoding="utf-8")
+        + "\n[External source](https://example.com/specification#requirement)\n",
+        encoding="utf-8",
+    )
+
+    validate_test_repository(repository)
+
+
 def test_standard_pair_block_contract_marker_is_required(
     repository_factory: RepositoryFactory,
 ) -> None:
