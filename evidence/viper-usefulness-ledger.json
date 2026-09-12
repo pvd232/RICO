@@ -1,0 +1,51 @@
+{
+  "schema_version": "rico.viper_usefulness.v1",
+  "assessed_checks": [
+    "local-cross-workspace-prior-run",
+    "declared-stage-file-access",
+    "unbenchmarked-build-model"
+  ],
+  "assessments": [
+    {
+      "check_id": "local-cross-workspace-prior-run",
+      "claimed_guarantee": "A RICO consumer can retrieve a MANTRA producer artifact through a local prior-run reference that retains the producer workspace and store identity.",
+      "observed_result": "The original reference compiled but retrieval searched the consumer store. The repaired reference retrieved the exact producer bytes across workspace roots.",
+      "defect_classification": "framework_gap",
+      "independent_check": "VIPER tests/test_prior_run_inputs.py::test_local_pointer_accepts_a_run_from_another_workspace and RICO evidence/viper-assessments/local-prior-run-cross-workspace.json",
+      "ordinary_check_equivalent": "A cross-workspace execution test could detect the retrieval failure; unit tests confined to one workspace did not.",
+      "false_alarms": [],
+      "infrastructure_failures": [],
+      "elapsed_seconds": 2671.0,
+      "work_added": "LocalFileRef gained producer workspace and store identities; serialization, storage, retrieval, verification, and cross-workspace tests changed.",
+      "later_reuse": "P0-PB-09 uses this connector to join MANTRA replay artifacts to the RICO evidence run."
+    },
+    {
+      "check_id": "declared-stage-file-access",
+      "claimed_guarantee": "A governed CPython stage rejects undeclared Python-visible file opens and retains successful declared opens.",
+      "observed_result": "The original runtime recorded declared paths without observing file opens. The repaired opt-in mode rejects undeclared opens, unused declared inputs, writes outside declared outputs, directory changes, threads, and subprocess launches.",
+      "defect_classification": "framework_gap",
+      "independent_check": "VIPER tests/test_stage_file_access.py and RICO evidence/pairblock-gates/p0-pb-05c/20260912T180303.155373Z.json",
+      "ordinary_check_equivalent": "A severed-input or undeclared-read integration test could detect a specific hidden dependency; ordinary output tests would not establish the general file boundary.",
+      "false_alarms": [],
+      "infrastructure_failures": [
+        "An isolated-clone subprocess initially imported the installed old VIPER source while its parent test imported the candidate source; the fixture now gives both processes the candidate source."
+      ],
+      "elapsed_seconds": 17.043052,
+      "work_added": "Authors opt into file_access=declared. The final focused gate added 24 cases and 17.04 seconds of validation; unrestricted stages retain their prior path.",
+      "later_reuse": "The MANTRA restoration, Hopfield replay, and MIL replay stages use the declared boundary."
+    },
+    {
+      "check_id": "unbenchmarked-build-model",
+      "claimed_guarantee": "An unbenchmarked VIPER run may select a build-stage model artifact while benchmarked runs still require a training-stage model.",
+      "observed_result": "The original verifier rejected the restoration graph because its selected model artifact came from a build stage. The repaired verifier accepts that graph and preserves the benchmarked training-stage rule.",
+      "defect_classification": "framework_gap",
+      "independent_check": "VIPER tests/test_verification.py::RunPlanRelationshipTests::test_unbenchmarked_build_may_supply_the_model and RICO evidence/pairblock-gates/p0-pb-05d/20260912T195128.851628Z.json",
+      "ordinary_check_equivalent": "The real restoration plan exposed the mismatch; a focused verifier test confirms both sides of the rule.",
+      "false_alarms": [],
+      "infrastructure_failures": [],
+      "elapsed_seconds": 2.129657,
+      "work_added": "The plan verifier changed one estimator guard and added two focused cases; the final gate took 2.13 seconds.",
+      "later_reuse": "P0-PB-06 selects the restored encoder artifact as the estimator of an unbenchmarked restoration run."
+    }
+  ]
+}
