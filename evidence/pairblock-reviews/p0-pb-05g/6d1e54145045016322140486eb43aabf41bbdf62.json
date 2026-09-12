@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-05G",
+  "requirement_ids": [
+    "P0-REQ-16"
+  ],
+  "repository": "https://github.com/pvd232/viper.git",
+  "base_commit": "56c4d288c0d4f647d41ba909b61fb1c3400f710b",
+  "result_commit": "6d1e54145045016322140486eb43aabf41bbdf62",
+  "owned_paths": [
+    "src/viper/stages.py",
+    "src/viper/_workers/stages.py",
+    "tests/declaration_observers.toml",
+    "tests/test_stage_invocation.py"
+  ],
+  "diff_sha256": "0a049c6318ab59b757d1128c52fe5a1fdf3bd497bfa21ae93970e1e9e7d3d2f6",
+  "invariants": [
+    "Only workspace modules imported with the frozen callable enter its retained module mapping.",
+    "Runtime module lookup receives the exact module objects used to construct the callable.",
+    "Invocation restores every replaced module entry and removes every temporarily added entry.",
+    "The existing file-access observer continues to reject undeclared data-file reads."
+  ],
+  "findings": [],
+  "mechanical_evidence": {
+    "focused_command": "python -m pytest tests/test_stage_invocation.py -q",
+    "focused_result": "6 passed",
+    "process_command": "python -m pytest tests/test_run_execution.py::test_train_stage_captures_local_external_input -q",
+    "process_result": "1 passed",
+    "codeql_selection": "4 selected tests; 1 deferred integration test; no fallback domains; no incomplete declarations",
+    "ruff": "passed",
+    "git_diff_check": "passed",
+    "upstream_match": "passed"
+  },
+  "tradeoffs": {
+    "workflow": "No stage-author configuration is added.",
+    "runtime": "One bounded module-dictionary installation and restoration occurs per stage invocation.",
+    "memory": "The worker retains references to modules it already imported until that single-stage worker exits."
+  },
+  "exclusions": [
+    "A stage that imports a new workspace module for the first time during its governed call still requires an explicit source or input boundary.",
+    "The full integration and distribution suites remain session-closure gates."
+  ],
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-12T23:54:51Z"
+}
