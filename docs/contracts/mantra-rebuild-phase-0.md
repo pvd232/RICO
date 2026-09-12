@@ -325,9 +325,9 @@ Resolution status lives in the [master checklist](../checklists/mantra-rebuild.m
 | [`P0-PB-05D`](../checklists/mantra-rebuild.md#pairblock-resolution) | Permit a build stage to supply an unbenchmarked run's selected `model` artifact. | Codex implements and independently reviews the VIPER change. | [Verifier](../../../viper/src/viper/_verification/plan.py) · [Tests](../../../viper/tests/test_verification.py) · [Test map](../../../viper/tests/declaration_observers.toml) | `P0-VR-12` |
 | [`P0-PB-05E`](../checklists/mantra-rebuild.md#pairblock-resolution) | Permit an unbenchmarked run to select a declared terminal artifact such as a replay receipt. | Codex implements and independently reviews the VIPER change. | [Run model](../../../viper/src/viper/runs.py) · [Protocol tests](../../../viper/tests/test_protocol.py) · [Relationship tests](../../../viper/tests/test_verification.py) | `P0-VR-13` |
 | [`P0-PB-05F`](../checklists/mantra-rebuild.md#pairblock-resolution) | Exclude the operating system's null device from governed data-access evidence. | Codex implements and independently reviews the VIPER change. | [Observer](../../../viper/src/viper/_workers/file_access.py) · [Tests](../../../viper/tests/test_stage_file_access.py) | `P0-VR-14` |
-| [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | Restore files and verify graph $B$. | Codex implements, runs, and independently reviews each bounded commit. | [Bindings](../../../mantra/src/mantra/rebuild/restoration.py) · [Extraction](../../../mantra/src/mantra/rebuild/archive_restore.py) · [VIPER workflow](../../../mantra/src/mantra/rebuild/viper_restore.py) · [Tests](../../../mantra/src/mantra/rebuild/tests) | `P0-VR-04`, `P0-VR-06`, and `P0-REQ-13` |
-| [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay Hopfield. | Codex implemented and independently reviewed MANTRA commits `0d06e069` and `e1025457`. | [Source](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py) · [Review](../../evidence/pairblock-reviews/p0-pb-07/e10254570214e92ef1785b92794752222387e9a1.json) | `P0-VR-07` |
-| [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay standalone MIL application. | Codex implemented and independently reviewed MANTRA commit `28490068`. | [Source](../../../mantra/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py) · [Review](../../evidence/pairblock-reviews/p0-pb-08/2849006816f7dc4e58c94b1f06b76cf4ac42457f.json) | `P0-VR-08` |
+| [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | Restore files and verify graph $B$. | Codex implements, runs, and independently reviews each bounded commit. | [Bindings](../../../mantra/src/mantra/rebuild/restoration.py) · [Extraction](../../../mantra/src/mantra/rebuild/archive_restore.py) · [VIPER workflow](../../../mantra/src/mantra/rebuild/viper_restore.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests) | `P0-VR-04`, `P0-VR-06`, and `P0-REQ-13` |
+| [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay Hopfield. | Codex implemented and independently reviewed MANTRA commits `0d06e069` and `e1025457`. | [Source](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py) · [Review](../../evidence/pairblock-reviews/p0-pb-07/e10254570214e92ef1785b92794752222387e9a1.json) | `P0-VR-07` |
+| [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay standalone MIL application. | Codex implemented and independently reviewed MANTRA commit `28490068`. | [Source](../../../mantra/src/mantra/rebuild/mil_replay.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py) · [Review](../../evidence/pairblock-reviews/p0-pb-08/2849006816f7dc4e58c94b1f06b76cf4ac42457f.json) | `P0-VR-08` |
 | [`P0-PB-09`](../checklists/mantra-rebuild.md#pairblock-resolution) | Freeze evidence and assess VIPER. | Codex implemented and independently reviewed RICO commit `64964135`. | [Source](../../tools/freeze_phase0.py) · [Tests](../../tests/test_freeze_phase0.py) · [Review](../../evidence/pairblock-reviews/p0-pb-09/64964135b66a4706501d9e768527241941397566.json) | `P0-VR-09` |
 | [`P0-PB-09A`](../checklists/mantra-rebuild.md#pairblock-resolution) | Register and verify the frozen evidence through VIPER. | Codex implemented and independently reviewed RICO commits `428a2506` and `b2f1d3fb`; the real run supplies completion evidence. | [Source](../../tools/register_phase0.py) · [Tests](../../tests/test_register_phase0.py) · [Review](../../evidence/pairblock-reviews/p0-pb-09a/b2f1d3fb8574bde0aef19bb8c90627ba8cac6f7e.json) | `P0-VR-09` |
 | [`P0-PB-10`](../checklists/mantra-rebuild.md#pairblock-resolution) | Validate PairBlock traceability and retain each tested-code or externally reviewed non-code lifecycle transition. | RICO owns the active controller; the user reviews lifecycle changes. | [Active source and tests](#p0-pb-10-accepted-implementation) | `P0-VR-10` |
@@ -766,9 +766,9 @@ choices.
 | [`P0-PB-05D`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Verifier](../../../viper/src/viper/_verification/plan.py) · [Tests](../../../viper/tests/test_verification.py) · [Test map](../../../viper/tests/declaration_observers.toml) · [Gate](#p0-pb-05d-proposed-code) |
 | [`P0-PB-05E`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Run model](../../../viper/src/viper/runs.py) · [Protocol tests](../../../viper/tests/test_protocol.py) · [Relationship tests](../../../viper/tests/test_verification.py) · [Gate](#p0-pb-05e-proposed-code) |
 | [`P0-PB-05F`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Observer](../../../viper/src/viper/_workers/file_access.py) · [Tests](../../../viper/tests/test_stage_file_access.py) · [Gate](#p0-pb-05f-proposed-code) |
-| [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Bindings](../../../mantra/src/mantra/rebuild/restoration.py) · [Extraction](../../../mantra/src/mantra/rebuild/archive_restore.py) · [VIPER workflow](../../../mantra/src/mantra/rebuild/viper_restore.py) · [Tests](../../../mantra/src/mantra/rebuild/tests) · [Gate](#p0-pb-06-proposed-code) · [Review receipt](../../evidence/pairblock-reviews/p0-pb-06/75e7ce38dc85918c1f593886f20ed33601daa288.json) |
-| [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py) · [Gate](#p0-pb-07-accepted-implementation) · [Review](../../evidence/pairblock-reviews/p0-pb-07/e10254570214e92ef1785b92794752222387e9a1.json) |
-| [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py) · [Gate](#p0-pb-08-accepted-implementation) · [Review](../../evidence/pairblock-reviews/p0-pb-08/2849006816f7dc4e58c94b1f06b76cf4ac42457f.json) |
+| [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Bindings](../../../mantra/src/mantra/rebuild/restoration.py) · [Extraction](../../../mantra/src/mantra/rebuild/archive_restore.py) · [VIPER workflow](../../../mantra/src/mantra/rebuild/viper_restore.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests) · [Gate](#p0-pb-06-proposed-code) · [Review receipt](../../evidence/pairblock-reviews/p0-pb-06/75e7ce38dc85918c1f593886f20ed33601daa288.json) |
+| [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py) · [Gate](#p0-pb-07-accepted-implementation) · [Review](../../evidence/pairblock-reviews/p0-pb-07/e10254570214e92ef1785b92794752222387e9a1.json) |
+| [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/src/mantra/rebuild/mil_replay.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py) · [Gate](#p0-pb-08-accepted-implementation) · [Review](../../evidence/pairblock-reviews/p0-pb-08/2849006816f7dc4e58c94b1f06b76cf4ac42457f.json) |
 | [`P0-PB-09`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../tools/freeze_phase0.py) · [Tests](../../tests/test_freeze_phase0.py) · [Gate](#p0-pb-09-accepted-implementation) · [Review](../../evidence/pairblock-reviews/p0-pb-09/64964135b66a4706501d9e768527241941397566.json) |
 | [`P0-PB-09A`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../tools/register_phase0.py) · [Tests](../../tests/test_register_phase0.py) · [Gate](#p0-pb-09a-accepted-implementation) · [Review](../../evidence/pairblock-reviews/p0-pb-09a/b2f1d3fb8574bde0aef19bb8c90627ba8cac6f7e.json) |
 | [`P0-PB-10`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Active implementation](#p0-pb-10-accepted-implementation) |
@@ -1274,6 +1274,7 @@ its [tests](../../../mantra/cleanup/tests/test_reinstantiation_archive.py),
 [binding resolver](../../../mantra/src/mantra/rebuild/restoration.py),
 [archive extraction](../../../mantra/src/mantra/rebuild/archive_restore.py),
 [VIPER workflow](../../../mantra/src/mantra/rebuild/viper_restore.py),
+[self-contained artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py),
 and the [rebuild tests](../../../mantra/src/mantra/rebuild/tests).
 
 **Fixture boundary:** [Python overlay runner](../../tools/pairblock_status/python_overlay.py)
@@ -1312,6 +1313,8 @@ and the [rebuild tests](../../../mantra/src/mantra/rebuild/tests).
 - Materialize each verified output at its canonical MANTRA path, run VIPER
   verification, then retain a severed-edge verification failure for one input
   edge and one restored-file output edge.
+- Load JSON and binary outputs through a self-contained source file that
+  remains importable when VIPER materializes only that exact loader file.
 
 **Focused check:**
 
@@ -1370,7 +1373,8 @@ truth.
 **Dependency:** `P0-PB-06` restores the six missing data files and saved
 encoder. The user approves the numerical tolerance before the real replay.
 
-**Code boundary:** [Hopfield replay source](../../../mantra/src/mantra/rebuild/hopfield_replay.py)
+**Code boundary:** [Hopfield replay source](../../../mantra/src/mantra/rebuild/hopfield_replay.py),
+[self-contained artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py),
 and [observing tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py).
 
 **Implementation requirements:** initialize scikit-learn's native threadpool
@@ -1382,6 +1386,8 @@ call the raw-gene readout with `memory_splits=("fit",)`, `topk=1600`, and
 truth; and persist the prediction identity, device, effective top-k, scores,
 tolerance, and decision. Runtime inventory initialization occurs before the
 governed stage begins, so the stage retains its child-process ban.
+VIPER verifies the produced JSON and binary artifacts through the
+self-contained loader source it materializes into its validation workspace.
 
 **Gate:** the tests prove the selected call arguments, output schema, CPU
 path, effective donor count, and parity decision. The real run retains the
@@ -1420,7 +1426,8 @@ v1953 Step02 and Step03 runtime in a fresh output root.
 of the Hopfield replay. They include the prototype, two historical Step01
 predictions, and the Step02 input-root files named below.
 
-**Code boundary:** [MIL replay source](../../../mantra/src/mantra/rebuild/mil_replay.py)
+**Code boundary:** [MIL replay source](../../../mantra/src/mantra/rebuild/mil_replay.py),
+[self-contained artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py),
 and [observing tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py).
 
 **Implementation requirements:** load the saved v1952 seed-123460 prototype;
@@ -1428,6 +1435,8 @@ verify the selected Step02, Step03, and prototype identities; assign a fresh
 run name and output root; call the maintained application runtime once; and
 retain the four prediction arrays, Step02 and Step03 scores, and their
 identities. The declared input set is the standalone MIL graph.
+VIPER verifies each output through the self-contained loader source it
+materializes into its validation workspace.
 
 **Gate:** the focused check rejects drift from the selected settings and
 confirms output isolation. The real L4 run reproduces Step02 hold
