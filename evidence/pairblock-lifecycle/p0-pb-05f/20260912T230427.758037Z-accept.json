@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "0e873990642d5db400fa8e1a46d865bac3cb5a7d37415be67e9755957236ab09",
+  "checklist_written_sha256": null,
+  "event": "accept",
+  "evidence": {
+    "kind": "artifact",
+    "revision": "56c4d288c0d4f647d41ba909b61fb1c3400f710b",
+    "target": "viper: src/viper/_workers/file_access.py, tests/declaration_observers.toml, tests/test_stage_file_access.py"
+  },
+  "pair_block_id": "P0-PB-05F",
+  "previous_receipt": "../../evidence/pairblock-lifecycle/p0-pb-05f/20260912T230420.926131Z-approve.json",
+  "recorded_at": "2026-09-12T23:04:27.758037+00:00",
+  "repository_head": "f9a48cf74d24c2c168e1f63e2bef187369361d98",
+  "result": "rejected",
+  "schema_version": 1,
+  "status_after": "Applied",
+  "status_before": "Approved"
+}
