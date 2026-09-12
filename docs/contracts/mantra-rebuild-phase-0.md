@@ -1434,10 +1434,12 @@ and [observing tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.p
 inventory when the worker imports the replay implementation; select one
 `NVIDIA L4` in the VIPER environment when `device="cuda"`; load the saved v1952
 seed-123460 prototype; verify the selected Step02, Step03, and prototype
-identities; assign a fresh run name and output root; call the maintained
-application runtime once; and retain the four prediction arrays, Step02 and
-Step03 scores, and their identities. The declared input set is the standalone
-MIL graph.
+identities; recreate the legacy input-root layout inside the declared output
+bundle with links to the VIPER-materialized compute inputs; pass that localized
+root and the materialized direct-input paths to the historical runner; assign a
+fresh run name and output root; call the maintained application runtime once;
+and retain the four prediction arrays, Step02 and Step03 scores, and their
+identities. The declared input set is the standalone MIL graph.
 VIPER verifies each output through the self-contained loader source it
 materializes into its validation workspace.
 
@@ -1449,7 +1451,9 @@ deterministic fitted-weight archives by SHA-256.
 
 **Stop condition:** stop when the runtime tries to train a teacher or student,
 reads a Hopfield-rebuild output, reuses an existing run root, or changes a
-selected setting or input identity.
+selected setting or input identity. Stop when the historical runner opens an
+original repository input instead of the corresponding VIPER-materialized
+input.
 
 **Applied paths:** `src/mantra/rebuild/mil_replay.py` and
 `src/mantra/rebuild/tests/test_mil_replay.py`.
