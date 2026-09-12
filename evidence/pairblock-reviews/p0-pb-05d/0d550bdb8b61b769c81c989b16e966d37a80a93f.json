@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-05D",
+  "requirement_ids": [
+    "P0-REQ-12"
+  ],
+  "repository": "https://github.com/pvd232/viper.git",
+  "base_commit": "951ed3bcc60f95176ec758d80ae9d5beb3c7d2ff",
+  "result_commit": "0d550bdb8b61b769c81c989b16e966d37a80a93f",
+  "owned_paths": [
+    "src/viper/_verification/plan.py",
+    "tests/declaration_observers.toml",
+    "tests/test_verification.py"
+  ],
+  "diff_sha256": "96d2faea59c8ebad73a45df64d4e9c533566e63355b1b4f7736b40fac82e0441",
+  "invariants": [
+    "The selected estimator names an artifact exposed by its declared producer stage.",
+    "An unbenchmarked run may select a model artifact from a build stage.",
+    "A benchmarked run still selects its model artifact from a training stage.",
+    "The CodeQL-backed declaration map connects the changed verifier to both observing tests."
+  ],
+  "findings": [
+    {
+      "severity": "P2",
+      "status": "resolved",
+      "summary": "The first benchmark counterexample bypassed BenchmarkSpec validation with model_construct().",
+      "repair": "Construct a schema-valid benchmark with one split, metric, and criterion.",
+      "observer": "tests/test_verification.py::RunPlanRelationshipTests::test_benchmark_estimator_requires_training"
+    }
+  ],
+  "mechanical_evidence": {
+    "command": "python -m pytest tests/test_verification.py tests/test_preflight.py tests/test_impacted_test_selection.py -q",
+    "result": "43 passed, 4 subtests passed",
+    "ruff": "passed",
+    "git_diff_check": "passed",
+    "upstream_match": "passed"
+  },
+  "exclusions": [
+    "The full integration and distribution suites remain session-closure gates; this block changes plan verification only."
+  ],
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-12T19:51:00Z"
+}
