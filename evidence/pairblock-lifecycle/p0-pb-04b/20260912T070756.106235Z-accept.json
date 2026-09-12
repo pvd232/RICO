@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "575ae12678bfe0cb6e584d9e44a41b38bd1e4366ac1dde1e1fc369c37ab29d8a",
+  "checklist_written_sha256": "8200c8130fc89367c7063c2013ce73d2466ebda7a2d27817ac071a8d2bba6c92",
+  "event": "accept",
+  "evidence": {
+    "kind": "test",
+    "revision": "2304674e1fc9730801d1afe39edc7585c81081f4",
+    "target": "src/mantra/rebuild/tests/test_control_resolution.py"
+  },
+  "pair_block_id": "P0-PB-04B",
+  "previous_receipt": "../../evidence/pairblock-lifecycle/p0-pb-04b/20260912T035904.710258Z-approve.json",
+  "recorded_at": "2026-09-12T07:07:56.106235+00:00",
+  "repository_head": "e6d99892c57e641b47877a57ca4f29673bd4345e",
+  "result": "applied",
+  "schema_version": 1,
+  "status_after": "Applied",
+  "status_before": "Approved"
+}
