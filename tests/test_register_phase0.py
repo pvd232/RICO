@@ -7,11 +7,14 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
-from viper.authoring import input
+from viper.artifacts import StageArtifactRef
+from viper.authoring import input, run_artifact
+from viper.references import LocalFileRef, ResolvedRunRef
 
 from tools.freeze_phase0 import REQUIRED_EVIDENCE_ROLES, sha256_file
 from tools.register_phase0 import (
     DIRECT_EVIDENCE_ROLES,
+    PRIOR_RUN_EVIDENCE_ROLES,
     REQUIRED_STAGE_INPUTS,
     RESTORATION_BUNDLE_FILES,
     Phase0RegistrationError,
@@ -67,6 +70,33 @@ def write_fixture(root: Path) -> SimpleNamespace:
     )
 
 
+def declared_stage_inputs(tmp_path: Path) -> dict[str, object]:
+    """Declare direct RICO evidence and prior-run MANTRA evidence."""
+
+    stage_inputs: dict[str, object] = {
+        name: input(name, path=f"evidence/{name}.json", data_role="benchmark")
+        for name in REQUIRED_STAGE_INPUTS - PRIOR_RUN_EVIDENCE_ROLES
+    }
+    run = ResolvedRunRef(
+        sha256="a" * 64,
+        bytes=1,
+        stored_at=LocalFileRef(
+            workspace=tmp_path,
+            store_id="0" * 32,
+            commit="b" * 64,
+            path="runs/source/resolved.yaml",
+        ),
+    )
+    for name in PRIOR_RUN_EVIDENCE_ROLES:
+        stage_inputs[name] = run_artifact(
+            run,
+            StageArtifactRef(stage_id="build", artifact_name=name),
+            path=f"evidence/{name}.json",
+            data_role="benchmark",
+        )
+    return stage_inputs
+
+
 def test_registers_every_indexed_evidence_identity(tmp_path: Path) -> None:
     """Write the terminal receipt after every indexed byte identity agrees."""
 
@@ -107,10 +137,7 @@ def test_rejects_changed_usefulness_ledger(tmp_path: Path) -> None:
 def test_declares_one_governed_registration_stage(tmp_path: Path) -> None:
     """Connect each named evidence source to one terminal VIPER receipt."""
 
-    stage_inputs = {
-        name: input(name, path=f"evidence/{name}.json", data_role="benchmark")
-        for name in REQUIRED_STAGE_INPUTS
-    }
+    stage_inputs = declared_stage_inputs(tmp_path)
     study = build_phase0_registration_study(stage_inputs)
     registration = study.variants["complete"].stages["register"]
 
@@ -126,6 +153,21 @@ def test_rejects_incomplete_stage_input_map() -> None:
 
     with pytest.raises(Phase0RegistrationError, match="inputs differ"):
         build_phase0_registration_study({})
+
+
+@pytest.mark.parametrize("role", sorted(PRIOR_RUN_EVIDENCE_ROLES))
+def test_rejects_disconnected_mantra_evidence(tmp_path: Path, role: str) -> None:
+    """Reject a local file substituted for one MANTRA producer artifact."""
+
+    stage_inputs = declared_stage_inputs(tmp_path)
+    stage_inputs[role] = input(
+        role,
+        path=f"evidence/{role}.json",
+        data_role="benchmark",
+    )
+
+    with pytest.raises(Phase0RegistrationError, match="prior-run evidence inputs"):
+        build_phase0_registration_study(stage_inputs)
 
 
 def test_rico_declares_its_viper_workspace_and_runtime_dependency() -> None:

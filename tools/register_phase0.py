@@ -9,6 +9,7 @@ from typing import Any
 
 from viper import execution
 from viper.authoring import experiment, plan, replicate, stage, variant
+from viper.benchmark import RunArtifactDraft
 from viper.config import BuildConfig
 from viper.outputs import StageOutputs, output
 from viper.references import GitFileRef
@@ -28,6 +29,14 @@ REQUIRED_STAGE_INPUTS = DIRECT_EVIDENCE_ROLES | {
     "ledger",
     "restoration_evidence",
 }
+PRIOR_RUN_EVIDENCE_ROLES = frozenset(
+    {
+        "hopfield_replay_receipt",
+        "mil_replay_receipt",
+        "restoration_bindings",
+        "restoration_evidence",
+    }
+)
 
 
 class Phase0RegistrationError(RuntimeError):
@@ -102,6 +111,15 @@ def build_phase0_registration_study(stage_inputs: Mapping[str, Any]):
 
     if set(stage_inputs) != REQUIRED_STAGE_INPUTS:
         raise Phase0RegistrationError("registration stage inputs differ")
+    disconnected = sorted(
+        role
+        for role in PRIOR_RUN_EVIDENCE_ROLES
+        if not isinstance(stage_inputs[role], RunArtifactDraft)
+    )
+    if disconnected:
+        raise Phase0RegistrationError(
+            f"prior-run evidence inputs differ: {disconnected}"
+        )
     registration = stage(
         register_phase0,
         stage_id="register",
