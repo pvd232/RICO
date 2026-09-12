@@ -8,6 +8,8 @@
 
 This contract governs artifact discovery, capacity planning, restoration, and provenance capture before the Hopfield or MIL rebuild begins. The model rebuild remains out of scope until every Phase 0 acceptance condition passes. The user actively reviews each PairBlock's scope, proposed work, observed result, and gate evidence before the next PairBlock begins.
 
+The [Mantra rebuild master checklist](../checklists/mantra-rebuild.md) owns execution order, current status, and the next action. This contract owns Phase 0 requirements, PairBlock definitions, source proposals, and gates.
+
 | ID | Implementation obligation |
 |---|---|
 | `P0-REQ-01` | Define $B$ for the selected Hopfield and MIL outputs. |
@@ -100,7 +102,7 @@ $$
 
 The download gate passes only when observed free space is at least $R_{max}$. Shared archive chunks count once.
 
-## 5. Execution roadmap
+## 5. Phase 0 dependency model
 
 $B$ contains the files, programs, and read/write links required to reproduce the selected Hopfield and MIL results. $Q$ contains historical outputs used only for comparison.
 
@@ -270,7 +272,7 @@ python -c 'from pathlib import Path; from viper.repository import resolve_root; 
 
 **Git evidence:** MANTRA commit `467d7d3dcdfcbcaaf40ab40a419ef89096bd465f` contains `viper.toml`. The environment check resolved the Conda environment `mantra`, Python 3.13.15, `viper-provenance` 0.1.0a3, and the MANTRA Git root.
 
-### Next execution tranche
+### Phase 0 ownership record
 
 The dependency order is:
 
@@ -299,7 +301,7 @@ The first `P0-PB-03` trace followed the wrong result. The v1953 application wrap
 
 The v1952 scorer is standalone: it reads the saved single-query MIL prototype, saved teacher representations, biological descriptor files, coefficient targets, and gene labels. It does not read a Hopfield prediction. The saved scorer explicitly requires CUDA, so CPU evaluation of stored predictions and a GPU replay are separate gates.
 
-### Next implementation tranche
+### Phase 0 implementation blocks
 
 The next work is divided into four reviewable code blocks:
 
