@@ -1437,9 +1437,10 @@ seed-123460 prototype; verify the selected Step02, Step03, and prototype
 identities; recreate the legacy input-root layout inside the declared output
 bundle with links to the VIPER-materialized compute inputs; pass that localized
 root and the materialized direct-input paths to the historical runner; assign a
-fresh run name and output root; call the maintained application runtime once;
-and retain the four prediction arrays, Step02 and Step03 scores, and their
-identities. The declared input set is the standalone MIL graph.
+source-commit-specific VIPER experiment identity and a fresh output root; call
+the maintained application runtime once; and retain the four prediction
+arrays, Step02 and Step03 scores, and their identities. The declared input set
+is the standalone MIL graph.
 VIPER verifies each output through the self-contained loader source it
 materializes into its validation workspace.
 
