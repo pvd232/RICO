@@ -5,1147 +5,1338 @@
       "symbol": "PythonRNGState",
       "source": "src/viper/randomness.py",
       "line": 17,
-      "source_sha256": "358f5c67742921951ccceaeb37ffda73e4c6b2eadeb01d05be178db36398da56"
+      "source_sha256": "358f5c67742921951ccceaeb37ffda73e4c6b2eadeb01d05be178db36398da56",
+      "declaration": "viper-protocol-declarations.md#pythonrngstate"
     },
     {
       "symbol": "PCG64InternalState",
       "source": "src/viper/randomness.py",
       "line": 31,
-      "source_sha256": "358f5c67742921951ccceaeb37ffda73e4c6b2eadeb01d05be178db36398da56"
+      "source_sha256": "358f5c67742921951ccceaeb37ffda73e4c6b2eadeb01d05be178db36398da56",
+      "declaration": "viper-protocol-declarations.md#pcg64internalstate"
     },
     {
       "symbol": "PCG64GeneratorState",
       "source": "src/viper/randomness.py",
       "line": 38,
-      "source_sha256": "358f5c67742921951ccceaeb37ffda73e4c6b2eadeb01d05be178db36398da56"
+      "source_sha256": "358f5c67742921951ccceaeb37ffda73e4c6b2eadeb01d05be178db36398da56",
+      "declaration": "viper-protocol-declarations.md#pcg64generatorstate"
     },
     {
       "symbol": "LegacyNumPyRNGState",
       "source": "src/viper/randomness.py",
       "line": 47,
-      "source_sha256": "358f5c67742921951ccceaeb37ffda73e4c6b2eadeb01d05be178db36398da56"
+      "source_sha256": "358f5c67742921951ccceaeb37ffda73e4c6b2eadeb01d05be178db36398da56",
+      "declaration": "viper-protocol-declarations.md#legacynumpyrngstate"
     },
     {
       "symbol": "NumPyRNGState",
       "source": "src/viper/randomness.py",
       "line": 57,
-      "source_sha256": "358f5c67742921951ccceaeb37ffda73e4c6b2eadeb01d05be178db36398da56"
+      "source_sha256": "358f5c67742921951ccceaeb37ffda73e4c6b2eadeb01d05be178db36398da56",
+      "declaration": "viper-protocol-declarations.md#numpyrngstate"
     },
     {
       "symbol": "MainProcessRNGState",
       "source": "src/viper/randomness.py",
       "line": 64,
-      "source_sha256": "358f5c67742921951ccceaeb37ffda73e4c6b2eadeb01d05be178db36398da56"
+      "source_sha256": "358f5c67742921951ccceaeb37ffda73e4c6b2eadeb01d05be178db36398da56",
+      "declaration": "viper-protocol-declarations.md#mainprocessrngstate"
     },
     {
       "symbol": "DataLoaderConfiguration",
       "source": "src/viper/resume.py",
       "line": 23,
-      "source_sha256": "9bd664a38aa8ba15f8fa15a49431ee4505d0037a74ea8c4e0f2c8ba30eafcd5e"
+      "source_sha256": "9bd664a38aa8ba15f8fa15a49431ee4505d0037a74ea8c4e0f2c8ba30eafcd5e",
+      "declaration": "viper-protocol-declarations.md#dataloaderconfiguration"
     },
     {
       "symbol": "DataLoaderResumeState",
       "source": "src/viper/resume.py",
       "line": 45,
-      "source_sha256": "9bd664a38aa8ba15f8fa15a49431ee4505d0037a74ea8c4e0f2c8ba30eafcd5e"
+      "source_sha256": "9bd664a38aa8ba15f8fa15a49431ee4505d0037a74ea8c4e0f2c8ba30eafcd5e",
+      "declaration": "viper-protocol-declarations.md#dataloaderresumestate"
     },
     {
       "symbol": "ResumeState",
       "source": "src/viper/resume.py",
       "line": 52,
-      "source_sha256": "9bd664a38aa8ba15f8fa15a49431ee4505d0037a74ea8c4e0f2c8ba30eafcd5e"
+      "source_sha256": "9bd664a38aa8ba15f8fa15a49431ee4505d0037a74ea8c4e0f2c8ba30eafcd5e",
+      "declaration": "viper-protocol-declarations.md#resumestate"
     },
     {
       "symbol": "ProtocolModel",
       "source": "src/viper/_schema.py",
       "line": 65,
-      "source_sha256": "5e984bc4a7c172bba3183cf6258fc11809e71d707e26d353c54e245e503a5777"
+      "source_sha256": "5e984bc4a7c172bba3183cf6258fc11809e71d707e26d353c54e245e503a5777",
+      "declaration": "viper-protocol-declarations.md#protocolmodel"
     },
     {
       "symbol": "Config",
       "source": "src/viper/config.py",
       "line": 22,
-      "source_sha256": "64e4b15cf76e5c31ed80a3b259ce5d4dba5b55ec373b24e0b04caf04c4a09368"
+      "source_sha256": "64e4b15cf76e5c31ed80a3b259ce5d4dba5b55ec373b24e0b04caf04c4a09368",
+      "declaration": "viper-protocol-declarations.md#config"
     },
     {
       "symbol": "BuildConfig",
       "source": "src/viper/config.py",
       "line": 38,
-      "source_sha256": "64e4b15cf76e5c31ed80a3b259ce5d4dba5b55ec373b24e0b04caf04c4a09368"
+      "source_sha256": "64e4b15cf76e5c31ed80a3b259ce5d4dba5b55ec373b24e0b04caf04c4a09368",
+      "declaration": "viper-protocol-declarations.md#buildconfig"
     },
     {
       "symbol": "EmbedConfig",
       "source": "src/viper/config.py",
       "line": 42,
-      "source_sha256": "64e4b15cf76e5c31ed80a3b259ce5d4dba5b55ec373b24e0b04caf04c4a09368"
+      "source_sha256": "64e4b15cf76e5c31ed80a3b259ce5d4dba5b55ec373b24e0b04caf04c4a09368",
+      "declaration": "viper-protocol-declarations.md#embedconfig"
     },
     {
       "symbol": "TrainConfig",
       "source": "src/viper/config.py",
       "line": 46,
-      "source_sha256": "64e4b15cf76e5c31ed80a3b259ce5d4dba5b55ec373b24e0b04caf04c4a09368"
+      "source_sha256": "64e4b15cf76e5c31ed80a3b259ce5d4dba5b55ec373b24e0b04caf04c4a09368",
+      "declaration": "viper-protocol-declarations.md#trainconfig"
     },
     {
       "symbol": "EvalConfig",
       "source": "src/viper/config.py",
       "line": 50,
-      "source_sha256": "64e4b15cf76e5c31ed80a3b259ce5d4dba5b55ec373b24e0b04caf04c4a09368"
+      "source_sha256": "64e4b15cf76e5c31ed80a3b259ce5d4dba5b55ec373b24e0b04caf04c4a09368",
+      "declaration": "viper-protocol-declarations.md#evalconfig"
     },
     {
       "symbol": "MetricConfig",
       "source": "src/viper/config.py",
       "line": 62,
-      "source_sha256": "64e4b15cf76e5c31ed80a3b259ce5d4dba5b55ec373b24e0b04caf04c4a09368"
+      "source_sha256": "64e4b15cf76e5c31ed80a3b259ce5d4dba5b55ec373b24e0b04caf04c4a09368",
+      "declaration": "viper-protocol-declarations.md#metricconfig"
     },
     {
       "symbol": "HttpConfig",
       "source": "src/viper/config.py",
       "line": 66,
-      "source_sha256": "64e4b15cf76e5c31ed80a3b259ce5d4dba5b55ec373b24e0b04caf04c4a09368"
+      "source_sha256": "64e4b15cf76e5c31ed80a3b259ce5d4dba5b55ec373b24e0b04caf04c4a09368",
+      "declaration": "viper-protocol-declarations.md#httpconfig"
     },
     {
       "symbol": "DiagnosticConfig",
       "source": "src/viper/config.py",
       "line": 70,
-      "source_sha256": "64e4b15cf76e5c31ed80a3b259ce5d4dba5b55ec373b24e0b04caf04c4a09368"
+      "source_sha256": "64e4b15cf76e5c31ed80a3b259ce5d4dba5b55ec373b24e0b04caf04c4a09368",
+      "declaration": "viper-protocol-declarations.md#diagnosticconfig"
     },
     {
       "symbol": "ConfigTypeRef",
       "source": "src/viper/config.py",
       "line": 77,
-      "source_sha256": "64e4b15cf76e5c31ed80a3b259ce5d4dba5b55ec373b24e0b04caf04c4a09368"
+      "source_sha256": "64e4b15cf76e5c31ed80a3b259ce5d4dba5b55ec373b24e0b04caf04c4a09368",
+      "declaration": "viper-protocol-declarations.md#configtyperef"
     },
     {
       "symbol": "GitSource",
       "source": "src/viper/references.py",
       "line": 14,
-      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0",
+      "declaration": "viper-protocol-declarations.md#gitsource"
     },
     {
       "symbol": "GitFileRef",
       "source": "src/viper/references.py",
       "line": 22,
-      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0",
+      "declaration": "viper-protocol-declarations.md#gitfileref"
     },
     {
       "symbol": "ArtifactPointerRef",
       "source": "src/viper/references.py",
       "line": 61,
-      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0",
+      "declaration": "viper-protocol-declarations.md#artifactpointerref"
     },
     {
       "symbol": "HuggingFaceFileRef",
       "source": "src/viper/references.py",
       "line": 71,
-      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0",
+      "declaration": "viper-protocol-declarations.md#huggingfacefileref"
     },
     {
       "symbol": "LocalFileRef",
       "source": "src/viper/references.py",
       "line": 81,
-      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0",
+      "declaration": "viper-protocol-declarations.md#localfileref"
     },
     {
       "symbol": "LocalStageResultSnapshotRef",
       "source": "src/viper/references.py",
       "line": 90,
-      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0",
+      "declaration": "viper-protocol-declarations.md#localstageresultsnapshotref"
     },
     {
       "symbol": "HuggingFaceStageResultSnapshotRef",
       "source": "src/viper/references.py",
       "line": 98,
-      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0",
+      "declaration": "viper-protocol-declarations.md#huggingfacestageresultsnapshotref"
     },
     {
       "symbol": "ViperCloudFileRef",
       "source": "src/viper/references.py",
       "line": 107,
-      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0",
+      "declaration": "viper-protocol-declarations.md#vipercloudfileref"
     },
     {
       "symbol": "ViperCloudStageResultSnapshotRef",
       "source": "src/viper/references.py",
       "line": 117,
-      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0",
+      "declaration": "viper-protocol-declarations.md#vipercloudstageresultsnapshotref"
     },
     {
       "symbol": "ResolvedFileRef",
       "source": "src/viper/references.py",
       "line": 141,
-      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0",
+      "declaration": "viper-protocol-declarations.md#resolvedfileref"
     },
     {
       "symbol": "SnapshotFileRef",
       "source": "src/viper/references.py",
       "line": 149,
-      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0",
+      "declaration": "viper-protocol-declarations.md#snapshotfileref"
     },
     {
       "symbol": "ResolvedGitFileRef",
       "source": "src/viper/references.py",
       "line": 157,
-      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0",
+      "declaration": "viper-protocol-declarations.md#resolvedgitfileref"
     },
     {
       "symbol": "ResolvedStageRef",
       "source": "src/viper/references.py",
       "line": 163,
-      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0",
+      "declaration": "viper-protocol-declarations.md#resolvedstageref"
     },
     {
       "symbol": "ResolvedStageInvocationRef",
       "source": "src/viper/references.py",
       "line": 171,
-      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0",
+      "declaration": "viper-protocol-declarations.md#resolvedstageinvocationref"
     },
     {
       "symbol": "ResolvedArtifactPointerRef",
       "source": "src/viper/references.py",
       "line": 177,
-      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0",
+      "declaration": "viper-protocol-declarations.md#resolvedartifactpointerref"
     },
     {
       "symbol": "ResolvedRunSpecRef",
       "source": "src/viper/references.py",
       "line": 189,
-      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0",
+      "declaration": "viper-protocol-declarations.md#resolvedrunspecref"
     },
     {
       "symbol": "ResolvedRunRef",
       "source": "src/viper/references.py",
       "line": 195,
-      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0",
+      "declaration": "viper-protocol-declarations.md#resolvedrunref"
     },
     {
       "symbol": "ResolvedBenchmarkSpecRef",
       "source": "src/viper/references.py",
       "line": 201,
-      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0",
+      "declaration": "viper-protocol-declarations.md#resolvedbenchmarkspecref"
     },
     {
       "symbol": "ResolvedBenchmarkResultRef",
       "source": "src/viper/references.py",
       "line": 207,
-      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0"
+      "source_sha256": "07086d28b89a46c3e404955cc3f5ec58bbca7bf36932511839233cb58dd36fe0",
+      "declaration": "viper-protocol-declarations.md#resolvedbenchmarkresultref"
     },
     {
       "symbol": "OutputDraft",
       "source": "src/viper/outputs.py",
       "line": 20,
-      "source_sha256": "b0cd9ed2ab7de0d8e0c9b4d0e75f6535a65df0c169f7a71799f481723e318e04"
+      "source_sha256": "b0cd9ed2ab7de0d8e0c9b4d0e75f6535a65df0c169f7a71799f481723e318e04",
+      "declaration": "viper-protocol-declarations.md#outputdraft"
     },
     {
       "symbol": "OutputSpec",
       "source": "src/viper/outputs.py",
       "line": 35,
-      "source_sha256": "b0cd9ed2ab7de0d8e0c9b4d0e75f6535a65df0c169f7a71799f481723e318e04"
+      "source_sha256": "b0cd9ed2ab7de0d8e0c9b4d0e75f6535a65df0c169f7a71799f481723e318e04",
+      "declaration": "viper-protocol-declarations.md#outputspec"
     },
     {
       "symbol": "StageOutputs",
       "source": "src/viper/outputs.py",
       "line": 44,
-      "source_sha256": "b0cd9ed2ab7de0d8e0c9b4d0e75f6535a65df0c169f7a71799f481723e318e04"
+      "source_sha256": "b0cd9ed2ab7de0d8e0c9b4d0e75f6535a65df0c169f7a71799f481723e318e04",
+      "declaration": "viper-protocol-declarations.md#stageoutputs"
     },
     {
       "symbol": "TrainOutputs",
       "source": "src/viper/outputs.py",
       "line": 111,
-      "source_sha256": "b0cd9ed2ab7de0d8e0c9b4d0e75f6535a65df0c169f7a71799f481723e318e04"
+      "source_sha256": "b0cd9ed2ab7de0d8e0c9b4d0e75f6535a65df0c169f7a71799f481723e318e04",
+      "declaration": "viper-protocol-declarations.md#trainoutputs"
     },
     {
       "symbol": "EvalOutputs",
       "source": "src/viper/outputs.py",
       "line": 118,
-      "source_sha256": "b0cd9ed2ab7de0d8e0c9b4d0e75f6535a65df0c169f7a71799f481723e318e04"
+      "source_sha256": "b0cd9ed2ab7de0d8e0c9b4d0e75f6535a65df0c169f7a71799f481723e318e04",
+      "declaration": "viper-protocol-declarations.md#evaloutputs"
     },
     {
       "symbol": "StageArtifactRef",
       "source": "src/viper/artifacts.py",
       "line": 36,
-      "source_sha256": "e311fed9430b066e153496b55de0ba10b6df4db8375affbd22949bbdcb897799"
+      "source_sha256": "e311fed9430b066e153496b55de0ba10b6df4db8375affbd22949bbdcb897799",
+      "declaration": "viper-protocol-declarations.md#stageartifactref"
     },
     {
       "symbol": "ArtifactPointer",
       "source": "src/viper/artifacts.py",
       "line": 43,
-      "source_sha256": "e311fed9430b066e153496b55de0ba10b6df4db8375affbd22949bbdcb897799"
+      "source_sha256": "e311fed9430b066e153496b55de0ba10b6df4db8375affbd22949bbdcb897799",
+      "declaration": "viper-protocol-declarations.md#artifactpointer"
     },
     {
       "symbol": "ArtifactLoaderRef",
       "source": "src/viper/artifacts.py",
       "line": 52,
-      "source_sha256": "e311fed9430b066e153496b55de0ba10b6df4db8375affbd22949bbdcb897799"
+      "source_sha256": "e311fed9430b066e153496b55de0ba10b6df4db8375affbd22949bbdcb897799",
+      "declaration": "viper-protocol-declarations.md#artifactloaderref"
     },
     {
       "symbol": "SingleFileArtifactSpec",
       "source": "src/viper/artifacts.py",
       "line": 61,
-      "source_sha256": "e311fed9430b066e153496b55de0ba10b6df4db8375affbd22949bbdcb897799"
+      "source_sha256": "e311fed9430b066e153496b55de0ba10b6df4db8375affbd22949bbdcb897799",
+      "declaration": "viper-protocol-declarations.md#singlefileartifactspec"
     },
     {
       "symbol": "BundleArtifactSpec",
       "source": "src/viper/artifacts.py",
       "line": 70,
-      "source_sha256": "e311fed9430b066e153496b55de0ba10b6df4db8375affbd22949bbdcb897799"
+      "source_sha256": "e311fed9430b066e153496b55de0ba10b6df4db8375affbd22949bbdcb897799",
+      "declaration": "viper-protocol-declarations.md#bundleartifactspec"
     },
     {
       "symbol": "ResolvedSingleFileArtifact",
       "source": "src/viper/artifacts.py",
       "line": 85,
-      "source_sha256": "e311fed9430b066e153496b55de0ba10b6df4db8375affbd22949bbdcb897799"
+      "source_sha256": "e311fed9430b066e153496b55de0ba10b6df4db8375affbd22949bbdcb897799",
+      "declaration": "viper-protocol-declarations.md#resolvedsinglefileartifact"
     },
     {
       "symbol": "ResolvedBundleMember",
       "source": "src/viper/artifacts.py",
       "line": 92,
-      "source_sha256": "e311fed9430b066e153496b55de0ba10b6df4db8375affbd22949bbdcb897799"
+      "source_sha256": "e311fed9430b066e153496b55de0ba10b6df4db8375affbd22949bbdcb897799",
+      "declaration": "viper-protocol-declarations.md#resolvedbundlemember"
     },
     {
       "symbol": "ResolvedBundleArtifact",
       "source": "src/viper/artifacts.py",
       "line": 99,
-      "source_sha256": "e311fed9430b066e153496b55de0ba10b6df4db8375affbd22949bbdcb897799"
+      "source_sha256": "e311fed9430b066e153496b55de0ba10b6df4db8375affbd22949bbdcb897799",
+      "declaration": "viper-protocol-declarations.md#resolvedbundleartifact"
     },
     {
       "symbol": "SingleFileArtifactDraft",
       "source": "src/viper/artifacts.py",
       "line": 139,
-      "source_sha256": "e311fed9430b066e153496b55de0ba10b6df4db8375affbd22949bbdcb897799"
+      "source_sha256": "e311fed9430b066e153496b55de0ba10b6df4db8375affbd22949bbdcb897799",
+      "declaration": "viper-protocol-declarations.md#singlefileartifactdraft"
     },
     {
       "symbol": "BundleArtifactDraft",
       "source": "src/viper/artifacts.py",
       "line": 150,
-      "source_sha256": "e311fed9430b066e153496b55de0ba10b6df4db8375affbd22949bbdcb897799"
+      "source_sha256": "e311fed9430b066e153496b55de0ba10b6df4db8375affbd22949bbdcb897799",
+      "declaration": "viper-protocol-declarations.md#bundleartifactdraft"
     },
     {
       "symbol": "AttemptFailure",
       "source": "src/viper/runs.py",
       "line": 58,
-      "source_sha256": "2d6e851fae5528bac131f349a1ef70b7e80169edc458b6521f22a7d16e26863a"
+      "source_sha256": "2d6e851fae5528bac131f349a1ef70b7e80169edc458b6521f22a7d16e26863a",
+      "declaration": "viper-protocol-declarations.md#attemptfailure"
     },
     {
       "symbol": "AttemptJournalRef",
       "source": "src/viper/runs.py",
       "line": 67,
-      "source_sha256": "2d6e851fae5528bac131f349a1ef70b7e80169edc458b6521f22a7d16e26863a"
+      "source_sha256": "2d6e851fae5528bac131f349a1ef70b7e80169edc458b6521f22a7d16e26863a",
+      "declaration": "viper-protocol-declarations.md#attemptjournalref"
     },
     {
       "symbol": "RunAttempt",
       "source": "src/viper/runs.py",
       "line": 73,
-      "source_sha256": "2d6e851fae5528bac131f349a1ef70b7e80169edc458b6521f22a7d16e26863a"
+      "source_sha256": "2d6e851fae5528bac131f349a1ef70b7e80169edc458b6521f22a7d16e26863a",
+      "declaration": "viper-protocol-declarations.md#runattempt"
     },
     {
       "symbol": "ResolvedAttemptRef",
       "source": "src/viper/runs.py",
       "line": 182,
-      "source_sha256": "2d6e851fae5528bac131f349a1ef70b7e80169edc458b6521f22a7d16e26863a"
+      "source_sha256": "2d6e851fae5528bac131f349a1ef70b7e80169edc458b6521f22a7d16e26863a",
+      "declaration": "viper-protocol-declarations.md#resolvedattemptref"
     },
     {
       "symbol": "RunStageRef",
       "source": "src/viper/runs.py",
       "line": 188,
-      "source_sha256": "2d6e851fae5528bac131f349a1ef70b7e80169edc458b6521f22a7d16e26863a"
+      "source_sha256": "2d6e851fae5528bac131f349a1ef70b7e80169edc458b6521f22a7d16e26863a",
+      "declaration": "viper-protocol-declarations.md#runstageref"
     },
     {
       "symbol": "RunSpec",
       "source": "src/viper/runs.py",
       "line": 197,
-      "source_sha256": "2d6e851fae5528bac131f349a1ef70b7e80169edc458b6521f22a7d16e26863a"
+      "source_sha256": "2d6e851fae5528bac131f349a1ef70b7e80169edc458b6521f22a7d16e26863a",
+      "declaration": "viper-protocol-declarations.md#runspec"
     },
     {
       "symbol": "ResolvedRun",
       "source": "src/viper/runs.py",
       "line": 248,
-      "source_sha256": "2d6e851fae5528bac131f349a1ef70b7e80169edc458b6521f22a7d16e26863a"
+      "source_sha256": "2d6e851fae5528bac131f349a1ef70b7e80169edc458b6521f22a7d16e26863a",
+      "declaration": "viper-protocol-declarations.md#resolvedrun"
     },
     {
       "symbol": "LocalSource",
       "source": "src/viper/inputs.py",
       "line": 20,
-      "source_sha256": "565f4861a41eb6e18cb91029ff4c8a8e1b13ebc97f2d96686b3c075c1ea4735b"
+      "source_sha256": "565f4861a41eb6e18cb91029ff4c8a8e1b13ebc97f2d96686b3c075c1ea4735b",
+      "declaration": "viper-protocol-declarations.md#localsource"
     },
     {
       "symbol": "ExternalInputRef",
       "source": "src/viper/inputs.py",
       "line": 27,
-      "source_sha256": "565f4861a41eb6e18cb91029ff4c8a8e1b13ebc97f2d96686b3c075c1ea4735b"
+      "source_sha256": "565f4861a41eb6e18cb91029ff4c8a8e1b13ebc97f2d96686b3c075c1ea4735b",
+      "declaration": "viper-protocol-declarations.md#externalinputref"
     },
     {
       "symbol": "ResolvedExternalInputRef",
       "source": "src/viper/inputs.py",
       "line": 35,
-      "source_sha256": "565f4861a41eb6e18cb91029ff4c8a8e1b13ebc97f2d96686b3c075c1ea4735b"
+      "source_sha256": "565f4861a41eb6e18cb91029ff4c8a8e1b13ebc97f2d96686b3c075c1ea4735b",
+      "declaration": "viper-protocol-declarations.md#resolvedexternalinputref"
     },
     {
       "symbol": "StoredInputRef",
       "source": "src/viper/inputs.py",
       "line": 66,
-      "source_sha256": "565f4861a41eb6e18cb91029ff4c8a8e1b13ebc97f2d96686b3c075c1ea4735b"
+      "source_sha256": "565f4861a41eb6e18cb91029ff4c8a8e1b13ebc97f2d96686b3c075c1ea4735b",
+      "declaration": "viper-protocol-declarations.md#storedinputref"
     },
     {
       "symbol": "FutureInputRef",
       "source": "src/viper/inputs.py",
       "line": 87,
-      "source_sha256": "565f4861a41eb6e18cb91029ff4c8a8e1b13ebc97f2d96686b3c075c1ea4735b"
+      "source_sha256": "565f4861a41eb6e18cb91029ff4c8a8e1b13ebc97f2d96686b3c075c1ea4735b",
+      "declaration": "viper-protocol-declarations.md#futureinputref"
     },
     {
       "symbol": "ResolvedStoredInputRef",
       "source": "src/viper/inputs.py",
       "line": 101,
-      "source_sha256": "565f4861a41eb6e18cb91029ff4c8a8e1b13ebc97f2d96686b3c075c1ea4735b"
+      "source_sha256": "565f4861a41eb6e18cb91029ff4c8a8e1b13ebc97f2d96686b3c075c1ea4735b",
+      "declaration": "viper-protocol-declarations.md#resolvedstoredinputref"
     },
     {
       "symbol": "ResolvedFutureInputRef",
       "source": "src/viper/inputs.py",
       "line": 108,
-      "source_sha256": "565f4861a41eb6e18cb91029ff4c8a8e1b13ebc97f2d96686b3c075c1ea4735b"
+      "source_sha256": "565f4861a41eb6e18cb91029ff4c8a8e1b13ebc97f2d96686b3c075c1ea4735b",
+      "declaration": "viper-protocol-declarations.md#resolvedfutureinputref"
     },
     {
       "symbol": "GCEBootImageRef",
       "source": "src/viper/runtime.py",
       "line": 37,
-      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6",
+      "declaration": "viper-protocol-declarations.md#gcebootimageref"
     },
     {
       "symbol": "GCEMachineImageRef",
       "source": "src/viper/runtime.py",
       "line": 46,
-      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6",
+      "declaration": "viper-protocol-declarations.md#gcemachineimageref"
     },
     {
       "symbol": "PythonDistributionSpec",
       "source": "src/viper/runtime.py",
       "line": 61,
-      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6",
+      "declaration": "viper-protocol-declarations.md#pythondistributionspec"
     },
     {
       "symbol": "CPUComputeSpec",
       "source": "src/viper/runtime.py",
       "line": 68,
-      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6",
+      "declaration": "viper-protocol-declarations.md#cpucomputespec"
     },
     {
       "symbol": "CUDAComputeSpec",
       "source": "src/viper/runtime.py",
       "line": 74,
-      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6",
+      "declaration": "viper-protocol-declarations.md#cudacomputespec"
     },
     {
       "symbol": "NumPyRandomnessSpec",
       "source": "src/viper/runtime.py",
       "line": 88,
-      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6",
+      "declaration": "viper-protocol-declarations.md#numpyrandomnessspec"
     },
     {
       "symbol": "TorchDeterminismSpec",
       "source": "src/viper/runtime.py",
       "line": 95,
-      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6",
+      "declaration": "viper-protocol-declarations.md#torchdeterminismspec"
     },
     {
       "symbol": "TorchPrecisionSpec",
       "source": "src/viper/runtime.py",
       "line": 105,
-      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6",
+      "declaration": "viper-protocol-declarations.md#torchprecisionspec"
     },
     {
       "symbol": "ParallelismSpec",
       "source": "src/viper/runtime.py",
       "line": 128,
-      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6",
+      "declaration": "viper-protocol-declarations.md#parallelismspec"
     },
     {
       "symbol": "ReproducibilitySpec",
       "source": "src/viper/runtime.py",
       "line": 138,
-      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6",
+      "declaration": "viper-protocol-declarations.md#reproducibilityspec"
     },
     {
       "symbol": "ExecutionPolicyRef",
       "source": "src/viper/runtime.py",
       "line": 147,
-      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6",
+      "declaration": "viper-protocol-declarations.md#executionpolicyref"
     },
     {
       "symbol": "GeneratorInitializationReceipt",
       "source": "src/viper/runtime.py",
       "line": 245,
-      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6",
+      "declaration": "viper-protocol-declarations.md#generatorinitializationreceipt"
     },
     {
       "symbol": "PythonEnvSpec",
       "source": "src/viper/runtime.py",
       "line": 273,
-      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6",
+      "declaration": "viper-protocol-declarations.md#pythonenvspec"
     },
     {
       "symbol": "GCEEnvSpec",
       "source": "src/viper/runtime.py",
       "line": 290,
-      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6",
+      "declaration": "viper-protocol-declarations.md#gceenvspec"
     },
     {
       "symbol": "ResolvedGCEEnv",
       "source": "src/viper/runtime.py",
       "line": 301,
-      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6",
+      "declaration": "viper-protocol-declarations.md#resolvedgceenv"
     },
     {
       "symbol": "LocalEnvSpec",
       "source": "src/viper/runtime.py",
       "line": 312,
-      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6",
+      "declaration": "viper-protocol-declarations.md#localenvspec"
     },
     {
       "symbol": "ResolvedLocalEnv",
       "source": "src/viper/runtime.py",
       "line": 321,
-      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6",
+      "declaration": "viper-protocol-declarations.md#resolvedlocalenv"
     },
     {
       "symbol": "RuntimeControlsReceipt",
       "source": "src/viper/runtime.py",
       "line": 341,
-      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6",
+      "declaration": "viper-protocol-declarations.md#runtimecontrolsreceipt"
     },
     {
       "symbol": "ProcessStartupReceipt",
       "source": "src/viper/runtime.py",
       "line": 411,
-      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6",
+      "declaration": "viper-protocol-declarations.md#processstartupreceipt"
     },
     {
       "symbol": "GCEHostContext",
       "source": "src/viper/runtime.py",
       "line": 428,
-      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6",
+      "declaration": "viper-protocol-declarations.md#gcehostcontext"
     },
     {
       "symbol": "LocalHostContext",
       "source": "src/viper/runtime.py",
       "line": 443,
-      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6",
+      "declaration": "viper-protocol-declarations.md#localhostcontext"
     },
     {
       "symbol": "CPUContext",
       "source": "src/viper/runtime.py",
       "line": 458,
-      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6",
+      "declaration": "viper-protocol-declarations.md#cpucontext"
     },
     {
       "symbol": "CPUBackendContext",
       "source": "src/viper/runtime.py",
       "line": 470,
-      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6",
+      "declaration": "viper-protocol-declarations.md#cpubackendcontext"
     },
     {
       "symbol": "CUDADeviceContext",
       "source": "src/viper/runtime.py",
       "line": 477,
-      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6",
+      "declaration": "viper-protocol-declarations.md#cudadevicecontext"
     },
     {
       "symbol": "CUDABackendContext",
       "source": "src/viper/runtime.py",
       "line": 489,
-      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6",
+      "declaration": "viper-protocol-declarations.md#cudabackendcontext"
     },
     {
       "symbol": "NativeLibraryContext",
       "source": "src/viper/runtime.py",
       "line": 515,
-      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6",
+      "declaration": "viper-protocol-declarations.md#nativelibrarycontext"
     },
     {
       "symbol": "NativeThreadPoolContext",
       "source": "src/viper/runtime.py",
       "line": 522,
-      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6",
+      "declaration": "viper-protocol-declarations.md#nativethreadpoolcontext"
     },
     {
       "symbol": "NumericalRuntimeContext",
       "source": "src/viper/runtime.py",
       "line": 528,
-      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6",
+      "declaration": "viper-protocol-declarations.md#numericalruntimecontext"
     },
     {
       "symbol": "ExecutionContext",
       "source": "src/viper/runtime.py",
       "line": 540,
-      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6",
+      "declaration": "viper-protocol-declarations.md#executioncontext"
     },
     {
       "symbol": "RuntimeInitialization",
       "source": "src/viper/runtime.py",
       "line": 560,
-      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6"
+      "source_sha256": "2622962de18a7efff106e3350246c21619e41b97027dc586a388ede21290aea6",
+      "declaration": "viper-protocol-declarations.md#runtimeinitialization"
     },
     {
       "symbol": "FactorSpec",
       "source": "src/viper/experiments.py",
       "line": 15,
-      "source_sha256": "525393087d86f8fd07c19b743f06ea9472573ba8c45c03902dd6b47f62be3779"
+      "source_sha256": "525393087d86f8fd07c19b743f06ea9472573ba8c45c03902dd6b47f62be3779",
+      "declaration": "viper-protocol-declarations.md#factorspec"
     },
     {
       "symbol": "ReplicateSpec",
       "source": "src/viper/experiments.py",
       "line": 29,
-      "source_sha256": "525393087d86f8fd07c19b743f06ea9472573ba8c45c03902dd6b47f62be3779"
+      "source_sha256": "525393087d86f8fd07c19b743f06ea9472573ba8c45c03902dd6b47f62be3779",
+      "declaration": "viper-protocol-declarations.md#replicatespec"
     },
     {
       "symbol": "ExperimentSpec",
       "source": "src/viper/experiments.py",
       "line": 36,
-      "source_sha256": "525393087d86f8fd07c19b743f06ea9472573ba8c45c03902dd6b47f62be3779"
+      "source_sha256": "525393087d86f8fd07c19b743f06ea9472573ba8c45c03902dd6b47f62be3779",
+      "declaration": "viper-protocol-declarations.md#experimentspec"
     },
     {
       "symbol": "BuildVariantStageConfig",
       "source": "src/viper/experiments.py",
       "line": 72,
-      "source_sha256": "525393087d86f8fd07c19b743f06ea9472573ba8c45c03902dd6b47f62be3779"
+      "source_sha256": "525393087d86f8fd07c19b743f06ea9472573ba8c45c03902dd6b47f62be3779",
+      "declaration": "viper-protocol-declarations.md#buildvariantstageconfig"
     },
     {
       "symbol": "EmbedVariantStageConfig",
       "source": "src/viper/experiments.py",
       "line": 80,
-      "source_sha256": "525393087d86f8fd07c19b743f06ea9472573ba8c45c03902dd6b47f62be3779"
+      "source_sha256": "525393087d86f8fd07c19b743f06ea9472573ba8c45c03902dd6b47f62be3779",
+      "declaration": "viper-protocol-declarations.md#embedvariantstageconfig"
     },
     {
       "symbol": "DiagnosticVariantStageConfig",
       "source": "src/viper/experiments.py",
       "line": 88,
-      "source_sha256": "525393087d86f8fd07c19b743f06ea9472573ba8c45c03902dd6b47f62be3779"
+      "source_sha256": "525393087d86f8fd07c19b743f06ea9472573ba8c45c03902dd6b47f62be3779",
+      "declaration": "viper-protocol-declarations.md#diagnosticvariantstageconfig"
     },
     {
       "symbol": "TrainVariantStageConfig",
       "source": "src/viper/experiments.py",
       "line": 96,
-      "source_sha256": "525393087d86f8fd07c19b743f06ea9472573ba8c45c03902dd6b47f62be3779"
+      "source_sha256": "525393087d86f8fd07c19b743f06ea9472573ba8c45c03902dd6b47f62be3779",
+      "declaration": "viper-protocol-declarations.md#trainvariantstageconfig"
     },
     {
       "symbol": "EvalVariantStageConfig",
       "source": "src/viper/experiments.py",
       "line": 104,
-      "source_sha256": "525393087d86f8fd07c19b743f06ea9472573ba8c45c03902dd6b47f62be3779"
+      "source_sha256": "525393087d86f8fd07c19b743f06ea9472573ba8c45c03902dd6b47f62be3779",
+      "declaration": "viper-protocol-declarations.md#evalvariantstageconfig"
     },
     {
       "symbol": "VariantSpec",
       "source": "src/viper/experiments.py",
       "line": 122,
-      "source_sha256": "525393087d86f8fd07c19b743f06ea9472573ba8c45c03902dd6b47f62be3779"
+      "source_sha256": "525393087d86f8fd07c19b743f06ea9472573ba8c45c03902dd6b47f62be3779",
+      "declaration": "viper-protocol-declarations.md#variantspec"
     },
     {
       "symbol": "FloatComparator",
       "source": "src/viper/metrics.py",
       "line": 38,
-      "source_sha256": "ceb66cd0cf5b5d51e32d5dad298764064382691ad13edfdc24edda87a277a189"
+      "source_sha256": "ceb66cd0cf5b5d51e32d5dad298764064382691ad13edfdc24edda87a277a189",
+      "declaration": "viper-protocol-declarations.md#floatcomparator"
     },
     {
       "symbol": "MetricImplementationRef",
       "source": "src/viper/metrics.py",
       "line": 54,
-      "source_sha256": "ceb66cd0cf5b5d51e32d5dad298764064382691ad13edfdc24edda87a277a189"
+      "source_sha256": "ceb66cd0cf5b5d51e32d5dad298764064382691ad13edfdc24edda87a277a189",
+      "declaration": "viper-protocol-declarations.md#metricimplementationref"
     },
     {
       "symbol": "MetricDependency",
       "source": "src/viper/metrics.py",
       "line": 63,
-      "source_sha256": "ceb66cd0cf5b5d51e32d5dad298764064382691ad13edfdc24edda87a277a189"
+      "source_sha256": "ceb66cd0cf5b5d51e32d5dad298764064382691ad13edfdc24edda87a277a189",
+      "declaration": "viper-protocol-declarations.md#metricdependency"
     },
     {
       "symbol": "MetricSpec",
       "source": "src/viper/metrics.py",
       "line": 73,
-      "source_sha256": "ceb66cd0cf5b5d51e32d5dad298764064382691ad13edfdc24edda87a277a189"
+      "source_sha256": "ceb66cd0cf5b5d51e32d5dad298764064382691ad13edfdc24edda87a277a189",
+      "declaration": "viper-protocol-declarations.md#metricspec"
     },
     {
       "symbol": "ResolvedMetricDependency",
       "source": "src/viper/metrics.py",
       "line": 106,
-      "source_sha256": "ceb66cd0cf5b5d51e32d5dad298764064382691ad13edfdc24edda87a277a189"
+      "source_sha256": "ceb66cd0cf5b5d51e32d5dad298764064382691ad13edfdc24edda87a277a189",
+      "declaration": "viper-protocol-declarations.md#resolvedmetricdependency"
     },
     {
       "symbol": "MetricExecutionReceipt",
       "source": "src/viper/metrics.py",
       "line": 113,
-      "source_sha256": "ceb66cd0cf5b5d51e32d5dad298764064382691ad13edfdc24edda87a277a189"
+      "source_sha256": "ceb66cd0cf5b5d51e32d5dad298764064382691ad13edfdc24edda87a277a189",
+      "declaration": "viper-protocol-declarations.md#metricexecutionreceipt"
     },
     {
       "symbol": "Measurement",
       "source": "src/viper/metrics.py",
       "line": 135,
-      "source_sha256": "ceb66cd0cf5b5d51e32d5dad298764064382691ad13edfdc24edda87a277a189"
+      "source_sha256": "ceb66cd0cf5b5d51e32d5dad298764064382691ad13edfdc24edda87a277a189",
+      "declaration": "viper-protocol-declarations.md#measurement"
     },
     {
       "symbol": "MetricVerificationReceipt",
       "source": "src/viper/metrics.py",
       "line": 150,
-      "source_sha256": "ceb66cd0cf5b5d51e32d5dad298764064382691ad13edfdc24edda87a277a189"
+      "source_sha256": "ceb66cd0cf5b5d51e32d5dad298764064382691ad13edfdc24edda87a277a189",
+      "declaration": "viper-protocol-declarations.md#metricverificationreceipt"
     },
     {
       "symbol": "MetricContext",
       "source": "src/viper/metrics.py",
       "line": 215,
-      "source_sha256": "ceb66cd0cf5b5d51e32d5dad298764064382691ad13edfdc24edda87a277a189"
+      "source_sha256": "ceb66cd0cf5b5d51e32d5dad298764064382691ad13edfdc24edda87a277a189",
+      "declaration": "viper-protocol-declarations.md#metriccontext"
     },
     {
       "symbol": "MetricObjectiveSpec",
       "source": "src/viper/metrics.py",
       "line": 536,
-      "source_sha256": "ceb66cd0cf5b5d51e32d5dad298764064382691ad13edfdc24edda87a277a189"
+      "source_sha256": "ceb66cd0cf5b5d51e32d5dad298764064382691ad13edfdc24edda87a277a189",
+      "declaration": "viper-protocol-declarations.md#metricobjectivespec"
     },
     {
       "symbol": "StageContext",
       "source": "src/viper/stages.py",
       "line": 76,
-      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821",
+      "declaration": "viper-protocol-declarations.md#stagecontext"
     },
     {
       "symbol": "StageImplementationRef",
       "source": "src/viper/stages.py",
       "line": 93,
-      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821",
+      "declaration": "viper-protocol-declarations.md#stageimplementationref"
     },
     {
       "symbol": "StageContextBinding",
       "source": "src/viper/stages.py",
       "line": 102,
-      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821",
+      "declaration": "viper-protocol-declarations.md#stagecontextbinding"
     },
     {
       "symbol": "StageInvocationReceipt",
       "source": "src/viper/stages.py",
       "line": 117,
-      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821",
+      "declaration": "viper-protocol-declarations.md#stageinvocationreceipt"
     },
     {
       "symbol": "BaseSpec",
       "source": "src/viper/stages.py",
       "line": 135,
-      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821",
+      "declaration": "viper-protocol-declarations.md#basespec"
     },
     {
       "symbol": "ParameterizedSpec",
       "source": "src/viper/stages.py",
       "line": 179,
-      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821",
+      "declaration": "viper-protocol-declarations.md#parameterizedspec"
     },
     {
       "symbol": "DownloadSpec",
       "source": "src/viper/stages.py",
       "line": 197,
-      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821",
+      "declaration": "viper-protocol-declarations.md#downloadspec"
     },
     {
       "symbol": "InternalSpec",
       "source": "src/viper/stages.py",
       "line": 215,
-      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821",
+      "declaration": "viper-protocol-declarations.md#internalspec"
     },
     {
       "symbol": "BuildSpec",
       "source": "src/viper/stages.py",
       "line": 253,
-      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821",
+      "declaration": "viper-protocol-declarations.md#buildspec"
     },
     {
       "symbol": "EmbedSpec",
       "source": "src/viper/stages.py",
       "line": 260,
-      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821",
+      "declaration": "viper-protocol-declarations.md#embedspec"
     },
     {
       "symbol": "DiagnosticSpec",
       "source": "src/viper/stages.py",
       "line": 278,
-      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821",
+      "declaration": "viper-protocol-declarations.md#diagnosticspec"
     },
     {
       "symbol": "TrainSpec",
       "source": "src/viper/stages.py",
       "line": 285,
-      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821",
+      "declaration": "viper-protocol-declarations.md#trainspec"
     },
     {
       "symbol": "EvalSpec",
       "source": "src/viper/stages.py",
       "line": 331,
-      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821",
+      "declaration": "viper-protocol-declarations.md#evalspec"
     },
     {
       "symbol": "ResolvedBaseSpec",
       "source": "src/viper/stages.py",
       "line": 404,
-      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821",
+      "declaration": "viper-protocol-declarations.md#resolvedbasespec"
     },
     {
       "symbol": "ResolvedExecutedSpec",
       "source": "src/viper/stages.py",
       "line": 450,
-      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821",
+      "declaration": "viper-protocol-declarations.md#resolvedexecutedspec"
     },
     {
       "symbol": "ResolvedDownloadSpec",
       "source": "src/viper/stages.py",
       "line": 531,
-      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821",
+      "declaration": "viper-protocol-declarations.md#resolveddownloadspec"
     },
     {
       "symbol": "ResolvedParameterizedSpec",
       "source": "src/viper/stages.py",
       "line": 565,
-      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821",
+      "declaration": "viper-protocol-declarations.md#resolvedparameterizedspec"
     },
     {
       "symbol": "ResolvedInternalSpec",
       "source": "src/viper/stages.py",
       "line": 606,
-      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821",
+      "declaration": "viper-protocol-declarations.md#resolvedinternalspec"
     },
     {
       "symbol": "ResolvedBuildSpec",
       "source": "src/viper/stages.py",
       "line": 644,
-      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821",
+      "declaration": "viper-protocol-declarations.md#resolvedbuildspec"
     },
     {
       "symbol": "ResolvedEmbedSpec",
       "source": "src/viper/stages.py",
       "line": 651,
-      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821",
+      "declaration": "viper-protocol-declarations.md#resolvedembedspec"
     },
     {
       "symbol": "ResolvedDiagnosticSpec",
       "source": "src/viper/stages.py",
       "line": 658,
-      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821",
+      "declaration": "viper-protocol-declarations.md#resolveddiagnosticspec"
     },
     {
       "symbol": "ResolvedTrainSpec",
       "source": "src/viper/stages.py",
       "line": 665,
-      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821",
+      "declaration": "viper-protocol-declarations.md#resolvedtrainspec"
     },
     {
       "symbol": "ResolvedEvalSpec",
       "source": "src/viper/stages.py",
       "line": 672,
-      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821",
+      "declaration": "viper-protocol-declarations.md#resolvedevalspec"
     },
     {
       "symbol": "StageDefinition",
       "source": "src/viper/stages.py",
       "line": 694,
-      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821",
+      "declaration": "viper-protocol-declarations.md#stagedefinition"
     },
     {
       "symbol": "StageDefinitionError",
       "source": "src/viper/stages.py",
       "line": 701,
-      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821"
+      "source_sha256": "84cc94c0dc3dcfab380b9035f80918428b9d503d9baececf923f221aef6b1821",
+      "declaration": "viper-protocol-declarations.md#stagedefinitionerror"
     },
     {
       "symbol": "HttpOrigin",
       "source": "src/viper/http.py",
       "line": 54,
-      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369",
+      "declaration": "viper-protocol-declarations.md#httporigin"
     },
     {
       "symbol": "EnvSecretRef",
       "source": "src/viper/http.py",
       "line": 70,
-      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369",
+      "declaration": "viper-protocol-declarations.md#envsecretref"
     },
     {
       "symbol": "HttpRequestSpec",
       "source": "src/viper/http.py",
       "line": 88,
-      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369",
+      "declaration": "viper-protocol-declarations.md#httprequestspec"
     },
     {
       "symbol": "HttpRetrievalPolicy",
       "source": "src/viper/http.py",
       "line": 120,
-      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369",
+      "declaration": "viper-protocol-declarations.md#httpretrievalpolicy"
     },
     {
       "symbol": "HttpImplementationRef",
       "source": "src/viper/http.py",
       "line": 157,
-      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369",
+      "declaration": "viper-protocol-declarations.md#httpimplementationref"
     },
     {
       "symbol": "ExternalExecutableSpec",
       "source": "src/viper/http.py",
       "line": 166,
-      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369",
+      "declaration": "viper-protocol-declarations.md#externalexecutablespec"
     },
     {
       "symbol": "BuiltinHttpImplementationSpec",
       "source": "src/viper/http.py",
       "line": 175,
-      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369",
+      "declaration": "viper-protocol-declarations.md#builtinhttpimplementationspec"
     },
     {
       "symbol": "WorkspaceHttpImplementationSpec",
       "source": "src/viper/http.py",
       "line": 182,
-      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369",
+      "declaration": "viper-protocol-declarations.md#workspacehttpimplementationspec"
     },
     {
       "symbol": "ObservedHttpResponse",
       "source": "src/viper/http.py",
       "line": 207,
-      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369",
+      "declaration": "viper-protocol-declarations.md#observedhttpresponse"
     },
     {
       "symbol": "ResolvedExternalExecutable",
       "source": "src/viper/http.py",
       "line": 231,
-      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369",
+      "declaration": "viper-protocol-declarations.md#resolvedexternalexecutable"
     },
     {
       "symbol": "ResolvedHttpImplementation",
       "source": "src/viper/http.py",
       "line": 238,
-      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369",
+      "declaration": "viper-protocol-declarations.md#resolvedhttpimplementation"
     },
     {
       "symbol": "ResolvedHttpRetrieval",
       "source": "src/viper/http.py",
       "line": 260,
-      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369",
+      "declaration": "viper-protocol-declarations.md#resolvedhttpretrieval"
     },
     {
       "symbol": "HttpRetrievalError",
       "source": "src/viper/http.py",
       "line": 300,
-      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369",
+      "declaration": "viper-protocol-declarations.md#httpretrievalerror"
     },
     {
       "symbol": "RuntimeHttpCredential",
       "source": "src/viper/http.py",
       "line": 305,
-      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369",
+      "declaration": "viper-protocol-declarations.md#runtimehttpcredential"
     },
     {
       "symbol": "HttpContext",
       "source": "src/viper/http.py",
       "line": 314,
-      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369",
+      "declaration": "viper-protocol-declarations.md#httpcontext"
     },
     {
       "symbol": "HttpResult",
       "source": "src/viper/http.py",
       "line": 327,
-      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369",
+      "declaration": "viper-protocol-declarations.md#httpresult"
     },
     {
       "symbol": "CustomHttpDraft",
       "source": "src/viper/http.py",
       "line": 334,
-      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369",
+      "declaration": "viper-protocol-declarations.md#customhttpdraft"
     },
     {
       "symbol": "HttpDefinition",
       "source": "src/viper/http.py",
       "line": 348,
-      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369",
+      "declaration": "viper-protocol-declarations.md#httpdefinition"
     },
     {
       "symbol": "HttpCallable",
       "source": "src/viper/http.py",
       "line": 356,
-      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369"
+      "source_sha256": "7470680fe3cba2bcb92818a3fcbf2d88ceea91cf9c5fd36bf5a4dc0057a34369",
+      "declaration": "viper-protocol-declarations.md#httpcallable"
     },
     {
       "symbol": "ReuseFileIdentity",
       "source": "src/viper/reuse.py",
       "line": 118,
-      "source_sha256": "a1cf33ec7c83e877367dfc9d9e63e0a4113e5de74ac6f448cdd31293a3fb5ce4"
+      "source_sha256": "a1cf33ec7c83e877367dfc9d9e63e0a4113e5de74ac6f448cdd31293a3fb5ce4",
+      "declaration": "viper-protocol-declarations.md#reusefileidentity"
     },
     {
       "symbol": "ReuseInputIdentity",
       "source": "src/viper/reuse.py",
       "line": 126,
-      "source_sha256": "a1cf33ec7c83e877367dfc9d9e63e0a4113e5de74ac6f448cdd31293a3fb5ce4"
+      "source_sha256": "a1cf33ec7c83e877367dfc9d9e63e0a4113e5de74ac6f448cdd31293a3fb5ce4",
+      "declaration": "viper-protocol-declarations.md#reuseinputidentity"
     },
     {
       "symbol": "StageReuseKey",
       "source": "src/viper/reuse.py",
       "line": 134,
-      "source_sha256": "a1cf33ec7c83e877367dfc9d9e63e0a4113e5de74ac6f448cdd31293a3fb5ce4"
+      "source_sha256": "a1cf33ec7c83e877367dfc9d9e63e0a4113e5de74ac6f448cdd31293a3fb5ce4",
+      "declaration": "viper-protocol-declarations.md#stagereusekey"
     },
     {
       "symbol": "ReusedStageFile",
       "source": "src/viper/reuse.py",
       "line": 147,
-      "source_sha256": "a1cf33ec7c83e877367dfc9d9e63e0a4113e5de74ac6f448cdd31293a3fb5ce4"
+      "source_sha256": "a1cf33ec7c83e877367dfc9d9e63e0a4113e5de74ac6f448cdd31293a3fb5ce4",
+      "declaration": "viper-protocol-declarations.md#reusedstagefile"
     },
     {
       "symbol": "ReusedMetricEvidence",
       "source": "src/viper/reuse.py",
       "line": 164,
-      "source_sha256": "a1cf33ec7c83e877367dfc9d9e63e0a4113e5de74ac6f448cdd31293a3fb5ce4"
+      "source_sha256": "a1cf33ec7c83e877367dfc9d9e63e0a4113e5de74ac6f448cdd31293a3fb5ce4",
+      "declaration": "viper-protocol-declarations.md#reusedmetricevidence"
     },
     {
       "symbol": "StageReuseReceipt",
       "source": "src/viper/reuse.py",
       "line": 172,
-      "source_sha256": "a1cf33ec7c83e877367dfc9d9e63e0a4113e5de74ac6f448cdd31293a3fb5ce4"
+      "source_sha256": "a1cf33ec7c83e877367dfc9d9e63e0a4113e5de74ac6f448cdd31293a3fb5ce4",
+      "declaration": "viper-protocol-declarations.md#stagereusereceipt"
     },
     {
       "symbol": "ResolvedStageReuseRef",
       "source": "src/viper/reuse.py",
       "line": 186,
-      "source_sha256": "a1cf33ec7c83e877367dfc9d9e63e0a4113e5de74ac6f448cdd31293a3fb5ce4"
+      "source_sha256": "a1cf33ec7c83e877367dfc9d9e63e0a4113e5de74ac6f448cdd31293a3fb5ce4",
+      "declaration": "viper-protocol-declarations.md#resolvedstagereuseref"
     },
     {
       "symbol": "ExecutedStageCompletion",
       "source": "src/viper/reuse.py",
       "line": 192,
-      "source_sha256": "a1cf33ec7c83e877367dfc9d9e63e0a4113e5de74ac6f448cdd31293a3fb5ce4"
+      "source_sha256": "a1cf33ec7c83e877367dfc9d9e63e0a4113e5de74ac6f448cdd31293a3fb5ce4",
+      "declaration": "viper-protocol-declarations.md#executedstagecompletion"
     },
     {
       "symbol": "ReusedStageCompletion",
       "source": "src/viper/reuse.py",
       "line": 204,
-      "source_sha256": "a1cf33ec7c83e877367dfc9d9e63e0a4113e5de74ac6f448cdd31293a3fb5ce4"
+      "source_sha256": "a1cf33ec7c83e877367dfc9d9e63e0a4113e5de74ac6f448cdd31293a3fb5ce4",
+      "declaration": "viper-protocol-declarations.md#reusedstagecompletion"
     },
     {
       "symbol": "DataLoaderConfiguration",
       "source": "src/viper/resume.py",
       "line": 23,
-      "source_sha256": "9bd664a38aa8ba15f8fa15a49431ee4505d0037a74ea8c4e0f2c8ba30eafcd5e"
+      "source_sha256": "9bd664a38aa8ba15f8fa15a49431ee4505d0037a74ea8c4e0f2c8ba30eafcd5e",
+      "declaration": "viper-protocol-declarations.md#dataloaderconfiguration"
     },
     {
       "symbol": "DataLoaderResumeState",
       "source": "src/viper/resume.py",
       "line": 45,
-      "source_sha256": "9bd664a38aa8ba15f8fa15a49431ee4505d0037a74ea8c4e0f2c8ba30eafcd5e"
+      "source_sha256": "9bd664a38aa8ba15f8fa15a49431ee4505d0037a74ea8c4e0f2c8ba30eafcd5e",
+      "declaration": "viper-protocol-declarations.md#dataloaderresumestate"
     },
     {
       "symbol": "ResumeState",
       "source": "src/viper/resume.py",
       "line": 52,
-      "source_sha256": "9bd664a38aa8ba15f8fa15a49431ee4505d0037a74ea8c4e0f2c8ba30eafcd5e"
+      "source_sha256": "9bd664a38aa8ba15f8fa15a49431ee4505d0037a74ea8c4e0f2c8ba30eafcd5e",
+      "declaration": "viper-protocol-declarations.md#resumestate"
     },
     {
       "symbol": "MetricCriterion",
       "source": "src/viper/benchmark.py",
       "line": 23,
-      "source_sha256": "1c444c5b5c7a10866516a966e5eeeb2d763967c25ceeb1afbf0b77e0df972556"
+      "source_sha256": "1c444c5b5c7a10866516a966e5eeeb2d763967c25ceeb1afbf0b77e0df972556",
+      "declaration": "viper-protocol-declarations.md#metriccriterion"
     },
     {
       "symbol": "RunArtifactDraft",
       "source": "src/viper/benchmark.py",
       "line": 31,
-      "source_sha256": "1c444c5b5c7a10866516a966e5eeeb2d763967c25ceeb1afbf0b77e0df972556"
+      "source_sha256": "1c444c5b5c7a10866516a966e5eeeb2d763967c25ceeb1afbf0b77e0df972556",
+      "declaration": "viper-protocol-declarations.md#runartifactdraft"
     },
     {
       "symbol": "BenchmarkDraft",
       "source": "src/viper/benchmark.py",
       "line": 42,
-      "source_sha256": "1c444c5b5c7a10866516a966e5eeeb2d763967c25ceeb1afbf0b77e0df972556"
+      "source_sha256": "1c444c5b5c7a10866516a966e5eeeb2d763967c25ceeb1afbf0b77e0df972556",
+      "declaration": "viper-protocol-declarations.md#benchmarkdraft"
     },
     {
       "symbol": "BenchmarkSpec",
       "source": "src/viper/benchmark.py",
       "line": 79,
-      "source_sha256": "1c444c5b5c7a10866516a966e5eeeb2d763967c25ceeb1afbf0b77e0df972556"
+      "source_sha256": "1c444c5b5c7a10866516a966e5eeeb2d763967c25ceeb1afbf0b77e0df972556",
+      "declaration": "viper-protocol-declarations.md#benchmarkspec"
     },
     {
       "symbol": "ArtifactComparisonReceipt",
       "source": "src/viper/benchmark.py",
       "line": 105,
-      "source_sha256": "1c444c5b5c7a10866516a966e5eeeb2d763967c25ceeb1afbf0b77e0df972556"
+      "source_sha256": "1c444c5b5c7a10866516a966e5eeeb2d763967c25ceeb1afbf0b77e0df972556",
+      "declaration": "viper-protocol-declarations.md#artifactcomparisonreceipt"
     },
     {
       "symbol": "MetricCriterionResult",
       "source": "src/viper/benchmark.py",
       "line": 123,
-      "source_sha256": "1c444c5b5c7a10866516a966e5eeeb2d763967c25ceeb1afbf0b77e0df972556"
+      "source_sha256": "1c444c5b5c7a10866516a966e5eeeb2d763967c25ceeb1afbf0b77e0df972556",
+      "declaration": "viper-protocol-declarations.md#metriccriterionresult"
     },
     {
       "symbol": "BenchmarkMetricResult",
       "source": "src/viper/benchmark.py",
       "line": 139,
-      "source_sha256": "1c444c5b5c7a10866516a966e5eeeb2d763967c25ceeb1afbf0b77e0df972556"
+      "source_sha256": "1c444c5b5c7a10866516a966e5eeeb2d763967c25ceeb1afbf0b77e0df972556",
+      "declaration": "viper-protocol-declarations.md#benchmarkmetricresult"
     },
     {
       "symbol": "BenchmarkResult",
       "source": "src/viper/benchmark.py",
       "line": 151,
-      "source_sha256": "1c444c5b5c7a10866516a966e5eeeb2d763967c25ceeb1afbf0b77e0df972556"
+      "source_sha256": "1c444c5b5c7a10866516a966e5eeeb2d763967c25ceeb1afbf0b77e0df972556",
+      "declaration": "viper-protocol-declarations.md#benchmarkresult"
     },
     {
       "symbol": "RunResult",
       "source": "src/viper/execution/results.py",
       "line": 14,
-      "source_sha256": "d8431086d3b75831805d81642d8a75f45cebbe5e1539ea6d8ecc938eee2fb475"
+      "source_sha256": "d8431086d3b75831805d81642d8a75f45cebbe5e1539ea6d8ecc938eee2fb475",
+      "declaration": "viper-protocol-declarations.md#runresult"
     },
     {
       "symbol": "ConfirmationRunResult",
       "source": "src/viper/execution/results.py",
       "line": 34,
-      "source_sha256": "d8431086d3b75831805d81642d8a75f45cebbe5e1539ea6d8ecc938eee2fb475"
+      "source_sha256": "d8431086d3b75831805d81642d8a75f45cebbe5e1539ea6d8ecc938eee2fb475",
+      "declaration": "viper-protocol-declarations.md#confirmationrunresult"
     },
     {
       "symbol": "BenchmarkExecutionResult",
       "source": "src/viper/execution/results.py",
       "line": 47,
-      "source_sha256": "d8431086d3b75831805d81642d8a75f45cebbe5e1539ea6d8ecc938eee2fb475"
+      "source_sha256": "d8431086d3b75831805d81642d8a75f45cebbe5e1539ea6d8ecc938eee2fb475",
+      "declaration": "viper-protocol-declarations.md#benchmarkexecutionresult"
     },
     {
       "symbol": "ExperimentRunFailure",
       "source": "src/viper/execution/results.py",
       "line": 73,
-      "source_sha256": "d8431086d3b75831805d81642d8a75f45cebbe5e1539ea6d8ecc938eee2fb475"
+      "source_sha256": "d8431086d3b75831805d81642d8a75f45cebbe5e1539ea6d8ecc938eee2fb475",
+      "declaration": "viper-protocol-declarations.md#experimentrunfailure"
     },
     {
       "symbol": "ExperimentRunResult",
       "source": "src/viper/execution/results.py",
       "line": 82,
-      "source_sha256": "d8431086d3b75831805d81642d8a75f45cebbe5e1539ea6d8ecc938eee2fb475"
+      "source_sha256": "d8431086d3b75831805d81642d8a75f45cebbe5e1539ea6d8ecc938eee2fb475",
+      "declaration": "viper-protocol-declarations.md#experimentrunresult"
     },
     {
       "symbol": "ExperimentExecutionResult",
       "source": "src/viper/execution/results.py",
       "line": 127,
-      "source_sha256": "d8431086d3b75831805d81642d8a75f45cebbe5e1539ea6d8ecc938eee2fb475"
+      "source_sha256": "d8431086d3b75831805d81642d8a75f45cebbe5e1539ea6d8ecc938eee2fb475",
+      "declaration": "viper-protocol-declarations.md#experimentexecutionresult"
     },
     {
       "symbol": "StageDraftOutputRef",
       "source": "src/viper/authoring.py",
       "line": 184,
-      "source_sha256": "c4dda74b9e446b8555ad932ab34d1532e8530f657bc9603c204d8d6374c60960"
+      "source_sha256": "c4dda74b9e446b8555ad932ab34d1532e8530f657bc9603c204d8d6374c60960",
+      "declaration": "viper-protocol-declarations.md#stagedraftoutputref"
     },
     {
       "symbol": "StageDraft",
       "source": "src/viper/authoring.py",
       "line": 311,
-      "source_sha256": "c4dda74b9e446b8555ad932ab34d1532e8530f657bc9603c204d8d6374c60960"
+      "source_sha256": "c4dda74b9e446b8555ad932ab34d1532e8530f657bc9603c204d8d6374c60960",
+      "declaration": "viper-protocol-declarations.md#stagedraft"
     },
     {
       "symbol": "VariantDraft",
       "source": "src/viper/authoring.py",
       "line": 383,
-      "source_sha256": "c4dda74b9e446b8555ad932ab34d1532e8530f657bc9603c204d8d6374c60960"
+      "source_sha256": "c4dda74b9e446b8555ad932ab34d1532e8530f657bc9603c204d8d6374c60960",
+      "declaration": "viper-protocol-declarations.md#variantdraft"
     },
     {
       "symbol": "ExperimentDraft",
       "source": "src/viper/authoring.py",
       "line": 414,
-      "source_sha256": "c4dda74b9e446b8555ad932ab34d1532e8530f657bc9603c204d8d6374c60960"
+      "source_sha256": "c4dda74b9e446b8555ad932ab34d1532e8530f657bc9603c204d8d6374c60960",
+      "declaration": "viper-protocol-declarations.md#experimentdraft"
     },
     {
       "symbol": "RunPlanDraft",
       "source": "src/viper/authoring.py",
       "line": 436,
-      "source_sha256": "c4dda74b9e446b8555ad932ab34d1532e8530f657bc9603c204d8d6374c60960"
+      "source_sha256": "c4dda74b9e446b8555ad932ab34d1532e8530f657bc9603c204d8d6374c60960",
+      "declaration": "viper-protocol-declarations.md#runplandraft"
     }
   ]
 }

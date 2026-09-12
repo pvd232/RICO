@@ -1,9 +1,9 @@
 {
   "document": "/Users/machina/Developer/ChatGPT/RICO/viper-protocol.md",
   "source_revision": "178653de710763d1f9d171b77d8eade89e498b10",
-  "line_count": 4513,
+  "line_count": 1926,
   "class_field_excerpts_checked": 191,
-  "local_links_checked": 220,
+  "local_links_checked": 281,
   "math_blocks_checked": 59,
   "original_foundation_appendix_math_blocks_preserved": 58,
   "checks": "passed",
@@ -19,7 +19,7 @@
     "log": "/tmp/viper-protocol-full-tests.log"
   },
   "scope": "Current source declarations, local links, mathematical typesetting, host-independent runtime tests, and focused runtime checks. Live CUDA acceptance was excluded; no universal reproducibility claim is inferred from these checks.",
-  "document_sha256": "7b736e047d62aea70d03a46fd8a9fda6abd63209cf15ead1b9e06fe32e571f36",
+  "document_sha256": "ca649fb328320e5f78fce849a743dc12c348bbf58526b341bdd34d96c107d86a",
   "math_typesetting": "59 display expressions compiled successfully with pdfLaTeX; source blank lines removed only in the temporary TeX rendering harness",
   "environment": {
     "python": "3.12.14",
@@ -42,5 +42,19 @@
     "Logical document digests and serialized file hashes identify different objects.",
     "Ordinary DataLoader illustrations are distinguished from StatefulDataLoader checkpoint capture.",
     "RandomSampler exhaustion can advance RNG after the final yielded batch; the appendix now includes this transition."
-  ]
+  ],
+  "declaration_appendix": {
+    "path": "viper-protocol-declarations.md",
+    "sha256": "432ae948ed93f481853b006ca22dc540cc03435fc16a2954d6f03f04be653ac2",
+    "distinct_declarations": 188,
+    "source_map_entries_checked": 191
+  },
+  "reorganization_checks": {
+    "command": "python /tmp/check-viper-appendix.py",
+    "result": "passed",
+    "math_and_text_blocks": "unchanged, including both file trees",
+    "python_blocks": "all preserved; three duplicate declarations consolidated",
+    "links": "file targets and Markdown heading anchors checked in both documents",
+    "runtime_test_scope": "Prior runtime results retained; this reorganization changes no executable source."
+  }
 }
