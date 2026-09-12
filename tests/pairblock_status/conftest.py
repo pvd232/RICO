@@ -123,9 +123,12 @@ def _pair_block_row(
     )
     proposed_code = "Pending"
     if proposed:
+        staging_root = Path("staging") / block.pair_block_id.lower()
         proposed_code = (
             f"[Source and tests]({contract_link}#"
             f"{block.pair_block_id.lower()}-proposed-code)"
+            f" · [Source]({_relative_link(CHECKLIST_PATH, staging_root / SOURCE_PATH)})"
+            f" · [Tests]({_relative_link(CHECKLIST_PATH, staging_root / TEST_PATH)})"
         )
     return (
         f"| `{block.pair_block_id}` | Pending | {block.status} | "
@@ -189,6 +192,12 @@ class RepositoryFactory:
             PAIR_BLOCK_ID,
             status or TEST_PROFILE.lifecycle.drafting_status,
         )
+        if proposed:
+            staging_root = Path("staging") / target.pair_block_id.lower()
+            for source, relative_destination in SOURCE_COPIES.items():
+                destination = repository / staging_root / relative_destination
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(source, destination)
         blocks = [target] if dependency is None else [dependency, target]
         normalized_states = [
             TEST_PROFILE.lifecycle.normalize(block.status) for block in blocks

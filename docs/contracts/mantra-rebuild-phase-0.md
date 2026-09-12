@@ -605,6 +605,12 @@ python -m tools.pairblock_status.pairblock_controller \
      --evidence-revision 'ACCEPTED_GIT_COMMIT'
    ```
 
+   The same atomic checklist update replaces each
+   `staging/BLOCK_ID/ACTIVE_PATH` link with `ACTIVE_PATH` and removes the
+   proposal-only **Source and tests** link. The transition fails when a staging
+   link names another PairBlock, so an `Applied` row always links to the active
+   implementation.
+
 6. After the block's declared VIPER run exists and verifies, Codex records its
    graph reference. This changes `Applied` to `Complete` and checks the block:
 

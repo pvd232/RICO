@@ -230,6 +230,10 @@ def test_applied_blocks_do_not_link_staging_proposals() -> None:
     for row in rows.values():
         if row.status in {"Applied", "Complete"}:
             assert "/staging/" not in row.proposed_code
+            assert (
+                MANTRA_PHASE0_ADAPTER.dialect.proposed_code_link_prefix
+                not in row.proposed_code
+            )
 
 
 def test_passing_gate_writes_receipt_and_advances_one_status(
@@ -309,6 +313,78 @@ def test_lifecycle_completion_updates_every_derived_status(
     assert block["state"] == requirement["state"] == "complete"
     assert block["completion_evidence"] == requirement["completion_evidence"]
     assert manifest["contracts"][0]["state"] == "complete"
+
+
+def test_accept_promotes_staging_links_to_active_code(
+    repository_factory: RepositoryFactory,
+) -> None:
+    """Replace every accepted staging link in the authoritative status row."""
+
+    repository = repository_factory(command=passing_command())
+    run_test_gate(repository)
+    advance_test_block(repository, "approve")
+    advance_test_block(repository, "accept")
+
+    rows, _ = validate_test_repository(repository)
+    proposed_code = rows[PAIR_BLOCK_ID].proposed_code
+
+    assert proposed_code == (
+        "[Source](../../tools/pairblock_status/checklist_profile.py) · "
+        "[Tests](../../tests/pairblock_status/test_pairblock_controller.py)"
+    )
+    assert "/staging/" not in proposed_code
+    assert TEST_DIALECT.proposed_code_link_prefix not in proposed_code
+
+
+def test_accept_removes_proposal_marker_from_active_links(
+    repository_factory: RepositoryFactory,
+) -> None:
+    """Remove the contract proposal link when code links are already active."""
+
+    repository = repository_factory(command=passing_command())
+    run_test_gate(repository)
+    advance_test_block(repository, "approve")
+    checklist = repository / CHECKLIST_PATH
+    checklist.write_text(
+        checklist.read_text(encoding="utf-8").replace(
+            f"/staging/{PAIR_BLOCK_ID.lower()}",
+            "",
+        ),
+        encoding="utf-8",
+    )
+
+    advance_test_block(repository, "accept")
+
+    rows, _ = validate_test_repository(repository)
+    assert rows[PAIR_BLOCK_ID].proposed_code == (
+        "[Source](../../tools/pairblock_status/checklist_profile.py) · "
+        "[Tests](../../tests/pairblock_status/test_pairblock_controller.py)"
+    )
+
+
+def test_accept_rejects_a_staging_link_owned_by_another_block(
+    repository_factory: RepositoryFactory,
+) -> None:
+    """Keep the checklist unchanged when proposal ownership is ambiguous."""
+
+    repository = repository_factory(command=passing_command())
+    run_test_gate(repository)
+    advance_test_block(repository, "approve")
+    checklist = repository / CHECKLIST_PATH
+    before = checklist.read_text(encoding="utf-8")
+    checklist.write_text(
+        before.replace(
+            f"/staging/{PAIR_BLOCK_ID.lower()}/",
+            "/staging/pb-other/",
+        ),
+        encoding="utf-8",
+    )
+    malformed = checklist.read_bytes()
+
+    with pytest.raises(PairBlockGateError, match="proposal link does not use"):
+        advance_test_block(repository, "accept")
+
+    assert checklist.read_bytes() == malformed
 
 
 def test_non_code_review_completion_updates_every_derived_status(

@@ -22,6 +22,7 @@ _LINK = re.compile(r"^\[[^]]+\]\(([^)#]+)(?:#([^)]+))?\)$")
 _DOCUMENT_LINK = re.compile(r"\[[^]]+\]\(([^)#\s]+)#([^)\s]+)\)")
 _HEADING = re.compile(r"^#{1,6}\s+(.+?)\s*$")
 _RECEIPT_LINK = re.compile(r"\[receipt\]\(([^)]+)\)")
+_MARKDOWN_LINK = re.compile(r"\[([^]]+)\]\(([^)]+)\)")
 _CHECKBOX = re.compile(r"^\s*- \[([ xX])\] ")
 
 
@@ -230,8 +231,9 @@ def _replace_status_row(
     pair_block_id: str,
     gate: str,
     status: str,
+    proposed_code: str | None = None,
 ) -> str:
-    """Replace the gate and status cells in one parsed PairBlock row."""
+    """Replace lifecycle-owned cells in one parsed PairBlock row."""
 
     lines = checklist_text.splitlines()
     matches: list[tuple[int, list[str]]] = []
@@ -249,9 +251,40 @@ def _replace_status_row(
     line_index, cells = matches[0]
     cells[1] = gate
     cells[2] = status
+    if proposed_code is not None:
+        cells[5] = proposed_code
     lines[line_index] = "| " + " | ".join(cells) + " |"
     suffix = "\n" if checklist_text.endswith("\n") else ""
     return "\n".join(lines) + suffix
+
+
+def _active_code_links(
+    row: PairBlockRow,
+    dialect: MarkdownChecklistDialect,
+) -> str:
+    """Map one accepted proposal's staging links to its active code paths."""
+
+    links = _MARKDOWN_LINK.findall(row.proposed_code)
+    marker_label = dialect.proposed_code_link_prefix.removeprefix("[").removesuffix("]")
+    has_marker = any(label == marker_label for label, _ in links)
+    if "/staging/" not in row.proposed_code and not has_marker:
+        return row.proposed_code
+    active_links: list[str] = []
+    staging_segment = f"/staging/{row.pair_block_id.lower()}/"
+    for label, target in links:
+        if label == marker_label:
+            continue
+        if "/staging/" in target and staging_segment not in target:
+            raise PairBlockGateError(
+                f"{row.pair_block_id} proposal link does not use {staging_segment}"
+            )
+        active_target = target.replace(staging_segment, "/", 1)
+        active_links.append(f"[{label}]({active_target})")
+    if not active_links:
+        raise PairBlockGateError(
+            f"{row.pair_block_id} has no staging source links to activate"
+        )
+    return " · ".join(active_links)
 
 
 def _replace_checkbox(
@@ -1207,11 +1240,15 @@ def render_transition(
 ) -> bytes:
     """Render one lifecycle receipt and all states derived from its block."""
 
+    proposed_code = None
+    if status in profile.lifecycle.resolved_dependency_states:
+        proposed_code = _active_code_links(row, dialect)
     rendered = _replace_status_row(
         checklist_text,
         pair_block_id=row.pair_block_id,
         gate=f"Lifecycle ([receipt]({receipt_path}))",
         status=status,
+        proposed_code=proposed_code,
     )
     placement = _pair_block_placement(
         rendered,
