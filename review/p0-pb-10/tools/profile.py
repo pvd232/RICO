@@ -3,41 +3,33 @@
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 
 _GLOBAL_ID = re.compile(r"[A-Za-z][A-Za-z0-9_.-]*")
 _GLOBAL_STATES = frozenset({"planned", "in_progress", "complete", "deferred"})
 
 
-def _described(description: str):
-    """Attach machine-readable meaning to one profile field."""
-
-    return field(metadata={"description": description})
-
-
 @dataclass(frozen=True, slots=True)
 class LifecyclePolicy:
-    """Define how project status labels map to global states and transitions."""
+    """Map project status labels to global states and legal transitions.
 
-    normalized_states: tuple[tuple[str, str], ...] = _described(
-        "Project status labels paired with their global checklist states."
-    )
-    waiting_prefix: str = _described(
-        "Prefix that marks a project status as waiting on another PairBlock."
-    )
-    drafting_status: str = _described(
-        "Project status assigned while Codex prepares a proposal."
-    )
-    review_status: str = _described(
-        "Project status assigned after a proposal gate passes."
-    )
-    proposal_gate_states: frozenset[str] = _described(
-        "Project statuses from which the proposal gate may run."
-    )
-    resolved_dependency_states: frozenset[str] = _described(
-        "Project statuses that satisfy another PairBlock's dependency."
-    )
+    Attributes:
+        normalized_states: Project labels paired with global checklist states.
+        waiting_prefix: Prefix that marks a dependency-wait status.
+        drafting_status: Status assigned while Codex prepares a proposal.
+        review_status: Status assigned after the proposal gate passes.
+        proposal_gate_states: Statuses from which the proposal gate may run.
+        resolved_dependency_states: Statuses that satisfy another PairBlock's
+            dependency.
+    """
+
+    normalized_states: tuple[tuple[str, str], ...]
+    waiting_prefix: str
+    drafting_status: str
+    review_status: str
+    proposal_gate_states: frozenset[str]
+    resolved_dependency_states: frozenset[str]
 
     def __post_init__(self) -> None:
         """Reject ambiguous labels and transitions when the profile is created."""
@@ -84,51 +76,37 @@ class LifecyclePolicy:
 
 @dataclass(frozen=True, slots=True)
 class ChecklistProfile:
-    """Own one project's paths, identifiers, Markdown syntax, and lifecycle."""
+    """Own one project's paths, identifiers, Markdown syntax, and lifecycle.
 
-    checklist_path: Path = field(
-        metadata={
-            "description": "Repository-relative Markdown checklist to compile."
-        }
-    )
-    contract_path: Path = field(
-        metadata={"description": "Repository-relative contract governed by profile."}
-    )
-    checklist_id: str = _described(
-        "Stable checklist identity emitted in the normalized manifest."
-    )
-    project_name: str = _described(
-        "Human-readable project name emitted in the normalized manifest."
-    )
-    contract_id: str = _described(
-        "Stable contract identity used by requirements and PairBlocks."
-    )
-    pair_block_pattern: str = _described(
-        "Full-match regular expression for project PairBlock identifiers."
-    )
-    requirement_pattern: str = _described(
-        "Full-match regular expression for project requirement identifiers."
-    )
-    phase_pattern: str = _described(
-        "Full-match expression whose numeric and letter groups order phases."
-    )
-    pair_block_table_header: str = _described(
-        "Exact Markdown header that begins the PairBlock status table."
-    )
-    requirement_table_header: str = _described(
-        "Exact Markdown header that begins requirement assignments."
-    )
-    requirement_map_header: str = _described(
-        "Exact Markdown header that begins the contract requirement map."
-    )
-    proposed_code_link_prefix: str = _described(
-        "Checklist link text that identifies a runnable code proposal."
-    )
-    lifecycle: LifecyclePolicy = field(
-        metadata={
-            "description": "Project status vocabulary and legal gate transitions."
-        }
-    )
+    Attributes:
+        checklist_path: Repository-relative Markdown checklist to compile.
+        contract_path: Repository-relative contract governed by the profile.
+        checklist_id: Stable checklist identity emitted in the manifest.
+        project_name: Human-readable name emitted in the manifest.
+        contract_id: Stable contract identity used by requirements and blocks.
+        pair_block_pattern: Full-match expression for PairBlock identifiers.
+        requirement_pattern: Full-match expression for requirement identifiers.
+        phase_pattern: Expression whose two capture groups order phases.
+        pair_block_table_header: Exact PairBlock status-table header.
+        requirement_table_header: Exact requirement-assignment table header.
+        requirement_map_header: Exact contract requirement-map table header.
+        proposed_code_link_prefix: Link text that identifies runnable code.
+        lifecycle: Project status vocabulary and legal gate transitions.
+    """
+
+    checklist_path: Path
+    contract_path: Path
+    checklist_id: str
+    project_name: str
+    contract_id: str
+    pair_block_pattern: str
+    requirement_pattern: str
+    phase_pattern: str
+    pair_block_table_header: str
+    requirement_table_header: str
+    requirement_map_header: str
+    proposed_code_link_prefix: str
+    lifecycle: LifecyclePolicy
 
     def __post_init__(self) -> None:
         """Reject invalid paths, identities, expressions, and Markdown markers."""

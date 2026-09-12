@@ -5,7 +5,7 @@ from __future__ import annotations
 import ast
 import json
 import shutil
-from dataclasses import fields, replace
+from dataclasses import replace
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -24,11 +24,9 @@ from conftest import (
     PairBlockFixture,
     RepositoryFactory,
 )
-from tools.execution_identity import ExecutionIdentity
-from tools.profile import MANTRA_PHASE0_PROFILE, ChecklistProfile, LifecyclePolicy
+from tools.profile import MANTRA_PHASE0_PROFILE
 from tools.run_pairblock_gate import (
     DEFAULT_MASTER_CHECKLIST_VALIDATOR,
-    GateReceipt,
     PairBlockGateError,
     run_gate,
     validate_traceability,
@@ -431,21 +429,6 @@ def test_execution_identity_drift_invalidates_pass(
     assert receipt["status_after"] == TEST_PROFILE.lifecycle.drafting_status
     assert drift_field in receipt["identity_drift"]
     assert TEST_PROFILE.lifecycle.review_status not in checklist
-
-
-def test_persisted_schema_fields_have_descriptions() -> None:
-    """Give every persisted receipt field machine-readable semantic meaning."""
-
-    for model in (
-        ExecutionIdentity,
-        GateReceipt,
-        LifecyclePolicy,
-        ChecklistProfile,
-    ):
-        for model_field in fields(model):
-            assert model_field.metadata.get("description"), (
-                f"{model.__name__}.{model_field.name} lacks a description"
-            )
 
 
 def test_active_modules_and_definitions_have_docstrings() -> None:

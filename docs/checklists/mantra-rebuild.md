@@ -85,7 +85,7 @@ zero.
 | <a id="status-p0-pb-07"></a>`P0-PB-07` | Pending | Waiting for `P0-PB-06` | `P0-PB-06` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-07-declaration) | Pending |
 | <a id="status-p0-pb-08"></a>`P0-PB-08` | Pending | Waiting for `P0-PB-06` | `P0-PB-06` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-08-declaration) | Pending |
 | <a id="status-p0-pb-09"></a>`P0-PB-09` | Pending | Waiting for `P0-PB-07`, `P0-PB-08`, `P0-PB-10` | `P0-PB-07`, `P0-PB-08`, `P0-PB-10` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-09-declaration) | Pending |
-| <a id="status-p0-pb-10"></a>`P0-PB-10` | Passed: `25` tests ([receipt](../../evidence/pairblock-gates/p0-pb-10/20260912T021750.426643Z.json)) | Awaiting user review | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-10-declaration) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-10-proposed-code) |
+| <a id="status-p0-pb-10"></a>`P0-PB-10` | Passed: `24` tests ([receipt](../../evidence/pairblock-gates/p0-pb-10/20260912T022829.127560Z.json)) | Awaiting user review | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-10-declaration) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-10-proposed-code) |
 
 ## Terminal outcome
 

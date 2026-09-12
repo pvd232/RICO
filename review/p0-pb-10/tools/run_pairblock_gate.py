@@ -9,7 +9,7 @@ import re
 import subprocess
 import tempfile
 from collections.abc import Sequence
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -32,62 +32,58 @@ from .profile import MANTRA_PHASE0_PROFILE, ChecklistProfile
 _PASSED = re.compile(r"(?m)(\d+) passed(?:,| in )")
 
 
-def _described(description: str):
-    """Attach machine-readable meaning to one persisted dataclass field."""
-
-    return field(metadata={"description": description})
-
-
 @dataclass(frozen=True, slots=True)
 class GateReceipt:
-    """Persist one proposal-gate attempt and its controlled status outcome."""
+    """Persist one proposal-gate attempt and its controlled status outcome.
 
-    schema_version: int = _described("Version of the persisted receipt shape.")
-    pair_block_id: str = _described("PairBlock whose declared proposal gate ran.")
-    result: str = _described("Gate outcome: passed, failed, or invalidated.")
-    status_before: str = _described("Authoritative lifecycle status before execution.")
-    status_after: str = _described("Lifecycle status written or preserved by the runner.")
-    started_at: str = _described("UTC timestamp immediately before command execution.")
-    finished_at: str = _described("UTC timestamp immediately after command execution.")
-    checklist_path: str = _described("Repository-relative authoritative checklist path.")
-    checklist_written_sha256: str = _described(
-        "Digest of the checklist bytes the runner preserved or wrote."
-    )
-    contract_path: str = _described("Repository-relative governing contract path.")
-    command: str = _described("Exact contract-declared shell command that ran.")
-    command_sha256: str = _described("Digest of the executed command text.")
-    exit_code: int = _described("Process exit code returned by the gate command.")
-    stdout: str = _described("Complete standard output from the gate command.")
-    stderr: str = _described("Complete standard error from the gate command.")
-    output_sha256: str = _described(
-        "Digest of stdout, a NUL separator, and stderr."
-    )
-    master_validator_path: str = _described(
-        "Absolute path of the inherited master-checklist validator."
-    )
-    identity_before: dict[str, object] = field(
-        metadata={
-            "description": "Git and file identities captured before execution."
-        }
-    )
-    identity_after: dict[str, object] = field(
-        metadata={
-            "description": "Git and file identities captured after execution."
-        }
-    )
-    identity_drift: dict[str, dict[str, object]] = field(
-        metadata={
-            "description": "Before and after values for changed identities."
-        }
-    )
-    normalized_manifest: dict[str, object] = field(
-        metadata={
-            "description": "Validated schema-version-2 checklist manifest."
-        }
-    )
-    normalized_manifest_sha256: str = _described(
-        "Digest of the normalized manifest's canonical JSON form."
-    )
+    Attributes:
+        schema_version: Version of the persisted receipt structure.
+        pair_block_id: PairBlock whose declared proposal gate ran.
+        result: Gate outcome: ``passed``, ``failed``, or ``invalidated``.
+        status_before: Authoritative lifecycle status before execution.
+        status_after: Lifecycle status written or preserved by the runner.
+        started_at: UTC timestamp immediately before command execution.
+        finished_at: UTC timestamp immediately after command execution.
+        checklist_path: Repository-relative authoritative checklist path.
+        checklist_written_sha256: Digest of the checklist bytes preserved or
+            written by the runner.
+        contract_path: Repository-relative governing contract path.
+        command: Exact contract-declared shell command that ran.
+        command_sha256: Digest of the executed command text.
+        exit_code: Process exit code returned by the gate command.
+        stdout: Complete standard output from the gate command.
+        stderr: Complete standard error from the gate command.
+        output_sha256: Digest of stdout, a NUL separator, and stderr.
+        master_validator_path: Absolute inherited-validator path.
+        identity_before: Git and file identities captured before execution.
+        identity_after: Git and file identities captured after execution.
+        identity_drift: Before and after values for changed identities.
+        normalized_manifest: Validated schema-version-2 checklist manifest.
+        normalized_manifest_sha256: Digest of the manifest's canonical JSON.
+    """
+
+    schema_version: int
+    pair_block_id: str
+    result: str
+    status_before: str
+    status_after: str
+    started_at: str
+    finished_at: str
+    checklist_path: str
+    checklist_written_sha256: str
+    contract_path: str
+    command: str
+    command_sha256: str
+    exit_code: int
+    stdout: str
+    stderr: str
+    output_sha256: str
+    master_validator_path: str
+    identity_before: dict[str, object]
+    identity_after: dict[str, object]
+    identity_drift: dict[str, dict[str, object]]
+    normalized_manifest: dict[str, object]
+    normalized_manifest_sha256: str
 
 
 def _split_row(line: str) -> list[str]:

@@ -5,45 +5,33 @@ from __future__ import annotations
 import hashlib
 import subprocess
 from collections.abc import Sequence
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass
 from pathlib import Path
 
 
 @dataclass(frozen=True, slots=True)
 class ExecutionIdentity:
-    """Persist the repository and file identities observed at one gate boundary."""
+    """Persist the repository and file identities at one gate boundary.
 
-    git_head: str = field(
-        metadata={"description": "Commit checked out when identity was captured."}
-    )
-    git_status_sha256: str = field(
-        metadata={
-            "description": (
-                "Digest of Git's NUL-delimited status, including untracked paths."
-            )
-        }
-    )
-    git_diff_sha256: str = field(
-        metadata={
-            "description": "Digest of the binary diff between worktree and HEAD."
-        }
-    )
-    checklist_sha256: str = field(
-        metadata={"description": "Digest of the authoritative checklist bytes."}
-    )
-    contract_sha256: str = field(
-        metadata={"description": "Digest of the governing contract bytes."}
-    )
-    source_sha256: dict[str, str] = field(
-        metadata={
-            "description": "Proposed repository paths mapped to their byte digests."
-        }
-    )
-    master_validator_sha256: str = field(
-        metadata={
-            "description": "Digest of the global checklist validator used by the gate."
-        }
-    )
+    Attributes:
+        git_head: Commit checked out when the identity was captured.
+        git_status_sha256: Digest of Git's NUL-delimited porcelain status,
+            including untracked paths.
+        git_diff_sha256: Digest of the binary diff between the worktree and
+            ``HEAD``.
+        checklist_sha256: Digest of the authoritative checklist bytes.
+        contract_sha256: Digest of the governing contract bytes.
+        source_sha256: Proposed repository paths mapped to their byte digests.
+        master_validator_sha256: Digest of the inherited checklist validator.
+    """
+
+    git_head: str
+    git_status_sha256: str
+    git_diff_sha256: str
+    checklist_sha256: str
+    contract_sha256: str
+    source_sha256: dict[str, str]
+    master_validator_sha256: str
 
 
 def sha256_bytes(value: bytes) -> str:

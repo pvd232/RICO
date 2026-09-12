@@ -526,7 +526,7 @@ PYTHONPATH=review/p0-pb-05a/src conda run -n mantra \
 | Owner, code, and fixture boundaries | `test_missing_owner_is_rejected`; `test_missing_proposed_source_is_rejected`; `test_missing_fixture_source_is_rejected`; `test_proposed_code_must_stay_in_governing_contract` |
 | Gate behavior | `test_gate_must_name_every_observing_test`; `test_failing_gate_retains_receipt_without_changing_checklist`; `test_unknown_pair_block_is_rejected` |
 | Git-backed execution identity | `test_execution_identity_drift_invalidates_pass` for source, contract, checklist, validator, and `HEAD` drift |
-| Code documentation | `test_persisted_schema_fields_have_descriptions`; `test_active_modules_and_definitions_have_docstrings` |
+| Code documentation | `test_active_modules_and_definitions_have_docstrings` |
 
 **Focused check:**
 
@@ -545,7 +545,7 @@ PYTHONPATH=review/p0-pb-10 conda run -n mantra \
 
 **Stop condition:** Return the proposal for revision if a gate can run outside its declared code boundary, bypass an unresolved dependency, change status after failure or identity drift, bind its receipt to post-execution bytes alone, or advance beyond `Awaiting user review`.
 
-**Evidence:** The proposal uses the existing global validator rather than reimplementing its normalized checks. Its identity check follows the earlier Git-backed strategy by recording `HEAD`, porcelain worktree state, binary diff identity, and file digests before and after execution. `ChecklistProfile` owns project paths, identifier rules, Markdown headers, and lifecycle policy. Unit tests use a generic profile; one integration test compiles the actual MANTRA documents. Ruff 0.16.7 passes over all executable review files. All structured fields carry machine-readable descriptions, every active definition has a docstring, and all `25` focused tests pass. The proposal has not been activated.
+**Evidence:** The proposal uses the existing global validator rather than reimplementing its normalized checks. Its identity check follows the earlier Git-backed strategy by recording `HEAD`, porcelain worktree state, binary diff identity, and file digests before and after execution. `ChecklistProfile` owns project paths, identifier rules, Markdown headers, and lifecycle policy. Unit tests use a generic profile; one integration test compiles the actual MANTRA documents. Ruff 0.16.7 passes over all executable review files. The dataclass annotations declare the stored structure, their class docstrings explain the fields, every active definition has a docstring, and all `24` focused tests pass. The proposal has not been activated.
 
 ## 11. Sources
 
