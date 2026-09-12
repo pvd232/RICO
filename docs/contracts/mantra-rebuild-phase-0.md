@@ -432,7 +432,7 @@ PYTHONPATH=review/p0-pb-04a/src conda run -n mantra \
 
 **Stop condition:** Return the proposal for revision when any declared field, path rule, identity rule, coverage rule, or focused test lacks an observing assertion.
 
-**Evidence:** The RICO proposal passes `15` tests. Closure still requires user approval, the applied MANTRA diff, focused MANTRA test output, a MANTRA commit, and later VIPER registration.
+**Evidence:** The RICO proposal passes `17` tests. Closure still requires user approval, the applied MANTRA diff, focused MANTRA test output, a MANTRA commit, and later VIPER registration.
 
 #### `P0-PB-05A` proposed code
 

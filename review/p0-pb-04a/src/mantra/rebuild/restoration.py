@@ -151,6 +151,14 @@ class RestorationBinding:
         """Validate the destination and its content-addressed member."""
 
         _validate_relative_path(self.destination, "destination")
+        if not isinstance(self.source, HuggingFaceArchiveMember):
+            raise RestorationBindingError(
+                "source must be a HuggingFaceArchiveMember"
+            )
+        if not isinstance(self.expected, RestoredFileIdentity):
+            raise RestorationBindingError(
+                "expected must be a RestoredFileIdentity"
+            )
         required_member = (
             f"objects/sha256/{self.expected.sha256[:2]}/{self.expected.sha256}"
         )

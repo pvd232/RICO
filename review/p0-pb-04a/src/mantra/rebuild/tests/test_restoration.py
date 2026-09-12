@@ -73,6 +73,17 @@ def test_member_must_match_content_identity() -> None:
         replace(binding, source=bad_source)
 
 
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [("source", {}), ("expected", {})],
+)
+def test_binding_rejects_invalid_nested_type(field: str, value: object) -> None:
+    """Keep invalid nested values inside the binding error boundary."""
+
+    with pytest.raises(RestorationBindingError, match=rf"^{field} must be"):
+        replace(valid_binding(), **{field: value})
+
+
 def test_duplicate_destination_is_rejected() -> None:
     """Reject two bindings for the same canonical destination."""
 
