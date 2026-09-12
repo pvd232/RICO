@@ -71,20 +71,20 @@ owned by `historical_and_shared_experiments` and two owned by
 
 | PairBlock | Proposal gate | Resolution status | Depends on | Contract declaration | Proposed code |
 |---|---|---|---|---|---|
-| <a id="status-p0-pb-01"></a>`P0-PB-01` | Environment check passed | Applied | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-01-declaration) | [Accepted implementation](../contracts/mantra-rebuild-phase-0.md#p0-pb-01-accepted-implementation) |
-| <a id="status-p0-pb-02"></a>`P0-PB-02` | Hopfield artifact table approved | Drafting | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-02-declaration) | [Work description](../contracts/mantra-rebuild-phase-0.md#replay-traces-awaiting-approval) |
-| <a id="status-p0-pb-03"></a>`P0-PB-03` | Pending | Drafting | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-03-declaration) | [Work description](../contracts/mantra-rebuild-phase-0.md#replay-traces-awaiting-approval) |
-| <a id="status-p0-pb-04"></a>`P0-PB-04` | Pending | Waiting for `P0-PB-04A`, `P0-PB-04B` | `P0-PB-04A`, `P0-PB-04B` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-04-declaration) | [Child blocks](../contracts/mantra-rebuild-phase-0.md#p0-pb-04-declaration) |
-| <a id="status-p0-pb-04a"></a>`P0-PB-04A` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-04a/20260912T035904.514065Z-approve.json)) | Approved | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-04a-declaration) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-04a-proposed-code) |
-| <a id="status-p0-pb-04b"></a>`P0-PB-04B` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-04b/20260912T035904.710258Z-approve.json)) | Approved | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-04b-declaration) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-04b-proposed-code) |
-| <a id="status-p0-pb-05"></a>`P0-PB-05` | Pending | Waiting for `P0-PB-05A`, `P0-PB-05B` | `P0-PB-05A`, `P0-PB-05B` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-05-declaration) | [Child blocks](../contracts/mantra-rebuild-phase-0.md#p0-pb-05-declaration) |
-| <a id="status-p0-pb-05a"></a>`P0-PB-05A` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05a/20260912T035904.894879Z-approve.json)) | Approved | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a-declaration) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a-proposed-code) |
-| <a id="status-p0-pb-05b"></a>`P0-PB-05B` | Pending | Waiting for `P0-PB-04B` | `P0-PB-04B` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-05b-declaration) | Pending |
-| <a id="status-p0-pb-06"></a>`P0-PB-06` | Pending | Waiting for `P0-PB-04`, `P0-PB-05` | `P0-PB-04`, `P0-PB-05` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-06-declaration) | Pending |
-| <a id="status-p0-pb-07"></a>`P0-PB-07` | Pending | Waiting for `P0-PB-06` | `P0-PB-06` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-07-declaration) | Pending |
-| <a id="status-p0-pb-08"></a>`P0-PB-08` | Pending | Waiting for `P0-PB-06` | `P0-PB-06` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-08-declaration) | Pending |
-| <a id="status-p0-pb-09"></a>`P0-PB-09` | Pending | Waiting for `P0-PB-07`, `P0-PB-08`, `P0-PB-10` | `P0-PB-07`, `P0-PB-08`, `P0-PB-10` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-09-declaration) | Pending |
-| <a id="status-p0-pb-10"></a>`P0-PB-10` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-10/20260912T035542.464393Z-accept.json)) | Applied | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-10-declaration) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-10-proposed-code) |
+| `P0-PB-01` | Environment check passed | Applied | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-01-declaration) | [Accepted implementation](../contracts/mantra-rebuild-phase-0.md#p0-pb-01-accepted-implementation) |
+| `P0-PB-02` | Hopfield artifact table approved | Drafting | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-02-declaration) | [Work description](../contracts/mantra-rebuild-phase-0.md#p0-pb-02-declaration) |
+| `P0-PB-03` | Pending | Drafting | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-03-declaration) | [Work description](../contracts/mantra-rebuild-phase-0.md#p0-pb-03-declaration) |
+| `P0-PB-04` | Pending | Waiting for `P0-PB-04A`, `P0-PB-04B` | `P0-PB-04A`, `P0-PB-04B` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-04-declaration) | [Child blocks](../contracts/mantra-rebuild-phase-0.md#p0-pb-04-declaration) |
+| `P0-PB-04A` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-04a/20260912T035904.514065Z-approve.json)) | Approved | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-04a-declaration) | [Target paths and gate](../contracts/mantra-rebuild-phase-0.md#p0-pb-04a-proposed-code) |
+| `P0-PB-04B` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-04b/20260912T035904.710258Z-approve.json)) | Approved | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-04b-declaration) | [Target paths and gate](../contracts/mantra-rebuild-phase-0.md#p0-pb-04b-proposed-code) |
+| `P0-PB-05` | Pending | Waiting for `P0-PB-05A`, `P0-PB-05B` | `P0-PB-05A`, `P0-PB-05B` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-05-declaration) | [Child blocks](../contracts/mantra-rebuild-phase-0.md#p0-pb-05-declaration) |
+| `P0-PB-05A` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05a/20260912T035904.894879Z-approve.json)) | Approved | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a-declaration) | [Target paths and gate](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a-proposed-code) |
+| `P0-PB-05B` | Pending | Waiting for `P0-PB-04B` | `P0-PB-04B` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-05b-declaration) | Pending |
+| `P0-PB-06` | Pending | Waiting for `P0-PB-04`, `P0-PB-05` | `P0-PB-04`, `P0-PB-05` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-06-declaration) | Pending |
+| `P0-PB-07` | Pending | Waiting for `P0-PB-06` | `P0-PB-06` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-07-declaration) | Pending |
+| `P0-PB-08` | Pending | Waiting for `P0-PB-06` | `P0-PB-06` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-08-declaration) | Pending |
+| `P0-PB-09` | Pending | Waiting for `P0-PB-07`, `P0-PB-08`, `P0-PB-10` | `P0-PB-07`, `P0-PB-08`, `P0-PB-10` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-09-declaration) | Pending |
+| `P0-PB-10` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-10/20260912T035542.464393Z-accept.json)) | Applied | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-10-declaration) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-10-proposed-code) |
 
 ## Terminal outcome
 
@@ -124,8 +124,9 @@ MANTRA. The RICO checklist cites their commit IDs and gate outputs.
 
 An approved review cycle closes before the next cycle begins. Codex runs the
 focused checks, commits only that cycle's owned paths, and pushes when the
-repository has a configured upstream. Without an upstream, the local commit
-closes the local cycle while publication remains blocked.
+repository has a configured upstream. A repository whose upstream is
+unavailable closes the local cycle at the local commit and leaves publication
+blocked.
 
 ## Governing sources
 

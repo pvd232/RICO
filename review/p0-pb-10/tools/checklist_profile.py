@@ -16,8 +16,10 @@ from .profile import MANTRA_PHASE0_PROFILE, ChecklistProfile
 DEFAULT_MASTER_CHECKLIST_VALIDATOR = (
     Path.home() / ".agents/scripts/validate-master-checklist.py"
 )
-_ROW_ID = re.compile(r'^<a id="status-([a-z0-9_.-]+)"></a>`([^`]+)`$')
+_ROW_ID = re.compile(r"^`([^`]+)`$")
 _LINK = re.compile(r"^\[[^]]+\]\(([^)#]+)(?:#([^)]+))?\)$")
+_DOCUMENT_LINK = re.compile(r"\[[^]]+\]\(([^)#\s]+)#([^)\s]+)\)")
+_HEADING = re.compile(r"^#{1,6}\s+(.+?)\s*$")
 _RECEIPT_LINK = re.compile(r"\[receipt\]\(([^)]+)\)")
 _CHECKBOX = re.compile(r"^\s*- \[([ xX])\] ")
 
@@ -237,7 +239,7 @@ def _replace_status_row(
             continue
         cells = _split_row(line)
         match = _ROW_ID.fullmatch(cells[0])
-        if match is not None and match.group(2) == pair_block_id:
+        if match is not None and match.group(1) == pair_block_id:
             matches.append((line_index, cells))
     if len(matches) != 1:
         raise PairBlockGateError(
@@ -413,11 +415,9 @@ def parse_pair_block_rows(
         match = _ROW_ID.fullmatch(cells[0])
         if match is None:
             raise PairBlockGateError(f"invalid PairBlock status cell: {cells[0]}")
-        pair_block_id = match.group(2)
+        pair_block_id = match.group(1)
         if not profile.accepts_pair_block_id(pair_block_id):
             raise PairBlockGateError(f"invalid PairBlock ID: {pair_block_id}")
-        if match.group(1) != pair_block_id.lower():
-            raise PairBlockGateError(f"status anchor differs for {pair_block_id}")
         if pair_block_id in rows:
             raise PairBlockGateError(f"duplicate PairBlock row: {pair_block_id}")
         rows[pair_block_id] = PairBlockRow(
@@ -478,14 +478,14 @@ def _resolve_link(base: Path, value: str) -> tuple[Path, str | None]:
 def _proposal_section(text: str, pair_block_id: str) -> str:
     """Return one PairBlock's complete proposed-code section."""
 
-    marker = f"#### `{pair_block_id}` proposed code"
+    marker = f"##### `{pair_block_id}` proposed code"
     start = text.find(marker)
     if start < 0:
         raise PairBlockGateError(
             f"proposed-code section is missing for {pair_block_id}"
         )
     remainder = text[start + len(marker) :]
-    next_heading = re.search(r"(?m)^#{3,4} ", remainder)
+    next_heading = re.search(r"(?m)^#{3,5} ", remainder)
     end = (
         len(text)
         if next_heading is None
@@ -515,15 +515,58 @@ def _proposal_boundary(
     return remainder[: next_label.start()]
 
 
-def _ownership_row(contract_text: str, anchor: str, pair_block_id: str) -> list[str]:
+def _declaration_heading(contract_text: str, pair_block_id: str) -> None:
+    """Require one renderer-visible heading for a PairBlock declaration."""
+
+    heading = f"#### `{pair_block_id}` declaration"
+    if contract_text.splitlines().count(heading) != 1:
+        raise PairBlockGateError(
+            f"contract must contain one native declaration heading for {pair_block_id}"
+        )
+
+
+def _heading_fragments(markdown: str) -> set[str]:
+    """Return renderer-visible fragments for the document's native headings."""
+
+    fragments = set()
+    for line in markdown.splitlines():
+        match = _HEADING.fullmatch(line)
+        if match is None:
+            continue
+        title = match.group(1).lower().replace("`", "")
+        title = re.sub(r"[^a-z0-9 _-]", "", title)
+        fragments.add(re.sub(r"[ ]+", "-", title.strip()))
+    return fragments
+
+
+def validate_document_fragments(repository: Path, document_path: Path) -> None:
+    """Require each relative Markdown fragment to name a native heading."""
+
+    document = document_path.read_text(encoding="utf-8")
+    for relative_target, fragment in _DOCUMENT_LINK.findall(document):
+        target = (document_path.parent / relative_target).resolve()
+        if not target.is_relative_to(repository):
+            raise PairBlockGateError(f"document link escapes the repository: {target}")
+        if not target.is_file():
+            raise PairBlockGateError(f"document link target does not exist: {target}")
+        if fragment not in _heading_fragments(target.read_text(encoding="utf-8")):
+            raise PairBlockGateError(
+                f"document link fragment does not name a native heading: "
+                f"{relative_target}#{fragment}"
+            )
+
+
+def _ownership_row(contract_text: str, pair_block_id: str) -> list[str]:
     """Return the unique ownership row for one contract declaration."""
 
-    marker = f'<a id="{anchor}"></a>'
-    matches = [
-        line
-        for line in contract_text.splitlines()
-        if marker in line and line.startswith("|")
-    ]
+    marker = f"[`{pair_block_id}`]("
+    matches = []
+    for line in contract_text.splitlines():
+        if not line.startswith("|"):
+            continue
+        cells = _split_row(line)
+        if len(cells) == 5 and cells[0].startswith(marker):
+            matches.append(line)
     if len(matches) != 1:
         raise PairBlockGateError(
             f"contract must contain one ownership row for {pair_block_id}"
@@ -548,11 +591,14 @@ def validate_declaration(
         raise PairBlockGateError(
             f"declaration anchor is missing for {row.pair_block_id}"
         )
-    _ownership_row(
-        contract_path.read_text(encoding="utf-8"),
-        anchor,
-        row.pair_block_id,
-    )
+    expected_anchor = f"{row.pair_block_id.lower()}-declaration"
+    if anchor != expected_anchor:
+        raise PairBlockGateError(
+            f"declaration link differs for {row.pair_block_id}"
+        )
+    contract_text = contract_path.read_text(encoding="utf-8")
+    _declaration_heading(contract_text, row.pair_block_id)
+    _ownership_row(contract_text, row.pair_block_id)
 
 
 def load_proposal_contract(
@@ -575,7 +621,13 @@ def load_proposal_contract(
         raise PairBlockGateError(
             f"declaration anchor is missing for {row.pair_block_id}"
         )
-    _ownership_row(contract_text, declaration_anchor, row.pair_block_id)
+    expected_declaration = f"{row.pair_block_id.lower()}-declaration"
+    if declaration_anchor != expected_declaration:
+        raise PairBlockGateError(
+            f"declaration link differs for {row.pair_block_id}"
+        )
+    _declaration_heading(contract_text, row.pair_block_id)
+    _ownership_row(contract_text, row.pair_block_id)
 
     proposed_path, proposed_fragment = _resolve_link(
         checklist_path.parent, row.proposed_code
@@ -589,10 +641,6 @@ def load_proposal_contract(
         raise PairBlockGateError(f"proposed-code link differs for {row.pair_block_id}")
 
     proposal = _proposal_section(contract_text, row.pair_block_id)
-    if f"#status-{row.pair_block_id.lower()}" not in proposal:
-        raise PairBlockGateError(
-            f"proposed-code section lacks the checklist status link for {row.pair_block_id}"
-        )
     if "**Code boundary:**" not in proposal or "**Gate:**" not in proposal:
         raise PairBlockGateError(
             f"proposed-code section lacks its code boundary or gate for {row.pair_block_id}"
@@ -998,11 +1046,11 @@ def _validate_block_inventory(
 ) -> None:
     """Require the contract declarations and status rows to name the same blocks."""
 
-    anchors = re.findall(
-        r'<a id="([a-z0-9_.-]+)-declaration"></a>',
+    headings = re.findall(
+        r"(?m)^#### `([^`]+)` declaration$",
         contract_text,
     )
-    declared = {block_id.upper() for block_id in anchors}
+    declared = set(headings)
     invalid = [item for item in declared if not profile.accepts_pair_block_id(item)]
     if invalid:
         raise PairBlockGateError(f"invalid declared PairBlock IDs: {invalid}")
@@ -1272,8 +1320,13 @@ def validate_traceability(
     rows = parse_pair_block_rows(checklist_text, profile, dialect)
     for row in rows.values():
         validate_declaration(repository, checklist_path, row)
-        if row.proposed_code.startswith(dialect.proposed_code_link_prefix):
+        if (
+            row.status in profile.lifecycle.proposal_gate_states
+            and row.proposed_code.startswith(dialect.proposed_code_link_prefix)
+        ):
             load_proposal_contract(repository, checklist_path, row, profile)
+    validate_document_fragments(repository, checklist_path)
+    validate_document_fragments(repository, repository / profile.contract_path)
     manifest = compile_normalized_manifest(
         repository,
         checklist_text,

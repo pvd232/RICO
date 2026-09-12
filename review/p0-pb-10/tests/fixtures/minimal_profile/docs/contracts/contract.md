@@ -12,9 +12,11 @@
 |---|---|---|---|---|
 {{OWNERSHIP_ROWS}}
 
-#### `{{PAIR_BLOCK_ID}}` proposed code
+{{DECLARATION_HEADINGS}}
 
 **Resolution status:** [Checklist]({{STATUS_LINK}})
+
+##### `{{PAIR_BLOCK_ID}}` proposed code
 
 **Code boundary:**
 

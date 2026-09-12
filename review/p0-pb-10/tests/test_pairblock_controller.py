@@ -375,7 +375,7 @@ def test_unknown_pair_block_is_rejected(
         run_test_gate(repository, UNKNOWN_PAIR_BLOCK_ID)
 
 
-def test_duplicate_status_anchor_is_rejected(
+def test_duplicate_status_row_is_rejected(
     repository_factory: RepositoryFactory,
 ) -> None:
     """Require one status row for each PairBlock identity."""
@@ -384,11 +384,46 @@ def test_duplicate_status_anchor_is_rejected(
     checklist = repository / CHECKLIST_PATH
     text = checklist.read_text(encoding="utf-8")
     row = next(
-        line for line in text.splitlines() if f"status-{PAIR_BLOCK_ID.lower()}" in line
+        line
+        for line in text.splitlines()
+        if line.startswith(f"| `{PAIR_BLOCK_ID}` |")
     )
     checklist.write_text(text.replace(row, row + "\n" + row), encoding="utf-8")
 
     with pytest.raises(PairBlockGateError, match="duplicate PairBlock row"):
+        validate_test_repository(repository)
+
+
+def test_html_declaration_anchor_is_not_a_navigation_target(
+    repository_factory: RepositoryFactory,
+) -> None:
+    """Reject a raw HTML anchor where a renderer-visible heading is required."""
+
+    repository = repository_factory(command=passing_command())
+    contract = repository / CONTRACT_PATH
+    heading = f"#### `{PAIR_BLOCK_ID}` declaration"
+    html_anchor = f'<a id="{PAIR_BLOCK_ID.lower()}-declaration"></a>'
+    text = contract.read_text(encoding="utf-8").replace(heading, html_anchor)
+    contract.write_text(text, encoding="utf-8")
+
+    with pytest.raises(PairBlockGateError, match="native declaration heading"):
+        validate_test_repository(repository)
+
+
+def test_broken_document_fragment_is_rejected(
+    repository_factory: RepositoryFactory,
+) -> None:
+    """Reject any contract or checklist link that names no native heading."""
+
+    repository = repository_factory(command=passing_command())
+    checklist = repository / CHECKLIST_PATH
+    checklist.write_text(
+        checklist.read_text(encoding="utf-8")
+        + "\n[Broken record](../contracts/contract.md#missing-heading)\n",
+        encoding="utf-8",
+    )
+
+    with pytest.raises(PairBlockGateError, match="does not name a native heading"):
         validate_test_repository(repository)
 
 
@@ -548,9 +583,9 @@ def test_every_contract_pair_block_requires_one_status_row(
     text = contract.read_text(encoding="utf-8").replace(
         "## Ownership",
         "## Ownership\n\n"
-        f'| <a id="{DEPENDENCY_PAIR_BLOCK_ID.lower()}-declaration"></a>'
-        f"[`{DEPENDENCY_PAIR_BLOCK_ID}`](#) | Exercise dependency. | "
-        "Test author. | Pending | Gate. |",
+        f"#### `{DEPENDENCY_PAIR_BLOCK_ID}` declaration\n\n"
+        f"| [`{DEPENDENCY_PAIR_BLOCK_ID}`](#pairblock-resolution) | "
+        "Exercise dependency. | Test author. | Pending | Gate. |",
     )
     contract.write_text(text, encoding="utf-8")
 

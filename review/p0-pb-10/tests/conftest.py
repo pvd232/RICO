@@ -122,8 +122,7 @@ def _pair_block_row(
             f"{block.pair_block_id.lower()}-proposed-code)"
         )
     return (
-        f'| <a id="status-{block.pair_block_id.lower()}"></a>'
-        f"`{block.pair_block_id}` | Pending | {block.status} | "
+        f"| `{block.pair_block_id}` | Pending | {block.status} | "
         f"{_dependency_cell(dependencies)} | {declaration} | {proposed_code} |"
     )
 
@@ -138,9 +137,8 @@ def _ownership_row(block: PairBlockFixture, *, proposed: bool) -> str:
         else "Pending"
     )
     return (
-        f'| <a id="{block.pair_block_id.lower()}-declaration"></a>'
-        f"[`{block.pair_block_id}`]({checklist_link}#status-"
-        f"{block.pair_block_id.lower()}) | Exercise the gate. | "
+        f"| [`{block.pair_block_id}`]({checklist_link}#pairblock-resolution) | "
+        "Exercise the gate. | "
         f"Test author. | {proposed_code} | Test gate. |"
     )
 
@@ -196,6 +194,7 @@ class RepositoryFactory:
             requirement_state = "In progress"
         pair_block_rows = []
         ownership_rows = []
+        declaration_headings = []
         block_links = []
         checkboxes = []
         for block in blocks:
@@ -209,6 +208,9 @@ class RepositoryFactory:
                 )
             )
             ownership_rows.append(_ownership_row(block, proposed=is_target))
+            declaration_headings.append(
+                f"#### `{block.pair_block_id}` declaration"
+            )
             block_links.append(
                 f"[`{block.pair_block_id}`](#{block.pair_block_id.lower()}-declaration)"
             )
@@ -226,10 +228,11 @@ class RepositoryFactory:
                 "{{REQUIREMENT_ID}}": REQUIREMENT_ID,
                 "{{BLOCK_LINKS}}": ", ".join(block_links),
                 "{{OWNERSHIP_ROWS}}": "\n".join(ownership_rows),
+                "{{DECLARATION_HEADINGS}}": "\n\n".join(declaration_headings),
                 "{{PAIR_BLOCK_ID}}": target.pair_block_id,
                 "{{STATUS_LINK}}": (
-                    f"{_relative_link(CONTRACT_PATH, CHECKLIST_PATH)}#status-"
-                    f"{target.pair_block_id.lower()}"
+                    f"{_relative_link(CONTRACT_PATH, CHECKLIST_PATH)}"
+                    "#pairblock-resolution"
                 ),
                 "{{SOURCE_LINK}}": _relative_link(CONTRACT_PATH, SOURCE_PATH),
                 "{{TEST_LINK}}": _relative_link(CONTRACT_PATH, TEST_PATH),

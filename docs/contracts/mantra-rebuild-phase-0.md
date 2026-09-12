@@ -243,20 +243,20 @@ Resolution status lives in the [master checklist](../checklists/mantra-rebuild.m
 
 | Block | Work | Review or implementation owner | Proposed code | Gate |
 |---|---|---|---|---|
-| <a id="p0-pb-01-declaration"></a>[`P0-PB-01`](../checklists/mantra-rebuild.md#status-p0-pb-01) | Mark and verify the MANTRA workspace. | Codex reviews; user implements. | [Accepted implementation](#p0-pb-01-accepted-implementation) | `P0-VR-05` |
-| <a id="p0-pb-02-declaration"></a>[`P0-PB-02`](../checklists/mantra-rebuild.md#status-p0-pb-02) | Trace the Hopfield replay. | Codex traces; user approves. | [Work description](#replay-traces-awaiting-approval) | Hopfield portion of `P0-VR-01` |
-| <a id="p0-pb-03-declaration"></a>[`P0-PB-03`](../checklists/mantra-rebuild.md#status-p0-pb-03) | Trace the MIL replay. | Codex traces; user approves. | [Work description](#replay-traces-awaiting-approval) | MIL portion of `P0-VR-01` |
-| <a id="p0-pb-04-declaration"></a>[`P0-PB-04`](../checklists/mantra-rebuild.md#status-p0-pb-04) | Produce every restoration binding. | User implements approved code; Codex reviews it. | [`P0-PB-04A`](#p0-pb-04a-proposed-code); [`P0-PB-04B`](#p0-pb-04b-proposed-code) | `P0-VR-02` |
-| <a id="p0-pb-04a-declaration"></a>[`P0-PB-04A`](../checklists/mantra-rebuild.md#status-p0-pb-04a) | Define and validate `RestorationBinding`. | User reviews and implements. | [Source and tests](#p0-pb-04a-proposed-code) | Reject malformed bindings and incomplete coverage. |
-| <a id="p0-pb-04b-declaration"></a>[`P0-PB-04B`](../checklists/mantra-rebuild.md#status-p0-pb-04b) | Resolve a MANTRA path through signed controls to one archive member. | Codex proposes; user reviews and implements. | [Source and tests](#p0-pb-04b-proposed-code) | Resolve the eight approved Hopfield restorations; reject broken path, symlink, file-identity, object-identity, and archive joins. |
-| <a id="p0-pb-05-declaration"></a>[`P0-PB-05`](../checklists/mantra-rebuild.md#status-p0-pb-05) | Prove capacity and produce the download plan. | User implements approved code; Codex reviews it. | [`P0-PB-05A`](#p0-pb-05a-proposed-code); `P0-PB-05B` pending | `P0-VR-03` |
-| <a id="p0-pb-05a-declaration"></a>[`P0-PB-05A`](../checklists/mantra-rebuild.md#status-p0-pb-05a) | Calculate capacity and write its receipt. | User reviews and implements. | [Source and tests](#p0-pb-05a-proposed-code) | Report every term in $R_{max}$ and reject insufficient space. |
-| <a id="p0-pb-05b-declaration"></a>[`P0-PB-05B`](../checklists/mantra-rebuild.md#status-p0-pb-05b) | Order the required archive chunks. | Codex proposes; user approves cache timing. | Pending proposal | Identify every chunk by revision, byte count, and digest. |
-| <a id="p0-pb-06-declaration"></a>[`P0-PB-06`](../checklists/mantra-rebuild.md#status-p0-pb-06) | Restore files and verify graph $B$. | User runs approved code; Codex reviews evidence. | Pending proposal | `P0-VR-04` and `P0-VR-06` |
-| <a id="p0-pb-07-declaration"></a>[`P0-PB-07`](../checklists/mantra-rebuild.md#status-p0-pb-07) | Replay Hopfield. | User runs approved code; Codex reviews evidence. | Pending proposal | `P0-VR-07` |
-| <a id="p0-pb-08-declaration"></a>[`P0-PB-08`](../checklists/mantra-rebuild.md#status-p0-pb-08) | Replay MIL. | User runs approved code; Codex reviews evidence. | Pending proposal | `P0-VR-08` |
-| <a id="p0-pb-09-declaration"></a>[`P0-PB-09`](../checklists/mantra-rebuild.md#status-p0-pb-09) | Freeze evidence and assess VIPER. | Codex compiles; user approves. | Pending proposal | `P0-VR-09` |
-| <a id="p0-pb-10-declaration"></a>[`P0-PB-10`](../checklists/mantra-rebuild.md#status-p0-pb-10) | Validate staged PairBlock traceability, run one proposal gate, retain its receipt, and apply its legal checklist transition. | Codex proposes; user reviews. | [Source and tests](#p0-pb-10-proposed-code) | `P0-VR-10` |
+| [`P0-PB-01`](../checklists/mantra-rebuild.md#pairblock-resolution) | Mark and verify the MANTRA workspace. | Codex reviews; user implements. | [Accepted implementation](#p0-pb-01-accepted-implementation) | `P0-VR-05` |
+| [`P0-PB-02`](../checklists/mantra-rebuild.md#pairblock-resolution) | Trace the Hopfield replay. | Codex traces; user approves. | [Work description](#p0-pb-02-declaration) | Hopfield portion of `P0-VR-01` |
+| [`P0-PB-03`](../checklists/mantra-rebuild.md#pairblock-resolution) | Trace the MIL replay. | Codex traces; user approves. | [Work description](#p0-pb-03-declaration) | MIL portion of `P0-VR-01` |
+| [`P0-PB-04`](../checklists/mantra-rebuild.md#pairblock-resolution) | Produce every restoration binding. | User implements approved code; Codex reviews it. | [`P0-PB-04A`](#p0-pb-04a-proposed-code); [`P0-PB-04B`](#p0-pb-04b-proposed-code) | `P0-VR-02` |
+| [`P0-PB-04A`](../checklists/mantra-rebuild.md#pairblock-resolution) | Define and validate `RestorationBinding`. | User reviews and implements. | [Source and tests](#p0-pb-04a-proposed-code) | Reject malformed bindings and incomplete coverage. |
+| [`P0-PB-04B`](../checklists/mantra-rebuild.md#pairblock-resolution) | Resolve a MANTRA path through signed controls to one archive member. | Codex proposes; user reviews and implements. | [Source and tests](#p0-pb-04b-proposed-code) | Resolve the eight approved Hopfield restorations; reject broken path, symlink, file-identity, object-identity, and archive joins. |
+| [`P0-PB-05`](../checklists/mantra-rebuild.md#pairblock-resolution) | Prove capacity and produce the download plan. | User implements approved code; Codex reviews it. | [`P0-PB-05A`](#p0-pb-05a-proposed-code); `P0-PB-05B` pending | `P0-VR-03` |
+| [`P0-PB-05A`](../checklists/mantra-rebuild.md#pairblock-resolution) | Calculate capacity and write its receipt. | User reviews and implements. | [Source and tests](#p0-pb-05a-proposed-code) | Report every term in $R_{max}$ and reject insufficient space. |
+| [`P0-PB-05B`](../checklists/mantra-rebuild.md#pairblock-resolution) | Order the required archive chunks. | Codex proposes; user approves cache timing. | Pending proposal | Identify every chunk by revision, byte count, and digest. |
+| [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | Restore files and verify graph $B$. | User runs approved code; Codex reviews evidence. | Pending proposal | `P0-VR-04` and `P0-VR-06` |
+| [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay Hopfield. | User runs approved code; Codex reviews evidence. | Pending proposal | `P0-VR-07` |
+| [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay MIL. | User runs approved code; Codex reviews evidence. | Pending proposal | `P0-VR-08` |
+| [`P0-PB-09`](../checklists/mantra-rebuild.md#pairblock-resolution) | Freeze evidence and assess VIPER. | Codex compiles; user approves. | Pending proposal | `P0-VR-09` |
+| [`P0-PB-10`](../checklists/mantra-rebuild.md#pairblock-resolution) | Validate staged PairBlock traceability, run one proposal gate, retain its receipt, and apply its legal checklist transition. | Codex proposes; user reviews. | [Source and tests](#p0-pb-10-proposed-code) | `P0-VR-10` |
 
 ### Work descriptions
 
@@ -274,11 +274,41 @@ Resolution status lives in the [master checklist](../checklists/mantra-rebuild.m
 
 MANTRA already owns its package, tests, configuration, and historical experiment code. `viper init` targets empty directories and would generate competing structure here. The adapter will call the historical Hopfield implementation at its existing path. `P0-PB-02` identifies the complete Hopfield input set; `P0-PB-07` requires the adapter to declare that set.
 
-#### Replay traces awaiting approval
+#### `P0-PB-02` declaration
 
 `P0-PB-02` traced the selected Hopfield computation. It reads eleven data files and one saved encoder. Five data files are present and hash-match; six data files and the encoder are absent and restorable. The adapter will call the selected helper path with `memory=("fit",)`, `topk=1600`, and `temperature=0.055`. It will write a new prediction and receipt. Its boundary excludes the historical ten-encoder, 42-readout-per-encoder sweep. The historical prediction and report remain unchanged in $Q$.
 
+#### `P0-PB-03` declaration
+
 `P0-PB-03` targets the v1952 seed-123460 `without_control` result in `experiments/v1952_direct_mil_control_term_ablation/diagnostics/CONTROL_TERM_MULTISEED_RESULTS.json`. Its hold PearsonDelta is `0.6025499488874759`. The scorer reads the saved single-query MIL prototype, saved teacher representations, biological descriptor files, coefficient targets, and gene labels. Its input set excludes Hopfield predictions. The runner's CUDA guard makes the historical GPU replay and CPU evaluation of stored predictions separate gates.
+
+#### `P0-PB-04` declaration
+
+`P0-PB-04` closes when `P0-PB-04A` and `P0-PB-04B` produce every restoration binding.
+
+#### `P0-PB-05` declaration
+
+`P0-PB-05` closes when `P0-PB-05A` proves capacity and `P0-PB-05B` fixes the archive-chunk order.
+
+#### `P0-PB-05B` declaration
+
+`P0-PB-05B` will identify the required archive chunks and their immutable identities.
+
+#### `P0-PB-06` declaration
+
+`P0-PB-06` will restore the approved files and verify graph $B$ in VIPER.
+
+#### `P0-PB-07` declaration
+
+`P0-PB-07` will replay the selected Hopfield result.
+
+#### `P0-PB-08` declaration
+
+`P0-PB-08` will replay the selected standalone MIL result.
+
+#### `P0-PB-09` declaration
+
+`P0-PB-09` will freeze the Phase 0 evidence and VIPER usefulness ledger.
 
 #### Approved Hopfield artifact set
 
@@ -359,38 +389,60 @@ The inspected teacher, student, and proposal paths contain zero unconditional `.
 
 The [Phase 0 ownership record](#phase-0-ownership-record) records each block's scope, owner, implementation link, and gate. The master checklist records resolution status.
 
+### Repository evidence protocol
+
+RICO records the contract, checklist, approvals, and lifecycle receipts. MANTRA
+owns every rebuild source file and test. A RICO proposal-gate receipt supports
+`Review` or `Approved`. The MANTRA implementation receipt proves that MANTRA
+contains the accepted code.
+
+An `Applied` transition requires one MANTRA implementation receipt with the
+MANTRA repository identity, verified base and result commits, exact owned
+paths, the canonical diff SHA-256, and the focused-test receipt. The canonical
+diff uses the command defined by the global master-checklist contract. The
+controller must recompute the commits and diff digest before changing status.
+A `Complete` transition then requires the VIPER record named by the block's
+gate.
+
+This project rule instantiates the global lifecycle-evidence contract. Git
+supplies the immutable commit identities and commit comparison. in-toto and
+SLSA supply the digest-bound attestation model. W3C PROV supplies the distinction
+between the changed source, the review or test activity, and the responsible
+actor. The exact receipt fields and canonical diff command are local protocol
+choices.
+
 ### Record index
 
 | Block | Record |
 |---|---|
-| [`P0-PB-01`](../checklists/mantra-rebuild.md#status-p0-pb-01) | [Accepted implementation](#p0-pb-01-accepted-implementation) |
-| [`P0-PB-02`](../checklists/mantra-rebuild.md#status-p0-pb-02) | [Replay-trace work description](#replay-traces-awaiting-approval) |
-| [`P0-PB-03`](../checklists/mantra-rebuild.md#status-p0-pb-03) | [Replay-trace work description](#replay-traces-awaiting-approval) |
-| [`P0-PB-04`](../checklists/mantra-rebuild.md#status-p0-pb-04) | Composed from `P0-PB-04A` and `P0-PB-04B` |
-| [`P0-PB-04A`](../checklists/mantra-rebuild.md#status-p0-pb-04a) | [Proposed code](#p0-pb-04a-proposed-code) |
-| [`P0-PB-04B`](../checklists/mantra-rebuild.md#status-p0-pb-04b) | [Proposed code](#p0-pb-04b-proposed-code) |
-| [`P0-PB-05`](../checklists/mantra-rebuild.md#status-p0-pb-05) | Composed from `P0-PB-05A` and `P0-PB-05B` |
-| [`P0-PB-05A`](../checklists/mantra-rebuild.md#status-p0-pb-05a) | [Proposed code](#p0-pb-05a-proposed-code) |
-| [`P0-PB-05B`](../checklists/mantra-rebuild.md#status-p0-pb-05b) | Pending proposal |
-| [`P0-PB-06`](../checklists/mantra-rebuild.md#status-p0-pb-06) | Pending proposal |
-| [`P0-PB-07`](../checklists/mantra-rebuild.md#status-p0-pb-07) | Pending proposal |
-| [`P0-PB-08`](../checklists/mantra-rebuild.md#status-p0-pb-08) | Pending proposal |
-| [`P0-PB-09`](../checklists/mantra-rebuild.md#status-p0-pb-09) | Pending proposal |
-| [`P0-PB-10`](../checklists/mantra-rebuild.md#status-p0-pb-10) | [Proposed code](#p0-pb-10-proposed-code) |
+| [`P0-PB-01`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Accepted implementation](#p0-pb-01-accepted-implementation) |
+| [`P0-PB-02`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Declaration](#p0-pb-02-declaration) |
+| [`P0-PB-03`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Declaration](#p0-pb-03-declaration) |
+| [`P0-PB-04`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Declaration](#p0-pb-04-declaration) |
+| [`P0-PB-04A`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Proposed code](#p0-pb-04a-proposed-code) |
+| [`P0-PB-04B`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Proposed code](#p0-pb-04b-proposed-code) |
+| [`P0-PB-05`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Declaration](#p0-pb-05-declaration) |
+| [`P0-PB-05A`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Proposed code](#p0-pb-05a-proposed-code) |
+| [`P0-PB-05B`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Declaration](#p0-pb-05b-declaration) |
+| [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Declaration](#p0-pb-06-declaration) |
+| [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Declaration](#p0-pb-07-declaration) |
+| [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Declaration](#p0-pb-08-declaration) |
+| [`P0-PB-09`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Declaration](#p0-pb-09-declaration) |
+| [`P0-PB-10`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Active implementation](#p0-pb-10-proposed-code) |
 
-A pending row has no implementation body. Its ownership, dependency, and current status remain visible through the linked declaration and checklist row.
+A pending row links its declaration and checklist state while omitting an implementation body.
 
 ### Accepted implementation
 
-#### `P0-PB-01` accepted implementation
+#### `P0-PB-01` declaration
 
-**Declaration:** [`P0-PB-01`](#p0-pb-01-declaration)
-
-**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#status-p0-pb-01)
+**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
 
 **Requirement:** Mark the MANTRA Git root as the VIPER workspace and verify the Conda environment named `mantra` uses Python 3.13 with `viper-provenance` installed.
 
 **Dependency:** The Conda environment named `mantra` exists.
+
+##### `P0-PB-01` accepted implementation
 
 **Code boundary:** One applied MANTRA file and its environment commands follow.
 
@@ -428,119 +480,117 @@ python -c 'from pathlib import Path; from viper.repository import resolve_root; 
 
 ### Proposed implementation
 
-#### `P0-PB-04A` proposed code
+#### `P0-PB-04A` declaration
 
-**Declaration:** [`P0-PB-04A`](#p0-pb-04a-declaration)
-
-**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#status-p0-pb-04a)
+**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
 
 **Requirement:** Represent one canonical MANTRA destination, its signed archive member, and its expected byte identity. Validate exact fields, normalized paths, content-addressed member names, unique destinations, order, and full missing-file coverage.
 
 **Dependency:** The `RestorationBinding` definition in Section 4 and the approved missing-file identities in graph $B$.
 
-**Code boundary:** These three executable review files form the complete proposal:
+##### `P0-PB-04A` proposed code
 
-- [`src/mantra/rebuild/__init__.py`](../../review/p0-pb-04a/src/mantra/rebuild/__init__.py)
-- [`src/mantra/rebuild/restoration.py`](../../review/p0-pb-04a/src/mantra/rebuild/restoration.py)
-- [`src/mantra/rebuild/tests/test_restoration.py`](../../review/p0-pb-04a/src/mantra/rebuild/tests/test_restoration.py)
+**Code boundary:** MANTRA owns these implementation paths:
+
+- `src/mantra/rebuild/__init__.py`
+- `src/mantra/rebuild/restoration.py`
+- `src/mantra/rebuild/tests/test_restoration.py`
 
 **Focused check:**
 
 ```bash
-cd /Users/machina/Developer/ChatGPT/RICO
-PYTHONPATH=review/p0-pb-04a/src conda run -n mantra \
-  python -m pytest \
-  review/p0-pb-04a/src/mantra/rebuild/tests/test_restoration.py -q
+cd /Users/machina/Developer/ChatGPT/mantra
+conda run -n mantra python -m pytest \
+  src/mantra/rebuild/tests/test_restoration.py -q
 ```
 
 **Gate:** Every `P0-PB-04A` rejection case passes, and the valid binding fixture survives full-set validation.
 
 **Stop condition:** Return the proposal for revision when any declared field, path rule, identity rule, coverage rule, or focused test lacks an observing assertion.
 
-**Evidence:** The RICO proposal passes `17` tests. Closure still requires user approval, the applied MANTRA diff, focused MANTRA test output, a MANTRA commit, and later VIPER registration.
+**Evidence:** The proposal gate passed `17` tests before approval. That receipt supports the approved proposal. The MANTRA implementation receipt defined above supports `Applied`; VIPER registration supports `Complete`.
 
-#### `P0-PB-04B` proposed code
+#### `P0-PB-04B` declaration
 
-**Declaration:** [`P0-PB-04B`](#p0-pb-04b-declaration)
-
-**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#status-p0-pb-04b)
+**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
 
 **Requirement:** Accept records only after MANTRA's existing archive verifier, or an equivalent retained signature-and-checksum procedure, authenticates their control files. Resolve each required destination through the filesystem manifest. Follow symlinks only within `/home/machina/MANTRA`. Join the resolved file digest to exactly one row in its `object_archive_id` manifest. Preserve the requested destination in the resulting `RestorationBinding`.
 
 **Dependency:** The `RestorationBinding` value type proposed in `P0-PB-04A`; the signed release, archive index, filesystem manifest, and required object manifests identified in the Phase 0 inspection evidence.
 
-**Code boundary:** This cumulative proposal supersedes the `P0-PB-04A` source after approval. The `P0-PB-04A` directory remains its frozen review record. These three files are the complete `P0-PB-04B` proposal:
+##### `P0-PB-04B` proposed code
 
-- [`src/mantra/rebuild/__init__.py`](../../review/p0-pb-04b/src/mantra/rebuild/__init__.py)
-- [`src/mantra/rebuild/restoration.py`](../../review/p0-pb-04b/src/mantra/rebuild/restoration.py)
-- [`src/mantra/rebuild/tests/test_control_resolution.py`](../../review/p0-pb-04b/src/mantra/rebuild/tests/test_control_resolution.py)
+**Code boundary:** MANTRA owns the cumulative implementation at these paths:
+
+- `src/mantra/rebuild/__init__.py`
+- `src/mantra/rebuild/restoration.py`
+- `src/mantra/rebuild/tests/test_restoration.py`
+- `src/mantra/rebuild/tests/test_control_resolution.py`
 
 **Focused check:**
 
 ```bash
-cd /Users/machina/Developer/ChatGPT/RICO
-conda run -n mantra python -m ruff check review/p0-pb-04b && \
-PYTHONPATH=review/p0-pb-04b/src conda run -n mantra \
-  python -m pytest \
-  review/p0-pb-04a/src/mantra/rebuild/tests/test_restoration.py \
-  review/p0-pb-04b/src/mantra/rebuild/tests/test_control_resolution.py -q
+cd /Users/machina/Developer/ChatGPT/mantra
+conda run -n mantra python -m ruff check src/mantra/rebuild && \
+conda run -n mantra python -m pytest \
+  src/mantra/rebuild/tests/test_restoration.py \
+  src/mantra/rebuild/tests/test_control_resolution.py -q
 ```
 
 **Gate:** Ruff passes. All `P0-PB-04A` tests still pass. The `P0-PB-04B` tests resolve both a regular file and the observed absolute historical symlink, use `object_archive_id`, and reject absent or duplicate paths, symlink escape or cycles, mismatched file or object identity, undeclared archives, malformed control records, and invalid revisions.
 
-**Stop condition:** Return the proposal for revision when a required destination can resolve outside the archived MANTRA root, through more than one path or object row, without matching graph $B$ byte identity, or without a signed archive-index owner.
+**Stop condition:** Return the proposal for revision unless each required destination stays inside the archived MANTRA root, resolves through one path and object row, matches graph $B$ byte identity, and has a signed archive-index owner.
 
-**Evidence:** The proposal resolved all eight approved Hopfield restorations against the authenticated historical controls: six content objects in `historical_and_shared_experiments` and two in `sota_reproducer`. No archive payload was downloaded. Closure still requires the proposal gate, user approval, the applied MANTRA diff, focused MANTRA test output, a MANTRA commit, and later VIPER registration.
+**Evidence:** The proposal resolved all eight approved Hopfield restorations against the authenticated historical controls: six content objects in `historical_and_shared_experiments` and two in `sota_reproducer`. Archive payload downloads remained at zero. The MANTRA implementation receipt defined above supports `Applied`; VIPER registration supports `Complete`.
 
-#### `P0-PB-05A` proposed code
+#### `P0-PB-05A` declaration
 
-**Declaration:** [`P0-PB-05A`](#p0-pb-05a-declaration)
-
-**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#status-p0-pb-05a)
+**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
 
 **Requirement:** Represent every term in $R_{max}$, measure free bytes on the target filesystem, and expose the resulting pass or fail decision in a serializable receipt.
 
 **Dependency:** The capacity formula in Section 4. `P0-PB-05B` supplies the measured archive-plan values used in the real receipt.
 
-**Code boundary:** These two executable review files form the complete proposal:
+##### `P0-PB-05A` proposed code
 
-- [`src/mantra/rebuild/capacity.py`](../../review/p0-pb-05a/src/mantra/rebuild/capacity.py)
-- [`src/mantra/rebuild/tests/test_capacity.py`](../../review/p0-pb-05a/src/mantra/rebuild/tests/test_capacity.py)
+**Code boundary:** MANTRA owns these implementation paths:
+
+- `src/mantra/rebuild/capacity.py`
+- `src/mantra/rebuild/tests/test_capacity.py`
 
 **Focused check:**
 
 ```bash
-cd /Users/machina/Developer/ChatGPT/RICO
-PYTHONPATH=review/p0-pb-05a/src conda run -n mantra \
-  python -m pytest \
-  review/p0-pb-05a/src/mantra/rebuild/tests/test_capacity.py -q
+cd /Users/machina/Developer/ChatGPT/mantra
+conda run -n mantra python -m pytest \
+  src/mantra/rebuild/tests/test_capacity.py -q
 ```
 
 **Gate:** The focused tests observe the exact-boundary pass, below-boundary failure, rejection of negative terms, and every serialized contract term.
 
 **Stop condition:** Return the proposal for revision when the receipt omits a capacity term or any input can understate `required_bytes`.
 
-**Evidence:** The RICO proposal passes `9` tests. Closure still requires user approval, the applied MANTRA diff, focused MANTRA test output, a MANTRA commit, and later VIPER registration.
+**Evidence:** The proposal gate passed `9` tests before approval. That receipt supports the approved proposal. The MANTRA implementation receipt defined above supports `Applied`; VIPER registration supports `Complete`.
 
-#### `P0-PB-10` proposed code
+#### `P0-PB-10` declaration
 
-**Declaration:** [`P0-PB-10`](#p0-pb-10-declaration)
-
-**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#status-p0-pb-10)
+**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
 
 **Requirement:** Compile the RICO Markdown checklist into schema version 2 of the global master-checklist manifest. One linked receipt advances a PairBlock through `Drafting`, `Review`, `Approved`, `Applied`, and `Complete`. The RICO profile updates the block's checkbox, mapped requirements, newly ready dependents, and contract state before the global validator accepts the transition. The global contract permits one of several sibling PairBlocks to close while their shared requirement remains in progress and requires that requirement to close with evidence after its final block closes.
 
-**Dependency:** The block has one checklist row, one contract ownership row, and one complete code section. A declared PairBlock dependency must reach an approved or later state before execution. `P0-PB-06` owns the later VIPER registration needed to move this applied block to `Complete`; that registration does not block this block's implementation or review.
+**Dependency:** The block has one checklist row, one contract ownership row, and one complete code section. A declared PairBlock dependency must reach an approved or later state before execution. `P0-PB-06` owns the later VIPER registration needed to move this applied block to `Complete`; implementation and review may finish before that registration.
 
-**Code boundary:** These seven executable review files form the proposal:
+##### `P0-PB-10` proposed code
 
-- [`tools/__init__.py`](../../review/p0-pb-10/tools/__init__.py)
-- [`tools/checklist_profile.py`](../../review/p0-pb-10/tools/checklist_profile.py)
-- [`tools/execution_identity.py`](../../review/p0-pb-10/tools/execution_identity.py)
-- [`tools/profile.py`](../../review/p0-pb-10/tools/profile.py)
-- [`tools/pairblock_controller.py`](../../review/p0-pb-10/tools/pairblock_controller.py)
-- [`tests/conftest.py`](../../review/p0-pb-10/tests/conftest.py)
-- [`tests/test_pairblock_controller.py`](../../review/p0-pb-10/tests/test_pairblock_controller.py)
+**Code boundary:** These seven files are the active RICO implementation:
+
+- [`review/p0-pb-10/tools/__init__.py`](../../review/p0-pb-10/tools/__init__.py)
+- [`review/p0-pb-10/tools/checklist_profile.py`](../../review/p0-pb-10/tools/checklist_profile.py)
+- [`review/p0-pb-10/tools/execution_identity.py`](../../review/p0-pb-10/tools/execution_identity.py)
+- [`review/p0-pb-10/tools/profile.py`](../../review/p0-pb-10/tools/profile.py)
+- [`review/p0-pb-10/tools/pairblock_controller.py`](../../review/p0-pb-10/tools/pairblock_controller.py)
+- [`review/p0-pb-10/tests/conftest.py`](../../review/p0-pb-10/tests/conftest.py)
+- [`review/p0-pb-10/tests/test_pairblock_controller.py`](../../review/p0-pb-10/tests/test_pairblock_controller.py)
 
 **Fixture boundary:** These two documents define the minimal RICO profile used by the tests. The fixture factory copies the actual `checklist_profile.py` and `test_pairblock_controller.py` into each disposable repository:
 
@@ -554,7 +604,7 @@ PYTHONPATH=review/p0-pb-05a/src conda run -n mantra \
 | Python lint | `ruff check` over all seven executable review files |
 | Project policy and lifecycle validity | `test_lifecycle_policy_rejects_undeclared_transition_status`; `test_checklist_profile_requires_two_phase_capture_groups`; `test_project_profile_excludes_markdown_dialect`; `test_markdown_dialect_rejects_empty_markers` |
 | Global lifecycle contract | `test_profile_fixture_compiles_with_global_validator`; `test_mantra_profile_compiles_current_contract`; `test_lifecycle_completion_updates_every_derived_status`; `test_checkbox_must_match_pairblock_completion` |
-| Complete PairBlock inventory and requirement mapping | `test_every_contract_pair_block_requires_one_status_row`; `test_unmapped_pair_block_is_rejected`; `test_duplicate_status_anchor_is_rejected`; `test_standard_pair_block_contract_marker_is_required` |
+| Complete PairBlock inventory and requirement mapping | `test_every_contract_pair_block_requires_one_status_row`; `test_unmapped_pair_block_is_rejected`; `test_duplicate_status_row_is_rejected`; `test_standard_pair_block_contract_marker_is_required` |
 | PairBlock dependency order | `test_unknown_dependency_is_rejected`; `test_unresolved_pair_block_dependency_blocks_gate`; `test_accepted_dependency_releases_waiting_block` |
 | Owner, code, and fixture boundaries | `test_missing_owner_is_rejected`; `test_missing_proposed_source_is_rejected`; `test_missing_fixture_source_is_rejected`; `test_proposed_code_must_stay_in_governing_contract` |
 | Gate and lifecycle behavior | `test_gate_must_name_every_observing_test`; `test_failing_gate_retains_receipt_without_changing_checklist`; `test_nested_conda_run_is_rejected_before_gate_execution`; `test_illegal_lifecycle_event_changes_no_status` |
@@ -579,7 +629,7 @@ PYTHONPATH=review/p0-pb-10 conda run -n mantra \
 
 **Stop condition:** Return the proposal for revision if a gate can run outside its declared code or runtime boundary, bypass an unresolved dependency, change status after failure or identity drift, accept an illegal lifecycle event, or leave a rendered status inconsistent with its evidence.
 
-**Evidence:** Global commit `58b59175e2a4a949bc8dd33302099cf780249c75` repairs incremental PairBlock closure and passes its three focused tests, normalized-manifest validation, and Ruff. The RICO implementation reuses that validator. `ChecklistProfile` owns project paths and lifecycle events; `MarkdownChecklistAdapter` owns RICO parsing and rendering; `pairblock_controller.py` runs proposal gates and records later evidence events without parsing Markdown. The focused RICO gate passes `40` cases and retains its receipt. The [master-checklist row](../checklists/mantra-rebuild.md#status-p0-pb-10) owns the current lifecycle state and its supporting receipt.
+**Evidence:** Global commit `58b59175e2a4a949bc8dd33302099cf780249c75` repairs incremental PairBlock closure and passes its three focused tests, normalized-manifest validation, and Ruff. The RICO implementation reuses that validator. `ChecklistProfile` owns project paths and lifecycle events; `MarkdownChecklistAdapter` owns RICO parsing and rendering; `pairblock_controller.py` runs proposal gates and records later evidence events while the adapter parses Markdown. The current focused RICO check passes `42` cases. The [master-checklist resolution table](../checklists/mantra-rebuild.md#pairblock-resolution) owns the current lifecycle state and links its supporting receipt.
 
 ## 11. Sources
 
@@ -591,3 +641,7 @@ PYTHONPATH=review/p0-pb-10 conda run -n mantra \
 - MANTRA: `docs/EXPERIMENT_ARCHIVE_AND_DELETE.md`
 - MANTRA: `archive_pointers/`
 - RICO: [`mantra-viper-rebuild-handoff.md`](../mantra-viper-rebuild-handoff.md)
+- Git: [revision verification](https://git-scm.com/docs/git-rev-parse) and [commit comparison](https://git-scm.com/docs/git-diff)
+- in-toto: [Statement v1](https://github.com/in-toto/attestation/blob/main/spec/v1/statement.md)
+- SLSA: [Provenance v1.2](https://slsa.dev/spec/v1.2/provenance)
+- W3C: [PROV-DM](https://www.w3.org/TR/prov-dm/)
