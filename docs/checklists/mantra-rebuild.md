@@ -135,11 +135,11 @@ closes the local cycle while publication remains blocked.
 | MIL reconstruction contract | Pending | Phase 2A | User-approved contract with exact intermediate and final parity gates. |
 | Graph encoder contract | Design complete; contract pending | Phase 3A | User-approved contract covering identity, topology, features, training, evaluation, and VIPER evidence. |
 
-The checklist uses the Phase 0 contract stored in RICO commit `97148f8` with
+The checklist uses the Phase 0 contract stored in RICO commit `d0f2d07` with
 SHA-256
-`d4be20ce05201dace7763157803cc7450d67a662343ce252973b2027932f8d6f`.
+`40f1396fc531acaabe61957ca182ad2ab5af4e45d2fa157e526ee5bf307189de`.
 
-<!-- contract-baseline: P0 path=docs/contracts/mantra-rebuild-phase-0.md revision=97148f8 sha256=d4be20ce05201dace7763157803cc7450d67a662343ce252973b2027932f8d6f -->
+<!-- contract-baseline: P0 path=docs/contracts/mantra-rebuild-phase-0.md revision=d0f2d07 sha256=40f1396fc531acaabe61957ca182ad2ab5af4e45d2fa157e526ee5bf307189de -->
 
 ## Verified baseline
 
