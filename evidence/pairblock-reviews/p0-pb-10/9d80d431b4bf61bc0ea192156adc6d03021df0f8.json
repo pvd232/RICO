@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-10",
+  "requirement_ids": [
+    "P0-REQ-10"
+  ],
+  "repository": "https://github.com/pvd232/RICO.git",
+  "base_commit": "b73e6c098f91de69f441856c5d0b562983784d09",
+  "result_commit": "9d80d431b4bf61bc0ea192156adc6d03021df0f8",
+  "owned_paths": [
+    "docs/checklists/mantra-rebuild.md",
+    "docs/contracts/mantra-rebuild-phase-0.md",
+    "tests/pairblock_status/conftest.py",
+    "tests/pairblock_status/test_pairblock_controller.py",
+    "tools/pairblock_status/checklist_profile.py"
+  ],
+  "diff_sha256": "0be49eb74afa786a4a49411c678ab1b2e21e0de00c3eab637f8e3b34de6fcddf",
+  "invariants": [
+    "The Markdown adapter owns status-row rendering; the lifecycle controller remains independent of project Markdown syntax.",
+    "An accept transition removes the proposal-only contract link and maps every staging/P0-PB-ID path to its active path in the same checklist write.",
+    "A staging link owned by another PairBlock rejects the transition and preserves the checklist bytes.",
+    "Applied and Complete rows contain neither staging paths nor proposal-only Source and tests links."
+  ],
+  "findings": [],
+  "mechanical_evidence": {
+    "command": "python -m pytest -q tests/pairblock_status",
+    "result": "57 passed",
+    "ruff": "passed",
+    "git_diff_check": "passed",
+    "upstream_match": "passed"
+  },
+  "exclusions": [
+    "Contract proposal records retain staging links because they preserve the reviewed proposal; only authoritative checklist status rows switch to active code."
+  ],
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-12T19:39:06Z"
+}
