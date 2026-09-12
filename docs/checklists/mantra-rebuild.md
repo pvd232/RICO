@@ -100,6 +100,12 @@ it, Codex reviews the applied diff, the focused gate passes, Git records the
 accepted increment, and VIPER records the required run evidence. A prose claim
 or proposed code block remains open.
 
+The PairBlock resolution table is the only source of lifecycle status. Contract
+requirements, block declarations, and review-source records expose that status
+through links to the table. A passing proposal test advances a drafted block to
+`Awaiting user review`. User approval, MANTRA implementation, applied-code
+tests, Git evidence, and VIPER evidence control the later transitions.
+
 For each review cycle, Codex updates this file in the same RICO commit that
 records any changed contract status. MANTRA implementation commits remain in
 MANTRA. The RICO checklist cites their commit IDs and gate outputs.
