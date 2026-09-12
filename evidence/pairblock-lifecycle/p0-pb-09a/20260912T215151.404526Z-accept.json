@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "e633286ddcb8daa11223b5b11877095636c3ad2fd2b2301ba664b8dc0f606c05",
+  "checklist_written_sha256": "994a426e01e177d6ec1efa62af1b876e561febbf192391a6ac206e8bbb1fe543",
+  "event": "accept",
+  "evidence": {
+    "kind": "artifact",
+    "revision": "b2f1d3fb8574bde0aef19bb8c90627ba8cac6f7e",
+    "target": "https://github.com/pvd232/RICO.git:tools/register_phase0.py"
+  },
+  "pair_block_id": "P0-PB-09A",
+  "previous_receipt": "../../evidence/pairblock-lifecycle/p0-pb-09a/20260912T214658.515525Z-approve.json",
+  "recorded_at": "2026-09-12T21:51:51.404526+00:00",
+  "repository_head": "b2f1d3fb8574bde0aef19bb8c90627ba8cac6f7e",
+  "result": "applied",
+  "schema_version": 1,
+  "status_after": "Applied",
+  "status_before": "Approved"
+}

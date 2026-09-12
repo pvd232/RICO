@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-09A",
+  "requirement_ids": [
+    "P0-REQ-09"
+  ],
+  "repository": "https://github.com/pvd232/RICO.git",
+  "base_commit": "428a250611ec138ed7aa976ba9af57cc655b00ff",
+  "result_commit": "b2f1d3fb8574bde0aef19bb8c90627ba8cac6f7e",
+  "owned_paths": [
+    "tests/test_register_phase0.py",
+    "tools/register_phase0.py"
+  ],
+  "diff_sha256": "b6fdd103311be57315460a2df63684f95603b56a8c55439aa1b1f172fc16b325",
+  "invariants": [
+    "The registration stage recomputes every byte count and SHA-256 stored in the frozen Phase 0 index.",
+    "The builder accepts restoration_bindings, restoration_evidence, hopfield_replay_receipt, and mil_replay_receipt only as prior-run artifact drafts.",
+    "The registration stage runs with declared file-access enforcement and writes one terminal receipt."
+  ],
+  "findings": [],
+  "mechanical_evidence": {
+    "command": "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest tests/test_register_phase0.py -q",
+    "result": "20 passed",
+    "ruff": "passed",
+    "git_diff_check": "passed",
+    "upstream_match": "passed"
+  },
+  "exclusions": [
+    "The real registration run remains pending until restoration and both replay runs produce their retained artifacts."
+  ],
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-12T21:51:17Z"
+}
