@@ -498,6 +498,62 @@ The inspected teacher, student, and proposal paths contain zero unconditional `.
 
 The [Phase 0 ownership record](#phase-0-ownership-record) records each block's scope, owner, implementation link, and gate. The master checklist records resolution status.
 
+### Repeatable block loop
+
+Use the same sequence for every proposed implementation below. Run these
+commands from the already activated Conda environment named `mantra`.
+
+1. Open the block's **Source and tests** link in the checklist and review the
+   linked staging files.
+2. Before applying the proposal, Codex runs its staging gate. A pass changes
+   `Drafting` to `Review` and writes the gate receipt:
+
+   ```bash
+   cd /Users/machina/Developer/ChatGPT/RICO
+   python -m tools.pairblock_status.pairblock_controller \
+     --repository "$PWD" gate BLOCK_ID
+   ```
+
+3. After the user approves the reviewed proposal, Codex records the approval:
+
+   ```bash
+   cd /Users/machina/Developer/ChatGPT/RICO
+   python -m tools.pairblock_status.pairblock_controller \
+     --repository "$PWD" advance BLOCK_ID approve \
+     --evidence-kind external \
+     --evidence-target 'User approval in the Codex task' \
+     --evidence-revision 'CODEX_MESSAGE_ID'
+   ```
+
+4. The user types the proposal into the active paths and runs the block's
+   **Applied check**. Codex reviews that exact diff, commits and pushes the
+   MANTRA or RICO change, then records the accepted commit:
+
+   ```bash
+   cd /Users/machina/Developer/ChatGPT/RICO
+   python -m tools.pairblock_status.pairblock_controller \
+     --repository "$PWD" advance BLOCK_ID accept \
+     --evidence-kind artifact \
+     --evidence-target 'OWNING_REPOSITORY_AND_ACTIVE_PATHS' \
+     --evidence-revision 'ACCEPTED_GIT_COMMIT'
+   ```
+
+5. After the block's declared VIPER run exists and verifies, Codex records its
+   graph reference. This changes `Applied` to `Complete` and checks the block:
+
+   ```bash
+   cd /Users/machina/Developer/ChatGPT/RICO
+   python -m tools.pairblock_status.pairblock_controller \
+     --repository "$PWD" advance BLOCK_ID register \
+     --evidence-kind artifact \
+     --evidence-target 'VIPER_RUN_OR_ARTIFACT_REFERENCE' \
+     --evidence-revision 'VIPER_CONTENT_ID'
+   ```
+
+`BLOCK_ID` and the quoted evidence values are replaced with the exact block
+and retained result. The controller rejects a skipped transition, an unresolved
+dependency, a changed proposal during its gate, or missing evidence.
+
 ### Repository evidence protocol
 
 RICO records the contract, checklist, approvals, and lifecycle receipts. MANTRA
@@ -716,22 +772,57 @@ path, byte count, upload state, readback state, and SHA-256.
 - [archive plan source](../../../mantra/staging/p0-pb-05b/src/mantra/rebuild/archive_plan.py)
 - [archive plan tests](../../../mantra/staging/p0-pb-05b/src/mantra/rebuild/tests/test_archive_plan.py)
 
-**Implementation:** `build_archive_plan()` selects the archives named by the
-bindings, requires a contiguous one-based part sequence, and retains the
-remote identity of every part. `ArchivePlan` exposes the largest cached part,
-the full-download upper bound, and the restored-file total.
+**Fixture boundary:** [Python overlay runner](../../tools/pairblock_status/python_overlay.py)
+
+**Implementation requirements:**
+
+- `ArchivePart.from_index_row()` accepts only dataset parts whose upload and
+  remote readback passed and whose readback digest equals the signed digest.
+- `build_archive_plan()` selects the archives named by the bindings, orders
+  archive IDs and one-based part numbers deterministically, and requires the
+  selected count to equal each signed archive count.
+- `ArchivePlan.to_dict()` records every remote part identity, the part count,
+  largest part, full-download upper bound, and restored-file total.
+- The real signed controls yield 34 parts, `4,294,967,296` largest-part bytes,
+  `141,178,724,468` download bytes, and `123,227,387` restored bytes.
 
 **Focused check:**
 
 ```bash
 cd /Users/machina/Developer/ChatGPT/mantra
-pytest src/mantra/rebuild/tests/test_archive_plan.py -q
-ruff check src/mantra/rebuild/archive_plan.py src/mantra/rebuild/tests/test_archive_plan.py
+python -m ruff check \
+  staging/p0-pb-05b/src/mantra/rebuild/archive_plan.py \
+  staging/p0-pb-05b/src/mantra/rebuild/tests/test_archive_plan.py && \
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+python /Users/machina/Developer/ChatGPT/RICO/tools/pairblock_status/python_overlay.py \
+  --active-root src \
+  --proposal-root staging/p0-pb-05b/src -- \
+  python -m pytest \
+    --rootdir="$PWD/src" \
+    --confcutdir="$PWD/src" \
+    staging/p0-pb-05b/src/mantra/rebuild/tests/test_archive_plan.py -q
 ```
 
-**Gate:** the unit tests pass, and the real signed controls produce 34 parts,
+**Gate:** Ruff and the staging tests pass. The real signed controls produce 34 parts,
 4,294,967,296 largest-part bytes, 141,178,724,468 upper-bound download bytes,
 and 123,227,387 restored bytes.
+
+**Applied paths:** `src/mantra/rebuild/archive_plan.py` and
+`src/mantra/rebuild/tests/test_archive_plan.py`.
+
+**Applied check:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/mantra
+python -m ruff check \
+  src/mantra/rebuild/archive_plan.py \
+  src/mantra/rebuild/tests/test_archive_plan.py && \
+PYTHONPATH="$PWD/src" PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+python -m pytest \
+  --rootdir="$PWD/src" \
+  --confcutdir="$PWD/src" \
+  src/mantra/rebuild/tests/test_archive_plan.py -q
+```
 
 **Stop condition:** do not begin `P0-PB-06` when a selected part is absent,
 unverified, non-contiguous, or different from the signed identity.
@@ -755,23 +846,62 @@ capacity receipt.
 the [extraction tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_archive_restore.py),
 and the [VIPER tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_viper_restore.py).
 
+**Fixture boundary:** [Python overlay runner](../../tools/pairblock_status/python_overlay.py)
+
+**Implementation requirements:**
+
+- Build the signed 34-part plan and call `measure_capacity()` before the first
+  remote read; persist the capacity receipt and require `passed`.
+- `RemotePartReader` downloads each selected part at its signed revision and
+  verifies its byte count and SHA-256 before the tar reader consumes it.
+- Extract exactly the eight bound members, verify each restored identity, and
+  retain all downloaded parts in the approved cache.
+- The VIPER stage declares the signed controls and binding set as inputs and
+  the eight restored files, archive plan, capacity receipt, and extraction
+  receipt as outputs.
+- Materialize each verified output at its canonical MANTRA path, run VIPER
+  verification, then retain a severed-edge verification failure for one input
+  edge and one restored-file output edge.
+
 **Focused check:**
 
 ```bash
 cd /Users/machina/Developer/ChatGPT/mantra
-pytest \
-  src/mantra/rebuild/tests/test_archive_restore.py \
-  src/mantra/rebuild/tests/test_viper_restore.py -q
-ruff check \
-  src/mantra/rebuild/archive_restore.py \
-  src/mantra/rebuild/viper_restore.py \
-  src/mantra/rebuild/tests/test_archive_restore.py \
-  src/mantra/rebuild/tests/test_viper_restore.py
+python -m ruff check staging/p0-pb-06/src/mantra/rebuild && \
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+python /Users/machina/Developer/ChatGPT/RICO/tools/pairblock_status/python_overlay.py \
+  --active-root src \
+  --proposal-root staging/p0-pb-06/src -- \
+  python -m pytest \
+    --rootdir="$PWD/src" \
+    --confcutdir="$PWD/src" \
+    staging/p0-pb-06/src/mantra/rebuild/tests/test_archive_restore.py \
+    staging/p0-pb-06/src/mantra/rebuild/tests/test_viper_restore.py -q
 ```
 
 **Gate:** the focused check passes; the real restoration receipt identifies
 every downloaded part and all eight restored identities; `verify_run()` passes;
 and the retained severed-edge fixture fails verification.
+
+**Applied paths:** `src/mantra/rebuild/archive_restore.py`,
+`src/mantra/rebuild/viper_restore.py`, and their two observing test files.
+
+**Applied check:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/mantra
+python -m ruff check \
+  src/mantra/rebuild/archive_restore.py \
+  src/mantra/rebuild/viper_restore.py \
+  src/mantra/rebuild/tests/test_archive_restore.py \
+  src/mantra/rebuild/tests/test_viper_restore.py && \
+PYTHONPATH="$PWD/src" PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+python -m pytest \
+  --rootdir="$PWD/src" \
+  --confcutdir="$PWD/src" \
+  src/mantra/rebuild/tests/test_archive_restore.py \
+  src/mantra/rebuild/tests/test_viper_restore.py -q
+```
 
 **Stop condition:** stop before either replay when one canonical identity or
 one required provenance edge differs.
@@ -792,14 +922,27 @@ encoder. The user approves the numerical tolerance before the real replay.
 **Code boundary:** [Hopfield replay source](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/hopfield_replay.py)
 and [observing tests](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/tests/test_hopfield_replay.py).
 
+**Fixture boundary:** [Python overlay runner](../../tools/pairblock_status/python_overlay.py)
+
+**Implementation requirements:** verify all twelve input identities; call the
+selected historical loader and saved encoder once; call the raw-gene readout
+with `memory_splits=("fit",)`, `topk=1600`, and `temperature=0.055`; write the
+new six-array prediction; score it against hold truth; and persist the
+prediction identity, device, effective top-k, scores, tolerance, and decision.
+
 **Focused check:**
 
 ```bash
 cd /Users/machina/Developer/ChatGPT/mantra
-pytest src/mantra/rebuild/tests/test_hopfield_replay.py -q
-ruff check \
-  src/mantra/rebuild/hopfield_replay.py \
-  src/mantra/rebuild/tests/test_hopfield_replay.py
+python -m ruff check staging/p0-pb-07/src/mantra/rebuild && \
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+python /Users/machina/Developer/ChatGPT/RICO/tools/pairblock_status/python_overlay.py \
+  --active-root src \
+  --proposal-root staging/p0-pb-07/src -- \
+  python -m pytest \
+    --rootdir="$PWD/src" \
+    --confcutdir="$PWD/src" \
+    staging/p0-pb-07/src/mantra/rebuild/tests/test_hopfield_replay.py -q
 ```
 
 **Gate:** the tests prove the selected call arguments, output schema, CPU
@@ -810,6 +953,23 @@ evaluation edge.
 **Stop condition:** reject any invocation of the historical grid search, any
 historical output destination, an undeclared file read, or a score outside the
 approved tolerance from `0.5861640938949398`.
+
+**Applied paths:** `src/mantra/rebuild/hopfield_replay.py` and
+`src/mantra/rebuild/tests/test_hopfield_replay.py`.
+
+**Applied check:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/mantra
+python -m ruff check \
+  src/mantra/rebuild/hopfield_replay.py \
+  src/mantra/rebuild/tests/test_hopfield_replay.py && \
+PYTHONPATH="$PWD/src" PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+python -m pytest \
+  --rootdir="$PWD/src" \
+  --confcutdir="$PWD/src" \
+  src/mantra/rebuild/tests/test_hopfield_replay.py -q
+```
 
 ### P0-PB-08 implementation record
 
@@ -827,14 +987,27 @@ predictions, and the Step02 input-root files named below.
 **Code boundary:** [MIL replay source](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/mil_replay.py)
 and [observing tests](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/tests/test_mil_replay.py).
 
+**Fixture boundary:** [Python overlay runner](../../tools/pairblock_status/python_overlay.py)
+
+**Implementation requirements:** load the saved v1952 seed-123460 prototype;
+verify the selected Step02, Step03, and prototype identities; assign a fresh
+run name and output root; call the maintained application runtime once; and
+retain the four prediction arrays, Step02 and Step03 scores, and their
+identities. The declared input set is the standalone MIL graph.
+
 **Focused check:**
 
 ```bash
 cd /Users/machina/Developer/ChatGPT/mantra
-pytest src/mantra/rebuild/tests/test_mil_replay.py -q
-ruff check \
-  src/mantra/rebuild/mil_replay.py \
-  src/mantra/rebuild/tests/test_mil_replay.py
+python -m ruff check staging/p0-pb-08/src/mantra/rebuild && \
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+python /Users/machina/Developer/ChatGPT/RICO/tools/pairblock_status/python_overlay.py \
+  --active-root src \
+  --proposal-root staging/p0-pb-08/src -- \
+  python -m pytest \
+    --rootdir="$PWD/src" \
+    --confcutdir="$PWD/src" \
+    staging/p0-pb-08/src/mantra/rebuild/tests/test_mil_replay.py -q
 ```
 
 **Gate:** the focused check rejects drift from the selected settings and
@@ -845,6 +1018,23 @@ compares the four declared NPZ hashes.
 **Stop condition:** stop when the runtime tries to train a teacher or student,
 reads a Hopfield-rebuild output, reuses an existing run root, or changes a
 selected setting or input identity.
+
+**Applied paths:** `src/mantra/rebuild/mil_replay.py` and
+`src/mantra/rebuild/tests/test_mil_replay.py`.
+
+**Applied check:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/mantra
+python -m ruff check \
+  src/mantra/rebuild/mil_replay.py \
+  src/mantra/rebuild/tests/test_mil_replay.py && \
+PYTHONPATH="$PWD/src" PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+python -m pytest \
+  --rootdir="$PWD/src" \
+  --confcutdir="$PWD/src" \
+  src/mantra/rebuild/tests/test_mil_replay.py -q
+```
 
 ### P0-PB-09 implementation record
 
@@ -858,26 +1048,45 @@ controller from `P0-PB-10`.
 
 ##### `P0-PB-09` proposed code
 
-**Code boundary:** [evidence freezer](../../staging/p0-pb-09/tools/freeze_phase0.py)
+**Code boundary:** [Phase 0 freezer](../../staging/p0-pb-09/tools/freeze_phase0.py)
 and [observing tests](../../staging/p0-pb-09/tests/test_freeze_phase0.py).
+
+**Implementation requirements:** read the completed capacity, restoration,
+graph-verification, severed-edge, Hopfield, MIL, and lifecycle receipts; verify
+their declared identities; require one usefulness-ledger record for every
+assessed VIPER check; require independent evidence for each confirmed defect;
+and write one deterministic digest-bound Phase 0 index.
 
 **Focused check:**
 
 ```bash
 cd /Users/machina/Developer/ChatGPT/RICO
-PYTHONPATH=staging/p0-pb-09 python -m pytest \
-  staging/p0-pb-09/tests/test_freeze_phase0.py -q
-ruff check \
+python -m ruff check \
   staging/p0-pb-09/tools/freeze_phase0.py \
-  staging/p0-pb-09/tests/test_freeze_phase0.py
+  staging/p0-pb-09/tests/test_freeze_phase0.py && \
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+python -m pytest staging/p0-pb-09/tests/test_freeze_phase0.py -q
 ```
 
-**Gate:** all six result roles are present, every retained file identity is
-recomputed, every confirmed VIPER defect names an independent check, and VIPER
-records the final index.
+**Gate:** Ruff and the focused tests pass. The real Phase 0 index resolves
+every required receipt and ledger record at its recorded identity.
 
-**Stop condition:** Phase 0 remains open while any receipt, ledger row,
-independent confirmation, or final VIPER record is absent.
+**Applied paths:** `tools/freeze_phase0.py` and
+`tests/test_freeze_phase0.py` in RICO.
+
+**Applied check:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/RICO
+python -m ruff check \
+  tools/freeze_phase0.py \
+  tests/test_freeze_phase0.py && \
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+python -m pytest tests/test_freeze_phase0.py -q
+```
+
+**Stop condition:** keep Phase 0 open when an input receipt, digest, assessed
+VIPER check, or independent defect confirmation is absent.
 
 #### P0-PB-10
 
@@ -889,15 +1098,17 @@ independent confirmation, or final VIPER record is absent.
 
 ##### `P0-PB-10` accepted implementation
 
-**Code boundary:** These seven files are the active RICO implementation:
+**Code boundary:** These nine files are the active RICO implementation:
 
 - [`tools/pairblock_status/__init__.py`](../../tools/pairblock_status/__init__.py)
 - [`tools/pairblock_status/checklist_profile.py`](../../tools/pairblock_status/checklist_profile.py)
 - [`tools/pairblock_status/execution_identity.py`](../../tools/pairblock_status/execution_identity.py)
 - [`tools/pairblock_status/profile.py`](../../tools/pairblock_status/profile.py)
 - [`tools/pairblock_status/pairblock_controller.py`](../../tools/pairblock_status/pairblock_controller.py)
+- [`tools/pairblock_status/python_overlay.py`](../../tools/pairblock_status/python_overlay.py)
 - [`tests/pairblock_status/conftest.py`](../../tests/pairblock_status/conftest.py)
 - [`tests/pairblock_status/test_pairblock_controller.py`](../../tests/pairblock_status/test_pairblock_controller.py)
+- [`tests/pairblock_status/test_python_overlay.py`](../../tests/pairblock_status/test_python_overlay.py)
 
 **Fixture boundary:** These two documents define the minimal RICO profile used by the tests. The fixture factory copies the actual `checklist_profile.py` and `test_pairblock_controller.py` into each disposable repository:
 
@@ -915,6 +1126,8 @@ independent confirmation, or final VIPER record is absent.
 | PairBlock dependency order | `test_unknown_dependency_is_rejected`; `test_unresolved_pair_block_dependency_blocks_gate`; `test_accepted_dependency_releases_waiting_block` |
 | Owner, code, and fixture boundaries | `test_missing_owner_is_rejected`; `test_missing_proposed_source_is_rejected`; `test_missing_fixture_source_is_rejected`; `test_proposed_code_must_stay_in_governing_contract` |
 | Gate and lifecycle behavior | `test_gate_must_name_every_observing_test`; `test_failing_gate_retains_receipt_without_changing_checklist`; `test_nested_conda_run_is_rejected_before_gate_execution`; `test_illegal_lifecycle_event_changes_no_status` |
+| Sibling-repository proposals | `test_profile_may_name_a_sibling_proposal_owner`; `test_proposal_module_overrides_active_module`; `test_requires_both_source_roots` |
+| Active environment | `test_gate_preserves_the_controller_python_environment` |
 | Controller and Markdown-adapter boundary | `test_gate_controller_does_not_parse_or_render_markdown`; `test_passing_gate_writes_receipt_and_advances_one_status` |
 | Git-backed execution identity | `test_execution_identity_drift_invalidates_pass` for source, contract, checklist, validator, and `HEAD` drift |
 | Code documentation | `test_active_modules_and_definitions_have_docstrings` |
@@ -926,14 +1139,31 @@ cd /Users/machina/Developer/ChatGPT/RICO
 python -m ruff check \
   tools/pairblock_status \
   tests/pairblock_status &&
-python -m pytest tests/pairblock_status/test_pairblock_controller.py -q
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+python -m pytest tests/pairblock_status -q
 ```
 
-**Gate:** The focused tests prove incremental sibling-block closure in the global validator; complete RICO PairBlock coverage; legal receipt-backed transitions; automatic checkbox, requirement, dependency-readiness, and contract updates; retained pass and failure evidence; and rejection of nested Conda execution, identity drift, broken links, missing owners, missing files, or invalid observing gates.
+**Gate:** The focused tests prove incremental sibling-block closure in the
+global validator; complete RICO PairBlock coverage; legal receipt-backed
+transitions; automatic checkbox, requirement, dependency-readiness, and
+contract updates; sibling-repository proposal gates through the active Python
+environment; retained pass and failure evidence; and rejection of nested Conda
+execution, identity drift, broken links, missing owners, missing files, or
+invalid observing gates.
 
 **Stop condition:** Return the proposal for revision if a gate can run outside its declared code or runtime boundary, bypass an unresolved dependency, change status after failure or identity drift, accept an illegal lifecycle event, or leave a rendered status inconsistent with its evidence.
 
-**Evidence:** Global commit `58b59175e2a4a949bc8dd33302099cf780249c75` repairs incremental PairBlock closure and passes its three focused tests, normalized-manifest validation, and Ruff. The RICO implementation reuses that validator. `ChecklistProfile` owns project paths and lifecycle events; `MarkdownChecklistAdapter` owns RICO parsing and rendering; `pairblock_controller.py` runs proposal gates and records later evidence events while the adapter parses Markdown. The current focused RICO check passes `44` cases. Historical receipts retain the paths and file identities captured when they were written; current links resolve to the accepted functional paths above. The [master-checklist resolution table](../checklists/mantra-rebuild.md#pairblock-resolution) owns the current lifecycle state and links its supporting receipt.
+**Evidence:** Global commit `58b59175e2a4a949bc8dd33302099cf780249c75`
+repairs incremental PairBlock closure and passes its three focused tests,
+normalized-manifest validation, and Ruff. The RICO implementation reuses that
+validator. `ChecklistProfile` owns project paths, proposal-owner roots, and
+lifecycle events; `MarkdownChecklistAdapter` owns RICO parsing and rendering;
+`pairblock_controller.py` runs proposal gates in the active environment; and
+`python_overlay.py` tests staged files against the active package. The current
+focused RICO check passes `49` cases. Historical receipts retain the paths and
+file identities captured when they were written; current links resolve to the
+accepted functional paths above. The [master-checklist resolution table](../checklists/mantra-rebuild.md#pairblock-resolution)
+owns the current lifecycle state and links its supporting receipt.
 
 ## 11. Sources
 

@@ -82,7 +82,11 @@ def capture_execution_identity(
         checklist_sha256=sha256_file(checklist_path),
         contract_sha256=sha256_file(contract_path),
         source_sha256={
-            path.relative_to(repository).as_posix(): sha256_file(path)
+            (
+                path.relative_to(repository).as_posix()
+                if path.is_relative_to(repository)
+                else path.as_posix()
+            ): sha256_file(path)
             for path in source_paths
         },
         master_validator_sha256=sha256_file(validator_path),

@@ -114,7 +114,7 @@ class MarkdownChecklistAdapter:
     def has_proposed_code(self, row: PairBlockRow) -> bool:
         """Return whether a status row links to runnable proposed code."""
 
-        return row.proposed_code.startswith(self.dialect.proposed_code_link_prefix)
+        return self.dialect.proposed_code_link_prefix in row.proposed_code
 
     def current_receipt(self, row: PairBlockRow) -> str | None:
         """Return the receipt linked from a PairBlock row, when present."""
@@ -476,6 +476,25 @@ def _resolve_link(base: Path, value: str) -> tuple[Path, str | None]:
     return (base / match.group(1)).resolve(), match.group(2)
 
 
+def _resolve_named_link(
+    base: Path,
+    value: str,
+    link_prefix: str,
+) -> tuple[Path, str | None]:
+    """Resolve the one Markdown link introduced by ``link_prefix``."""
+
+    matches = re.findall(
+        re.escape(link_prefix) + r"\(([^)#]+)(?:#([^)]+))?\)",
+        value,
+    )
+    if len(matches) != 1:
+        raise PairBlockGateError(
+            f"expected one {link_prefix} link, received: {value}"
+        )
+    target, fragment = matches[0]
+    return (base / target).resolve(), fragment or None
+
+
 def _proposal_section(text: str, pair_block_id: str) -> str:
     """Return one PairBlock's complete proposed-code section."""
 
@@ -633,8 +652,10 @@ def load_proposal_contract(
     _declaration_heading(contract_text, row.pair_block_id)
     _ownership_row(contract_text, row.pair_block_id)
 
-    proposed_path, proposed_fragment = _resolve_link(
-        checklist_path.parent, row.proposed_code
+    proposed_path, proposed_fragment = _resolve_named_link(
+        checklist_path.parent,
+        row.proposed_code,
+        "[Source and tests]",
     )
     if proposed_path != contract_path:
         raise PairBlockGateError(
@@ -677,24 +698,34 @@ def load_proposal_contract(
     source_paths = tuple(
         (contract_path.parent / linked_path).resolve() for linked_path in linked_paths
     )
-    relative_sources: list[Path] = []
+    allowed_source_roots = (repository,) + tuple(
+        (repository / root).resolve() for root in profile.proposal_source_roots
+    )
+    validated_sources: list[Path] = []
     for source_path in source_paths:
-        if not source_path.is_relative_to(repository):
-            raise PairBlockGateError("proposed source path escapes the repository")
+        if not any(source_path.is_relative_to(root) for root in allowed_source_roots):
+            raise PairBlockGateError(
+                f"proposed source is outside an allowed owner root: {source_path}"
+            )
         if not source_path.is_file():
             raise PairBlockGateError(f"proposed source is missing: {source_path}")
-        relative_sources.append(source_path.relative_to(repository))
-    code_sources = relative_sources[: len(code_links)]
+        validated_sources.append(source_path)
+    code_sources = validated_sources[: len(code_links)]
     if not any(path.name.startswith("test_") for path in code_sources):
         raise PairBlockGateError(f"code boundary lacks a test for {row.pair_block_id}")
-    for relative_source_path in code_sources:
-        relative_source = relative_source_path.as_posix()
+    for source_path in code_sources:
+        command_names = {source_path.as_posix()}
+        command_names.update(
+            source_path.relative_to(root).as_posix()
+            for root in allowed_source_roots
+            if source_path.is_relative_to(root)
+        )
         if (
-            relative_source_path.name.startswith("test_")
-            and relative_source not in command
+            source_path.name.startswith("test_")
+            and not any(name in command for name in command_names)
         ):
             raise PairBlockGateError(
-                f"focused check does not name observing test {relative_source}"
+                f"focused check does not name observing test {source_path}"
             )
     return ProposalContract(
         path=contract_path,
@@ -1326,7 +1357,7 @@ def validate_traceability(
         validate_declaration(repository, checklist_path, row)
         if (
             row.status in profile.lifecycle.proposal_gate_states
-            and row.proposed_code.startswith(dialect.proposed_code_link_prefix)
+            and dialect.proposed_code_link_prefix in row.proposed_code
         ):
             load_proposal_contract(repository, checklist_path, row, profile)
     validate_document_fragments(repository, checklist_path)

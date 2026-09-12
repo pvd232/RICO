@@ -235,7 +235,7 @@ def run_gate(
     )
     started = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
     completed = subprocess.run(
-        ["/bin/zsh", "-lc", proposal.command],
+        ["/bin/zsh", "-c", proposal.command],
         cwd=repository,
         check=False,
         capture_output=True,

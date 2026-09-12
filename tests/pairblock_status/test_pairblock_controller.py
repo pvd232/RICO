@@ -5,6 +5,7 @@ from __future__ import annotations
 import ast
 import json
 import shutil
+import sys
 from dataclasses import fields, replace
 from datetime import datetime, timezone
 from pathlib import Path
@@ -27,7 +28,10 @@ from conftest import (
     RepositoryFactory,
 )
 
-from tools.pairblock_status.checklist_profile import MANTRA_PHASE0_ADAPTER
+from tools.pairblock_status.checklist_profile import (
+    MANTRA_PHASE0_ADAPTER,
+    MarkdownChecklistAdapter,
+)
 from tools.pairblock_status.pairblock_controller import (
     DEFAULT_MASTER_CHECKLIST_VALIDATOR,
     EvidenceRef,
@@ -240,6 +244,24 @@ def test_passing_gate_writes_receipt_and_advances_one_status(
     assert "Passed: `2` tests" in checklist
     assert TEST_PROFILE.lifecycle.review_status in checklist
     assert receipt_path.name in checklist
+
+
+def test_gate_preserves_the_controller_python_environment(
+    repository_factory: RepositoryFactory,
+) -> None:
+    """Run the declared command with the controller's active Python."""
+
+    command = (
+        "python -c 'import sys; "
+        f'assert sys.executable == "{Path(sys.executable)}"; '
+        'print("2 passed in 0.01s")\' '
+        f"{SOURCE_PATH.as_posix()} {TEST_PATH.as_posix()}"
+    )
+    repository = repository_factory(command=command)
+
+    receipt = json.loads(run_test_gate(repository).read_text(encoding="utf-8"))
+
+    assert receipt["result"] == "passed"
 
 
 def test_lifecycle_completion_updates_every_derived_status(
@@ -514,6 +536,46 @@ def test_missing_proposed_source_is_rejected(
 
     with pytest.raises(PairBlockGateError, match="proposed source is missing"):
         validate_test_repository(repository)
+
+
+def test_profile_may_name_a_sibling_proposal_owner(
+    repository_factory: RepositoryFactory,
+) -> None:
+    """Hash proposal files from a profile-declared sibling repository."""
+
+    repository = repository_factory(command=passing_command())
+    source_owner = repository.parent / "source-owner"
+    source = source_owner / "source.py"
+    test = source_owner / "test_source.py"
+    source_owner.mkdir()
+    source.write_text("VALUE = 1\n", encoding="utf-8")
+    test.write_text("def test_value():\n    assert 1 == 1\n", encoding="utf-8")
+
+    contract = repository / CONTRACT_PATH
+    text = contract.read_text(encoding="utf-8")
+    text = text.replace(
+        "../../tools/pairblock_status/checklist_profile.py",
+        "../../../source-owner/source.py",
+    ).replace(
+        "../../tests/pairblock_status/test_pairblock_controller.py",
+        "../../../source-owner/test_source.py",
+    )
+    text = text.replace(passing_command(), f"python {source} {test}")
+    contract.write_text(text, encoding="utf-8")
+
+    profile = replace(
+        TEST_PROFILE,
+        proposal_source_roots=(Path("../source-owner"),),
+    )
+    adapter = MarkdownChecklistAdapter(profile=profile, dialect=TEST_DIALECT)
+    rows, _ = adapter.validate_traceability(repository)
+    proposal = adapter.load_proposal_contract(
+        repository,
+        repository / CHECKLIST_PATH,
+        rows[PAIR_BLOCK_ID],
+    )
+
+    assert proposal.source_paths == (source, test)
 
 
 def test_missing_fixture_source_is_rejected(

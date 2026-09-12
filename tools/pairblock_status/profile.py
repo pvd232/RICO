@@ -137,6 +137,8 @@ class ChecklistProfile:
         requirement_pattern: Full-match expression for requirement identifiers.
         phase_pattern: Expression whose two capture groups order phases.
         lifecycle: Project status vocabulary and legal gate transitions.
+        proposal_source_roots: Paths, resolved from the checklist repository,
+            that may own reviewed proposal files.
     """
 
     checklist_path: Path
@@ -148,6 +150,7 @@ class ChecklistProfile:
     requirement_pattern: str
     phase_pattern: str
     lifecycle: LifecyclePolicy
+    proposal_source_roots: tuple[Path, ...] = ()
 
     def __post_init__(self) -> None:
         """Reject invalid paths, identities, and identifier expressions."""
@@ -158,6 +161,9 @@ class ChecklistProfile:
         ):
             if path.is_absolute() or ".." in path.parts:
                 raise ValueError(f"{label} must be repository-relative")
+        for source_root in self.proposal_source_roots:
+            if source_root.is_absolute():
+                raise ValueError("proposal_source_roots must be repository-relative")
         for label, value in (
             ("checklist_id", self.checklist_id),
             ("contract_id", self.contract_id),
@@ -229,4 +235,5 @@ MANTRA_PHASE0_PROFILE = ChecklistProfile(
         ),
         resolved_dependency_states=frozenset({"Applied", "Complete"}),
     ),
+    proposal_source_roots=(Path("../mantra"),),
 )
