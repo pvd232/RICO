@@ -47,7 +47,7 @@ the implementation gate because the MIL artifact table is incomplete.
 
 | Actor | Next action | Result |
 |---|---|---|
-| Codex | Draft [`P0-PB-04B`](../contracts/mantra-rebuild-phase-0.md#p0-pb-04b-declaration). | Complete proposed source and tests in the Phase 0 contract. |
+| Codex | Gate [`P0-PB-04B`](../contracts/mantra-rebuild-phase-0.md#p0-pb-04b-declaration). | Retained proposal receipt and automatic transition to user review. |
 | User | Review [`P0-PB-04A`](../contracts/mantra-rebuild-phase-0.md#p0-pb-04a-declaration), [`P0-PB-05A`](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a-declaration), and [`P0-PB-10`](../contracts/mantra-rebuild-phase-0.md#p0-pb-10-declaration). | Approved blocks or named corrections. |
 | Codex and user | Review each approved block; the user implements it in MANTRA; Codex reviews the applied diff and gate output. | Accepted MANTRA implementation with retained evidence. |
 
@@ -66,7 +66,9 @@ saved encoder and historical prediction belong to `sota_reproducer`. The
 absolute historical symlink whose target file carries the approved byte count
 and SHA-256. The reader must resolve that link inside the historical MANTRA
 root and reject links that escape it. Archive payload downloads remain at
-zero.
+zero. The staged resolver produced eight bindings from those controls: six
+owned by `historical_and_shared_experiments` and two owned by
+`sota_reproducer`.
 
 ## PairBlock resolution
 
@@ -77,7 +79,7 @@ zero.
 | <a id="status-p0-pb-03"></a>`P0-PB-03` | Pending | Codex tracing | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-03-declaration) | [Work description](../contracts/mantra-rebuild-phase-0.md#replay-traces-awaiting-approval) |
 | <a id="status-p0-pb-04"></a>`P0-PB-04` | Pending | Waiting for `P0-PB-04A`, `P0-PB-04B` | `P0-PB-04A`, `P0-PB-04B` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-04-declaration) | [Child blocks](../contracts/mantra-rebuild-phase-0.md#p0-pb-04-declaration) |
 | <a id="status-p0-pb-04a"></a>`P0-PB-04A` | Passed: `17` tests | Awaiting user review | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-04a-declaration) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-04a-proposed-code) |
-| <a id="status-p0-pb-04b"></a>`P0-PB-04B` | Pending | Codex drafting | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-04b-declaration) | Pending |
+| <a id="status-p0-pb-04b"></a>`P0-PB-04B` | Passed: `42` tests ([receipt](../../evidence/pairblock-gates/p0-pb-04b/20260912T025100.211753Z.json)) | Awaiting user review | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-04b-declaration) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-04b-proposed-code) |
 | <a id="status-p0-pb-05"></a>`P0-PB-05` | Pending | Waiting for `P0-PB-05A`, `P0-PB-05B` | `P0-PB-05A`, `P0-PB-05B` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-05-declaration) | [Child blocks](../contracts/mantra-rebuild-phase-0.md#p0-pb-05-declaration) |
 | <a id="status-p0-pb-05a"></a>`P0-PB-05A` | Passed: `9` tests | Awaiting user review | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a-declaration) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a-proposed-code) |
 | <a id="status-p0-pb-05b"></a>`P0-PB-05B` | Pending | Waiting for `P0-PB-04B` | `P0-PB-04B` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-05b-declaration) | Pending |
@@ -214,7 +216,7 @@ definitions in RICO.
       `P0-PB-04A`.
       <!-- pair-block: P0-PB-04A -->
       <!-- pair-block-contract: P0-PB-04A contract=docs/contracts/mantra-rebuild-phase-0.md -->
-- [ ] Implement and test the signed-control reader proposed in `P0-PB-04B` so
+- [ ] Implement and test the control-record resolver proposed in `P0-PB-04B` so
       one approved MANTRA path resolves to one archive member.
       <!-- pair-block: P0-PB-04B -->
       <!-- pair-block-contract: P0-PB-04B contract=docs/contracts/mantra-rebuild-phase-0.md -->

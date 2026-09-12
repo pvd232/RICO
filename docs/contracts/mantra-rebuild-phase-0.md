@@ -246,9 +246,9 @@ Resolution status lives in the [master checklist](../checklists/mantra-rebuild.m
 | <a id="p0-pb-01-declaration"></a>[`P0-PB-01`](../checklists/mantra-rebuild.md#status-p0-pb-01) | Mark and verify the MANTRA workspace. | Codex reviews; user implements. | [Accepted implementation](#p0-pb-01-accepted-implementation) | `P0-VR-05` |
 | <a id="p0-pb-02-declaration"></a>[`P0-PB-02`](../checklists/mantra-rebuild.md#status-p0-pb-02) | Trace the Hopfield replay. | Codex traces; user approves. | [Work description](#replay-traces-awaiting-approval) | Hopfield portion of `P0-VR-01` |
 | <a id="p0-pb-03-declaration"></a>[`P0-PB-03`](../checklists/mantra-rebuild.md#status-p0-pb-03) | Trace the MIL replay. | Codex traces; user approves. | [Work description](#replay-traces-awaiting-approval) | MIL portion of `P0-VR-01` |
-| <a id="p0-pb-04-declaration"></a>[`P0-PB-04`](../checklists/mantra-rebuild.md#status-p0-pb-04) | Produce every restoration binding. | User implements approved code; Codex reviews it. | [`P0-PB-04A`](#p0-pb-04a-proposed-code); `P0-PB-04B` pending | `P0-VR-02` |
+| <a id="p0-pb-04-declaration"></a>[`P0-PB-04`](../checklists/mantra-rebuild.md#status-p0-pb-04) | Produce every restoration binding. | User implements approved code; Codex reviews it. | [`P0-PB-04A`](#p0-pb-04a-proposed-code); [`P0-PB-04B`](#p0-pb-04b-proposed-code) | `P0-VR-02` |
 | <a id="p0-pb-04a-declaration"></a>[`P0-PB-04A`](../checklists/mantra-rebuild.md#status-p0-pb-04a) | Define and validate `RestorationBinding`. | User reviews and implements. | [Source and tests](#p0-pb-04a-proposed-code) | Reject malformed bindings and incomplete coverage. |
-| <a id="p0-pb-04b-declaration"></a>[`P0-PB-04B`](../checklists/mantra-rebuild.md#status-p0-pb-04b) | Resolve a MANTRA path through signed controls to one archive member. | Codex proposes; user reviews and implements. | Pending proposal | Resolve one known path; reject absent or duplicate paths. |
+| <a id="p0-pb-04b-declaration"></a>[`P0-PB-04B`](../checklists/mantra-rebuild.md#status-p0-pb-04b) | Resolve a MANTRA path through signed controls to one archive member. | Codex proposes; user reviews and implements. | [Source and tests](#p0-pb-04b-proposed-code) | Resolve the eight approved Hopfield restorations; reject broken path, symlink, file-identity, object-identity, and archive joins. |
 | <a id="p0-pb-05-declaration"></a>[`P0-PB-05`](../checklists/mantra-rebuild.md#status-p0-pb-05) | Prove capacity and produce the download plan. | User implements approved code; Codex reviews it. | [`P0-PB-05A`](#p0-pb-05a-proposed-code); `P0-PB-05B` pending | `P0-VR-03` |
 | <a id="p0-pb-05a-declaration"></a>[`P0-PB-05A`](../checklists/mantra-rebuild.md#status-p0-pb-05a) | Calculate capacity and write its receipt. | User reviews and implements. | [Source and tests](#p0-pb-05a-proposed-code) | Report every term in $R_{max}$ and reject insufficient space. |
 | <a id="p0-pb-05b-declaration"></a>[`P0-PB-05B`](../checklists/mantra-rebuild.md#status-p0-pb-05b) | Order the required archive chunks. | Codex proposes; user approves cache timing. | Pending proposal | Identify every chunk by revision, byte count, and digest. |
@@ -368,7 +368,7 @@ The [Phase 0 ownership record](#phase-0-ownership-record) records each block's s
 | [`P0-PB-03`](../checklists/mantra-rebuild.md#status-p0-pb-03) | [Replay-trace work description](#replay-traces-awaiting-approval) |
 | [`P0-PB-04`](../checklists/mantra-rebuild.md#status-p0-pb-04) | Composed from `P0-PB-04A` and `P0-PB-04B` |
 | [`P0-PB-04A`](../checklists/mantra-rebuild.md#status-p0-pb-04a) | [Proposed code](#p0-pb-04a-proposed-code) |
-| [`P0-PB-04B`](../checklists/mantra-rebuild.md#status-p0-pb-04b) | Pending proposal |
+| [`P0-PB-04B`](../checklists/mantra-rebuild.md#status-p0-pb-04b) | [Proposed code](#p0-pb-04b-proposed-code) |
 | [`P0-PB-05`](../checklists/mantra-rebuild.md#status-p0-pb-05) | Composed from `P0-PB-05A` and `P0-PB-05B` |
 | [`P0-PB-05A`](../checklists/mantra-rebuild.md#status-p0-pb-05a) | [Proposed code](#p0-pb-05a-proposed-code) |
 | [`P0-PB-05B`](../checklists/mantra-rebuild.md#status-p0-pb-05b) | Pending proposal |
@@ -458,6 +458,39 @@ PYTHONPATH=review/p0-pb-04a/src conda run -n mantra \
 **Stop condition:** Return the proposal for revision when any declared field, path rule, identity rule, coverage rule, or focused test lacks an observing assertion.
 
 **Evidence:** The RICO proposal passes `17` tests. Closure still requires user approval, the applied MANTRA diff, focused MANTRA test output, a MANTRA commit, and later VIPER registration.
+
+#### `P0-PB-04B` proposed code
+
+**Declaration:** [`P0-PB-04B`](#p0-pb-04b-declaration)
+
+**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#status-p0-pb-04b)
+
+**Requirement:** Accept records only after MANTRA's existing archive verifier, or an equivalent retained signature-and-checksum procedure, authenticates their control files. Resolve each required destination through the filesystem manifest. Follow symlinks only within `/home/machina/MANTRA`. Join the resolved file digest to exactly one row in its `object_archive_id` manifest. Preserve the requested destination in the resulting `RestorationBinding`.
+
+**Dependency:** The `RestorationBinding` value type proposed in `P0-PB-04A`; the signed release, archive index, filesystem manifest, and required object manifests identified in the Phase 0 inspection evidence.
+
+**Code boundary:** This cumulative proposal supersedes the `P0-PB-04A` source after approval. The `P0-PB-04A` directory remains its frozen review record. These three files are the complete `P0-PB-04B` proposal:
+
+- [`src/mantra/rebuild/__init__.py`](../../review/p0-pb-04b/src/mantra/rebuild/__init__.py)
+- [`src/mantra/rebuild/restoration.py`](../../review/p0-pb-04b/src/mantra/rebuild/restoration.py)
+- [`src/mantra/rebuild/tests/test_control_resolution.py`](../../review/p0-pb-04b/src/mantra/rebuild/tests/test_control_resolution.py)
+
+**Focused check:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/RICO
+conda run -n mantra python -m ruff check review/p0-pb-04b && \
+PYTHONPATH=review/p0-pb-04b/src conda run -n mantra \
+  python -m pytest \
+  review/p0-pb-04a/src/mantra/rebuild/tests/test_restoration.py \
+  review/p0-pb-04b/src/mantra/rebuild/tests/test_control_resolution.py -q
+```
+
+**Gate:** Ruff passes. All `P0-PB-04A` tests still pass. The `P0-PB-04B` tests resolve both a regular file and the observed absolute historical symlink, use `object_archive_id`, and reject absent or duplicate paths, symlink escape or cycles, mismatched file or object identity, undeclared archives, malformed control records, and invalid revisions.
+
+**Stop condition:** Return the proposal for revision when a required destination can resolve outside the archived MANTRA root, through more than one path or object row, without matching graph $B$ byte identity, or without a signed archive-index owner.
+
+**Evidence:** The proposal resolved all eight approved Hopfield restorations against the authenticated historical controls: six content objects in `historical_and_shared_experiments` and two in `sota_reproducer`. No archive payload was downloaded. Closure still requires the proposal gate, user approval, the applied MANTRA diff, focused MANTRA test output, a MANTRA commit, and later VIPER registration.
 
 #### `P0-PB-05A` proposed code
 
