@@ -50,11 +50,11 @@ The first missing result is therefore the complete graph $B$. When the signed Hu
 
 $$
 r=(f,d,s,c),\qquad
-s=(repo,revision,archive,member),\qquad
+s=(repo,control\_revision,archive,member),\qquad
 c=(bytes,sha256).
 $$
 
-Here $d$ is the destination relative to the MANTRA repository root. The value $s$ identifies one member of one archive at one immutable Hugging Face revision. The value $c$ identifies the extracted file bytes. The binding records restoration identity; $B$ records producer and consumer relationships.
+Here $d$ is the destination relative to the MANTRA repository root. The value $s$ identifies the signed control package, the archive declared by that package, and the archive member that contains the file bytes. `control_revision` is the immutable Hugging Face revision containing the signed archive manifest. That manifest lists the archive's ordered parts; each part has its own immutable data revision, path, byte count, and SHA-256. The value $c$ identifies the extracted file bytes. The binding records restoration identity; $B$ records producer and consumer relationships.
 
 RICO owns this definition and its approval history. The proposed executable type is `src/mantra/rebuild/restoration.py::RestorationBinding` in MANTRA. VIPER stores each resolved binding with the run evidence that used it; Phase 0 will select a checked-in MANTRA path for the reviewed binding set when `P0-PB-04` defines that file's consumer.
 
@@ -230,7 +230,7 @@ Context: MANTRA already owns its package, tests, configuration, and historical e
 
 ### `P0-PB-01` workspace marker and environment
 
-**Status:** Applied — awaiting MANTRA commit and later VIPER graph registration
+**Status:** Passed locally and committed in MANTRA; awaiting later VIPER graph registration
 
 **Requirement:** Mark the MANTRA Git root as the VIPER workspace and verify the Conda environment named `mantra` uses Python 3.13 with `viper-provenance` installed.
 
@@ -266,6 +266,8 @@ python -c 'from pathlib import Path; from viper.repository import resolve_root; 
 
 **Stop condition:** Stop before `P0-PB-02` if any value differs. Stop before `P0-PB-07` if its focused test shows that the adapter reads an undeclared input.
 
+**Git evidence:** MANTRA commit `467d7d3dcdfcbcaaf40ab40a419ef89096bd465f` contains `viper.toml`. The environment check resolved the Conda environment `mantra`, Python 3.13.15, `viper-provenance` 0.1.0a3, and the MANTRA Git root.
+
 ### Next execution tranche
 
 The dependency order is:
@@ -286,6 +288,27 @@ P0-PB-01 -> (P0-PB-02 and P0-PB-03) -> (P0-PB-04 and P0-PB-05) -> P0-PB-06
 `P0-PB-02` and `P0-PB-03` run concurrently after the MANTRA marker commit. `P0-PB-04` and `P0-PB-05` run concurrently after both graph portions are approved. The user reviews each block before its output becomes an input to the next dependency layer.
 
 For each PairBlock, Codex drafts the proposed contract or source, the user reviews it, Codex performs the agreed code review, the user implements approved code, and Codex reviews the applied diff and focused gate. A PairBlock closes only when the implementation, test result, Git evidence, and VIPER evidence agree.
+
+### Replay traces awaiting approval
+
+`P0-PB-02` traced the selected Hopfield computation. It reads eleven data files and one saved encoder. Five data files are present and hash-match; six data files and the encoder are absent and restorable. The adapter will call the selected helper path with `memory=("fit",)`, `topk=1600`, and `temperature=0.055`. It will write a new prediction and receipt. It will not execute the historical ten-encoder, 42-readout-per-encoder sweep or overwrite the historical report. The historical prediction and report remain in $Q$.
+
+`P0-PB-03` traced the saved MIL application. It does not retrain the teacher, student, base Hopfield model, or projected Hopfield model. It reads their saved outputs, reruns Direct-MIL retrieval, then fits the permitted fit-only ridge and per-gene slopes. The replay requires the saved base prediction, projected prediction, seed-123460 prototype vectors, and the eleven paths declared by the v1953 Step02 input contract. Two of those eleven paths are hashed by the runner but are not used numerically; they remain in $B$ because the selected entrypoint reads them.
+
+The MIL trace exposed two historical provenance defects that the new adapter must not copy: `APPLICATION_VERIFICATION.json` omits several files the application reads, and the legacy provenance writer records v1938 default specification paths instead of the v1953 specifications actually loaded.
+
+### Next implementation tranche
+
+The next work is divided into four reviewable code blocks:
+
+| Block | Complete source proposed by Codex | User action after review | Focused gate |
+|---|---|---|---|
+| `P0-PB-04A` | `RestorationBinding` value type and validation tests | Implement the approved source and tests. | Reject an absolute destination, `..` traversal, an unknown archive, a malformed digest, a negative byte count, and an incomplete source identity. |
+| `P0-PB-04B` | Signed-control reader that maps a MANTRA path to its content object and archive member | Implement the approved source and tests. | A known path resolves to one archive member; an absent or duplicate path fails. |
+| `P0-PB-05A` | Capacity calculator and receipt writer | Implement the approved source and tests. | The receipt reports measured free space and each term in $R_{max}$; lowering free space below $R_{max}$ fails. |
+| `P0-PB-05B` | Ordered download plan for only the archive chunks needed by approved bindings | Review and approve cache deletion timing before any archive download. | The plan fits local capacity and every planned chunk is identified by its own immutable revision, byte count, and digest. |
+
+`P0-PB-04A`, `P0-PB-04B`, and `P0-PB-05A` can be implemented in parallel after the two replay traces are approved. `P0-PB-05B` depends on the path-to-member results from `P0-PB-04B`.
 
 ## 10. Sources
 
