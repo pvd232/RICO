@@ -13,6 +13,7 @@ The [Mantra rebuild master checklist](../checklists/mantra-rebuild.md) owns exec
 ## Table of contents
 
 - [Status](#1-status)
+  - [Phase 0 requirement map](#phase-0-requirement-map)
 - [Required claim](#2-required-claim)
 - [Current gap](#3-current-gap)
 - [Restoration and storage contract](#4-restoration-and-storage-contract)
@@ -25,17 +26,19 @@ The [Mantra rebuild master checklist](../checklists/mantra-rebuild.md) owns exec
 - [Implementation records](#10-implementation-records)
 - [Sources](#11-sources)
 
-| ID | Implementation obligation |
-|---|---|
-| `P0-REQ-01` | Define $B$ for the selected Hopfield and MIL outputs. |
-| `P0-REQ-02` | Give every restored file node in $B$ one verified `RestorationBinding`. |
-| `P0-REQ-03` | Calculate the maximum simultaneous local storage requirement before downloading an archive. |
-| `P0-REQ-04` | Restore verified files to their canonical, Git-ignored paths inside the MANTRA checkout. |
-| `P0-REQ-05` | Run restoration from the MANTRA workspace with `viper-provenance` installed in MANTRA's `venv`. |
-| `P0-REQ-06` | Record and verify $B$ in the VIPER provenance graph. |
-| `P0-REQ-07` | Replay the historical Hopfield raw-gene readout from its saved encoder and restored inputs. |
-| `P0-REQ-08` | Replay the v1952 MIL seed-123460 `without_control` result from restored inputs. |
-| `P0-REQ-09` | Maintain an independent usefulness ledger for VIPER checks, failures, costs, and confirmed findings. |
+### Phase 0 requirement map
+
+| ID | Contract boundary | Owning block declarations |
+|---|---|---|
+| `P0-REQ-01` | Define $B$ for the selected Hopfield and MIL outputs. | [`P0-PB-02`](#p0-pb-02-declaration), [`P0-PB-03`](#p0-pb-03-declaration) |
+| `P0-REQ-02` | Give every restored file node in $B$ one verified `RestorationBinding`. | [`P0-PB-04`](#p0-pb-04-declaration), [`P0-PB-04A`](#p0-pb-04a-declaration), [`P0-PB-04B`](#p0-pb-04b-declaration) |
+| `P0-REQ-03` | Calculate the maximum simultaneous local storage requirement before downloading an archive. | [`P0-PB-05`](#p0-pb-05-declaration), [`P0-PB-05A`](#p0-pb-05a-declaration), [`P0-PB-05B`](#p0-pb-05b-declaration) |
+| `P0-REQ-04` | Restore verified files to their canonical, Git-ignored paths inside the MANTRA checkout. | [`P0-PB-06`](#p0-pb-06-declaration) |
+| `P0-REQ-05` | Run restoration from the MANTRA workspace with `viper-provenance` installed in MANTRA's `venv`. | [`P0-PB-01`](#p0-pb-01-declaration), [`P0-PB-06`](#p0-pb-06-declaration) |
+| `P0-REQ-06` | Record and verify $B$ in the VIPER provenance graph. | [`P0-PB-06`](#p0-pb-06-declaration) |
+| `P0-REQ-07` | Replay the historical Hopfield raw-gene readout from its saved encoder and restored inputs. | [`P0-PB-07`](#p0-pb-07-declaration) |
+| `P0-REQ-08` | Replay the v1952 MIL seed-123460 `without_control` result from restored inputs. | [`P0-PB-08`](#p0-pb-08-declaration) |
+| `P0-REQ-09` | Maintain an independent usefulness ledger for VIPER checks, failures, costs, and confirmed findings. | [`P0-PB-09`](#p0-pb-09-declaration) |
 
 ## 2. Required claim
 
@@ -237,19 +240,19 @@ Resolution status lives in the [master checklist](../checklists/mantra-rebuild.m
 
 | Block | Work | Review or implementation owner | Proposed code | Gate |
 |---|---|---|---|---|
-| [`P0-PB-01`](../checklists/mantra-rebuild.md#phase-0a-verify-the-mantra-workspace-and-environment) | Mark and verify the MANTRA workspace. | Codex reviews; user implements. | [Accepted implementation](#p0-pb-01-accepted-implementation) | `P0-VR-05` |
-| [`P0-PB-02`](../checklists/mantra-rebuild.md#phase-0b-freeze-the-two-independent-replay-graphs) | Trace the Hopfield replay. | Codex traces; user approves. | [Work description](#replay-traces-awaiting-approval) | Hopfield portion of `P0-VR-01` |
-| [`P0-PB-03`](../checklists/mantra-rebuild.md#phase-0b-freeze-the-two-independent-replay-graphs) | Trace the MIL replay. | Codex traces; user approves. | [Work description](#replay-traces-awaiting-approval) | MIL portion of `P0-VR-01` |
-| [`P0-PB-04`](../checklists/mantra-rebuild.md#phase-0c-implement-restoration-bindings-and-capacity-planning) | Produce every restoration binding. | User implements approved code; Codex reviews it. | `P0-PB-04A` and `P0-PB-04B` | `P0-VR-02` |
+| <a id="p0-pb-01-declaration"></a>[`P0-PB-01`](../checklists/mantra-rebuild.md#phase-0a-verify-the-mantra-workspace-and-environment) | Mark and verify the MANTRA workspace. | Codex reviews; user implements. | [Accepted implementation](#p0-pb-01-accepted-implementation) | `P0-VR-05` |
+| <a id="p0-pb-02-declaration"></a>[`P0-PB-02`](../checklists/mantra-rebuild.md#phase-0b-freeze-the-two-independent-replay-graphs) | Trace the Hopfield replay. | Codex traces; user approves. | [Work description](#replay-traces-awaiting-approval) | Hopfield portion of `P0-VR-01` |
+| <a id="p0-pb-03-declaration"></a>[`P0-PB-03`](../checklists/mantra-rebuild.md#phase-0b-freeze-the-two-independent-replay-graphs) | Trace the MIL replay. | Codex traces; user approves. | [Work description](#replay-traces-awaiting-approval) | MIL portion of `P0-VR-01` |
+| <a id="p0-pb-04-declaration"></a>[`P0-PB-04`](../checklists/mantra-rebuild.md#phase-0c-implement-restoration-bindings-and-capacity-planning) | Produce every restoration binding. | User implements approved code; Codex reviews it. | [`P0-PB-04A`](#p0-pb-04a-proposed-code); `P0-PB-04B` pending | `P0-VR-02` |
 | <a id="p0-pb-04a-declaration"></a>[`P0-PB-04A`](../checklists/mantra-rebuild.md#status-p0-pb-04a) | Define and validate `RestorationBinding`. | User reviews and implements. | [Source and tests](#p0-pb-04a-proposed-code) | Reject malformed bindings and incomplete coverage. |
 | <a id="p0-pb-04b-declaration"></a>[`P0-PB-04B`](../checklists/mantra-rebuild.md#status-p0-pb-04b) | Resolve a MANTRA path through signed controls to one archive member. | Codex proposes; user reviews and implements. | Pending proposal | Resolve one known path; reject absent or duplicate paths. |
-| [`P0-PB-05`](../checklists/mantra-rebuild.md#phase-0c-implement-restoration-bindings-and-capacity-planning) | Prove capacity and produce the download plan. | User implements approved code; Codex reviews it. | `P0-PB-05A` and `P0-PB-05B` | `P0-VR-03` |
+| <a id="p0-pb-05-declaration"></a>[`P0-PB-05`](../checklists/mantra-rebuild.md#phase-0c-implement-restoration-bindings-and-capacity-planning) | Prove capacity and produce the download plan. | User implements approved code; Codex reviews it. | [`P0-PB-05A`](#p0-pb-05a-proposed-code); `P0-PB-05B` pending | `P0-VR-03` |
 | <a id="p0-pb-05a-declaration"></a>[`P0-PB-05A`](../checklists/mantra-rebuild.md#status-p0-pb-05a) | Calculate capacity and write its receipt. | User reviews and implements. | [Source and tests](#p0-pb-05a-proposed-code) | Report every term in $R_{max}$ and reject insufficient space. |
 | <a id="p0-pb-05b-declaration"></a>[`P0-PB-05B`](../checklists/mantra-rebuild.md#status-p0-pb-05b) | Order the required archive chunks. | Codex proposes; user approves cache timing. | Pending proposal | Identify every chunk by revision, byte count, and digest. |
-| [`P0-PB-06`](../checklists/mantra-rebuild.md#phase-0d-restore-files-and-verify-graph-b-in-viper) | Restore files and verify graph $B$. | User runs approved code; Codex reviews evidence. | Pending proposal | `P0-VR-04` and `P0-VR-06` |
-| [`P0-PB-07`](../checklists/mantra-rebuild.md#phase-0e-replay-hopfield-and-mil) | Replay Hopfield. | User runs approved code; Codex reviews evidence. | Pending proposal | `P0-VR-07` |
-| [`P0-PB-08`](../checklists/mantra-rebuild.md#phase-0e-replay-hopfield-and-mil) | Replay MIL. | User runs approved code; Codex reviews evidence. | Pending proposal | `P0-VR-08` |
-| [`P0-PB-09`](../checklists/mantra-rebuild.md#phase-0f-freeze-evidence-and-assess-viper) | Freeze evidence and assess VIPER. | Codex compiles; user approves. | Pending proposal | `P0-VR-09` |
+| <a id="p0-pb-06-declaration"></a>[`P0-PB-06`](../checklists/mantra-rebuild.md#phase-0d-restore-files-and-verify-graph-b-in-viper) | Restore files and verify graph $B$. | User runs approved code; Codex reviews evidence. | Pending proposal | `P0-VR-04` and `P0-VR-06` |
+| <a id="p0-pb-07-declaration"></a>[`P0-PB-07`](../checklists/mantra-rebuild.md#phase-0e-replay-hopfield-and-mil) | Replay Hopfield. | User runs approved code; Codex reviews evidence. | Pending proposal | `P0-VR-07` |
+| <a id="p0-pb-08-declaration"></a>[`P0-PB-08`](../checklists/mantra-rebuild.md#phase-0e-replay-hopfield-and-mil) | Replay MIL. | User runs approved code; Codex reviews evidence. | Pending proposal | `P0-VR-08` |
+| <a id="p0-pb-09-declaration"></a>[`P0-PB-09`](../checklists/mantra-rebuild.md#phase-0f-freeze-evidence-and-assess-viper) | Freeze evidence and assess VIPER. | Codex compiles; user approves. | Pending proposal | `P0-VR-09` |
 
 ### Work descriptions
 
@@ -356,11 +359,15 @@ The [Phase 0 ownership record](#phase-0-ownership-record) records each block's s
 
 #### `P0-PB-01` accepted implementation
 
+**Declaration:** [`P0-PB-01`](#p0-pb-01-declaration)
+
 **Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#phase-0a-verify-the-mantra-workspace-and-environment)
 
 **Requirement:** Mark the MANTRA Git root as the VIPER workspace and verify the Conda environment named `mantra` uses Python 3.13 with `viper-provenance` installed.
 
 **Dependency:** The Conda environment named `mantra` exists.
+
+**Code boundary:** One applied MANTRA file and its environment commands follow.
 
 **File: `viper.toml`**
 
@@ -400,7 +407,11 @@ python -c 'from pathlib import Path; from viper.repository import resolve_root; 
 
 **Declaration:** [`P0-PB-04A`](#p0-pb-04a-declaration)
 
-**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
+**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#status-p0-pb-04a)
+
+**Requirement:** Represent one canonical MANTRA destination, its signed archive member, and its expected byte identity. Validate exact fields, normalized paths, content-addressed member names, unique destinations, order, and full missing-file coverage.
+
+**Dependency:** The `RestorationBinding` definition in Section 4 and the approved missing-file identities in graph $B$.
 
 **Code boundary:** The three complete files below form the review proposal. MANTRA implementation follows approval.
 
@@ -777,11 +788,21 @@ PYTHONPATH=src python -m pytest \
   src/mantra/rebuild/tests/test_restoration.py -q
 ```
 
+**Gate:** Every `P0-PB-04A` rejection case passes, and the valid binding fixture survives full-set validation.
+
+**Stop condition:** Return the proposal for revision when any declared field, path rule, identity rule, coverage rule, or focused test lacks an observing assertion.
+
+**Evidence:** User approval, the applied MANTRA diff, focused test output, MANTRA commit, and later VIPER registration.
+
 #### `P0-PB-05A` proposed code
 
 **Declaration:** [`P0-PB-05A`](#p0-pb-05a-declaration)
 
-**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
+**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#status-p0-pb-05a)
+
+**Requirement:** Represent every term in $R_{max}$, measure free bytes on the target filesystem, and expose the resulting pass or fail decision in a serializable receipt.
+
+**Dependency:** The capacity formula in Section 4. `P0-PB-05B` supplies the measured archive-plan values used in the real receipt.
 
 **Code boundary:** The two complete files below form the review proposal. MANTRA implementation follows approval.
 
@@ -953,6 +974,12 @@ def test_receipt_exposes_every_contract_term() -> None:
 ```bash
 PYTHONPATH=src python -m pytest src/mantra/rebuild/tests -q
 ```
+
+**Gate:** The focused tests observe the exact-boundary pass, below-boundary failure, rejection of negative terms, and every serialized contract term.
+
+**Stop condition:** Return the proposal for revision when the receipt omits a capacity term or any input can understate `required_bytes`.
+
+**Evidence:** User approval, the applied MANTRA diff, focused test output, MANTRA commit, and later VIPER registration.
 
 ## 11. Sources
 
