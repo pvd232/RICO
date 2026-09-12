@@ -83,7 +83,8 @@ owned by `historical_and_shared_experiments` and two owned by
 | `P0-PB-05A` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05a/20260912T163739.537947Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a) | [Source](../../../mantra/src/mantra/rebuild/capacity.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_capacity.py) |
 | `P0-PB-05B` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05b/20260912T192242.315993Z-accept.json)) | Applied | `P0-PB-04B` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05b) | [Source](../../../mantra/src/mantra/rebuild/archive_plan.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_archive_plan.py) |
 | `P0-PB-05C` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05c/20260912T183000.036271Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05c) | [Observer](../../../viper/src/viper/_workers/file_access.py) · [Tests](../../../viper/tests/test_stage_file_access.py) |
-| `P0-PB-06` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-06/20260912T192604.690678Z-approve.json)) | Approved | `P0-PB-04A`, `P0-PB-04B`, `P0-PB-05A`, `P0-PB-05B`, `P0-PB-05C` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-06) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-06-proposed-code) · [Extraction](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/archive_restore.py) · [VIPER](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/viper_restore.py) · [Tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_archive_restore.py) |
+| `P0-PB-05D` | Pending | Drafting | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05d) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-05d-proposed-code) · [Verifier](../../../viper/src/viper/_verification/plan.py) · [Tests](../../../viper/tests/test_verification.py) |
+| `P0-PB-06` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-06/20260912T192604.690678Z-approve.json)) | Approved | `P0-PB-04A`, `P0-PB-04B`, `P0-PB-05A`, `P0-PB-05B`, `P0-PB-05C`, `P0-PB-05D` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-06) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-06-proposed-code) · [Extraction](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/archive_restore.py) · [VIPER](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/viper_restore.py) · [Tests](../../../mantra/staging/p0-pb-06/src/mantra/rebuild/tests/test_archive_restore.py) |
 | `P0-PB-07` | Pending | Waiting for `P0-PB-06` | `P0-PB-06` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-07) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-07-proposed-code) · [Source](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/tests/test_hopfield_replay.py) |
 | `P0-PB-08` | Pending | Waiting for `P0-PB-06` | `P0-PB-06` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-08) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-08-proposed-code) · [Source](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/tests/test_mil_replay.py) |
 | `P0-PB-09` | Pending | Waiting for `P0-PB-07`, `P0-PB-08`, `P0-PB-10` | `P0-PB-07`, `P0-PB-08`, `P0-PB-10` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-09) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-09-proposed-code) · [Source](../../staging/p0-pb-09/tools/freeze_phase0.py) · [Tests](../../staging/p0-pb-09/tests/test_freeze_phase0.py) |
@@ -152,7 +153,7 @@ applies only to branches and worktrees created for this rebuild.
 
 | Work unit | Current state | Owning phase | Completion evidence |
 |---|---|---|---|
-| [Phase 0 contract](../contracts/mantra-rebuild-phase-0.md) | In progress | Phase 0 | `P0-REQ-01` through `P0-REQ-11` and every mapped PairBlock close. |
+| [Phase 0 contract](../contracts/mantra-rebuild-phase-0.md) | In progress | Phase 0 | `P0-REQ-01` through `P0-REQ-12` and every mapped PairBlock close. |
 | Hopfield reconstruction contract | Pending | Phase 1A | User-approved contract with exact intermediate and final parity gates. |
 | MIL reconstruction contract | Pending | Phase 2A | User-approved contract with exact intermediate and final parity gates. |
 | Graph encoder contract | Design complete; contract pending | Phase 3A | User-approved contract covering identity, topology, features, training, evaluation, and VIPER evidence. |
@@ -190,6 +191,7 @@ This table schedules every requirement in the approved Phase 0 contract once.
 | `P0-REQ-09` | Planned | 0F | `P0-REQ-07`, `P0-REQ-08` | Every assessed VIPER check has a usefulness-ledger entry and independently confirmed findings. |
 | `P0-REQ-10` | In progress | 0C | None | A declared proposal gate retains its result and applies only its legal checklist transition; traceability validation rejects broken IDs, dependencies, owners, code links, tests, or gates. |
 | `P0-REQ-11` | In progress | 0C | None | A governed VIPER stage rejects undeclared CPython-visible file-open attempts and retains each successful Python file open, including one read-open for every declared input. |
+| `P0-REQ-12` | In progress | 0C | None | An unbenchmarked VIPER run may select a `model` artifact produced by a non-training stage; a benchmarked run still selects its model from a training stage. |
 
 ## Phase 0A. Verify the MANTRA workspace and environment
 
@@ -250,6 +252,10 @@ definitions in RICO.
 - [ ] Add and verify the governed VIPER file-access mode in `P0-PB-05C`.
       <!-- pair-block: P0-PB-05C -->
       <!-- pair-block-contract: P0-PB-05C contract=docs/contracts/mantra-rebuild-phase-0.md -->
+- [ ] Permit an unbenchmarked VIPER restoration run to select its restored
+      `model` output in `P0-PB-05D`.
+      <!-- pair-block: P0-PB-05D -->
+      <!-- pair-block-contract: P0-PB-05D contract=docs/contracts/mantra-rebuild-phase-0.md -->
 - [ ] Measure free space and save a passing capacity receipt before download.
       <!-- pair-block: P0-PB-05 -->
       <!-- pair-block-contract: P0-PB-05 contract=docs/contracts/mantra-rebuild-phase-0.md -->
