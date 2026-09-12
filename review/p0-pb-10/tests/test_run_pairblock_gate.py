@@ -5,7 +5,7 @@ from __future__ import annotations
 import ast
 import json
 import shutil
-from dataclasses import replace
+from dataclasses import fields, replace
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -18,18 +18,20 @@ from conftest import (
     PAIR_BLOCK_ID,
     REQUIREMENT_ID,
     SOURCE_PATH,
+    TEST_ADAPTER,
+    TEST_DIALECT,
     TEST_PATH,
     TEST_PROFILE,
     UNKNOWN_PAIR_BLOCK_ID,
     PairBlockFixture,
     RepositoryFactory,
 )
-from tools.profile import MANTRA_PHASE0_PROFILE
+from tools.checklist_profile import MANTRA_PHASE0_ADAPTER
+from tools.profile import MANTRA_PHASE0_PROFILE, ChecklistProfile
 from tools.run_pairblock_gate import (
     DEFAULT_MASTER_CHECKLIST_VALIDATOR,
     PairBlockGateError,
     run_gate,
-    validate_traceability,
 )
 
 NOW = datetime(2026, 9, 11, 16, 0, tzinfo=timezone.utc)
@@ -40,7 +42,7 @@ def validate_test_repository(
 ) -> tuple[dict[str, object], dict[str, object]]:
     """Validate one generated repository with the generic test profile."""
 
-    return validate_traceability(repository, profile=TEST_PROFILE)
+    return TEST_ADAPTER.validate_traceability(repository)
 
 
 def run_test_gate(
@@ -56,7 +58,7 @@ def run_test_gate(
         pair_block_id,
         now=NOW,
         validator_path=validator_path,
-        profile=TEST_PROFILE,
+        adapter=TEST_ADAPTER,
     )
 
 
@@ -104,13 +106,62 @@ def test_checklist_profile_requires_two_phase_capture_groups() -> None:
         replace(TEST_PROFILE, phase_pattern=r"[0-9]+[A-Z]")
 
 
+def test_project_profile_excludes_markdown_dialect() -> None:
+    """Keep document layout out of the project policy model."""
+
+    names = {model_field.name for model_field in fields(ChecklistProfile)}
+    assert not names & {
+        "pair_block_table_header",
+        "requirement_table_header",
+        "requirement_map_header",
+        "proposed_code_link_prefix",
+    }
+
+
+@pytest.mark.parametrize(
+    "field_name",
+    [
+        "pair_block_table_header",
+        "requirement_table_header",
+        "requirement_map_header",
+        "proposed_code_link_prefix",
+    ],
+)
+def test_markdown_dialect_rejects_empty_markers(field_name: str) -> None:
+    """Require every RICO Markdown extension used by the adapter."""
+
+    with pytest.raises(ValueError, match=f"{field_name} must not be empty"):
+        replace(TEST_DIALECT, **{field_name: ""})
+
+
+def test_gate_controller_does_not_parse_or_render_markdown() -> None:
+    """Keep Markdown row manipulation inside the checklist adapter."""
+
+    controller = Path(__file__).parents[1] / "tools/run_pairblock_gate.py"
+    tree = ast.parse(controller.read_text(encoding="utf-8"), filename=str(controller))
+    function_names = {
+        node.name
+        for node in ast.walk(tree)
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+    }
+    string_literals = {
+        node.value
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Constant) and isinstance(node.value, str)
+    }
+
+    assert "_split_row" not in function_names
+    assert "_replace_status_row" not in function_names
+    assert not any("[receipt](" in value for value in string_literals)
+    assert not any(" | " in value for value in string_literals)
+
+
 def test_mantra_profile_compiles_current_contract() -> None:
     """Compile the real MANTRA documents through their project profile."""
 
     repository = Path(__file__).parents[3]
-    rows, manifest = validate_traceability(
+    rows, manifest = MANTRA_PHASE0_ADAPTER.validate_traceability(
         repository,
-        profile=MANTRA_PHASE0_PROFILE,
     )
 
     assert "P0-PB-10" in rows
@@ -193,6 +244,24 @@ def test_duplicate_status_anchor_is_rejected(
     checklist.write_text(text.replace(row, row + "\n" + row), encoding="utf-8")
 
     with pytest.raises(PairBlockGateError, match="duplicate PairBlock row"):
+        validate_test_repository(repository)
+
+
+def test_standard_pair_block_contract_marker_is_required(
+    repository_factory: RepositoryFactory,
+) -> None:
+    """Keep each project row connected through the global checklist marker."""
+
+    repository = repository_factory(command=passing_command())
+    checklist = repository / CHECKLIST_PATH
+    text = checklist.read_text(encoding="utf-8")
+    marker = (
+        f"<!-- pair-block-contract: {PAIR_BLOCK_ID} "
+        f"contract={CONTRACT_PATH.as_posix()} -->"
+    )
+    checklist.write_text(text.replace(marker, ""), encoding="utf-8")
+
+    with pytest.raises(PairBlockGateError, match="standard contract marker"):
         validate_test_repository(repository)
 
 

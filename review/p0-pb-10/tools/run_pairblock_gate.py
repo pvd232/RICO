@@ -15,19 +15,16 @@ from pathlib import Path
 
 from .checklist_profile import (
     DEFAULT_MASTER_CHECKLIST_VALIDATOR,
+    MANTRA_PHASE0_ADAPTER,
+    MarkdownChecklistAdapter,
     PairBlockGateError,
-    compile_normalized_manifest,
-    load_proposal_contract,
-    parse_pair_block_rows,
     validate_normalized_manifest,
-    validate_traceability,
 )
 from .execution_identity import (
     capture_execution_identity,
     compare_execution_identities,
     sha256_bytes,
 )
-from .profile import MANTRA_PHASE0_PROFILE, ChecklistProfile
 
 _PASSED = re.compile(r"(?m)(\d+) passed(?:,| in )")
 
@@ -86,30 +83,6 @@ class GateReceipt:
     normalized_manifest_sha256: str
 
 
-def _split_row(line: str) -> list[str]:
-    """Split one PairBlock table row for its controlled two-cell update."""
-
-    return [cell.strip() for cell in line.strip().strip("|").split("|")]
-
-
-def _replace_status_row(
-    checklist_text: str,
-    *,
-    line_index: int,
-    gate: str,
-    status: str,
-) -> str:
-    """Return checklist text with one gate cell and one status cell replaced."""
-
-    lines = checklist_text.splitlines()
-    cells = _split_row(lines[line_index])
-    cells[1] = gate
-    cells[2] = status
-    lines[line_index] = "| " + " | ".join(cells) + " |"
-    suffix = "\n" if checklist_text.endswith("\n") else ""
-    return "\n".join(lines) + suffix
-
-
 def _atomic_write(path: Path, content: bytes) -> None:
     """Replace one file after flushing a same-directory temporary file."""
 
@@ -136,27 +109,27 @@ def run_gate(
     *,
     now: datetime | None = None,
     validator_path: Path = DEFAULT_MASTER_CHECKLIST_VALIDATOR,
-    profile: ChecklistProfile = MANTRA_PHASE0_PROFILE,
+    adapter: MarkdownChecklistAdapter = MANTRA_PHASE0_ADAPTER,
 ) -> Path:
     """Execute one eligible proposal gate and persist its evidence and status."""
 
     repository = repository.resolve()
+    profile = adapter.profile
     if not profile.accepts_pair_block_id(pair_block_id):
         raise PairBlockGateError(f"invalid PairBlock ID: {pair_block_id}")
 
     checklist_path = repository / profile.checklist_path
     checklist_before = checklist_path.read_bytes()
     checklist_text = checklist_before.decode("utf-8")
-    rows, manifest = validate_traceability(
+    rows, manifest = adapter.validate_traceability(
         repository,
         validator_path=validator_path,
-        profile=profile,
     )
     try:
         row = rows[pair_block_id]
     except KeyError as error:
         raise PairBlockGateError(f"unknown PairBlock: {pair_block_id}") from error
-    if not row.proposed_code.startswith(profile.proposed_code_link_prefix):
+    if not adapter.has_proposed_code(row):
         raise PairBlockGateError(f"{pair_block_id} has no proposed code")
     for dependency in row.dependencies:
         dependency_status = rows[dependency].status
@@ -168,7 +141,7 @@ def run_gate(
     if row.status not in profile.lifecycle.proposal_gate_states:
         raise PairBlockGateError(f"proposal gate cannot run from status: {row.status}")
 
-    proposal = load_proposal_contract(repository, checklist_path, row, profile)
+    proposal = adapter.load_proposal_contract(repository, checklist_path, row)
     resolved_validator = validator_path.resolve()
     identity_before = capture_execution_identity(
         repository,
@@ -220,24 +193,22 @@ def run_gate(
         passed = _PASSED.search(completed.stdout + completed.stderr)
         if passed is None:
             raise PairBlockGateError("passing gate output lacks a pytest pass count")
-        relative_receipt = os.path.relpath(receipt_path, checklist_path.parent)
-        gate_cell = (
-            f"Passed: `{passed.group(1)}` tests "
-            f"([receipt]({Path(relative_receipt).as_posix()}))"
-        )
-        checklist_after = _replace_status_row(
+        relative_receipt = Path(
+            os.path.relpath(receipt_path, checklist_path.parent)
+        ).as_posix()
+        checklist_after = adapter.record_gate_result(
             checklist_text,
-            line_index=row.line_index,
-            gate=gate_cell,
+            row,
+            test_count=int(passed.group(1)),
+            receipt_path=relative_receipt,
             status=status_after,
-        ).encode("utf-8")
+        )
         projected_text = checklist_after.decode("utf-8")
-        projected_rows = parse_pair_block_rows(projected_text, profile)
-        manifest_after = compile_normalized_manifest(
+        projected_rows = adapter.parse_pair_block_rows(projected_text)
+        manifest_after = adapter.compile_normalized_manifest(
             repository,
             projected_text,
             projected_rows,
-            profile,
         )
         validate_normalized_manifest(
             repository,
@@ -281,10 +252,9 @@ def run_gate(
     )
     if result == "passed":
         _atomic_write(checklist_path, checklist_after)
-        validate_traceability(
+        adapter.validate_traceability(
             repository,
             validator_path=resolved_validator,
-            profile=profile,
         )
     return receipt_path
 
@@ -305,7 +275,6 @@ def main(argv: Sequence[str] | None = None) -> int:
         arguments.repository,
         arguments.pair_block_id,
         validator_path=arguments.master_validator,
-        profile=MANTRA_PHASE0_PROFILE,
     )
     receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
     print(receipt_path)

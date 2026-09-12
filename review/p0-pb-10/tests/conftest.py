@@ -9,6 +9,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import pytest
+from tools.checklist_profile import MarkdownChecklistAdapter, MarkdownChecklistDialect
 from tools.profile import ChecklistProfile, LifecyclePolicy
 
 FIXTURE_ROOT = Path(__file__).parent / "fixtures/minimal_profile"
@@ -36,15 +37,6 @@ TEST_PROFILE = ChecklistProfile(
     pair_block_pattern=r"PB-[A-Z]+",
     requirement_pattern=r"REQ-[A-Z]+",
     phase_pattern=r"([0-9]+)([A-Z])",
-    pair_block_table_header=(
-        "| PairBlock | Proposal gate | Resolution status | Depends on | "
-        "Contract declaration | Proposed code |"
-    ),
-    requirement_table_header="| Requirement | State | Phase | Depends on | Gate |",
-    requirement_map_header=(
-        "| ID | Contract boundary | Owning block declarations |"
-    ),
-    proposed_code_link_prefix="[Source and tests]",
     lifecycle=LifecyclePolicy(
         normalized_states=(
             ("Planned", "planned"),
@@ -65,6 +57,23 @@ TEST_PROFILE = ChecklistProfile(
             {"Approved", "Implemented", "Accepted", "Complete"}
         ),
     ),
+)
+
+TEST_DIALECT = MarkdownChecklistDialect(
+    pair_block_table_header=(
+        "| PairBlock | Proposal gate | Resolution status | Depends on | "
+        "Contract declaration | Proposed code |"
+    ),
+    requirement_table_header="| Requirement | State | Phase | Depends on | Gate |",
+    requirement_map_header=(
+        "| ID | Contract boundary | Owning block declarations |"
+    ),
+    proposed_code_link_prefix="[Source and tests]",
+)
+
+TEST_ADAPTER = MarkdownChecklistAdapter(
+    profile=TEST_PROFILE,
+    dialect=TEST_DIALECT,
 )
 
 

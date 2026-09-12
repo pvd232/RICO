@@ -495,7 +495,7 @@ PYTHONPATH=review/p0-pb-05a/src conda run -n mantra \
 
 **Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#status-p0-pb-10)
 
-**Requirement:** Compile the RICO Markdown profile into schema version 2 of the established master-checklist manifest and invoke `/Users/machina/.agents/scripts/validate-master-checklist.py` for requirement coverage, requirement ordering, PairBlock mapping, completion evidence, and derived contract state. The RICO adapter additionally validates detailed PairBlock dependencies, owners, proposed files, observing tests, focused gates, and status links. It retains the contract-declared gate evidence and advances only `Codex drafting` to `Awaiting user review` after a pass.
+**Requirement:** Compile the RICO Markdown checklist into schema version 2 of the established master-checklist manifest and invoke `/Users/machina/.agents/scripts/validate-master-checklist.py` for requirement coverage, requirement ordering, PairBlock mapping, completion evidence, and derived contract state. The Markdown adapter reuses the standard `pair-block` and `pair-block-contract` markers, owns RICO-specific tables and rendering, and exposes typed records to the gate controller. It additionally validates detailed PairBlock dependencies, owners, proposed files, observing tests, focused gates, and status links. The controller retains the contract-declared gate evidence and advances only `Codex drafting` to `Awaiting user review` after a pass.
 
 **Dependency:** The proposed block has one checklist row, one contract ownership row, and one complete proposed-code section. A declared PairBlock dependency must reach an approved or later state before execution.
 
@@ -519,12 +519,13 @@ PYTHONPATH=review/p0-pb-05a/src conda run -n mantra \
 | Boundary | Observing tests |
 |---|---|
 | Python lint | `ruff check` over all seven executable review files |
-| Profile field and lifecycle validity | `test_lifecycle_policy_rejects_undeclared_transition_status`; `test_checklist_profile_requires_two_phase_capture_groups` |
+| Project policy and lifecycle validity | `test_lifecycle_policy_rejects_undeclared_transition_status`; `test_checklist_profile_requires_two_phase_capture_groups`; `test_project_profile_excludes_markdown_dialect`; `test_markdown_dialect_rejects_empty_markers` |
 | Existing normalized checklist contract | `test_profile_fixture_compiles_with_global_validator`; `test_mantra_profile_compiles_current_contract`; `test_passing_gate_writes_receipt_and_advances_one_status`; `test_duplicate_requirement_id_is_rejected` |
-| Complete PairBlock inventory and requirement mapping | `test_every_contract_pair_block_requires_one_status_row`; `test_unmapped_pair_block_is_rejected`; `test_duplicate_status_anchor_is_rejected` |
+| Complete PairBlock inventory and requirement mapping | `test_every_contract_pair_block_requires_one_status_row`; `test_unmapped_pair_block_is_rejected`; `test_duplicate_status_anchor_is_rejected`; `test_standard_pair_block_contract_marker_is_required` |
 | PairBlock dependency order | `test_unknown_dependency_is_rejected`; `test_unresolved_pair_block_dependency_blocks_gate` |
 | Owner, code, and fixture boundaries | `test_missing_owner_is_rejected`; `test_missing_proposed_source_is_rejected`; `test_missing_fixture_source_is_rejected`; `test_proposed_code_must_stay_in_governing_contract` |
 | Gate behavior | `test_gate_must_name_every_observing_test`; `test_failing_gate_retains_receipt_without_changing_checklist`; `test_unknown_pair_block_is_rejected` |
+| Controller and Markdown-adapter boundary | `test_gate_controller_does_not_parse_or_render_markdown`; `test_passing_gate_writes_receipt_and_advances_one_status` |
 | Git-backed execution identity | `test_execution_identity_drift_invalidates_pass` for source, contract, checklist, validator, and `HEAD` drift |
 | Code documentation | `test_active_modules_and_definitions_have_docstrings` |
 
@@ -545,7 +546,7 @@ PYTHONPATH=review/p0-pb-10 conda run -n mantra \
 
 **Stop condition:** Return the proposal for revision if a gate can run outside its declared code boundary, bypass an unresolved dependency, change status after failure or identity drift, bind its receipt to post-execution bytes alone, or advance beyond `Awaiting user review`.
 
-**Evidence:** The proposal uses the existing global validator rather than reimplementing its normalized checks. Its identity check follows the earlier Git-backed strategy by recording `HEAD`, porcelain worktree state, binary diff identity, and file digests before and after execution. `ChecklistProfile` owns project paths, identifier rules, Markdown headers, and lifecycle policy. Unit tests use a generic profile; one integration test compiles the actual MANTRA documents. Ruff 0.16.7 passes over all executable review files. The dataclass annotations declare the stored structure, their class docstrings explain the fields, every active definition has a docstring, and all `24` focused tests pass. The proposal has not been activated.
+**Evidence:** The proposal uses the existing global validator rather than reimplementing its normalized checks. Its identity check follows the earlier Git-backed strategy by recording `HEAD`, porcelain worktree state, binary diff identity, and file digests before and after execution. `ChecklistProfile` owns project paths, identifier rules, and lifecycle policy. `MarkdownChecklistAdapter` owns the standard markers plus RICO-specific tables and rendering. The gate controller receives typed records and requests a result update without parsing or rendering Markdown. Unit tests use a generic profile and dialect; one integration test compiles the actual MANTRA documents. Ruff 0.16.7 passes over all executable review files. The dataclass annotations declare the stored structure, their class docstrings explain the fields, every active definition has a docstring, and all `31` focused tests pass. The proposal has not been activated.
 
 ## 11. Sources
 

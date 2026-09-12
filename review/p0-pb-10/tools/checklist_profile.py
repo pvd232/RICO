@@ -28,7 +28,6 @@ class PairBlockGateError(RuntimeError):
 class PairBlockRow:
     """Represent one authoritative PairBlock lifecycle row in the checklist."""
 
-    line_index: int
     pair_block_id: str
     gate: str
     status: str
@@ -46,10 +45,157 @@ class ProposalContract:
     source_paths: tuple[Path, ...]
 
 
+@dataclass(frozen=True, slots=True)
+class MarkdownChecklistDialect:
+    """Describe the RICO tables that extend the standard checklist markers.
+
+    Attributes:
+        pair_block_table_header: Exact PairBlock status-table header.
+        requirement_table_header: Exact requirement-assignment table header.
+        requirement_map_header: Exact contract requirement-map table header.
+        proposed_code_link_prefix: Link text that identifies runnable code.
+    """
+
+    pair_block_table_header: str
+    requirement_table_header: str
+    requirement_map_header: str
+    proposed_code_link_prefix: str
+
+    def __post_init__(self) -> None:
+        """Reject empty Markdown markers when the adapter is configured."""
+
+        for name, value in (
+            ("pair_block_table_header", self.pair_block_table_header),
+            ("requirement_table_header", self.requirement_table_header),
+            ("requirement_map_header", self.requirement_map_header),
+            ("proposed_code_link_prefix", self.proposed_code_link_prefix),
+        ):
+            if not value.strip():
+                raise ValueError(f"{name} must not be empty")
+
+
+@dataclass(frozen=True, slots=True)
+class MarkdownChecklistAdapter:
+    """Translate one project checklist between Markdown and core records.
+
+    Attributes:
+        profile: Project identities, paths, and lifecycle policy.
+        dialect: RICO Markdown tables layered on the standard checklist markers.
+    """
+
+    profile: ChecklistProfile
+    dialect: MarkdownChecklistDialect
+
+    def parse_pair_block_rows(self, checklist_text: str) -> dict[str, PairBlockRow]:
+        """Parse the configured PairBlock status table."""
+
+        return parse_pair_block_rows(checklist_text, self.profile, self.dialect)
+
+    def has_proposed_code(self, row: PairBlockRow) -> bool:
+        """Return whether a status row links to runnable proposed code."""
+
+        return row.proposed_code.startswith(self.dialect.proposed_code_link_prefix)
+
+    def load_proposal_contract(
+        self,
+        repository: Path,
+        checklist_path: Path,
+        row: PairBlockRow,
+    ) -> ProposalContract:
+        """Resolve one runnable proposal through this Markdown dialect."""
+
+        return load_proposal_contract(
+            repository,
+            checklist_path,
+            row,
+            self.profile,
+        )
+
+    def compile_normalized_manifest(
+        self,
+        repository: Path,
+        checklist_text: str,
+        rows: dict[str, PairBlockRow],
+    ) -> dict[str, object]:
+        """Compile the Markdown records into the core manifest structure."""
+
+        return compile_normalized_manifest(
+            repository,
+            checklist_text,
+            rows,
+            self.profile,
+            self.dialect,
+        )
+
+    def record_gate_result(
+        self,
+        checklist_text: str,
+        row: PairBlockRow,
+        *,
+        test_count: int,
+        receipt_path: str,
+        status: str,
+    ) -> bytes:
+        """Render one gate result into the configured PairBlock table."""
+
+        gate = f"Passed: `{test_count}` tests ([receipt]({receipt_path}))"
+        return _replace_status_row(
+            checklist_text,
+            pair_block_id=row.pair_block_id,
+            gate=gate,
+            status=status,
+        ).encode("utf-8")
+
+    def validate_traceability(
+        self,
+        repository: Path,
+        *,
+        validator_path: Path = DEFAULT_MASTER_CHECKLIST_VALIDATOR,
+    ) -> tuple[dict[str, PairBlockRow], dict[str, object]]:
+        """Validate Markdown links and the compiled core manifest."""
+
+        return validate_traceability(
+            repository,
+            validator_path=validator_path,
+            profile=self.profile,
+            dialect=self.dialect,
+        )
+
+
 def _split_row(line: str) -> list[str]:
     """Split one pipe-delimited Markdown table row into stripped cells."""
 
     return [cell.strip() for cell in line.strip().strip("|").split("|")]
+
+
+def _replace_status_row(
+    checklist_text: str,
+    *,
+    pair_block_id: str,
+    gate: str,
+    status: str,
+) -> str:
+    """Replace the gate and status cells in one parsed PairBlock row."""
+
+    lines = checklist_text.splitlines()
+    matches: list[tuple[int, list[str]]] = []
+    for line_index, line in enumerate(lines):
+        if not line.startswith("|"):
+            continue
+        cells = _split_row(line)
+        match = _ROW_ID.fullmatch(cells[0])
+        if match is not None and match.group(2) == pair_block_id:
+            matches.append((line_index, cells))
+    if len(matches) != 1:
+        raise PairBlockGateError(
+            f"expected one rendered status row for {pair_block_id}"
+        )
+    line_index, cells = matches[0]
+    cells[1] = gate
+    cells[2] = status
+    lines[line_index] = "| " + " | ".join(cells) + " |"
+    suffix = "\n" if checklist_text.endswith("\n") else ""
+    return "\n".join(lines) + suffix
 
 
 def _parse_dependencies(
@@ -72,13 +218,14 @@ def _parse_dependencies(
 
 def parse_pair_block_rows(
     checklist_text: str,
-    profile: ChecklistProfile = MANTRA_PHASE0_PROFILE,
+    profile: ChecklistProfile,
+    dialect: MarkdownChecklistDialect,
 ) -> dict[str, PairBlockRow]:
     """Parse the status table and reject duplicate or cyclic PairBlocks."""
 
     lines = checklist_text.splitlines()
     try:
-        header_index = lines.index(profile.pair_block_table_header)
+        header_index = lines.index(dialect.pair_block_table_header)
     except ValueError as error:
         raise PairBlockGateError("PairBlock status table header is missing") from error
 
@@ -101,7 +248,6 @@ def parse_pair_block_rows(
         if pair_block_id in rows:
             raise PairBlockGateError(f"duplicate PairBlock row: {pair_block_id}")
         rows[pair_block_id] = PairBlockRow(
-            line_index=line_index,
             pair_block_id=pair_block_id,
             gate=cells[1],
             status=cells[2],
@@ -234,7 +380,7 @@ def load_proposal_contract(
     repository: Path,
     checklist_path: Path,
     row: PairBlockRow,
-    profile: ChecklistProfile = MANTRA_PHASE0_PROFILE,
+    profile: ChecklistProfile,
 ) -> ProposalContract:
     """Resolve a runnable proposal from its status row and governing contract."""
 
@@ -356,12 +502,13 @@ def _phase_number(value: str, profile: ChecklistProfile) -> int:
 def _requirement_records(
     checklist_text: str,
     profile: ChecklistProfile,
+    dialect: MarkdownChecklistDialect,
 ) -> list[dict[str, object]]:
     """Compile requirement-assignment rows without reproducing global validation."""
 
     rows = _table_rows(
         checklist_text,
-        profile.requirement_table_header,
+        dialect.requirement_table_header,
     )
     phase_orders: dict[int, int] = {}
     records: list[dict[str, object]] = []
@@ -404,12 +551,13 @@ def _requirement_records(
 def _contract_requirement_map(
     contract_text: str,
     profile: ChecklistProfile,
+    dialect: MarkdownChecklistDialect,
 ) -> tuple[list[str], dict[str, list[str]]]:
     """Compile requirement IDs and their PairBlock declaration links."""
 
     rows = _table_rows(
         contract_text,
-        profile.requirement_map_header,
+        dialect.requirement_map_header,
     )
     requirement_ids: list[str] = []
     requirements_by_block: dict[str, list[str]] = {}
@@ -433,8 +581,12 @@ def _contract_requirement_map(
     return requirement_ids, requirements_by_block
 
 
-def _pair_block_section(checklist_text: str, pair_block_id: str) -> str:
-    """Resolve one PairBlock marker to its unique checklist section."""
+def _pair_block_section(
+    checklist_text: str,
+    pair_block_id: str,
+    contract_path: Path,
+) -> str:
+    """Resolve the standard PairBlock markers to one checklist section."""
 
     marker = f"<!-- pair-block: {pair_block_id} -->"
     lines = checklist_text.splitlines()
@@ -443,7 +595,19 @@ def _pair_block_section(checklist_text: str, pair_block_id: str) -> str:
         raise PairBlockGateError(
             f"{pair_block_id} must map to one checklist checkbox"
         )
-    for line in reversed(lines[: matches[0]]):
+    contract_marker = (
+        f"<!-- pair-block-contract: {pair_block_id} "
+        f"contract={contract_path.as_posix()} -->"
+    )
+    marker_index = matches[0]
+    following_lines = [
+        line.strip() for line in lines[marker_index + 1 : marker_index + 3]
+    ]
+    if contract_marker not in following_lines:
+        raise PairBlockGateError(
+            f"{pair_block_id} lacks its standard contract marker"
+        )
+    for line in reversed(lines[:marker_index]):
         if line.startswith("## "):
             return line.removeprefix("## ")
     raise PairBlockGateError(f"checklist section is missing for {pair_block_id}")
@@ -476,7 +640,8 @@ def compile_normalized_manifest(
     repository: Path,
     checklist_text: str,
     rows: dict[str, PairBlockRow],
-    profile: ChecklistProfile = MANTRA_PHASE0_PROFILE,
+    profile: ChecklistProfile,
+    dialect: MarkdownChecklistDialect,
 ) -> dict[str, object]:
     """Compile RICO-owned fields into schema version 2 of the global manifest."""
 
@@ -486,13 +651,18 @@ def compile_normalized_manifest(
     requirement_ids, requirements_by_block = _contract_requirement_map(
         contract_text,
         profile,
+        dialect,
     )
-    requirements = _requirement_records(checklist_text, profile)
+    requirements = _requirement_records(checklist_text, profile, dialect)
     pair_blocks = [
         {
             "pair_block_id": row.pair_block_id,
             "contract_id": profile.contract_id,
-            "section": _pair_block_section(checklist_text, row.pair_block_id),
+            "section": _pair_block_section(
+                checklist_text,
+                row.pair_block_id,
+                profile.contract_path,
+            ),
             "requirement_ids": requirements_by_block.get(row.pair_block_id, []),
             "state": _normalized_state(row.status, profile),
             "gate": {"kind": "external", "target": row.gate},
@@ -567,23 +737,43 @@ def validate_traceability(
     repository: Path,
     *,
     validator_path: Path = DEFAULT_MASTER_CHECKLIST_VALIDATOR,
-    profile: ChecklistProfile = MANTRA_PHASE0_PROFILE,
+    profile: ChecklistProfile,
+    dialect: MarkdownChecklistDialect,
 ) -> tuple[dict[str, PairBlockRow], dict[str, object]]:
     """Validate RICO-owned links, then delegate normalized contract semantics."""
 
     repository = repository.resolve()
     checklist_path = repository / profile.checklist_path
     checklist_text = checklist_path.read_text(encoding="utf-8")
-    rows = parse_pair_block_rows(checklist_text, profile)
+    rows = parse_pair_block_rows(checklist_text, profile, dialect)
     for row in rows.values():
         validate_declaration(repository, checklist_path, row)
-        if row.proposed_code.startswith(profile.proposed_code_link_prefix):
+        if row.proposed_code.startswith(dialect.proposed_code_link_prefix):
             load_proposal_contract(repository, checklist_path, row, profile)
     manifest = compile_normalized_manifest(
         repository,
         checklist_text,
         rows,
         profile,
+        dialect,
     )
     validate_normalized_manifest(repository, manifest, validator_path.resolve())
     return rows, manifest
+
+
+MANTRA_PHASE0_DIALECT = MarkdownChecklistDialect(
+    pair_block_table_header=(
+        "| PairBlock | Proposal gate | Resolution status | Depends on | "
+        "Contract declaration | Proposed code |"
+    ),
+    requirement_table_header="| Requirement | State | Phase | Depends on | Gate |",
+    requirement_map_header=(
+        "| ID | Contract boundary | Owning block declarations |"
+    ),
+    proposed_code_link_prefix="[Source and tests]",
+)
+
+MANTRA_PHASE0_ADAPTER = MarkdownChecklistAdapter(
+    profile=MANTRA_PHASE0_PROFILE,
+    dialect=MANTRA_PHASE0_DIALECT,
+)

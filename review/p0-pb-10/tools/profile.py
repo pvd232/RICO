@@ -76,7 +76,7 @@ class LifecyclePolicy:
 
 @dataclass(frozen=True, slots=True)
 class ChecklistProfile:
-    """Own one project's paths, identifiers, Markdown syntax, and lifecycle.
+    """Own one project's paths, identifiers, and lifecycle policy.
 
     Attributes:
         checklist_path: Repository-relative Markdown checklist to compile.
@@ -87,10 +87,6 @@ class ChecklistProfile:
         pair_block_pattern: Full-match expression for PairBlock identifiers.
         requirement_pattern: Full-match expression for requirement identifiers.
         phase_pattern: Expression whose two capture groups order phases.
-        pair_block_table_header: Exact PairBlock status-table header.
-        requirement_table_header: Exact requirement-assignment table header.
-        requirement_map_header: Exact contract requirement-map table header.
-        proposed_code_link_prefix: Link text that identifies runnable code.
         lifecycle: Project status vocabulary and legal gate transitions.
     """
 
@@ -102,14 +98,10 @@ class ChecklistProfile:
     pair_block_pattern: str
     requirement_pattern: str
     phase_pattern: str
-    pair_block_table_header: str
-    requirement_table_header: str
-    requirement_map_header: str
-    proposed_code_link_prefix: str
     lifecycle: LifecyclePolicy
 
     def __post_init__(self) -> None:
-        """Reject invalid paths, identities, expressions, and Markdown markers."""
+        """Reject invalid paths, identities, and identifier expressions."""
 
         for label, path in (
             ("checklist_path", self.checklist_path),
@@ -137,15 +129,8 @@ class ChecklistProfile:
             raise ValueError("phase_pattern is not a valid expression") from error
         if phase_expression.groups != 2:
             raise ValueError("phase_pattern must capture numeric and letter groups")
-        for label, value in (
-            ("project_name", self.project_name),
-            ("pair_block_table_header", self.pair_block_table_header),
-            ("requirement_table_header", self.requirement_table_header),
-            ("requirement_map_header", self.requirement_map_header),
-            ("proposed_code_link_prefix", self.proposed_code_link_prefix),
-        ):
-            if not value.strip():
-                raise ValueError(f"{label} must not be empty")
+        if not self.project_name.strip():
+            raise ValueError("project_name must not be empty")
 
     def accepts_pair_block_id(self, value: str) -> bool:
         """Return whether an identifier belongs to this profile's PairBlocks."""
@@ -173,15 +158,6 @@ MANTRA_PHASE0_PROFILE = ChecklistProfile(
     pair_block_pattern=r"P0-PB-[0-9A-Z]+",
     requirement_pattern=r"P0-REQ-[0-9]+",
     phase_pattern=r"([0-9]+)([A-Z])",
-    pair_block_table_header=(
-        "| PairBlock | Proposal gate | Resolution status | Depends on | "
-        "Contract declaration | Proposed code |"
-    ),
-    requirement_table_header="| Requirement | State | Phase | Depends on | Gate |",
-    requirement_map_header=(
-        "| ID | Contract boundary | Owning block declarations |"
-    ),
-    proposed_code_link_prefix="[Source and tests]",
     lifecycle=LifecyclePolicy(
         normalized_states=(
             ("Planned", "planned"),

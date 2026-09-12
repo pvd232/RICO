@@ -85,7 +85,7 @@ zero.
 | <a id="status-p0-pb-07"></a>`P0-PB-07` | Pending | Waiting for `P0-PB-06` | `P0-PB-06` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-07-declaration) | Pending |
 | <a id="status-p0-pb-08"></a>`P0-PB-08` | Pending | Waiting for `P0-PB-06` | `P0-PB-06` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-08-declaration) | Pending |
 | <a id="status-p0-pb-09"></a>`P0-PB-09` | Pending | Waiting for `P0-PB-07`, `P0-PB-08`, `P0-PB-10` | `P0-PB-07`, `P0-PB-08`, `P0-PB-10` | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-09-declaration) | Pending |
-| <a id="status-p0-pb-10"></a>`P0-PB-10` | Passed: `24` tests ([receipt](../../evidence/pairblock-gates/p0-pb-10/20260912T022829.127560Z.json)) | Awaiting user review | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-10-declaration) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-10-proposed-code) |
+| <a id="status-p0-pb-10"></a>`P0-PB-10` | Passed: `31` tests ([receipt](../../evidence/pairblock-gates/p0-pb-10/20260912T023835.120553Z.json)) | Awaiting user review | None | [Declaration](../contracts/mantra-rebuild-phase-0.md#p0-pb-10-declaration) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-10-proposed-code) |
 
 ## Terminal outcome
 
@@ -112,8 +112,8 @@ or proposed code block remains open.
 
 The PairBlock resolution table is the only source of lifecycle status. Contract
 requirements, block declarations, and review-source records expose that status
-through links to the table. The `P0-PB-10` runner compiles this RICO Markdown
-profile into the established normalized master-checklist manifest and invokes
+through links to the table. The `P0-PB-10` Markdown adapter compiles this RICO
+document into the established normalized master-checklist manifest and invokes
 the existing `/Users/machina/.agents/scripts/validate-master-checklist.py`
 validator. Its RICO checks cover the detailed PairBlock dependencies, named
 owners, proposed files, observing tests, focused gates, and status links. A
