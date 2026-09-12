@@ -541,7 +541,12 @@ python -c 'from pathlib import Path; from viper.repository import resolve_root; 
 
 ```bash
 cd /Users/machina/Developer/ChatGPT/mantra
-conda run -n mantra python -m pytest \
+conda run -n mantra env \
+  PYTHONPATH="$PWD/src" \
+  PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+  python -m pytest \
+  --rootdir="$PWD/src" \
+  --confcutdir="$PWD/src" \
   src/mantra/rebuild/tests/test_restoration.py -q
 ```
 
@@ -573,7 +578,12 @@ conda run -n mantra python -m pytest \
 ```bash
 cd /Users/machina/Developer/ChatGPT/mantra
 conda run -n mantra python -m ruff check src/mantra/rebuild && \
-conda run -n mantra python -m pytest \
+conda run -n mantra env \
+  PYTHONPATH="$PWD/src" \
+  PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+  python -m pytest \
+  --rootdir="$PWD/src" \
+  --confcutdir="$PWD/src" \
   src/mantra/rebuild/tests/test_restoration.py \
   src/mantra/rebuild/tests/test_control_resolution.py -q
 ```
@@ -603,7 +613,12 @@ conda run -n mantra python -m pytest \
 
 ```bash
 cd /Users/machina/Developer/ChatGPT/mantra
-conda run -n mantra python -m pytest \
+conda run -n mantra env \
+  PYTHONPATH="$PWD/src" \
+  PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+  python -m pytest \
+  --rootdir="$PWD/src" \
+  --confcutdir="$PWD/src" \
   src/mantra/rebuild/tests/test_capacity.py -q
 ```
 
