@@ -126,20 +126,25 @@ For each review cycle, Codex updates this file in the same RICO commit that
 records any changed contract status. MANTRA implementation commits remain in
 MANTRA. The RICO checklist cites their commit IDs and gate outputs.
 
+An approved review cycle closes before the next cycle begins. Codex runs the
+focused checks, commits only that cycle's owned paths, and pushes when the
+repository has a configured upstream. Without an upstream, the local commit
+closes the local cycle while publication remains blocked.
+
 ## Governing sources
 
 | Work unit | Current state | Owning phase | Completion evidence |
 |---|---|---|---|
-| [Phase 0 contract](../contracts/mantra-rebuild-phase-0.md) | In progress | Phase 0 | `P0-REQ-01` through `P0-REQ-09` and every mapped PairBlock close. |
+| [Phase 0 contract](../contracts/mantra-rebuild-phase-0.md) | In progress | Phase 0 | `P0-REQ-01` through `P0-REQ-10` and every mapped PairBlock close. |
 | Hopfield reconstruction contract | Pending | Phase 1A | User-approved contract with exact intermediate and final parity gates. |
 | MIL reconstruction contract | Pending | Phase 2A | User-approved contract with exact intermediate and final parity gates. |
 | Graph encoder contract | Design complete; contract pending | Phase 3A | User-approved contract covering identity, topology, features, training, evaluation, and VIPER evidence. |
 
-The checklist uses the Phase 0 contract stored in RICO commit `9227c62` with
+The checklist uses the Phase 0 contract stored in RICO commit `cbb9604` with
 SHA-256
-`2b8d94c50b78ab6737de5b791c8e5c2e5c8813e327de165d505ba3e46afdbeb5`.
+`d67ea494cbb50845823f4da55fc28f610881a258e2e00e8e7bf649196bee5b1a`.
 
-<!-- contract-baseline: P0 path=docs/contracts/mantra-rebuild-phase-0.md revision=9227c62 sha256=2b8d94c50b78ab6737de5b791c8e5c2e5c8813e327de165d505ba3e46afdbeb5 -->
+<!-- contract-baseline: P0 path=docs/contracts/mantra-rebuild-phase-0.md revision=cbb9604 sha256=d67ea494cbb50845823f4da55fc28f610881a258e2e00e8e7bf649196bee5b1a -->
 
 ## Verified baseline
 
