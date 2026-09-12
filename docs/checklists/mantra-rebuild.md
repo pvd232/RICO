@@ -182,7 +182,7 @@ This table schedules every requirement in the approved Phase 0 contract once.
 | `P0-REQ-03` | In progress | 0C | `P0-REQ-01` | The capacity receipt records every term in $R_{max}$ and measured free space is at least $R_{max}$. |
 | `P0-REQ-04` | In progress | 0D | `P0-REQ-02`, `P0-REQ-03` | Every restored canonical file matches its approved byte count and SHA-256. |
 | `P0-REQ-05` | In progress | 0D | `P0-REQ-02`, `P0-REQ-03` | Restoration runs from the MANTRA root through the verified `mantra` environment, and VIPER retains the environment receipt. |
-| `P0-REQ-06` | Planned | 0D | `P0-REQ-04`, `P0-REQ-05` | VIPER verifies graph $B$; deleting one required node or edge makes verification fail. |
+| `P0-REQ-06` | In progress | 0D | `P0-REQ-04`, `P0-REQ-05` | VIPER verifies graph $B$; deleting one required node or edge makes verification fail. |
 | `P0-REQ-07` | Planned | 0E | `P0-REQ-06` | Hopfield replay reproduces `0.5861640938949398` within the approved tolerance and retains its predictions. |
 | `P0-REQ-08` | Planned | 0E | `P0-REQ-06` | Standalone v1952 seed-123460 `without_control` replay reproduces `0.6025499488874759` and the approved prediction hashes. |
 | `P0-REQ-09` | Planned | 0F | `P0-REQ-07`, `P0-REQ-08` | Every assessed VIPER check has a usefulness-ledger entry and independently confirmed findings. |
