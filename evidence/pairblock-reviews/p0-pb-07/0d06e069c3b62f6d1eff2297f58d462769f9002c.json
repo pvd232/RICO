@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-07",
+  "requirement_ids": [
+    "P0-REQ-07"
+  ],
+  "repository": "https://github.com/pvd232/MANTRA.git",
+  "base_commit": "75e7ce38dc85918c1f593886f20ed33601daa288",
+  "result_commit": "0d06e069c3b62f6d1eff2297f58d462769f9002c",
+  "owned_paths": [
+    ".gitignore",
+    "src/mantra/rebuild/hopfield_replay.py",
+    "src/mantra/rebuild/tests/test_hopfield_replay.py"
+  ],
+  "diff_sha256": "005bafc890bf92d7174de743d36afd22b4fa4b441c3a373a4c38213e66aa6b3a",
+  "invariants": [
+    "The prediction stage declares the selected encoder, all eleven data inputs, and the two historical configuration files.",
+    "The adapter invokes the selected fit-only raw-gene readout with fit-only memory, top-k 1600, and temperature 0.055.",
+    "The evaluation stage consumes the produced prediction and score artifacts and accepts only the historical hold PearsonDelta within the declared tolerance.",
+    "Both stages use VIPER's declared file-access boundary and the selected receipt is the experiment estimator."
+  ],
+  "findings": [
+    {
+      "severity": "P1",
+      "status": "resolved in e10254570214e92ef1785b92794752222387e9a1",
+      "summary": "The prediction stage read hold truth and scored its own output, contradicting the approved prediction-to-evaluation boundary.",
+      "repair": "Move hold truth and PearsonDelta scoring into the evaluation stage and preserve attention metadata as the prediction-stage edge.",
+      "observer": "src/mantra/rebuild/tests/test_hopfield_replay.py::test_study_declares_every_input_and_two_stage_edges"
+    }
+  ],
+  "mechanical_evidence": {
+    "command": "PYTHONPATH=$PWD/src:$PWD PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest --rootdir=$PWD/src --confcutdir=$PWD/src src/mantra/rebuild/tests/test_hopfield_replay.py -q",
+    "result": "4 passed",
+    "ruff": "passed",
+    "git_diff_check": "passed",
+    "upstream_match": "passed"
+  },
+  "exclusions": [
+    "The restored-input replay remains the P0-PB-07 completion gate."
+  ],
+  "verdict": "Request changes",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-12T20:57:00Z"
+}

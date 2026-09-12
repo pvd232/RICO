@@ -317,8 +317,8 @@ Resolution status lives in the [master checklist](../checklists/mantra-rebuild.m
 | [`P0-PB-05C`](../checklists/mantra-rebuild.md#pairblock-resolution) | Enforce and retain each governed VIPER stage's declared file boundary. | Codex implements in VIPER; user reviews the guarantee, workflow cost, measured overhead, and applied diff. | [Protocol](../../../viper/src/viper/stages.py) · [Authoring](../../../viper/src/viper/authoring.py) · [Observer](../../../viper/src/viper/_workers/file_access.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Verifier](../../../viper/src/viper/_verification/attempt.py) · [Tests](../../../viper/tests/test_stage_file_access.py) | `P0-VR-11` and the framework tradeoff review pass. |
 | [`P0-PB-05D`](../checklists/mantra-rebuild.md#pairblock-resolution) | Permit a build stage to supply an unbenchmarked run's selected `model` artifact. | Codex implements and independently reviews the VIPER change. | [Verifier](../../../viper/src/viper/_verification/plan.py) · [Tests](../../../viper/tests/test_verification.py) · [Test map](../../../viper/tests/declaration_observers.toml) | `P0-VR-12` |
 | [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | Restore files and verify graph $B$. | Codex implements, runs, and independently reviews each bounded commit. | [Bindings](../../../mantra/src/mantra/rebuild/restoration.py) · [Extraction](../../../mantra/src/mantra/rebuild/archive_restore.py) · [VIPER workflow](../../../mantra/src/mantra/rebuild/viper_restore.py) · [Tests](../../../mantra/src/mantra/rebuild/tests) | `P0-VR-04`, `P0-VR-06`, and `P0-REQ-13` |
-| [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay Hopfield. | User reviews, implements, and runs; Codex reviews the applied diff and evidence. | [Source](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/tests/test_hopfield_replay.py) | `P0-VR-07` |
-| [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay standalone MIL application. | User reviews, implements, and runs; Codex reviews the applied diff and evidence. | [Source](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/tests/test_mil_replay.py) | `P0-VR-08` |
+| [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay Hopfield. | Codex implemented and independently reviewed MANTRA commits `0d06e069` and `e1025457`. | [Source](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py) · [Review](../../evidence/pairblock-reviews/p0-pb-07/e10254570214e92ef1785b92794752222387e9a1.json) | `P0-VR-07` |
+| [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay standalone MIL application. | Codex implemented and independently reviewed MANTRA commit `28490068`. | [Source](../../../mantra/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py) · [Review](../../evidence/pairblock-reviews/p0-pb-08/2849006816f7dc4e58c94b1f06b76cf4ac42457f.json) | `P0-VR-08` |
 | [`P0-PB-09`](../checklists/mantra-rebuild.md#pairblock-resolution) | Freeze evidence and assess VIPER. | Codex compiles; user approves. | [Source](../../staging/p0-pb-09/tools/freeze_phase0.py) · [Tests](../../staging/p0-pb-09/tests/test_freeze_phase0.py) | `P0-VR-09` |
 | [`P0-PB-10`](../checklists/mantra-rebuild.md#pairblock-resolution) | Validate PairBlock traceability and retain each tested-code or externally reviewed non-code lifecycle transition. | RICO owns the active controller; the user reviews lifecycle changes. | [Active source and tests](#p0-pb-10-accepted-implementation) | `P0-VR-10` |
 
@@ -448,27 +448,26 @@ saved encoder and the ten non-scoring data inputs, then calls
 temperature=0.055)`. Evaluation adds the hold truth, calls the historical
 scorer, and compares the new hold PearsonDelta with `0.5861640938949398`.
 
-**Start here:** type the [proposed source](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/hopfield_replay.py)
-and [observing tests](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/tests/test_hopfield_replay.py)
-into the matching `src/mantra/rebuild/` paths. The full historical sweep and
-its output paths remain untouched. CPU execution is supported; acceptance uses
-the user-approved numerical tolerance because the historical report omits its
-device.
+The accepted [source](../../../mantra/src/mantra/rebuild/hopfield_replay.py)
+and [observing tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py)
+implement this boundary. The full historical sweep and its output paths remain
+untouched. CPU execution is supported; acceptance uses the user-approved
+numerical tolerance because the historical report omits its device.
 
 #### P0-PB-08
 
-Loads the v1953 application runtime that binds the saved v1952 seed-123460 MIL
-prototype. It redirects the run name and experiment output root, checks the
-selected Step02 and Step03 settings, and calls the maintained
-`runtime.pipeline.run_result()` path. This application replay skips teacher and
-student training and consumes no Hopfield-rebuild output.
+Runs the saved v1952 seed-123460 MIL prototype through the historical Step02
+and Step03 application functions in two VIPER stages. The application stage
+consumes its 15 standalone compute inputs and produces predictions, fitted
+weights, and scores. The evaluation stage consumes those products and the four
+historical parity artifacts. The MIL graph consumes no Hopfield-rebuild output.
 
-**Start here:** type the [proposed source](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/mil_replay.py)
-and [observing tests](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/tests/test_mil_replay.py)
-into the matching `src/mantra/rebuild/` paths. The GPU parity gate compares the
-four rewritten NPZ hashes and the Step02 and Step03 hold scores before closing
-the block. A CPU run may establish numerical parity but does not claim the
-L4-produced NPZ container hashes.
+The accepted [source](../../../mantra/src/mantra/rebuild/mil_replay.py)
+and [observing tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py)
+implement this boundary. The L4 parity gate compares prediction keys, dtypes,
+shapes, and values; compares the deterministic fitted-weight archive hashes;
+and reproduces the Step02 and Step03 hold scores before closing the block. A
+CPU diagnostic may waive artifact parity but cannot close `P0-VR-08`.
 
 #### P0-PB-09
 
@@ -731,8 +730,8 @@ choices.
 | [`P0-PB-05C`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Protocol](../../../viper/src/viper/stages.py) · [Authoring](../../../viper/src/viper/authoring.py) · [Observer](../../../viper/src/viper/_workers/file_access.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Verifier](../../../viper/src/viper/_verification/attempt.py) · [Tests](../../../viper/tests/test_stage_file_access.py) · [Gate](#p0-pb-05c-proposed-code) |
 | [`P0-PB-05D`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Verifier](../../../viper/src/viper/_verification/plan.py) · [Tests](../../../viper/tests/test_verification.py) · [Test map](../../../viper/tests/declaration_observers.toml) · [Gate](#p0-pb-05d-proposed-code) |
 | [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Bindings](../../../mantra/src/mantra/rebuild/restoration.py) · [Extraction](../../../mantra/src/mantra/rebuild/archive_restore.py) · [VIPER workflow](../../../mantra/src/mantra/rebuild/viper_restore.py) · [Tests](../../../mantra/src/mantra/rebuild/tests) · [Gate](#p0-pb-06-proposed-code) · [Review receipt](../../evidence/pairblock-reviews/p0-pb-06/75e7ce38dc85918c1f593886f20ed33601daa288.json) |
-| [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/tests/test_hopfield_replay.py) · [Gate](#p0-pb-07-proposed-code) |
-| [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/tests/test_mil_replay.py) · [Gate](#p0-pb-08-proposed-code) |
+| [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py) · [Gate](#p0-pb-07-accepted-implementation) · [Review](../../evidence/pairblock-reviews/p0-pb-07/e10254570214e92ef1785b92794752222387e9a1.json) |
+| [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py) · [Gate](#p0-pb-08-accepted-implementation) · [Review](../../evidence/pairblock-reviews/p0-pb-08/2849006816f7dc4e58c94b1f06b76cf4ac42457f.json) |
 | [`P0-PB-09`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../staging/p0-pb-09/tools/freeze_phase0.py) · [Tests](../../staging/p0-pb-09/tests/test_freeze_phase0.py) · [Gate](#p0-pb-09-proposed-code) |
 | [`P0-PB-10`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Active implementation](#p0-pb-10-accepted-implementation) |
 
@@ -1218,7 +1217,7 @@ python -m pytest \
 **Stop condition:** stop before either replay when one canonical identity or
 one required provenance edge differs.
 
-### P0-PB-07 implementation record
+### P0-PB-07 accepted implementation
 
 **Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
 
@@ -1229,33 +1228,14 @@ truth.
 **Dependency:** `P0-PB-06` restores the six missing data files and saved
 encoder. The user approves the numerical tolerance before the real replay.
 
-##### `P0-PB-07` proposed code
-
-**Code boundary:** [Hopfield replay source](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/hopfield_replay.py)
-and [observing tests](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/tests/test_hopfield_replay.py).
-
-**Fixture boundary:** [Python overlay runner](../../tools/pairblock_status/python_overlay.py)
+**Code boundary:** [Hopfield replay source](../../../mantra/src/mantra/rebuild/hopfield_replay.py)
+and [observing tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py).
 
 **Implementation requirements:** verify all twelve input identities; call the
 selected historical loader and saved encoder once; call the raw-gene readout
 with `memory_splits=("fit",)`, `topk=1600`, and `temperature=0.055`; write the
 new six-array prediction; score it against hold truth; and persist the
 prediction identity, device, effective top-k, scores, tolerance, and decision.
-
-**Focused check:**
-
-```bash
-cd /Users/machina/Developer/ChatGPT/mantra
-python -m ruff check staging/p0-pb-07/src/mantra/rebuild && \
-PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
-python /Users/machina/Developer/ChatGPT/RICO/tools/pairblock_status/python_overlay.py \
-  --active-root src \
-  --proposal-root staging/p0-pb-07/src -- \
-  python -m pytest \
-    --rootdir="$PWD/src" \
-    --confcutdir="$PWD/src" \
-    staging/p0-pb-07/src/mantra/rebuild/tests/test_hopfield_replay.py -q
-```
 
 **Gate:** the tests prove the selected call arguments, output schema, CPU
 path, effective donor count, and parity decision. The real run retains the
@@ -1283,7 +1263,7 @@ python -m pytest \
   src/mantra/rebuild/tests/test_hopfield_replay.py -q
 ```
 
-### P0-PB-08 implementation record
+### P0-PB-08 accepted implementation
 
 **Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
 
@@ -1294,12 +1274,8 @@ v1953 Step02 and Step03 runtime in a fresh output root.
 of the Hopfield replay. They include the prototype, two historical Step01
 predictions, and the Step02 input-root files named below.
 
-##### `P0-PB-08` proposed code
-
-**Code boundary:** [MIL replay source](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/mil_replay.py)
-and [observing tests](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/tests/test_mil_replay.py).
-
-**Fixture boundary:** [Python overlay runner](../../tools/pairblock_status/python_overlay.py)
+**Code boundary:** [MIL replay source](../../../mantra/src/mantra/rebuild/mil_replay.py)
+and [observing tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py).
 
 **Implementation requirements:** load the saved v1952 seed-123460 prototype;
 verify the selected Step02, Step03, and prototype identities; assign a fresh
@@ -1307,25 +1283,11 @@ run name and output root; call the maintained application runtime once; and
 retain the four prediction arrays, Step02 and Step03 scores, and their
 identities. The declared input set is the standalone MIL graph.
 
-**Focused check:**
-
-```bash
-cd /Users/machina/Developer/ChatGPT/mantra
-python -m ruff check staging/p0-pb-08/src/mantra/rebuild && \
-PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
-python /Users/machina/Developer/ChatGPT/RICO/tools/pairblock_status/python_overlay.py \
-  --active-root src \
-  --proposal-root staging/p0-pb-08/src -- \
-  python -m pytest \
-    --rootdir="$PWD/src" \
-    --confcutdir="$PWD/src" \
-    staging/p0-pb-08/src/mantra/rebuild/tests/test_mil_replay.py -q
-```
-
 **Gate:** the focused check rejects drift from the selected settings and
 confirms output isolation. The real L4 run reproduces Step02 hold
-`0.5924883417873266` and Step03 hold `0.6025499488874759` within `1e-8`, then
-compares the four declared NPZ hashes.
+`0.5924883417873266` and Step03 hold `0.6025499488874759` within `1e-8`, compares
+the two prediction archives by logical array content, and compares the two
+deterministic fitted-weight archives by SHA-256.
 
 **Stop condition:** stop when the runtime tries to train a teacher or student,
 reads a Hopfield-rebuild output, reuses an existing run root, or changes a

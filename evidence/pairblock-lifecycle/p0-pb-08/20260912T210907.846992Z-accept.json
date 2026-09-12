@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "0cd5ac1a4525424205adff66b92b3bfbeeac1168dacbda76a1d5e99ec651a572",
+  "checklist_written_sha256": "58e83252842d3c0dc80c1353166d460f9687197b0239b8f45314d61a76582138",
+  "event": "accept",
+  "evidence": {
+    "kind": "artifact",
+    "revision": "2849006816f7dc4e58c94b1f06b76cf4ac42457f",
+    "target": "https://github.com/pvd232/MANTRA.git:src/mantra/rebuild/mil_replay.py"
+  },
+  "pair_block_id": "P0-PB-08",
+  "previous_receipt": "../../evidence/pairblock-lifecycle/p0-pb-08/20260912T210907.624015Z-approve.json",
+  "recorded_at": "2026-09-12T21:09:07.846992+00:00",
+  "repository_head": "45db86931b6f903696e54fffb11315e5e62fd63b",
+  "result": "applied",
+  "schema_version": 1,
+  "status_after": "Applied",
+  "status_before": "Approved"
+}

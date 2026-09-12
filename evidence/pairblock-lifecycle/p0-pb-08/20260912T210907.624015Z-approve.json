@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "96260260b9e93adf529d11319b31805ba480790731a07f7c8cee4119a94c1885",
+  "checklist_written_sha256": "0cd5ac1a4525424205adff66b92b3bfbeeac1168dacbda76a1d5e99ec651a572",
+  "event": "approve",
+  "evidence": {
+    "kind": "external",
+    "revision": "2026-09-12-phase-0-finish",
+    "target": "User instruction to finish Phase 0 autonomously"
+  },
+  "pair_block_id": "P0-PB-08",
+  "previous_receipt": "../../evidence/pairblock-gates/p0-pb-08/20260912T210854.478388Z.json",
+  "recorded_at": "2026-09-12T21:09:07.624015+00:00",
+  "repository_head": "45db86931b6f903696e54fffb11315e5e62fd63b",
+  "result": "applied",
+  "schema_version": 1,
+  "status_after": "Approved",
+  "status_before": "Review"
+}

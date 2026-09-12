@@ -42,11 +42,11 @@ current status, review points, and completion evidence.
 
 ## Current focus
 
-**Active tranche:** [`P0-PB-06`](../contracts/mantra-rebuild-phase-0.md#p0-pb-06-proposed-code)
-restores the approved files and verifies graph $B$. Its child dependencies have
-applied implementations; the aggregate `P0-PB-04` and `P0-PB-05` records close
-before the restoration gate runs. The resolution table owns each PairBlock's
-current lifecycle state.
+**Active tranche:** [`P0-PB-06`](../contracts/mantra-rebuild-phase-0.md#p0-pb-06)
+is restoring the approved files. The applied [`P0-PB-07`](../contracts/mantra-rebuild-phase-0.md#p0-pb-07)
+and [`P0-PB-08`](../contracts/mantra-rebuild-phase-0.md#p0-pb-08) implementations
+can run as soon as restoration supplies their inputs. The resolution table owns
+each PairBlock's current lifecycle state.
 
 The resolution table identifies the next action. `Review` requires the user's
 decision. `Approved` authorizes the user to apply the proposal. `Applied`
@@ -86,9 +86,9 @@ controls. The completed set contains 27 Hopfield and MIL destinations in
 | `P0-PB-05C` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05c/20260912T183000.036271Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05c) | [Observer](../../../viper/src/viper/_workers/file_access.py) · [Tests](../../../viper/tests/test_stage_file_access.py) |
 | `P0-PB-05D` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05d/20260912T195229.538244Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05d) | [Verifier](../../../viper/src/viper/_verification/plan.py) · [Tests](../../../viper/tests/test_verification.py) · [Test map](../../../viper/tests/declaration_observers.toml) |
 | `P0-PB-06` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-06/20260912T203846.816608Z-accept.json)) | Applied | `P0-PB-04A`, `P0-PB-04B`, `P0-PB-05A`, `P0-PB-05B`, `P0-PB-05C`, `P0-PB-05D` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-06) | [Control helper](../../../mantra/cleanup/reinstantiation_archive.py) · [Bindings](../../../mantra/src/mantra/rebuild/restoration.py) · [Extraction](../../../mantra/src/mantra/rebuild/archive_restore.py) · [VIPER](../../../mantra/src/mantra/rebuild/viper_restore.py) · [Tests](../../../mantra/src/mantra/rebuild/tests) |
-| `P0-PB-07` | Pending | Drafting | `P0-PB-06` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-07) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-07-proposed-code) · [Source](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/staging/p0-pb-07/src/mantra/rebuild/tests/test_hopfield_replay.py) |
-| `P0-PB-08` | Pending | Drafting | `P0-PB-06` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-08) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-08-proposed-code) · [Source](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/staging/p0-pb-08/src/mantra/rebuild/tests/test_mil_replay.py) |
-| `P0-PB-09` | Pending | Waiting for `P0-PB-07`, `P0-PB-08`, `P0-PB-10` | `P0-PB-07`, `P0-PB-08`, `P0-PB-10` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-09) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-09-proposed-code) · [Source](../../staging/p0-pb-09/tools/freeze_phase0.py) · [Tests](../../staging/p0-pb-09/tests/test_freeze_phase0.py) |
+| `P0-PB-07` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-07/20260912T205719.212980Z-accept.json)) | Applied | `P0-PB-06` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-07) | [Source](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py) |
+| `P0-PB-08` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-08/20260912T210907.846992Z-accept.json)) | Applied | `P0-PB-06` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-08) | [Source](../../../mantra/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py) |
+| `P0-PB-09` | Pending | Drafting | `P0-PB-07`, `P0-PB-08`, `P0-PB-10` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-09) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-09-proposed-code) · [Source](../../staging/p0-pb-09/tools/freeze_phase0.py) · [Tests](../../staging/p0-pb-09/tests/test_freeze_phase0.py) |
 | `P0-PB-10` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-10/20260912T035542.464393Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-10) | [Controller](../../tools/pairblock_status/pairblock_controller.py) · [Tests](../../tests/pairblock_status/test_pairblock_controller.py) |
 
 ## Terminal outcome
@@ -189,7 +189,7 @@ This table schedules every requirement in the approved Phase 0 contract once.
 | `P0-REQ-06` | In progress | 0D | `P0-REQ-04`, `P0-REQ-05` | VIPER verifies graph $B$; deleting one required node or edge makes verification fail. |
 | `P0-REQ-07` | In progress | 0E | `P0-REQ-06` | Hopfield replay reproduces `0.5861640938949398` within the approved tolerance and retains its predictions. |
 | `P0-REQ-08` | In progress | 0E | `P0-REQ-06` | Standalone v1952 seed-123460 `without_control` replay reproduces `0.6025499488874759` and the approved prediction hashes. |
-| `P0-REQ-09` | Planned | 0F | `P0-REQ-07`, `P0-REQ-08` | Every assessed VIPER check has a usefulness-ledger entry and independently confirmed findings. |
+| `P0-REQ-09` | In progress | 0F | `P0-REQ-07`, `P0-REQ-08` | Every assessed VIPER check has a usefulness-ledger entry and independently confirmed findings. |
 | `P0-REQ-10` | In progress | 0C | None | A declared proposal gate retains its result and applies only its legal checklist transition; traceability validation rejects broken IDs, dependencies, owners, code links, tests, or gates. |
 | `P0-REQ-11` | In progress | 0C | None | A governed VIPER stage rejects undeclared CPython-visible file-open attempts and retains each successful Python file open, including one read-open for every declared input. |
 | `P0-REQ-12` | In progress | 0C | None | An unbenchmarked VIPER run may select a `model` artifact produced by a non-training stage; a benchmarked run still selects its model from a training stage. |

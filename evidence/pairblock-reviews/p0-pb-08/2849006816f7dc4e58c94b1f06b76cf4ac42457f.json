@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-08",
+  "requirement_ids": [
+    "P0-REQ-08"
+  ],
+  "repository": "https://github.com/pvd232/MANTRA.git",
+  "base_commit": "e10254570214e92ef1785b92794752222387e9a1",
+  "result_commit": "2849006816f7dc4e58c94b1f06b76cf4ac42457f",
+  "owned_paths": [
+    ".gitignore",
+    "src/mantra/rebuild/mil_replay.py",
+    "src/mantra/rebuild/tests/test_mil_replay.py"
+  ],
+  "diff_sha256": "dabd58a96fcbdf45f43f8705ccc732b6c8eb8538f3b6b0314aefa508c61c5099",
+  "invariants": [
+    "The application stage declares and verifies the fifteen standalone MIL compute inputs and never consumes Hopfield replay output.",
+    "The adapter loads the selected direct-MIL Step02 settings and fit-only Step03 settings, then calls each historical application step once.",
+    "The evaluation stage compares Step02 and Step03 scores and all four produced artifacts with authenticated historical references.",
+    "Prediction parity compares logical NumPy arrays while deterministic weight archives compare exact file identities.",
+    "Both stages use VIPER's declared file-access boundary and the replay receipt is the experiment estimator."
+  ],
+  "findings": [
+    {
+      "severity": "P1",
+      "status": "resolved before commit",
+      "summary": "The first parity implementation attempted to load deterministic model-weight ZIP archives as ordinary NumPy prediction archives.",
+      "repair": "Compare prediction payloads by logical array content and model-weight archives by exact SHA-256.",
+      "observer": "src/mantra/rebuild/tests/test_mil_replay.py::test_evaluation_compares_weight_archives_by_file_identity"
+    }
+  ],
+  "mechanical_evidence": {
+    "command": "PYTHONPATH=$PWD/src:$PWD PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest --rootdir=$PWD/src --confcutdir=$PWD/src src/mantra/rebuild/tests/test_mil_replay.py -q",
+    "result": "6 passed",
+    "ruff": "passed",
+    "git_diff_check": "passed",
+    "upstream_match": "passed"
+  },
+  "exclusions": [
+    "The authenticated L4 replay remains the P0-PB-08 completion gate."
+  ],
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-12T21:13:00Z"
+}

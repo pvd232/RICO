@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "454ce6e346ae6c172cdeb0137301282735953881679767fdec5b8c0c9456782d",
+  "checklist_written_sha256": "d9936ce2e997ef5f1dc73a28678b3f150b175d8038754b4f045d5b324e1b5fec",
+  "event": "accept",
+  "evidence": {
+    "kind": "artifact",
+    "revision": "0d06e069c3b62f6d1eff2297f58d462769f9002c",
+    "target": "https://github.com/pvd232/MANTRA.git:src/mantra/rebuild/hopfield_replay.py"
+  },
+  "pair_block_id": "P0-PB-07",
+  "previous_receipt": "../../evidence/pairblock-lifecycle/p0-pb-07/20260912T205718.988899Z-approve.json",
+  "recorded_at": "2026-09-12T20:57:19.212980+00:00",
+  "repository_head": "45db86931b6f903696e54fffb11315e5e62fd63b",
+  "result": "applied",
+  "schema_version": 1,
+  "status_after": "Applied",
+  "status_before": "Approved"
+}
