@@ -464,7 +464,9 @@ final `PearsonDelta` gate.
 
 ## Phase 2. Rebuild MIL
 
-**Depends on:** Phase 1C
+**Execution order:** Begin after Phase 1C so each reconstruction receives a
+separate review cycle. The standalone MIL input graph ends at its own
+artifacts.
 
 ### Phase 2A. Approve the MIL reconstruction contract
 
