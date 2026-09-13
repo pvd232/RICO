@@ -2419,7 +2419,7 @@ translate without rewriting their bytes.
 <!-- generated:manifest-native-contract:start -->
 #### Manifest-native block P0-PB-07A
 
-**Status:** Drafting
+**Status:** Review
 
 **Requirements:**
 
@@ -2436,7 +2436,7 @@ translate without rewriting their bytes.
 
 **Implementation:** [hopfield_replay.py](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [test_hopfield_replay.py](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py)
 
-**Current receipt:** None
+**Current receipt:** [receipt](../../evidence/pairblock-gates/p0-pb-07a/20260913T063012.890580Z.json)
 
 **Gate:**
 
@@ -2449,7 +2449,7 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONPATH=/Users/machina/Developer/ChatGPT/man
 
 ```bash
 cd /Users/machina/Developer/ChatGPT/RICO
-python -m tools.pairblock_status.pairblock_controller gate P0-PB-07A
+python -m tools.pairblock_status.pairblock_controller advance P0-PB-07A approve --evidence-kind KIND --evidence-target TARGET --evidence-revision REVISION
 ```
 
 #### Manifest-native block P0-PB-10D

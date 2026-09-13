@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-07A",
+  "requirement_ids": [
+    "P0-REQ-26"
+  ],
+  "repository": "https://github.com/pvd232/MANTRA.git",
+  "base_commit": "7c76c9772378f94f55012a06fc9f13354a46a4e7",
+  "result_commit": "07993ada4e42fb4967f331da8c2ddf072a722276",
+  "owned_paths": [
+    "src/mantra/rebuild/hopfield_replay.py",
+    "src/mantra/rebuild/tests/test_hopfield_replay.py"
+  ],
+  "diff_sha256": "098139076b12482ee13057eead51b71c157cf39ec54b5304cc078ad4bbe5f9d5",
+  "invariants": [
+    "Evaluation consumes the replayed prediction and the restored historical prediction.",
+    "Both archives contain the approved keys in order and equal dtypes, shapes, and values.",
+    "The receipt identifies both prediction archives and separates array parity from score parity.",
+    "A matching hold score cannot pass when any prediction array differs."
+  ],
+  "findings": [],
+  "counterexamples": [
+    "Changed prediction value with an unchanged hold score.",
+    "Changed prediction shape or dtype.",
+    "Missing prediction key in either archive.",
+    "Historical prediction with an unapproved byte identity."
+  ],
+  "mechanical_evidence": {
+    "pyright": "0 errors",
+    "focused_command": "python -m pytest --rootdir=/Users/machina/Developer/ChatGPT/mantra/src --confcutdir=/Users/machina/Developer/ChatGPT/mantra/src src/mantra/rebuild/tests/test_hopfield_replay.py -q",
+    "focused_result": "12 passed",
+    "ruff_format": "passed last",
+    "ruff_check": "passed last",
+    "git_diff_check": "passed"
+  },
+  "findings_status": "none unresolved",
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-13T06:30:36Z"
+}
