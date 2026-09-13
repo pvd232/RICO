@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
-"""Materialize one planned PairBlock over Git HEAD and run its declared gate.
+"""Materialize one planned PairBlock over its Git baseline and run its gate.
 
-The checker copies tracked baseline files into a temporary directory, overlays
-the selected plan actions, and executes the gate there. The RICO working tree
-remains unchanged, so a passing result proves the staged production candidates
-work together before the user creates their active clones.
+The checker extracts the plan's immutable baseline into a temporary directory,
+overlays the selected actions, and executes the gate there. The RICO working
+tree remains unchanged, and later production edits cannot change the candidate
+under test.
 """
 
 from __future__ import annotations
 
 import argparse
+import io
 import os
 import shutil
 import subprocess
+import tarfile
 import tempfile
 from collections.abc import Mapping, Sequence
 from pathlib import Path
@@ -27,11 +29,13 @@ def main(argv: Sequence[str] | None = None) -> int:
     plan_root = Path(__file__).resolve().parent
     repository = plan_root.parents[1]
     plan = _load_plan(plan_root / "plan.toml")
+    _validate_plan_identity(plan, plan_root, repository)
     block = _select_block(plan, arguments.pair_block_id)
+    baseline = _require_string(plan, "baseline")
 
     with tempfile.TemporaryDirectory(prefix="pairblock-plan-") as directory:
         candidate = Path(directory) / "RICO"
-        _copy_tracked_baseline(repository, candidate)
+        _copy_tracked_baseline(repository, candidate, baseline)
         _overlay_actions(plan_root, candidate, block)
         os.symlink(repository / ".venv", candidate / ".venv")
         result = _run_gate(candidate, block)
@@ -42,7 +46,7 @@ def _parse_arguments(argv: Sequence[str] | None) -> argparse.Namespace:
     """Parse the one PairBlock identifier selected for materialization."""
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("pair_block_id", nargs="?", default="P0-PB-10K")
+    parser.add_argument("pair_block_id")
     return parser.parse_args(argv)
 
 
@@ -51,6 +55,35 @@ def _load_plan(path: Path) -> dict[str, object]:
 
     with path.open("rb") as stream:
         return tomllib.load(stream)
+
+
+def _validate_plan_identity(
+    plan: Mapping[str, object],
+    plan_root: Path,
+    repository: Path,
+) -> None:
+    """Require the package directory, contract ID, and contract path to agree."""
+
+    if plan.get("schema_version") != 1:
+        raise ValueError("plan schema_version must be 1")
+    contract_id = _require_string(plan, "contract_id")
+    if plan_root.name != contract_id:
+        raise ValueError("plan directory must equal contract_id")
+    contract_path = Path(_require_string(plan, "contract_path"))
+    if contract_path.stem != contract_id:
+        raise ValueError("contract filename stem must equal contract_id")
+    contract = _contained_path(repository, contract_path.as_posix(), "contract path")
+    if not contract.is_file():
+        raise ValueError("contract path must name an existing file")
+
+
+def _require_string(plan: Mapping[str, object], field: str) -> str:
+    """Return one required nonempty plan string."""
+
+    value = plan.get(field)
+    if not isinstance(value, str) or not value or value.strip() != value:
+        raise TypeError(f"plan {field} must be a nonempty string")
+    return value
 
 
 def _select_block(plan: Mapping[str, object], pair_block_id: str) -> dict[str, object]:
@@ -69,24 +102,22 @@ def _select_block(plan: Mapping[str, object], pair_block_id: str) -> dict[str, o
     return matches[0]
 
 
-def _copy_tracked_baseline(repository: Path, destination: Path) -> None:
-    """Copy every file owned by the current Git revision into a temporary root."""
+def _copy_tracked_baseline(
+    repository: Path,
+    destination: Path,
+    baseline: str,
+) -> None:
+    """Extract the plan's immutable Git baseline into a temporary root."""
 
     destination.mkdir(parents=True)
     result = subprocess.run(
-        ["git", "ls-files", "-z"],
+        ["git", "archive", "--format=tar", baseline],
         cwd=repository,
         check=True,
         capture_output=True,
     )
-    for encoded_path in result.stdout.split(b"\0"):
-        if not encoded_path:
-            continue
-        relative_path = Path(encoded_path.decode())
-        source = repository / relative_path
-        target = destination / relative_path
-        target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(source, target)
+    with tarfile.open(fileobj=io.BytesIO(result.stdout), mode="r:") as archive:
+        archive.extractall(destination, filter="data")
 
 
 def _overlay_actions(
@@ -100,8 +131,11 @@ def _overlay_actions(
     if not isinstance(actions, list) or not actions:
         raise ValueError("planned PairBlock must declare at least one action")
     for action in actions:
-        if not isinstance(action, dict) or action.get("kind") != "add":
-            raise ValueError("P0-PB-10K accepts only add actions")
+        if not isinstance(action, dict):
+            raise TypeError("plan action must be a mapping")
+        kind = action.get("kind")
+        if kind not in {"add", "replace"}:
+            raise ValueError("plan action kind must be add or replace")
         source_value = action.get("source")
         target_value = action.get("target")
         if not isinstance(source_value, str) or not isinstance(target_value, str):
@@ -110,8 +144,10 @@ def _overlay_actions(
         target = _contained_path(candidate, target_value, "action target")
         if not source.is_file():
             raise ValueError(f"planned source is missing: {source_value}")
-        if target.exists():
+        if kind == "add" and target.exists():
             raise ValueError(f"add target already exists: {target_value}")
+        if kind == "replace" and not target.is_file():
+            raise ValueError(f"replace target is missing: {target_value}")
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(source, target)
 

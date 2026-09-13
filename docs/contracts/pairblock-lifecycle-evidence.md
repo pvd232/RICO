@@ -608,6 +608,7 @@ Production targets:
 ```text
 tools/pairblock_status/lifecycle_evidence.py
 tests/pairblock_status/test_lifecycle_evidence_records.py
+requirements.txt
 ```
 
 The [source-backed plan](../../plans/pairblock-lifecycle-evidence/plan.toml)
@@ -615,7 +616,13 @@ contains the reviewed production-file candidates:
 
 - [staged lifecycle model](../../plans/pairblock-lifecycle-evidence/add/tools/pairblock_status/lifecycle_evidence.py)
 - [staged observing tests](../../plans/pairblock-lifecycle-evidence/add/tests/pairblock_status/test_lifecycle_evidence_records.py)
+- [staged dependency declaration](../../plans/pairblock-lifecycle-evidence/replace/requirements.txt)
 - [isolated plan checker](../../plans/pairblock-lifecycle-evidence/check.py)
+
+The plan fixes Git commit `b3bdaa1b2e134b2a04a448dd279e8aeb1b064915` as
+the reviewed baseline. Its checker extracts that commit before applying the
+declared actions, so later production changes cannot alter the candidate being
+verified.
 
 Gate obligations:
 
@@ -629,6 +636,8 @@ review receipt supplied to register fails
 registration receipt supplied to accept fails
 non-canonical repository path fails
 malformed SHA-256 fails
+generated schema describes every persisted field
+validated records reject mutation
 ```
 
 ### `P0-PB-10L` — controller, CLI, persistence, and rendering

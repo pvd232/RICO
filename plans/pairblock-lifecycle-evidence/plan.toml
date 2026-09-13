@@ -1,5 +1,7 @@
 schema_version = 1
-contract = "docs/contracts/pairblock-lifecycle-evidence.md"
+contract_id = "pairblock-lifecycle-evidence"
+contract_path = "docs/contracts/pairblock-lifecycle-evidence.md"
+baseline = "b3bdaa1b2e134b2a04a448dd279e8aeb1b064915"
 
 [[pair_blocks]]
 id = "P0-PB-10K"
@@ -23,3 +25,8 @@ target = "tools/pairblock_status/lifecycle_evidence.py"
 kind = "add"
 source = "add/tests/pairblock_status/test_lifecycle_evidence_records.py"
 target = "tests/pairblock_status/test_lifecycle_evidence_records.py"
+
+[[pair_blocks.actions]]
+kind = "replace"
+source = "replace/requirements.txt"
+target = "requirements.txt"

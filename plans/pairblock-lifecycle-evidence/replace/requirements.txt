@@ -1,0 +1,5 @@
+pydantic
+pyright
+pytest
+ruff
+viper-provenance
