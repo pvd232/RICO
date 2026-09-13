@@ -1,0 +1,512 @@
+{
+  "accepted_manifest": {
+    "pair_blocks": [
+      {
+        "depends_on": [
+          "P0-PB-10A"
+        ],
+        "gate": {
+          "argv": [
+            "/bin/zsh",
+            "-e",
+            "-c",
+            "python -m pyright tools/pairblock_status/profile.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_lifecycle_evidence.py && python -m pytest tests/pairblock_status/test_lifecycle_evidence.py -q && python -m ruff format --check tools/pairblock_status/profile.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_lifecycle_evidence.py && python -m ruff check tools/pairblock_status/profile.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_lifecycle_evidence.py"
+          ],
+          "environment": {
+            "PYTHONPATH": "."
+          },
+          "repository": "rico",
+          "working_directory": "."
+        },
+        "id": "P0-PB-10D",
+        "repository": "rico",
+        "requirement_ids": [
+          "P0-REQ-28"
+        ],
+        "section": "0G",
+        "source_paths": [
+          "tools/pairblock_status/profile.py",
+          "tools/pairblock_status/pairblock_controller.py"
+        ],
+        "test_paths": [
+          "tests/pairblock_status/test_lifecycle_evidence.py"
+        ]
+      },
+      {
+        "depends_on": [
+          "P0-PB-10D"
+        ],
+        "gate": {
+          "argv": [
+            "/bin/zsh",
+            "-e",
+            "-c",
+            "python -m pyright tools/pairblock_status/execution_identity.py tools/pairblock_status/receipt_validation.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_receipt_integrity.py && python -m pytest tests/pairblock_status/test_receipt_integrity.py -q && python -m ruff format --check tools/pairblock_status/execution_identity.py tools/pairblock_status/receipt_validation.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_receipt_integrity.py && python -m ruff check tools/pairblock_status/execution_identity.py tools/pairblock_status/receipt_validation.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_receipt_integrity.py"
+          ],
+          "environment": {
+            "PYTHONPATH": "."
+          },
+          "repository": "rico",
+          "working_directory": "."
+        },
+        "id": "P0-PB-10E",
+        "repository": "rico",
+        "requirement_ids": [
+          "P0-REQ-29"
+        ],
+        "section": "0G",
+        "source_paths": [
+          "tools/pairblock_status/execution_identity.py",
+          "tools/pairblock_status/receipt_validation.py",
+          "tools/pairblock_status/pairblock_controller.py"
+        ],
+        "test_paths": [
+          "tests/pairblock_status/test_receipt_integrity.py"
+        ]
+      },
+      {
+        "depends_on": [
+          "P0-PB-10A"
+        ],
+        "gate": {
+          "argv": [
+            "/bin/zsh",
+            "-e",
+            "-c",
+            "python -m pyright tools/pairblock_status/declaration_manifest.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_declaration_revision_integrity.py && python -m pytest tests/pairblock_status/test_declaration_revision_integrity.py -q && python -m ruff format --check tools/pairblock_status/declaration_manifest.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_declaration_revision_integrity.py && python -m ruff check tools/pairblock_status/declaration_manifest.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_declaration_revision_integrity.py"
+          ],
+          "environment": {
+            "PYTHONPATH": "."
+          },
+          "repository": "rico",
+          "working_directory": "."
+        },
+        "id": "P0-PB-10F",
+        "repository": "rico",
+        "requirement_ids": [
+          "P0-REQ-30"
+        ],
+        "section": "0G",
+        "source_paths": [
+          "tools/pairblock_status/declaration_manifest.py",
+          "tools/pairblock_status/pairblock_controller.py"
+        ],
+        "test_paths": [
+          "tests/pairblock_status/test_declaration_revision_integrity.py"
+        ]
+      },
+      {
+        "depends_on": [
+          "P0-PB-10E",
+          "P0-PB-10F"
+        ],
+        "gate": {
+          "argv": [
+            "/bin/zsh",
+            "-e",
+            "-c",
+            "python -m pyright tools/pairblock_status/projection_transaction.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_projection_recovery.py && python -m pytest tests/pairblock_status/test_projection_recovery.py -q && python -m ruff format --check tools/pairblock_status/projection_transaction.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_projection_recovery.py && python -m ruff check tools/pairblock_status/projection_transaction.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_projection_recovery.py"
+          ],
+          "environment": {
+            "PYTHONPATH": "."
+          },
+          "repository": "rico",
+          "working_directory": "."
+        },
+        "id": "P0-PB-10G",
+        "repository": "rico",
+        "requirement_ids": [
+          "P0-REQ-31"
+        ],
+        "section": "0G",
+        "source_paths": [
+          "tools/pairblock_status/projection_transaction.py",
+          "tools/pairblock_status/pairblock_controller.py"
+        ],
+        "test_paths": [
+          "tests/pairblock_status/test_projection_recovery.py"
+        ]
+      },
+      {
+        "depends_on": [
+          "P0-PB-10A"
+        ],
+        "gate": {
+          "argv": [
+            "/bin/zsh",
+            "-e",
+            "-c",
+            "python -m pyright tools/pairblock_status/markdown_renderer.py tests/pairblock_status/test_markdown_renderer.py && python -m pytest tests/pairblock_status/test_markdown_renderer.py -q && python -m ruff format --check tools/pairblock_status/markdown_renderer.py tests/pairblock_status/test_markdown_renderer.py && python -m ruff check tools/pairblock_status/markdown_renderer.py tests/pairblock_status/test_markdown_renderer.py"
+          ],
+          "environment": {
+            "PYTHONPATH": "."
+          },
+          "repository": "rico",
+          "working_directory": "."
+        },
+        "id": "P0-PB-10H",
+        "repository": "rico",
+        "requirement_ids": [
+          "P0-REQ-32"
+        ],
+        "section": "0G",
+        "source_paths": [
+          "tools/pairblock_status/markdown_renderer.py"
+        ],
+        "test_paths": [
+          "tests/pairblock_status/test_markdown_renderer.py"
+        ]
+      },
+      {
+        "depends_on": [
+          "P0-PB-10H"
+        ],
+        "gate": {
+          "argv": [
+            "/bin/zsh",
+            "-e",
+            "-c",
+            "python -m pyright tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_cross_origin_dependencies.py && python -m pytest tests/pairblock_status/test_cross_origin_dependencies.py -q && python -m ruff format --check tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_cross_origin_dependencies.py && python -m ruff check tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_cross_origin_dependencies.py"
+          ],
+          "environment": {
+            "PYTHONPATH": "."
+          },
+          "repository": "rico",
+          "working_directory": "."
+        },
+        "id": "P0-PB-10I",
+        "repository": "rico",
+        "requirement_ids": [
+          "P0-REQ-33"
+        ],
+        "section": "0G",
+        "source_paths": [
+          "tools/pairblock_status/pairblock_controller.py"
+        ],
+        "test_paths": [
+          "tests/pairblock_status/test_cross_origin_dependencies.py"
+        ]
+      },
+      {
+        "depends_on": [
+          "P0-PB-10G",
+          "P0-PB-10I"
+        ],
+        "gate": {
+          "argv": [
+            "/bin/zsh",
+            "-e",
+            "-c",
+            "python -m pyright tools/pairblock_status/profile.py tools/pairblock_status/pairblock_controller.py tools/pairblock_status/checklist_profile.py tests/pairblock_status/conftest.py tests/pairblock_status/test_pairblock_controller.py && python -m pytest tests/pairblock_status/test_pairblock_controller.py -q && python -m ruff format --check tools/pairblock_status/profile.py tools/pairblock_status/pairblock_controller.py tools/pairblock_status/checklist_profile.py tests/pairblock_status/conftest.py tests/pairblock_status/test_pairblock_controller.py && python -m ruff check tools/pairblock_status/profile.py tools/pairblock_status/pairblock_controller.py tools/pairblock_status/checklist_profile.py tests/pairblock_status/conftest.py tests/pairblock_status/test_pairblock_controller.py"
+          ],
+          "environment": {
+            "PYTHONPATH": "."
+          },
+          "repository": "rico",
+          "working_directory": "."
+        },
+        "id": "P0-PB-10J",
+        "repository": "rico",
+        "requirement_ids": [
+          "P0-REQ-34"
+        ],
+        "section": "0G",
+        "source_paths": [
+          "tools/pairblock_status/profile.py",
+          "tools/pairblock_status/pairblock_controller.py",
+          "tools/pairblock_status/checklist_profile.py"
+        ],
+        "test_paths": [
+          "tests/pairblock_status/conftest.py",
+          "tests/pairblock_status/test_pairblock_controller.py"
+        ]
+      }
+    ],
+    "requirements": [
+      {
+        "claim": "Each lifecycle event accepts only the evidence category and verified evidence target assigned to that event.",
+        "depends_on": [
+          "P0-REQ-25"
+        ],
+        "gate": {
+          "kind": "test",
+          "target": "P0-VR-27"
+        },
+        "id": "P0-REQ-28",
+        "order": 28,
+        "pair_block_ids": [
+          "P0-PB-10D"
+        ],
+        "phase": 6,
+        "verifier_ids": [
+          "P0-VR-27"
+        ]
+      },
+      {
+        "claim": "A native receipt is authoritative only when its complete schema and recomputed command, output, declaration, repository, and predecessor identities agree with the declared operation.",
+        "depends_on": [
+          "P0-REQ-28"
+        ],
+        "gate": {
+          "kind": "test",
+          "target": "P0-VR-28"
+        },
+        "id": "P0-REQ-29",
+        "order": 29,
+        "pair_block_ids": [
+          "P0-PB-10E"
+        ],
+        "phase": 6,
+        "verifier_ids": [
+          "P0-VR-28"
+        ]
+      },
+      {
+        "claim": "Declaration acceptance binds the user's approval to one persisted revision plan and accepts only declaration schema version 1.",
+        "depends_on": [
+          "P0-REQ-25"
+        ],
+        "gate": {
+          "kind": "test",
+          "target": "P0-VR-29"
+        },
+        "id": "P0-REQ-30",
+        "order": 30,
+        "pair_block_ids": [
+          "P0-PB-10F"
+        ],
+        "phase": 6,
+        "verifier_ids": [
+          "P0-VR-29"
+        ]
+      },
+      {
+        "claim": "An interrupted state transition converges to one validated receipt-derived contract and checklist projection before another operation runs.",
+        "depends_on": [
+          "P0-REQ-29",
+          "P0-REQ-30"
+        ],
+        "gate": {
+          "kind": "test",
+          "target": "P0-VR-30"
+        },
+        "id": "P0-REQ-31",
+        "order": 31,
+        "pair_block_ids": [
+          "P0-PB-10G"
+        ],
+        "phase": 6,
+        "verifier_ids": [
+          "P0-VR-30"
+        ]
+      },
+      {
+        "claim": "Generated review links encode valid Markdown destinations and each displayed lifecycle command identifies the controlling repository.",
+        "depends_on": [
+          "P0-REQ-25"
+        ],
+        "gate": {
+          "kind": "test",
+          "target": "P0-VR-31"
+        },
+        "id": "P0-REQ-32",
+        "order": 32,
+        "pair_block_ids": [
+          "P0-PB-10H"
+        ],
+        "phase": 6,
+        "verifier_ids": [
+          "P0-VR-31"
+        ]
+      },
+      {
+        "claim": "A manifest-native PairBlock derives its waiting state from every declared dependency, including a dependency retained in the legacy checklist.",
+        "depends_on": [
+          "P0-REQ-32"
+        ],
+        "gate": {
+          "kind": "test",
+          "target": "P0-VR-32"
+        },
+        "id": "P0-REQ-33",
+        "order": 33,
+        "pair_block_ids": [
+          "P0-PB-10I"
+        ],
+        "phase": 6,
+        "verifier_ids": [
+          "P0-VR-32"
+        ]
+      },
+      {
+        "claim": "A legacy certification accepts only the profile-declared terminal Phase 0 registration artifact and its exact byte identity.",
+        "depends_on": [
+          "P0-REQ-25"
+        ],
+        "gate": {
+          "kind": "test",
+          "target": "P0-VR-33"
+        },
+        "id": "P0-REQ-34",
+        "order": 34,
+        "pair_block_ids": [
+          "P0-PB-10J"
+        ],
+        "phase": 6,
+        "verifier_ids": [
+          "P0-VR-33"
+        ]
+      }
+    ],
+    "schema_version": 1,
+    "verifiers": [
+      {
+        "conditions": [
+          "The lifecycle policy assigns one evidence rule to every executable event.",
+          "The controller validates the evidence rule before it writes a receipt."
+        ],
+        "id": "P0-VR-27",
+        "rejection_cases": [
+          "Approve with test evidence.",
+          "Accept with unrelated external text.",
+          "Register with an arbitrary command."
+        ],
+        "requirement_ids": [
+          "P0-REQ-28"
+        ],
+        "success_case": "Approve, accept, and register each advance with the evidence assigned to that event."
+      },
+      {
+        "conditions": [
+          "Native receipts reject unknown fields and invalid nested values.",
+          "Gate receipts recompute the command, output, declaration, manifest, drift, and predecessor relationships.",
+          "Receipts name both the declaration repository and the implementation repository when they differ."
+        ],
+        "id": "P0-VR-28",
+        "rejection_cases": [
+          "Replace the executed command or its digest.",
+          "Remove the captured execution identities.",
+          "Record the controller repository as the implementation repository."
+        ],
+        "requirement_ids": [
+          "P0-REQ-29"
+        ],
+        "success_case": "An unchanged receipt produced by the declared gate advances its PairBlock."
+      },
+      {
+        "conditions": [
+          "plan-revision persists the candidate declaration digest and computed change.",
+          "revise requires that exact plan and rejects a different candidate manifest.",
+          "Live manifests and accepted snapshots share one exact schema-version check."
+        ],
+        "id": "P0-VR-29",
+        "rejection_cases": [
+          "Change the candidate after planning.",
+          "Load schema version 0, 2, or true from either declaration source."
+        ],
+        "requirement_ids": [
+          "P0-REQ-30"
+        ],
+        "success_case": "Accept the unchanged candidate named by a persisted reviewed plan."
+      },
+      {
+        "conditions": [
+          "The controller writes a recoverable prepared record before changing receipt-derived projections.",
+          "A successful operation publishes its authoritative receipt after both projection files match the prepared bytes and the semantic validator accepts them.",
+          "The next controller invocation completes an interrupted prepared transition idempotently."
+        ],
+        "id": "P0-VR-30",
+        "rejection_cases": [
+          "A receipt advances state while either rendered document still shows the predecessor.",
+          "A retry rejects its own partially written projection."
+        ],
+        "requirement_ids": [
+          "P0-REQ-31"
+        ],
+        "success_case": "Interrupt after each persistent write, retry, and obtain the same receipt, contract, and checklist bytes as an uninterrupted run."
+      },
+      {
+        "conditions": [
+          "Links escape Markdown control characters while preserving repository-relative targets and fragments.",
+          "Each generated transition command begins in the controlling repository."
+        ],
+        "id": "P0-VR-31",
+        "rejection_cases": [
+          "A rendered link resolves to a different file or fragment.",
+          "A copied transition command depends on the operator's current directory."
+        ],
+        "requirement_ids": [
+          "P0-REQ-32"
+        ],
+        "success_case": "Render and resolve paths containing spaces, parentheses, a number sign, and a table delimiter."
+      },
+      {
+        "conditions": [
+          "Waiting-state derivation combines receipt-derived native statuses with parsed legacy statuses.",
+          "An unresolved dependency produces the same displayed state and gate rejection regardless of declaration origin.",
+          "The render command regenerates both human views from accepted declarations and receipts without changing lifecycle state."
+        ],
+        "id": "P0-VR-32",
+        "rejection_cases": [
+          "Display a native block as Drafting while its legacy dependency remains in Review.",
+          "Execute a native gate before its legacy dependency reaches Applied or Complete."
+        ],
+        "requirement_ids": [
+          "P0-REQ-33"
+        ],
+        "success_case": "Render a native block as waiting while its legacy dependency remains unresolved."
+      },
+      {
+        "conditions": [
+          "A profile that enables legacy certification declares one repository-relative terminal artifact path.",
+          "The certification transition rejects every other artifact even when that artifact's SHA-256 is valid.",
+          "Completion validation rechecks both the declared artifact path and its byte identity."
+        ],
+        "id": "P0-VR-33",
+        "rejection_cases": [
+          "Certify with a different repository artifact and its valid SHA-256.",
+          "Change the configured terminal artifact after certification."
+        ],
+        "requirement_ids": [
+          "P0-REQ-34"
+        ],
+        "success_case": "Certify a named legacy PairBlock with evidence/phase0/rico/phase0_registration_receipt.json and that file's SHA-256."
+      }
+    ]
+  },
+  "affected_pair_blocks": [
+    "P0-PB-10J"
+  ],
+  "after_sha256": "44168be61898b37f864afc5195caa940699913ce7a4765493427d5d442224ee2",
+  "approval": {
+    "kind": "external",
+    "revision": "explicit-approval:p0-req-34:p0-pb-10j",
+    "target": "User approval in the Codex task"
+  },
+  "before_sha256": "f8410b5c3258f20b4bbd262721ae19a692fd8b449b6248057a838321e2067ba1",
+  "event": "revise",
+  "previous_receipt": "evidence/declaration-revisions/20260913T060909.182434Z-revise.json",
+  "recorded_at": "2026-09-13T06:17:14.923470+00:00",
+  "records": [
+    {
+      "after_sha256": "7530586fb56106ba65b9f502147a0fec2864044c301f03514cabe9642dca3bf8",
+      "before_sha256": null,
+      "record": "pair_block:P0-PB-10J"
+    },
+    {
+      "after_sha256": "741693f69cf652eb0e2d25dd315fd4ce11712c35840a2591f195a433ad0e065b",
+      "before_sha256": null,
+      "record": "requirement:P0-REQ-34"
+    },
+    {
+      "after_sha256": "26a1c6cdcf49e7c9effda9d127f2ea34a2f9100e3da9681ae8cf80c72d259290",
+      "before_sha256": null,
+      "record": "verifier:P0-VR-33"
+    }
+  ],
+  "result": "applied",
+  "reviewed_plan": "evidence/declaration-plans/20260913T061615.122313Z.json",
+  "reviewed_plan_sha256": "193bdd47a479a19188e3b5796db8b44ef361f3a5470e9337e6c26d0a84a63aa8",
+  "schema_version": 1,
+  "superseded_receipt_heads": {}
+}

@@ -2148,6 +2148,10 @@ accepted manifest digests, both versions of each changed record digest, the
 affected blocks, the approval reference, and each superseded receipt head.
 Affected blocks return to `Drafting`; their transitive dependents return to a
 waiting state. Unaffected blocks retain their receipts and lifecycle states.
+Before acceptance, superseded uncommitted revision plans may be discarded so
+one final reviewed plan and one acceptance receipt describe the declaration.
+Every completed code-review pass remains preserved by its own Git commit,
+including a pass whose verdict requires further changes.
 
 **Declaration record:** `docs/contracts/mantra-rebuild.declarations.toml` will
 store these fields:
@@ -2613,6 +2617,40 @@ PYTHONPATH=. /bin/zsh -e -c 'python -m pyright tools/pairblock_status/pairblock_
 ```bash
 cd /Users/machina/Developer/ChatGPT/RICO
 python -m tools.pairblock_status.pairblock_controller advance P0-PB-10I register --evidence-kind KIND --evidence-target TARGET --evidence-revision REVISION
+```
+
+#### Manifest-native block P0-PB-10J
+
+**Status:** Drafting
+
+**Requirements:**
+
+- `P0-REQ-34`: A legacy certification accepts only the profile-declared terminal Phase 0 registration artifact and its exact byte identity.
+
+**Verifier conditions:**
+
+- `P0-VR-33`: A profile that enables legacy certification declares one repository-relative terminal artifact path.
+- `P0-VR-33`: The certification transition rejects every other artifact even when that artifact's SHA-256 is valid.
+- `P0-VR-33`: Completion validation rechecks both the declared artifact path and its byte identity.
+
+**Dependencies:** `P0-PB-10G`, `P0-PB-10I`
+
+**Implementation:** [profile.py](../../tools/pairblock_status/profile.py) · [pairblock_controller.py](../../tools/pairblock_status/pairblock_controller.py) · [checklist_profile.py](../../tools/pairblock_status/checklist_profile.py) · [conftest.py](../../tests/pairblock_status/conftest.py) · [test_pairblock_controller.py](../../tests/pairblock_status/test_pairblock_controller.py)
+
+**Current receipt:** None
+
+**Gate:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/RICO
+PYTHONPATH=. /bin/zsh -e -c 'python -m pyright tools/pairblock_status/profile.py tools/pairblock_status/pairblock_controller.py tools/pairblock_status/checklist_profile.py tests/pairblock_status/conftest.py tests/pairblock_status/test_pairblock_controller.py && python -m pytest tests/pairblock_status/test_pairblock_controller.py -q && python -m ruff format --check tools/pairblock_status/profile.py tools/pairblock_status/pairblock_controller.py tools/pairblock_status/checklist_profile.py tests/pairblock_status/conftest.py tests/pairblock_status/test_pairblock_controller.py && python -m ruff check tools/pairblock_status/profile.py tools/pairblock_status/pairblock_controller.py tools/pairblock_status/checklist_profile.py tests/pairblock_status/conftest.py tests/pairblock_status/test_pairblock_controller.py'
+```
+
+**Next transition:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/RICO
+python -m tools.pairblock_status.pairblock_controller gate P0-PB-10J
 ```
 <!-- generated:manifest-native-contract:end -->
 
