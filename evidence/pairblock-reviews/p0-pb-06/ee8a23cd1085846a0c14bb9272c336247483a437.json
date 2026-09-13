@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-06",
+  "requirement_ids": ["P0-REQ-04", "P0-REQ-05", "P0-REQ-06"],
+  "repository": "https://github.com/pvd232/MANTRA.git",
+  "base_commit": "4d13d7de30c14a9462cf3cddef339375e238a6e6",
+  "result_commit": "ee8a23cd1085846a0c14bb9272c336247483a437",
+  "owned_paths": [
+    "src/mantra/rebuild/tests/test_viper_restore.py",
+    "src/mantra/rebuild/viper_restore.py"
+  ],
+  "diff_sha256": "116306ac60a3a856039108b24434abe56865118b74537c29e47bf064e90032f6",
+  "invariants": [
+    "The control stage authenticates the signed package and resolves all 27 RestorationBinding records.",
+    "The import stage declares all 27 restored disk files as inputs and publishes one named output per binding.",
+    "Each source and output matches the binding byte count and SHA-256.",
+    "The capacity check runs before VIPER captures a disk input and the retained stage receipt repeats the same calculation.",
+    "The archive plan remains available as the identity-checked recovery route."
+  ],
+  "findings": [
+    {
+      "severity": "P1",
+      "counterexample": "The initial tests changed binding metadata but never changed a preserved-disk file.",
+      "repair": "Add a source-identity counterexample that reaches the byte check and proves copying never starts.",
+      "status": "repaired",
+      "observing_test": "src/mantra/rebuild/tests/test_viper_restore.py::test_changed_disk_file_stops_before_copy"
+    }
+  ],
+  "mechanical_evidence": {
+    "focused_command": "python -m pytest src/mantra/rebuild/tests/test_viper_restore.py -q",
+    "focused_result": "10 passed",
+    "ruff": "passed",
+    "git_diff_check": "passed",
+    "upstream_match": "passed"
+  },
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-13T00:24:00Z"
+}

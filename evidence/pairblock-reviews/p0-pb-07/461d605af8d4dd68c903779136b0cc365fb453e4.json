@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-07",
+  "requirement_ids": ["P0-REQ-07"],
+  "repository": "https://github.com/pvd232/MANTRA.git",
+  "base_commit": "ee8a23cd1085846a0c14bb9272c336247483a437",
+  "result_commit": "461d605af8d4dd68c903779136b0cc365fb453e4",
+  "owned_paths": [
+    "src/mantra/rebuild/hopfield_replay.py",
+    "src/mantra/rebuild/tests/test_hopfield_replay.py"
+  ],
+  "diff_sha256": "bedf4fec6178f51ac51edc748015def9ff17ec1c32c2d2b32d425f2865834f89",
+  "invariants": [
+    "Each Hopfield input covered by a restoration binding selects the corresponding P0-PB-06 output.",
+    "Present tracked Hopfield inputs remain exact repository inputs.",
+    "Hold truth reaches evaluation through the same restoration run used by prediction.",
+    "The experiment identity binds the MANTRA source commit and restoration run SHA-256."
+  ],
+  "findings": [],
+  "mechanical_evidence": {
+    "focused_command": "python -m pytest src/mantra/rebuild/tests/test_hopfield_replay.py -q",
+    "focused_result": "6 passed",
+    "ruff": "passed",
+    "git_diff_check": "passed",
+    "upstream_match": "passed"
+  },
+  "findings_status": "none unresolved",
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-13T00:24:00Z"
+}

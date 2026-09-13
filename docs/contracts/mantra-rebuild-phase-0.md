@@ -47,6 +47,7 @@ The [Mantra rebuild master checklist](../checklists/mantra-rebuild.md) owns exec
 | `P0-REQ-15` | Permit a governed stage to open the operating system's null device without treating it as a data input or persisted output. | [`P0-PB-05F`](#p0-pb-05f) |
 | `P0-REQ-16` | Keep the exact workspace module objects loaded with a frozen stage callable available while that callable executes. | [`P0-PB-05G`](#p0-pb-05g) |
 | `P0-REQ-17` | Permit governed reads of exact Python source files present in the run's frozen Git commit without treating those files as data inputs. | [`P0-PB-05H`](#p0-pb-05h) |
+| `P0-REQ-18` | Publish the final failed attempt after result verification rejects a provisional successful attempt. | [`P0-PB-05I`](#p0-pb-05i) |
 
 ## 2. Required claim
 
@@ -281,12 +282,13 @@ The dependency graph, restoration bindings, environment receipt, capacity receip
 | `P0-VR-14` | A stage using `file_access="declared"` may read from or write to the exact path returned by `os.devnull`. The observer excludes that path from retained data-access evidence and continues to reject every other undeclared device path. | [`P0-PB-05F`](#p0-pb-05f) |
 | `P0-VR-15` | The stage loader retains the exact workspace module objects imported with the frozen callable. The worker exposes those objects through `sys.modules` only during invocation and restores every prior entry afterward. Runtime module lookup resolves without reopening repository source or bytecode. | [`P0-PB-05G`](#p0-pb-05g) |
 | `P0-VR-16` | Before governed access begins, the worker derives the exact tracked `.py` paths from the frozen source commit. The observer permits those source reads without recording data-access evidence, while an untracked Python file and a tracked non-Python file remain undeclared reads. | [`P0-PB-05H`](#p0-pb-05h) |
+| `P0-VR-17` | A result-verification failure writes one failed `resolved.yaml` whose failure message preserves the verification error. | [`P0-PB-05I`](#p0-pb-05i) |
 
 ## 8. Acceptance boundary
 
 ### Success
 
-Phase 0 passes when `P0-VR-01` through `P0-VR-16` pass, every required provenance record exists in VIPER, the user reviews the complete evidence set, and the repository contains a synced commit recording the approved contract and Phase 0 receipts.
+Phase 0 passes when `P0-VR-01` through `P0-VR-17` pass, every required provenance record exists in VIPER, the user reviews the complete evidence set, and the repository contains a synced commit recording the approved contract and Phase 0 receipts.
 
 ### Rejection
 
@@ -307,6 +309,7 @@ Phase 0 fails when $B$ contains an unnecessary node, omits a required node or ed
 | `P0-PB-05F` | VIPER null-device handling in governed stages | `P0-VR-14`. |
 | `P0-PB-05G` | VIPER workspace-module activation during stage invocation | `P0-VR-15`. |
 | `P0-PB-05H` | VIPER frozen-source reads during governed stage invocation | `P0-VR-16`. |
+| `P0-PB-05I` | VIPER failed-attempt finalization after result verification | `P0-VR-17`. |
 | `P0-PB-06` | Verified restoration and graph-completeness rejection test | `P0-VR-04` and `P0-VR-06`. |
 | `P0-PB-07` | Hopfield VIPER adapter, focused test, and historical raw-gene readout replay | `P0-VR-07`. |
 | `P0-PB-08` | v1952 MIL seed-123460 `without_control` replay | `P0-VR-08`. |
@@ -335,9 +338,10 @@ Resolution status lives in the [master checklist](../checklists/mantra-rebuild.m
 | [`P0-PB-05F`](../checklists/mantra-rebuild.md#pairblock-resolution) | Exclude the operating system's null device from governed data-access evidence. | Codex implements and independently reviews the VIPER change. | [Observer](../../../viper/src/viper/_workers/file_access.py) · [Tests](../../../viper/tests/test_stage_file_access.py) | `P0-VR-14` |
 | [`P0-PB-05G`](../checklists/mantra-rebuild.md#pairblock-resolution) | Preserve the frozen callable's workspace modules during invocation. | Codex implements and independently reviews the VIPER change. | [Loader](../../../viper/src/viper/stages.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Tests](../../../viper/tests/test_stage_invocation.py) | `P0-VR-15` |
 | [`P0-PB-05H`](../checklists/mantra-rebuild.md#pairblock-resolution) | Permit reads of Python source captured by the run's frozen Git commit. | Codex implements and independently reviews the VIPER change. | [Observer](../../../viper/src/viper/_workers/file_access.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Tests](../../../viper/tests/test_stage_file_access.py) | `P0-VR-16` |
-| [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | Import the 27 restored disk files and verify graph $B$. | Codex implements, runs, and independently reviews each bounded commit. | [Bindings](../../../mantra/src/mantra/rebuild/restoration.py) · [VIPER workflow](../../../mantra/src/mantra/rebuild/viper_restore.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests) | `P0-VR-04`, `P0-VR-06`, and `P0-REQ-13` |
-| [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay Hopfield. | Codex implemented and independently reviewed the final MANTRA source through `42e1f7b16ff6787e80bcdf71bca11674ba7a4b6e`. | [Source](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py) · [Review](../../evidence/pairblock-reviews/p0-pb-07/42e1f7b16ff6787e80bcdf71bca11674ba7a4b6e.json) | `P0-VR-07` |
-| [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay standalone MIL application. | Codex implemented and independently reviewed the final MANTRA source through `0a3b62d8dc3a6ede768fff499ebc0a80f3cc2128`. | [Source](../../../mantra/src/mantra/rebuild/mil_replay.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py) · [Review](../../evidence/pairblock-reviews/p0-pb-08/0a3b62d8dc3a6ede768fff499ebc0a80f3cc2128.json) | `P0-VR-08` |
+| [`P0-PB-05I`](../checklists/mantra-rebuild.md#pairblock-resolution) | Finalize a failed attempt after result verification rejects it. | Codex implements and independently reviews the VIPER change. | [Attempt execution](../../../viper/src/viper/execution/_attempt.py) · [Publication](../../../viper/src/viper/execution/_publication.py) · [Tests](../../../viper/tests/test_run_execution.py) | `P0-VR-17` |
+| [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | Import the 27 restored disk files and verify graph $B$. | Codex implemented and independently reviewed MANTRA through `ee8a23cd1085846a0c14bb9272c336247483a437`. | [Bindings](../../../mantra/src/mantra/rebuild/restoration.py) · [VIPER workflow](../../../mantra/src/mantra/rebuild/viper_restore.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_viper_restore.py) · [Review](../../evidence/pairblock-reviews/p0-pb-06/ee8a23cd1085846a0c14bb9272c336247483a437.json) | `P0-VR-04`, `P0-VR-06`, and `P0-REQ-13` |
+| [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay Hopfield. | Codex independently reviewed the restoration-run linkage through `461d605af8d4dd68c903779136b0cc365fb453e4`. | [Source](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py) · [Review](../../evidence/pairblock-reviews/p0-pb-07/461d605af8d4dd68c903779136b0cc365fb453e4.json) | `P0-VR-07` |
+| [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay standalone MIL application. | Codex independently reviewed the restoration-run linkage through `5e822ffa289d58092a2a6b9edc5799b477e44eee`. | [Source](../../../mantra/src/mantra/rebuild/mil_replay.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py) · [Review](../../evidence/pairblock-reviews/p0-pb-08/5e822ffa289d58092a2a6b9edc5799b477e44eee.json) | `P0-VR-08` |
 | [`P0-PB-09`](../checklists/mantra-rebuild.md#pairblock-resolution) | Freeze evidence and assess VIPER. | Codex implemented and independently reviewed RICO commit `64964135`. | [Source](../../tools/freeze_phase0.py) · [Tests](../../tests/test_freeze_phase0.py) · [Review](../../evidence/pairblock-reviews/p0-pb-09/64964135b66a4706501d9e768527241941397566.json) | `P0-VR-09` |
 | [`P0-PB-09A`](../checklists/mantra-rebuild.md#pairblock-resolution) | Register and verify the frozen evidence through VIPER. | Codex implemented and independently reviewed RICO commits `428a2506` and `b2f1d3fb`; the real run supplies completion evidence. | [Source](../../tools/register_phase0.py) · [Tests](../../tests/test_register_phase0.py) · [Review](../../evidence/pairblock-reviews/p0-pb-09a/b2f1d3fb8574bde0aef19bb8c90627ba8cac6f7e.json) | `P0-VR-09` |
 | [`P0-PB-10`](../checklists/mantra-rebuild.md#pairblock-resolution) | Validate PairBlock traceability and retain each tested-code or externally reviewed non-code lifecycle transition. | RICO owns the active controller; the user reviews lifecycle changes. | [Active source and tests](#p0-pb-10-accepted-implementation) | `P0-VR-10` |
@@ -461,6 +465,13 @@ Derive the exact tracked Python paths from the run's frozen Git source before
 governed access begins. Permit those implementation reads while retaining the
 declared data boundary for every untracked path and tracked non-Python file.
 [Review the implementation and gate](#p0-pb-05h-proposed-code).
+
+#### P0-PB-05I
+
+When result verification rejects an attempt that completed its stages, publish
+the failed attempt at `attempts/<id>/resolved.yaml` and preserve the original
+verification message in `AttemptFailure.message`. [Review the implementation
+and gate](#p0-pb-05i-proposed-code).
 
 #### P0-PB-06
 
@@ -790,9 +801,10 @@ choices.
 | [`P0-PB-05F`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Observer](../../../viper/src/viper/_workers/file_access.py) · [Tests](../../../viper/tests/test_stage_file_access.py) · [Gate](#p0-pb-05f-proposed-code) |
 | [`P0-PB-05G`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Loader](../../../viper/src/viper/stages.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Tests](../../../viper/tests/test_stage_invocation.py) · [Gate](#p0-pb-05g-proposed-code) |
 | [`P0-PB-05H`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Observer](../../../viper/src/viper/_workers/file_access.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Tests](../../../viper/tests/test_stage_file_access.py) · [Gate](#p0-pb-05h-proposed-code) |
-| [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Bindings](../../../mantra/src/mantra/rebuild/restoration.py) · [Extraction](../../../mantra/src/mantra/rebuild/archive_restore.py) · [VIPER workflow](../../../mantra/src/mantra/rebuild/viper_restore.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests) · [Gate](#p0-pb-06-proposed-code) · [Review receipt](../../evidence/pairblock-reviews/p0-pb-06/75e7ce38dc85918c1f593886f20ed33601daa288.json) |
-| [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py) · [Gate](#p0-pb-07-accepted-implementation) · [Review](../../evidence/pairblock-reviews/p0-pb-07/42e1f7b16ff6787e80bcdf71bca11674ba7a4b6e.json) |
-| [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/src/mantra/rebuild/mil_replay.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py) · [Gate](#p0-pb-08-accepted-implementation) · [Review](../../evidence/pairblock-reviews/p0-pb-08/0a3b62d8dc3a6ede768fff499ebc0a80f3cc2128.json) |
+| [`P0-PB-05I`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Attempt](../../../viper/src/viper/execution/_attempt.py) · [Publication](../../../viper/src/viper/execution/_publication.py) · [Tests](../../../viper/tests/test_run_execution.py) · [Gate](#p0-pb-05i-proposed-code) |
+| [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Bindings](../../../mantra/src/mantra/rebuild/restoration.py) · [VIPER workflow](../../../mantra/src/mantra/rebuild/viper_restore.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_viper_restore.py) · [Gate](#p0-pb-06-proposed-code) · [Review](../../evidence/pairblock-reviews/p0-pb-06/ee8a23cd1085846a0c14bb9272c336247483a437.json) |
+| [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py) · [Gate](#p0-pb-07-accepted-implementation) · [Review](../../evidence/pairblock-reviews/p0-pb-07/461d605af8d4dd68c903779136b0cc365fb453e4.json) |
+| [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/src/mantra/rebuild/mil_replay.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py) · [Gate](#p0-pb-08-accepted-implementation) · [Review](../../evidence/pairblock-reviews/p0-pb-08/5e822ffa289d58092a2a6b9edc5799b477e44eee.json) |
 | [`P0-PB-09`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../tools/freeze_phase0.py) · [Tests](../../tests/test_freeze_phase0.py) · [Gate](#p0-pb-09-accepted-implementation) · [Review](../../evidence/pairblock-reviews/p0-pb-09/64964135b66a4706501d9e768527241941397566.json) |
 | [`P0-PB-09A`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../tools/register_phase0.py) · [Tests](../../tests/test_register_phase0.py) · [Gate](#p0-pb-09a-accepted-implementation) · [Review](../../evidence/pairblock-reviews/p0-pb-09a/b2f1d3fb8574bde0aef19bb8c90627ba8cac6f7e.json) |
 | [`P0-PB-10`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Active implementation](#p0-pb-10-accepted-implementation) |
@@ -1366,6 +1378,54 @@ runs under declared access without a repository source-read rejection.
 **Stop condition:** Reject the patch if it permits every `.py` path, permits a
 tracked non-Python path, lets a source read satisfy a data input, invokes Git
 after the observer is active, or requires a new stage-author setting.
+
+### P0-PB-05I implementation record
+
+**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
+
+**Requirement:** Finalize a failed attempt when `verify_run_result()` rejects
+the provisional successful attempt document.
+
+**Dependency:** None. The observed failure occurred during `P0-PB-06` artifact
+verification.
+
+##### `P0-PB-05I` proposed code
+
+**Code boundary:** [attempt execution](../../../viper/src/viper/execution/_attempt.py),
+[attempt publication](../../../viper/src/viper/execution/_publication.py), and
+[execution tests](../../../viper/tests/test_run_execution.py).
+
+**Implementation requirements:** `write_attempt_document()` retains its
+immutable-write behavior for ordinary publication. The exception path replaces
+the provisional local attempt document atomically, publishes the failed bytes,
+and returns the failed attempt reference. `AttemptFailure.code` remains
+`verification_failed`, and `AttemptFailure.message` retains the originating
+`VerificationError`. Successful runs keep their existing publication path.
+
+**Runtime and workflow effect:** Successful runs execute the same operations.
+A verification failure performs one atomic local replacement and publishes the
+failed attempt bytes. Stage authors add no setting or command.
+
+**Focused check:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/viper
+source .venv/bin/activate
+python -m ruff check \
+  src/viper/execution/_attempt.py \
+  src/viper/execution/_publication.py \
+  tests/test_run_execution.py
+python -m pytest \
+  tests/test_run_execution.py::test_result_verification_failure_finalizes_failed_attempt -q
+```
+
+**Gate:** The focused test forces `verify_run_result()` to reject a provisional
+successful attempt, then proves the terminal run and canonical attempt both
+record `failed`, `verification_failed`, and the original verification message.
+
+**Stop condition:** Reject the patch if it changes successful publication,
+overwrites a terminal attempt from another execution, or replaces the original
+verification message.
 
 ### P0-PB-06 implementation record
 

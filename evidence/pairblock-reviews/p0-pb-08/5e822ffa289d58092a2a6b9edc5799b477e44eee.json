@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-08",
+  "requirement_ids": ["P0-REQ-08"],
+  "repository": "https://github.com/pvd232/MANTRA.git",
+  "base_commit": "461d605af8d4dd68c903779136b0cc365fb453e4",
+  "result_commit": "5e822ffa289d58092a2a6b9edc5799b477e44eee",
+  "owned_paths": [
+    "src/mantra/rebuild/mil_replay.py",
+    "src/mantra/rebuild/tests/test_mil_replay.py"
+  ],
+  "diff_sha256": "68bb13e47467b80825e898276c5bcc26f0a2b2bcc4f20a9b7f322564d5e96a51",
+  "invariants": [
+    "All 15 standalone MIL compute inputs select outputs from one P0-PB-06 restoration run.",
+    "All four MIL parity inputs select outputs from the same restoration run.",
+    "The application and evaluation stages retain their direct output edges.",
+    "The experiment identity binds the MANTRA source commit and restoration run SHA-256."
+  ],
+  "findings": [],
+  "mechanical_evidence": {
+    "focused_command": "python -m pytest src/mantra/rebuild/tests/test_mil_replay.py -q",
+    "focused_result": "8 passed",
+    "ruff": "passed",
+    "git_diff_check": "passed",
+    "upstream_match": "passed"
+  },
+  "findings_status": "none unresolved",
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-13T00:24:00Z"
+}
