@@ -178,11 +178,11 @@ applies only to branches and worktrees created for this rebuild.
 | MIL reconstruction contract | Pending | Phase 2A | User-approved contract with exact intermediate and final parity gates. |
 | Graph encoder contract | Design complete; contract pending | Phase 3A | User-approved contract covering identity, topology, features, training, evaluation, and VIPER evidence. |
 
-The checklist uses the Phase 0 contract stored in RICO commit `d0f2d07` with
+The checklist uses the Phase 0 contract stored in RICO commit `929a1d2` with
 SHA-256
-`40f1396fc531acaabe61957ca182ad2ab5af4e45d2fa157e526ee5bf307189de`.
+`ca016cf7ba2f5a1c4ee88cc42c1bad3127124a256288c19710ef12fd5c5fc94c`.
 
-<!-- contract-baseline: P0 path=docs/contracts/mantra-rebuild-phase-0.md revision=d0f2d07 sha256=40f1396fc531acaabe61957ca182ad2ab5af4e45d2fa157e526ee5bf307189de -->
+<!-- contract-baseline: P0 path=docs/contracts/mantra-rebuild-phase-0.md revision=929a1d2 sha256=ca016cf7ba2f5a1c4ee88cc42c1bad3127124a256288c19710ef12fd5c5fc94c -->
 
 ## Verified baseline
 
