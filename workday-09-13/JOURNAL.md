@@ -220,3 +220,24 @@ adds only the new cache, materialization, restoration, and release facts.
 VIPER commit `d3b95a6` adds the final release receipt and publication links. The
 receipt records the signed tag, CI and publication runs, distribution identities,
 registry checks, and installed-package acceptance.
+
+## Local 0.1.0a5 identity cleanup
+
+VIPER commit `44c9fd2` defines `viper.references.FileIdentity` as the shared
+SHA-256 and byte-count base for resolved, snapshot, and reuse file references.
+MANTRA commit `181e29768` removes its two duplicate identity classes and uses
+the VIPER type in restoration and Hopfield replay code. The historical
+restoration JSON schema still writes `byte_count`; `RestorationBinding` owns the
+translation to and from `FileIdentity.bytes`.
+
+`P0-REQ-37` traces the change through `P0-PB-05R` and `P0-PB-07B`. Their
+focused gates passed 60 tests plus five subtests in VIPER and 84 tests in
+MANTRA, with clean Pyright and Ruff results. Both blocks are Applied. Their
+remaining `register` transition requires new VIPER provenance for these commits;
+the earlier Phase 0 terminal registration cannot support that claim.
+
+The discriminated lifecycle-evidence union remains deferred. Current lifecycle
+events consume approval and artifact evidence, while test and command execution
+has a separate gate-receipt schema. Combining them now would require new receipt
+semantics, schema migration, CLI adaptation, and global-manifest mapping without
+an active caller that benefits from typed dispatch.

@@ -1,0 +1,22 @@
+{
+  "checklist_before_sha256": "96e1b281a266ae9e9cbe7bd9c2d723edd29bed34830f7930fcf59b40b2180dea",
+  "checklist_written_sha256": "8e5fcad71619f8d6c6fd41fd7b7c9f6dbb7bd2c4610c09f061dcc1917b83dae1",
+  "declaration_repository_head": "463a6ab41fdd13c516ae32f5bdcbb8793e8e8a45",
+  "declaration_sha256": "7ae0399a8bb8720d8fc77f71650dd23a1ce75b5dfe96c3bedc27feb79674b206",
+  "event": "accept",
+  "evidence": {
+    "kind": "artifact",
+    "revision": "69dc78c3301f836f772aa232fe8a16db1bcfa6768a931b162eeb61d229746868",
+    "target": "evidence/pairblock-reviews/p0-pb-07b/181e29768320a0d8f809428655972431e957d1c5.json"
+  },
+  "implementation_repository_head": "181e29768320a0d8f809428655972431e957d1c5",
+  "pair_block_fingerprint": "3970bf0b77a91262b21c6566280bf36e2a80beca8801c03c5ef84d149b970a95",
+  "pair_block_id": "P0-PB-07B",
+  "previous_receipt": "evidence/pairblock-lifecycle/p0-pb-07b/20260913T163043.359816Z-approve.json",
+  "recorded_at": "2026-09-13T16:30:50.199539+00:00",
+  "repository_head": "463a6ab41fdd13c516ae32f5bdcbb8793e8e8a45",
+  "result": "applied",
+  "schema_version": 3,
+  "status_after": "Applied",
+  "status_before": "Approved"
+}

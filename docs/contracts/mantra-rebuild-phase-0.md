@@ -2472,7 +2472,7 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 /bin/zsh -e -c 'python -m pyright src/viper/out
 
 #### Manifest-native block P0-PB-05R
 
-**Status:** Drafting
+**Status:** Applied
 
 **Requirements:**
 
@@ -2489,7 +2489,7 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 /bin/zsh -e -c 'python -m pyright src/viper/out
 
 **Implementation:** [references.py](../../../viper/src/viper/references.py) · [reuse.py](../../../viper/src/viper/reuse.py) · [test_protocol.py](../../../viper/tests/test_protocol.py) · [test_public_api.py](../../../viper/tests/test_public_api.py)
 
-**Current receipt:** None
+**Current receipt:** [receipt](../../evidence/pairblock-lifecycle/p0-pb-05r/20260913T162946.636564Z-accept.json)
 
 **Gate:**
 
@@ -2502,7 +2502,7 @@ cd /Users/machina/Developer/ChatGPT/viper
 
 ```bash
 cd /Users/machina/Developer/ChatGPT/RICO
-python -m tools.pairblock_status.pairblock_controller gate P0-PB-05R
+python -m tools.pairblock_status.pairblock_controller advance P0-PB-05R register --evidence-kind KIND --evidence-target TARGET --evidence-revision REVISION
 ```
 
 #### Manifest-native block P0-PB-07A
@@ -2546,7 +2546,7 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONPATH=/Users/machina/Developer/ChatGPT/man
 
 #### Manifest-native block P0-PB-07B
 
-**Status:** Waiting for P0-PB-05R
+**Status:** Applied
 
 **Requirements:**
 
@@ -2563,7 +2563,7 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONPATH=/Users/machina/Developer/ChatGPT/man
 
 **Implementation:** [restoration.py](../../../mantra/src/mantra/rebuild/restoration.py) · [archive_plan.py](../../../mantra/src/mantra/rebuild/archive_plan.py) · [archive_restore.py](../../../mantra/src/mantra/rebuild/archive_restore.py) · [viper_restore.py](../../../mantra/src/mantra/rebuild/viper_restore.py) · [hopfield_replay.py](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [test_restoration.py](../../../mantra/src/mantra/rebuild/tests/test_restoration.py) · [test_control_resolution.py](../../../mantra/src/mantra/rebuild/tests/test_control_resolution.py) · [test_archive_plan.py](../../../mantra/src/mantra/rebuild/tests/test_archive_plan.py) · [test_archive_restore.py](../../../mantra/src/mantra/rebuild/tests/test_archive_restore.py) · [test_viper_restore.py](../../../mantra/src/mantra/rebuild/tests/test_viper_restore.py) · [test_hopfield_replay.py](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py)
 
-**Current receipt:** None
+**Current receipt:** [receipt](../../evidence/pairblock-lifecycle/p0-pb-07b/20260913T163050.199539Z-accept.json)
 
 **Gate:**
 
@@ -2575,7 +2575,8 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONPATH=/Users/machina/Developer/ChatGPT/man
 **Next transition:**
 
 ```bash
-# Waiting for a declared dependency.
+cd /Users/machina/Developer/ChatGPT/RICO
+python -m tools.pairblock_status.pairblock_controller advance P0-PB-07B register --evidence-kind KIND --evidence-target TARGET --evidence-revision REVISION
 ```
 
 #### Manifest-native block P0-PB-10D

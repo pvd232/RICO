@@ -1,0 +1,22 @@
+{
+  "checklist_before_sha256": "c0e5896ff6c8daa9240c566117dde61c4e2fc4a343f654bfac6bfbce45a630da",
+  "checklist_written_sha256": "96e1b281a266ae9e9cbe7bd9c2d723edd29bed34830f7930fcf59b40b2180dea",
+  "declaration_repository_head": "463a6ab41fdd13c516ae32f5bdcbb8793e8e8a45",
+  "declaration_sha256": "7ae0399a8bb8720d8fc77f71650dd23a1ce75b5dfe96c3bedc27feb79674b206",
+  "event": "approve",
+  "evidence": {
+    "kind": "external",
+    "revision": "2026-09-13T16:20:00Z",
+    "target": "User request in current Codex task to complete the local a5 FileIdentity change"
+  },
+  "implementation_repository_head": "181e29768320a0d8f809428655972431e957d1c5",
+  "pair_block_fingerprint": "3970bf0b77a91262b21c6566280bf36e2a80beca8801c03c5ef84d149b970a95",
+  "pair_block_id": "P0-PB-07B",
+  "previous_receipt": "evidence/pairblock-gates/p0-pb-07b/20260913T162957.484832Z.json",
+  "recorded_at": "2026-09-13T16:30:43.359816+00:00",
+  "repository_head": "463a6ab41fdd13c516ae32f5bdcbb8793e8e8a45",
+  "result": "applied",
+  "schema_version": 3,
+  "status_after": "Approved",
+  "status_before": "Review"
+}
