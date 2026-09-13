@@ -20,6 +20,7 @@ current status, review points, and completion evidence.
 - [Phase 0D: restoration and graph B](#phase-0d-restore-files-and-verify-graph-b-in-viper)
 - [Phase 0E: parity replays](#phase-0e-replay-hopfield-and-mil)
 - [Phase 0F: evidence freeze](#phase-0f-freeze-evidence-and-assess-viper)
+- [Phase 0G: structured PairBlock declarations](#phase-0g-introduce-structured-pairblock-declarations)
 - [Phase 1: Hopfield](#phase-1-rebuild-hopfield)
   - [1A: contract](#phase-1a-approve-the-hopfield-reconstruction-contract)
   - [1B: preprocessing](#phase-1b-rebuild-preprocessing-and-training-inputs)
@@ -42,11 +43,12 @@ current status, review points, and completion evidence.
 
 ## Current focus
 
-**Active tranche:** Phase 0 execution is complete. The terminal RICO-rooted
-VIPER run succeeded in 283.833269 seconds; its [run identity](../../evidence/phase0/rico/phase0_registration_run.json)
+**Active tranche:** The accepted Phase 0 restoration and replay evidence remains
+frozen. `P0-PB-10B` now introduces a structured origin for future requirements,
+verifiers, PairBlocks, paths, and gates before the Hopfield output-parity repair.
+The terminal RICO-rooted VIPER [run identity](../../evidence/phase0/rico/phase0_registration_run.json)
 and [registration receipt](../../evidence/phase0/rico/phase0_registration_receipt.json)
-bind the verified result. The resolution table owns each PairBlock's current
-lifecycle state. All Phase 0 PairBlocks and requirements are complete. The
+remain unchanged. The
 `certify` receipts for `P0-PB-01`, `P0-PB-04A`, `P0-PB-04B`, and `P0-PB-05A`
 preserve their pre-protocol records and bind their completion to the terminal
 Phase 0 artifact.
@@ -106,6 +108,7 @@ controls. The completed set contains 27 Hopfield and MIL destinations in
 | `P0-PB-09A` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-09a/20260913T023141.344319Z-register.json)) | Complete | `P0-PB-07`, `P0-PB-08`, `P0-PB-09` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-09a) | [Source](../../tools/register_phase0.py) · [Loader](../../tools/artifact_loaders.py) · [Tests](../../tests/test_register_phase0.py) · [Terminal receipt](../../evidence/phase0/rico/phase0_registration_receipt.json) |
 | `P0-PB-10` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-10/20260913T023140.710312Z-register.json)) | Complete | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-10) | [Controller](../../tools/pairblock_status/pairblock_controller.py) · [Tests](../../tests/pairblock_status/test_pairblock_controller.py) |
 | `P0-PB-10A` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-10a/20260913T024518.399844Z-register.json)) | Complete | `P0-PB-10` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-10a) | [Profile](../../tools/pairblock_status/profile.py) · [Controller](../../tools/pairblock_status/pairblock_controller.py) · [Validator](../../tools/pairblock_status/checklist_profile.py) · [Fixtures](../../tests/pairblock_status/conftest.py) · [Tests](../../tests/pairblock_status/test_pairblock_controller.py) |
+| `P0-PB-10B` | Pending | Drafting | `P0-PB-10A` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-10b) | [Target paths and gate](../contracts/mantra-rebuild-phase-0.md#p0-pb-10b) |
 
 ## Terminal outcome
 
@@ -170,7 +173,7 @@ applies only to branches and worktrees created for this rebuild.
 
 | Work unit | Current state | Owning phase | Completion evidence |
 |---|---|---|---|
-| [Phase 0 contract](../contracts/mantra-rebuild-phase-0.md) | Complete | Phase 0 | `P0-REQ-01` through `P0-REQ-25` and every mapped PairBlock close. |
+| [Phase 0 contract](../contracts/mantra-rebuild-phase-0.md) | In progress | Phase 0 | The accepted restoration and replay baseline remains closed; `P0-PB-10B` closes the structured-authoring maintenance requirement. |
 | Hopfield reconstruction contract | Pending | Phase 1A | User-approved contract with exact intermediate and final parity gates. |
 | MIL reconstruction contract | Pending | Phase 2A | User-approved contract with exact intermediate and final parity gates. |
 | Graph encoder contract | Design complete; contract pending | Phase 3A | User-approved contract covering identity, topology, features, training, evaluation, and VIPER evidence. |
@@ -222,6 +225,7 @@ This table schedules every requirement in the approved Phase 0 contract once.
 | `P0-REQ-23` | Complete | 0C | None | Import bindings do not cause domain widening when CodeQL already identifies the runtime callers. |
 | `P0-REQ-24` | Complete | 0C | None | Repository-owned stage process calls use the spawn-safe subprocess facade. |
 | `P0-REQ-25` | Complete | 0C | `P0-REQ-10` | A named pre-protocol PairBlock closes only from a reasoned certification receipt bound to the terminal Phase 0 artifact. |
+| `P0-REQ-27` | In progress | 0G | `P0-REQ-25` | Typed declarations and lifecycle receipts generate every machine and human surface for a newly authored PairBlock. |
 
 ## Phase 0A. Verify the MANTRA workspace and environment
 
@@ -420,6 +424,25 @@ Phase 0 requirements are complete.
 
 **Commit boundary:** Update the Phase 0 contract status and this checklist in
 RICO; record the closing RICO and MANTRA commit IDs in VIPER.
+
+## Phase 0G. Introduce structured PairBlock declarations
+
+**Depends on:** Phase 0F
+
+- [ ] Implement and review the typed declaration loader, deterministic Markdown
+      renderer, and controller ownership router in `P0-PB-10B`.
+      <!-- pair-block: P0-PB-10B -->
+      <!-- pair-block-contract: P0-PB-10B contract=docs/contracts/mantra-rebuild-phase-0.md -->
+
+**Gate:** `P0-VR-26` passes. The implementation accepts one manifest-native
+fixture through its full lifecycle, rejects every severed or duplicate
+connector before execution, reopens the exact affected closure after an
+approved declaration revision, preserves unaffected receipts, and leaves the
+completed legacy inventory on its current authority path.
+
+**Commit boundary:** Commit the reviewed declaration protocol, renderer,
+controller routing, tests, contract, and checklist as one RICO increment. Record
+its VIPER result before authoring `P0-PB-07A`.
 
 ## Phase 1. Rebuild Hopfield
 

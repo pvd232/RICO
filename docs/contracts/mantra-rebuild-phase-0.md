@@ -2,9 +2,9 @@
 
 ## 1. Status
 
-**Contract status:** Final
+**Contract status:** In progress
 
-**Approval state:** Approved
+**Approval state:** `P0-PB-10B` charter approved; implementation pending
 
 This contract governs artifact discovery, capacity planning, restoration, and provenance capture before the Hopfield or MIL rebuild begins. The model rebuild remains out of scope until every Phase 0 acceptance condition passes. The user actively reviews each PairBlock's scope, proposed work, observed result, and gate evidence before the next PairBlock begins.
 
@@ -55,6 +55,7 @@ The [Mantra rebuild master checklist](../checklists/mantra-rebuild.md) owns exec
 | `P0-REQ-23` | Exclude imported local names from a changed declaration's runtime-dependent one-hop callers. | [`P0-PB-05N`](#p0-pb-05n) |
 | `P0-REQ-24` | Route repository-owned stage-worker child processes through VIPER's spawn-safe subprocess facade. | [`P0-PB-05O`](#p0-pb-05o) |
 | `P0-REQ-25` | Certify a named legacy PairBlock from one retained terminal artifact while preserving its incomplete historical receipt chain and recording the reason for the exception. | [`P0-PB-10A`](#p0-pb-10a) |
+| `P0-REQ-27` | Author every post-bootstrap requirement, verifier, PairBlock, dependency, implementation path, and gate once in a typed declaration manifest; bind each accepted declaration revision to its affected PairBlocks; derive each state after `Drafting` from receipts; and render the human contract and checklist views from those records. | [`P0-PB-10B`](#p0-pb-10b) |
 
 ## 2. Required claim
 
@@ -265,6 +266,8 @@ flowchart TB
 | MIL replay receipt | Exact command, environment, input digests, output digests, metrics, tolerances, and comparison result. |
 | Cross-workspace assessment | The original failure, defect classification, repair revision, producer and consumer store identities, retrieved byte identity, and project rule. |
 | Stage file-access receipt | The repository-relative reads and writes observed while a stage runs with `file_access="declared"`. |
+| Project declaration manifest | Typed requirement, verifier, PairBlock, dependency, repository-relative path, and gate records for every manifest-native block. |
+| Declaration revision receipt | Previous and accepted manifest digests, changed record digests, affected PairBlock IDs, approval reference, and superseded receipt heads. |
 | VIPER usefulness ledger | Claimed check, real defect detected, independent confirmation, ordinary-test coverage, false alarms, infrastructure failures, time cost, and later reuse. |
 
 The dependency graph, restoration bindings, environment receipt, capacity receipt, restoration receipts, completeness report, both replay receipts, and usefulness ledger must themselves be registered in VIPER. Each checked-in evidence file requires a corresponding graph record.
@@ -297,16 +300,25 @@ The dependency graph, restoration bindings, environment receipt, capacity receip
 | `P0-VR-22` | An `imports` edge does not create an independent one-hop caller for its target. An import selected as the changed declaration still requires a reachable test or domain fallback. | [`P0-PB-05N`](#p0-pb-05n) |
 | `P0-VR-23` | The repository AST policy finds no direct standard-library `subprocess` import outside the facade and its own observer test; stage source inspection and file-access tests pass through the facade. | [`P0-PB-05O`](#p0-pb-05o) |
 | `P0-VR-24` | The `certify` event accepts only a PairBlock named by `ChecklistProfile.legacy_certifiable_pair_blocks`, requires `artifact` evidence and a nonempty reason, preserves any existing receipt link, and produces the same derived `Complete` state as an ordinary completion receipt. | [`P0-PB-10A`](#p0-pb-10a) |
+| `P0-VR-26` | For a manifest-native PairBlock, the declaration manifest is the only source for IDs, relationships, paths, gates, and the initial `Drafting` state; lifecycle receipts determine each later state; an accepted declaration revision reopens exactly the PairBlocks whose semantic fingerprints changed and their transitive dependents; deterministic rendering supplies every human link and command; validation rejects an unapproved declaration change, duplicate legacy ownership, a severed reference, receipt disagreement, or manual changes inside a generated region. | [`P0-PB-10B`](#p0-pb-10b) |
 
 ## 8. Acceptance boundary
 
 ### Success
 
-Phase 0 passes when `P0-VR-01` through `P0-VR-24` pass, every required provenance record exists in VIPER, the user reviews the complete evidence set, and the repository contains a synced commit recording the approved contract and Phase 0 receipts.
+The restoration and replay baseline remains accepted by `P0-VR-01` through
+`P0-VR-24`. This maintenance revision returns the Phase 0 contract to `Final`
+when `P0-VR-26` passes, its implementation review and Git evidence are retained,
+and VIPER registers the protocol result.
 
 ### Rejection
 
-Phase 0 fails when $B$ contains an unnecessary node, omits a required node or edge, admits a parity reference as a rebuild input, lacks a `RestorationBinding`, exceeds available storage, restores different bytes, permits an undeclared governed file-open attempt, lacks a successful Python read-open for a governed input, or either replay exceeds its approved tolerance.
+The maintenance gate rejects a manifest-native record when Markdown supplies an
+authoritative field, the same ID also belongs to the legacy adapter, a reference
+is missing or ambiguous, a lifecycle state differs from its receipts, or a
+generated region differs from deterministic rendering. The existing Phase 0
+rejection conditions continue to govern the accepted restoration and replay
+baseline.
 
 ## 9. PairBlock order
 
@@ -337,6 +349,7 @@ Phase 0 fails when $B$ contains an unnecessary node, omits a required node or ed
 | `P0-PB-09A` | RICO-rooted registration of the frozen Phase 0 evidence | `P0-VR-09`. |
 | `P0-PB-10` | Traceability validation, proposal-gate receipts, and legal checklist transitions | `P0-VR-10`. |
 | `P0-PB-10A` | Explicit certification of named pre-protocol PairBlocks | `P0-VR-24`. |
+| `P0-PB-10B` | Structured declaration origin and deterministic human views for newly authored PairBlocks | `P0-VR-26`. |
 
 ### Phase 0 ownership record
 
@@ -373,6 +386,7 @@ Resolution status lives in the [master checklist](../checklists/mantra-rebuild.m
 | [`P0-PB-09A`](../checklists/mantra-rebuild.md#pairblock-resolution) | Register and verify the frozen evidence through VIPER. | Codex implemented and independently reviewed RICO through commit `3b575be1`; the real run supplies completion evidence. | [Source](../../tools/register_phase0.py) · [Loader](../../tools/artifact_loaders.py) · [Tests](../../tests/test_register_phase0.py) · [Latest review](../../evidence/pairblock-reviews/p0-pb-09a/3b575be150cfd9691fac75d2b0586af14f665527.json) | `P0-VR-09` |
 | [`P0-PB-10`](../checklists/mantra-rebuild.md#pairblock-resolution) | Validate PairBlock traceability and retain each tested-code or externally reviewed non-code lifecycle transition. | RICO owns the active controller; the user reviews lifecycle changes. | [Active source and tests](#p0-pb-10-accepted-implementation) | `P0-VR-10` |
 | [`P0-PB-10A`](../checklists/mantra-rebuild.md#pairblock-resolution) | Certify the four applied PairBlocks whose preserved records predate the active receipt chain. | Codex implements and independently reviews the compatibility path. | [Implementation and gate](#p0-pb-10a-implementation-record) | `P0-VR-24` |
+| [`P0-PB-10B`](../checklists/mantra-rebuild.md#pairblock-resolution) | Make typed declarations and lifecycle receipts generate every new PairBlock's human review surface. | Codex drafts the implementation; the user reviews the charter, code, gate result, and diff before acceptance. | [Charter, targets, and gate](#p0-pb-10b) | `P0-VR-26` |
 
 ### Blocks
 
@@ -2098,6 +2112,156 @@ for every PairBlock absent from `legacy_certifiable_pair_blocks`.
 
 **Stop condition:** Keep each legacy block `Applied` when its terminal artifact
 is absent, its reason is empty, or the profile does not name its PairBlock ID.
+
+#### P0-PB-10B
+
+**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
+
+**Requirement:** A typed project declaration record owns each post-bootstrap
+requirement, verifier, PairBlock, dependency, repository-relative source or test
+path, and gate. Lifecycle receipts own observed state transitions. The renderer
+uses those two inputs to produce the contract and checklist sections used for
+human review.
+
+**Dependency:** `P0-PB-10A` closes the historical lifecycle exceptions. The
+existing Markdown adapter remains the sole owner of the completed Phase 0 IDs
+until `P0-PB-07A` completes through this new path. A later `P0-PB-10C` migration
+will move those IDs and remove the legacy parser. `P0-PB-10B` is the single
+bootstrap record declared through the current Markdown protocol and will move
+with that later migration.
+
+**Authority rule:** Each PairBlock ID belongs to exactly one origin. The
+controller rejects an ID present in both the typed declaration manifest and the
+legacy Markdown inventory. For a manifest-native ID, the controller reads each
+requirement, relationship, path, and gate from the typed declaration and reads
+each lifecycle state from the declaration or receipt chain. The declaration
+supplies `Drafting` before the first receipt. Each later state comes from the
+validated receipt chain.
+
+**Revision rule:** The controller computes one canonical fingerprint from a
+PairBlock record, its mapped requirements and verifiers, and their transitive
+declaration dependencies. Each gate and lifecycle receipt stores that
+fingerprint. A candidate manifest is compared with the last accepted manifest
+before another operation runs. The user approves the resulting changed-record
+and affected-PairBlock sets. A `revise` receipt then binds the previous and
+accepted manifest digests, both versions of each changed record digest, the
+affected blocks, the approval reference, and each superseded receipt head.
+Affected blocks return to `Drafting`; their transitive dependents return to a
+waiting state. Unaffected blocks retain their receipts and lifecycle states.
+
+**Declaration record:** `docs/contracts/mantra-rebuild.declarations.toml` will
+store these fields:
+
+| Record | Owned values |
+|---|---|
+| Requirement | `id`, `claim`, `phase`, `order`, `depends_on`, `gate`, `verifier_ids`, and `pair_block_ids` |
+| Verifier | `id`, `requirement_ids`, executable conditions, success case, and rejection cases |
+| PairBlock | `id`, `requirement_ids`, `depends_on`, checklist section, implementation repository, source paths, test paths, and gate |
+
+The manifest stores repository identifiers and repository-relative paths. The
+project profile resolves each repository identifier to its approved checkout.
+The declaration schema owns only the initial `Drafting` state. Receipts derive
+every later state. A gate stores its owning
+repository, working directory, argument vector, and environment variables. The
+renderer turns those fields into the displayed shell command; the controller
+executes the argument vector.
+
+**Code boundary:** The implementation may change only these RICO paths:
+
+- `docs/contracts/mantra-rebuild.declarations.toml`
+- `docs/contracts/mantra-rebuild-phase-0.md`
+- `docs/checklists/mantra-rebuild.md`
+- `tools/pairblock_status/declaration_manifest.py`
+- `tools/pairblock_status/markdown_renderer.py`
+- `tools/pairblock_status/profile.py`
+- `tools/pairblock_status/checklist_profile.py`
+- `tools/pairblock_status/pairblock_controller.py`
+- `tests/pairblock_status/fixtures/minimal_profile/declarations.toml`
+- `tests/pairblock_status/conftest.py`
+- `tests/pairblock_status/test_declaration_manifest.py`
+- `tests/pairblock_status/test_markdown_renderer.py`
+- `tests/pairblock_status/test_pairblock_controller.py`
+
+**Implementation requirements:**
+
+1. Parse the TOML into frozen typed records and reject unknown fields, duplicate
+   IDs, unresolved references, dependency cycles, duplicate path roles, unknown
+   repositories, and paths outside their owning repository.
+2. Compile manifest-native records directly into schema version 2 of the global
+   master-checklist manifest. Preserve the global validator and receipt chain.
+3. Render deterministic contract and checklist regions containing the claim,
+   verifier conditions, dependencies, status, direct source and test links,
+   exact gate command, current receipt, and next legal lifecycle command.
+4. Preserve hand-written prose outside the generated regions. A check-only
+   render fails when bytes inside a generated region differ from the renderer's
+   output.
+5. Route controller operations by PairBlock ownership. Manifest-native IDs use
+   typed declarations and receipts; legacy IDs use the existing adapter. Reject
+   duplicate ownership before a gate runs or a file changes.
+6. Keep `P0-PB-07A` as the first real manifest-native execution. Keep the 25
+   historical requirements and 29 historical PairBlocks on the legacy path
+   until that block completes.
+7. Canonically encode each requirement, verifier, and PairBlock record. Compute
+   each PairBlock fingerprint from its own record, mapped requirement and
+   verifier records, and transitive declaration dependencies.
+8. Compare a candidate manifest with the last accepted manifest. Report added,
+   changed, and removed records, then traverse reverse declaration dependencies
+   to calculate the affected PairBlocks.
+9. Require explicit user approval before accepting a declaration revision.
+   Persist a `revise` receipt with the prior and accepted manifest digests,
+   record-level before and after digests, affected PairBlocks, superseded
+   receipt heads, and approval reference.
+10. Block gates and lifecycle transitions while the working declaration differs
+    from its last accepted revision. After `revise`, render affected blocks as
+    `Drafting`, render their transitive dependents as waiting, and preserve every
+    unaffected receipt and state.
+
+**Focused check:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/RICO
+python -m ruff check tools/pairblock_status tests/pairblock_status
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+python -m pytest \
+  tests/pairblock_status/test_declaration_manifest.py \
+  tests/pairblock_status/test_markdown_renderer.py \
+  tests/pairblock_status/test_pairblock_controller.py -q
+```
+
+**Gate:** The focused tests pass and establish six results: one manifest edit
+creates every machine and human relationship for a new block; equal inputs
+render equal bytes; a receipt transition updates every displayed status; a
+manual generated-region edit fails check mode; a missing or duplicate reference
+fails before execution; and the controller selects the typed adapter directly
+for a manifest-native block. The revision tests establish five more results:
+
+- `test_revision_receipt_binds_manifest_and_record_digests` retains the exact
+  accepted change and approval.
+- `test_changed_verifier_reopens_owner_and_dependents` propagates one semantic
+  change through reverse declaration dependencies.
+- `test_unrelated_declaration_change_preserves_receipts` keeps an unaffected
+  block complete.
+- `test_unapproved_declaration_change_blocks_execution` prevents a stale gate
+  or lifecycle transition.
+- `test_referenced_record_removal_is_rejected` preserves referential integrity.
+
+**Acceptance case:** A fixture requirement, verifier, and PairBlock advance
+through `gate`, `approve`, `accept`, and `register`. Each transition writes one
+receipt, updates the normalized manifest, and changes the generated human view.
+
+**Rejection case:** The gate fails before command execution after a test removes
+the verifier reference, duplicates the PairBlock in the legacy inventory,
+changes a generated link, corrupts the current receipt reference, or changes an
+accepted declaration while the latest `revise` receipt identifies the earlier
+digest.
+
+**Stop condition:** Return the proposal for revision if a manifest-native field
+can originate in Markdown, a rendered edit can change execution, a receipt-free
+status can appear current, the controller can execute an ambiguously owned ID,
+an affected block can retain evidence bound to an older fingerprint,
+an unrelated block loses valid evidence,
+or the bridge requires migration of the historical records before
+`P0-PB-07A` succeeds.
 
 ## 11. Sources
 
