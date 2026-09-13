@@ -2452,6 +2452,41 @@ cd /Users/machina/Developer/ChatGPT/RICO
 python -m tools.pairblock_status.pairblock_controller advance P0-PB-05P register --evidence-kind KIND --evidence-target TARGET --evidence-revision REVISION
 ```
 
+#### Manifest-native block P0-PB-05Q
+
+**Status:** Drafting
+
+**Requirements:**
+
+- `P0-REQ-36`: A frozen artifact preserves its author-declared relative path separately from its immutable storage reference, and restoration uses the declared path without parsing the storage path.
+
+**Verifier conditions:**
+
+- `P0-VR-35`: OutputSpec stores the author-declared output path separately from the run-owned output path.
+- `P0-VR-35`: Resolved single-file and bundle artifacts retain the declared path beside their immutable SnapshotFileRef values.
+- `P0-VR-35`: Resolved-stage validation recomputes each expected storage path from the declared path and rejects a mismatch.
+- `P0-VR-35`: Restoration joins the requested destination directory to the retained declared path without parsing SnapshotFileRef.path.
+
+**Dependencies:** `P0-PB-05P`, `P0-PB-10J`
+
+**Implementation:** [outputs.py](../../../viper/src/viper/outputs.py) · [artifacts.py](../../../viper/src/viper/artifacts.py) · [authoring.py](../../../viper/src/viper/authoring.py) · [stages.py](../../../viper/src/viper/stages.py) · [_stage.py](../../../viper/src/viper/execution/_stage.py) · [_reuse.py](../../../viper/src/viper/execution/_reuse.py) · [_materialization.py](../../../viper/src/viper/execution/_materialization.py) · [_restore.py](../../../viper/src/viper/execution/_restore.py) · [storage.py](../../../viper/src/viper/_verification/storage.py) · [attempt.py](../../../viper/src/viper/_verification/attempt.py) · [retry-restore-compare.md](../../../viper/docs/how-to/retry-restore-compare.md) · [test_protocol.py](../../../viper/tests/test_protocol.py) · [test_run_execution.py](../../../viper/tests/test_run_execution.py) · [test_storage.py](../../../viper/tests/test_storage.py) · [test_verification.py](../../../viper/tests/test_verification.py) · [test_verification_acceptance.py](../../../viper/tests/test_verification_acceptance.py) · [test_metric_provenance.py](../../../viper/tests/test_metric_provenance.py)
+
+**Current receipt:** None
+
+**Gate:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/viper
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 /bin/zsh -e -c 'python -m pyright src/viper/outputs.py src/viper/artifacts.py src/viper/authoring.py src/viper/stages.py src/viper/execution/_stage.py src/viper/execution/_reuse.py src/viper/execution/_materialization.py src/viper/execution/_restore.py src/viper/_verification/storage.py src/viper/_verification/attempt.py tests/test_protocol.py tests/test_run_execution.py tests/test_storage.py tests/test_verification.py tests/test_verification_acceptance.py tests/test_metric_provenance.py && python -m pytest tests/test_protocol.py tests/test_run_execution.py tests/test_storage.py tests/test_verification.py tests/test_verification_acceptance.py tests/test_metric_provenance.py -q && python -m ruff format --check src/viper/outputs.py src/viper/artifacts.py src/viper/authoring.py src/viper/stages.py src/viper/execution/_stage.py src/viper/execution/_reuse.py src/viper/execution/_materialization.py src/viper/execution/_restore.py src/viper/_verification/storage.py src/viper/_verification/attempt.py tests/test_protocol.py tests/test_run_execution.py tests/test_storage.py tests/test_verification.py tests/test_verification_acceptance.py tests/test_metric_provenance.py && python -m ruff check src/viper/outputs.py src/viper/artifacts.py src/viper/authoring.py src/viper/stages.py src/viper/execution/_stage.py src/viper/execution/_reuse.py src/viper/execution/_materialization.py src/viper/execution/_restore.py src/viper/_verification/storage.py src/viper/_verification/attempt.py tests/test_protocol.py tests/test_run_execution.py tests/test_storage.py tests/test_verification.py tests/test_verification_acceptance.py tests/test_metric_provenance.py'
+```
+
+**Next transition:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/RICO
+python -m tools.pairblock_status.pairblock_controller gate P0-PB-05Q
+```
+
 #### Manifest-native block P0-PB-07A
 
 **Status:** Applied

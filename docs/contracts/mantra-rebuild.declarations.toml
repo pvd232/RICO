@@ -90,6 +90,16 @@ gate = { kind = "test", target = "P0-VR-34" }
 verifier_ids = ["P0-VR-34"]
 pair_block_ids = ["P0-PB-05P", "P0-PB-07A"]
 
+[[requirements]]
+id = "P0-REQ-36"
+claim = "A frozen artifact preserves its author-declared relative path separately from its immutable storage reference, and restoration uses the declared path without parsing the storage path."
+phase = 6
+order = 37
+depends_on = ["P0-REQ-35"]
+gate = { kind = "test", target = "P0-VR-35" }
+verifier_ids = ["P0-VR-35"]
+pair_block_ids = ["P0-PB-05Q"]
+
 [[verifiers]]
 id = "P0-VR-25"
 requirement_ids = ["P0-REQ-26"]
@@ -220,6 +230,22 @@ rejection_cases = [
   "Issue one restore call per selected Hopfield artifact.",
 ]
 
+[[verifiers]]
+id = "P0-VR-35"
+requirement_ids = ["P0-REQ-36"]
+conditions = [
+  "OutputSpec stores the author-declared output path separately from the run-owned output path.",
+  "Resolved single-file and bundle artifacts retain the declared path beside their immutable SnapshotFileRef values.",
+  "Resolved-stage validation recomputes each expected storage path from the declared path and rejects a mismatch.",
+  "Restoration joins the requested destination directory to the retained declared path without parsing SnapshotFileRef.path.",
+]
+success_case = "Freeze and execute two outputs, then restore both beneath one directory using their retained declared paths."
+rejection_cases = [
+  "Change a retained declared path without changing its run-owned SnapshotFileRef.path.",
+  "Change a run-owned SnapshotFileRef.path without changing its retained declared path.",
+  "Restore a record that omits the retained declared path.",
+]
+
 [[pair_blocks]]
 id = "P0-PB-07A"
 requirement_ids = ["P0-REQ-26", "P0-REQ-35"]
@@ -239,6 +265,16 @@ repository = "viper"
 source_paths = ["src/viper/execution/_restore.py", "src/viper/restoration.py", "docs/how-to/retry-restore-compare.md"]
 test_paths = ["tests/test_storage.py"]
 gate = { repository = "viper", working_directory = ".", argv = ["/bin/zsh", "-e", "-c", "python -m pyright src/viper/execution/_restore.py src/viper/restoration.py tests/test_storage.py && python -m pytest tests/test_storage.py -q && python -m ruff format --check src/viper/execution/_restore.py src/viper/restoration.py tests/test_storage.py && python -m ruff check src/viper/execution/_restore.py src/viper/restoration.py tests/test_storage.py"], environment = { PYTEST_DISABLE_PLUGIN_AUTOLOAD = "1" } }
+
+[[pair_blocks]]
+id = "P0-PB-05Q"
+requirement_ids = ["P0-REQ-36"]
+depends_on = ["P0-PB-05P", "P0-PB-10J"]
+section = "0E"
+repository = "viper"
+source_paths = ["src/viper/outputs.py", "src/viper/artifacts.py", "src/viper/authoring.py", "src/viper/stages.py", "src/viper/execution/_stage.py", "src/viper/execution/_reuse.py", "src/viper/execution/_materialization.py", "src/viper/execution/_restore.py", "src/viper/_verification/storage.py", "src/viper/_verification/attempt.py", "docs/how-to/retry-restore-compare.md"]
+test_paths = ["tests/test_protocol.py", "tests/test_run_execution.py", "tests/test_storage.py", "tests/test_verification.py", "tests/test_verification_acceptance.py", "tests/test_metric_provenance.py"]
+gate = { repository = "viper", working_directory = ".", argv = ["/bin/zsh", "-e", "-c", "python -m pyright src/viper/outputs.py src/viper/artifacts.py src/viper/authoring.py src/viper/stages.py src/viper/execution/_stage.py src/viper/execution/_reuse.py src/viper/execution/_materialization.py src/viper/execution/_restore.py src/viper/_verification/storage.py src/viper/_verification/attempt.py tests/test_protocol.py tests/test_run_execution.py tests/test_storage.py tests/test_verification.py tests/test_verification_acceptance.py tests/test_metric_provenance.py && python -m pytest tests/test_protocol.py tests/test_run_execution.py tests/test_storage.py tests/test_verification.py tests/test_verification_acceptance.py tests/test_metric_provenance.py -q && python -m ruff format --check src/viper/outputs.py src/viper/artifacts.py src/viper/authoring.py src/viper/stages.py src/viper/execution/_stage.py src/viper/execution/_reuse.py src/viper/execution/_materialization.py src/viper/execution/_restore.py src/viper/_verification/storage.py src/viper/_verification/attempt.py tests/test_protocol.py tests/test_run_execution.py tests/test_storage.py tests/test_verification.py tests/test_verification_acceptance.py tests/test_metric_provenance.py && python -m ruff check src/viper/outputs.py src/viper/artifacts.py src/viper/authoring.py src/viper/stages.py src/viper/execution/_stage.py src/viper/execution/_reuse.py src/viper/execution/_materialization.py src/viper/execution/_restore.py src/viper/_verification/storage.py src/viper/_verification/attempt.py tests/test_protocol.py tests/test_run_execution.py tests/test_storage.py tests/test_verification.py tests/test_verification_acceptance.py tests/test_metric_provenance.py"], environment = { PYTEST_DISABLE_PLUGIN_AUTOLOAD = "1" } }
 
 [[pair_blocks]]
 id = "P0-PB-10D"
