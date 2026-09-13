@@ -170,7 +170,7 @@ applies only to branches and worktrees created for this rebuild.
 
 | Work unit | Current state | Owning phase | Completion evidence |
 |---|---|---|---|
-| [Phase 0 contract](../contracts/mantra-rebuild-phase-0.md) | Complete | Phase 0 | `P0-REQ-01` through `P0-REQ-17` and every mapped PairBlock close. |
+| [Phase 0 contract](../contracts/mantra-rebuild-phase-0.md) | Complete | Phase 0 | `P0-REQ-01` through `P0-REQ-25` and every mapped PairBlock close. |
 | Hopfield reconstruction contract | Pending | Phase 1A | User-approved contract with exact intermediate and final parity gates. |
 | MIL reconstruction contract | Pending | Phase 2A | User-approved contract with exact intermediate and final parity gates. |
 | Graph encoder contract | Design complete; contract pending | Phase 3A | User-approved contract covering identity, topology, features, training, evaluation, and VIPER evidence. |
