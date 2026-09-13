@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-05R",
+  "requirement_ids": [
+    "P0-REQ-37"
+  ],
+  "repository": "https://github.com/pvd232/viper.git",
+  "base_commit": "d3b95a6",
+  "result_commit": "44c9fd2157b4fd65026626673b6d3797357f8c04",
+  "owned_paths": [
+    "CHANGELOG.md",
+    "pyproject.toml",
+    "src/viper/references.py",
+    "src/viper/reuse.py",
+    "tests/test_protocol.py"
+  ],
+  "diff_sha256": "ea969f36bdd0b1354eb55a14d532a9658d0919eee1035c2ed608c4ffedfa0a66",
+  "invariants": [
+    "FileIdentity validates one SHA-256 digest and nonnegative byte count.",
+    "ResolvedFileRef, SnapshotFileRef, and ReuseFileIdentity retain their existing serialized fields.",
+    "FileIdentity is public from its defining viper.references module."
+  ],
+  "findings": [
+    {
+      "status": "repaired",
+      "finding": "The first test fixture supplied a 64-character local store ID where the protocol requires 32 characters.",
+      "repair": "Use a valid 32-character store ID and rerun the complete focused boundary."
+    }
+  ],
+  "mechanical_evidence": {
+    "focused_result": "Pyright reported 0 errors; 60 tests and 5 subtests passed; Ruff formatting and lint checks passed.",
+    "git_diff_check": "passed",
+    "implementation_repository_head": "44c9fd2157b4fd65026626673b6d3797357f8c04"
+  },
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-13T16:20:25Z"
+}
