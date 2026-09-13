@@ -2419,7 +2419,7 @@ translate without rewriting their bytes.
 <!-- generated:manifest-native-contract:start -->
 #### Manifest-native block P0-PB-05P
 
-**Status:** Drafting
+**Status:** Review
 
 **Requirements:**
 
@@ -2436,7 +2436,7 @@ translate without rewriting their bytes.
 
 **Implementation:** [_restore.py](../../../viper/src/viper/execution/_restore.py) · [restoration.py](../../../viper/src/viper/restoration.py) · [retry-restore-compare.md](../../../viper/docs/how-to/retry-restore-compare.md) · [test_storage.py](../../../viper/tests/test_storage.py)
 
-**Current receipt:** None
+**Current receipt:** [receipt](../../evidence/pairblock-gates/p0-pb-05p/20260913T070134.569783Z.json)
 
 **Gate:**
 
@@ -2449,7 +2449,7 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 /bin/zsh -e -c 'python -m pyright src/viper/exe
 
 ```bash
 cd /Users/machina/Developer/ChatGPT/RICO
-python -m tools.pairblock_status.pairblock_controller gate P0-PB-05P
+python -m tools.pairblock_status.pairblock_controller advance P0-PB-05P approve --evidence-kind KIND --evidence-target TARGET --evidence-revision REVISION
 ```
 
 #### Manifest-native block P0-PB-07A
