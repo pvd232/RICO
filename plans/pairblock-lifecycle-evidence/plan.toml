@@ -8,7 +8,7 @@ depends_on = ["P0-PB-10E"]
 repository = "rico"
 context = "Replace the generic native-lifecycle evidence triple with exact event-specific reference and transition types."
 gate = [
-  ".venv/bin/python -m pyright tools/pairblock_status/lifecycle_evidence.py tests/pairblock_status/test_lifecycle_evidence_records.py",
+  ".venv/bin/python -m pyright --pythonpath .venv/bin/python tools/pairblock_status/lifecycle_evidence.py tests/pairblock_status/test_lifecycle_evidence_records.py",
   "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 .venv/bin/python -m pytest tests/pairblock_status/test_lifecycle_evidence_records.py tests/pairblock_status/test_pairblock_controller.py::test_pairblock_modules_and_definitions_have_documentation -q",
   ".venv/bin/python -m ruff format --check tools/pairblock_status/lifecycle_evidence.py tests/pairblock_status/test_lifecycle_evidence_records.py",
   ".venv/bin/python -m ruff check tools/pairblock_status/lifecycle_evidence.py tests/pairblock_status/test_lifecycle_evidence_records.py",
