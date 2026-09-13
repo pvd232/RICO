@@ -2417,6 +2417,41 @@ translate without rewriting their bytes.
 ## 11. Sources
 
 <!-- generated:manifest-native-contract:start -->
+#### Manifest-native block P0-PB-07A
+
+**Status:** Drafting
+
+**Requirements:**
+
+- `P0-REQ-26`: The selected Hopfield replay passes only when its prediction arrays and hold PearsonDelta match the approved historical result.
+
+**Verifier conditions:**
+
+- `P0-VR-25`: The evaluation stage consumes both the replayed and historical prediction archives.
+- `P0-VR-25`: Each archive contains the approved keys in order, with equal shapes, dtypes, and values.
+- `P0-VR-25`: The receipt records the byte count and SHA-256 of both prediction archives.
+- `P0-VR-25`: The parity decision requires both prediction-array parity and score parity.
+
+**Dependencies:** `P0-PB-07`, `P0-PB-10J`
+
+**Implementation:** [hopfield_replay.py](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [test_hopfield_replay.py](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py)
+
+**Current receipt:** None
+
+**Gate:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/mantra
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONPATH=/Users/machina/Developer/ChatGPT/mantra/src:/Users/machina/Developer/ChatGPT/mantra /bin/zsh -e -c 'python -m pyright src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_hopfield_replay.py && python -m pytest src/mantra/rebuild/tests/test_hopfield_replay.py -q && python -m ruff format --check src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_hopfield_replay.py && python -m ruff check src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_hopfield_replay.py'
+```
+
+**Next transition:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/RICO
+python -m tools.pairblock_status.pairblock_controller gate P0-PB-07A
+```
+
 #### Manifest-native block P0-PB-10D
 
 **Status:** Applied

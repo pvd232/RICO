@@ -1,6 +1,16 @@
 schema_version = 1
 
 [[requirements]]
+id = "P0-REQ-26"
+claim = "The selected Hopfield replay passes only when its prediction arrays and hold PearsonDelta match the approved historical result."
+phase = 4
+order = 26
+depends_on = ["P0-REQ-07"]
+gate = { kind = "test", target = "P0-VR-25" }
+verifier_ids = ["P0-VR-25"]
+pair_block_ids = ["P0-PB-07A"]
+
+[[requirements]]
 id = "P0-REQ-28"
 claim = "Each lifecycle event accepts only the evidence category and verified evidence target assigned to that event."
 phase = 6
@@ -69,6 +79,22 @@ depends_on = ["P0-REQ-25"]
 gate = { kind = "test", target = "P0-VR-33" }
 verifier_ids = ["P0-VR-33"]
 pair_block_ids = ["P0-PB-10J"]
+
+[[verifiers]]
+id = "P0-VR-25"
+requirement_ids = ["P0-REQ-26"]
+conditions = [
+  "The evaluation stage consumes both the replayed and historical prediction archives.",
+  "Each archive contains the approved keys in order, with equal shapes, dtypes, and values.",
+  "The receipt records the byte count and SHA-256 of both prediction archives.",
+  "The parity decision requires both prediction-array parity and score parity.",
+]
+success_case = "Reproduce the historical prediction arrays and hold PearsonDelta exactly within the declared score tolerance."
+rejection_cases = [
+  "Produce a different prediction value while retaining the historical hold PearsonDelta.",
+  "Change an array key, shape, or dtype.",
+  "Change either prediction archive after its identity is recorded.",
+]
 
 [[verifiers]]
 id = "P0-VR-27"
@@ -167,6 +193,16 @@ rejection_cases = [
   "Certify with a different repository artifact and its valid SHA-256.",
   "Change the configured terminal artifact after certification.",
 ]
+
+[[pair_blocks]]
+id = "P0-PB-07A"
+requirement_ids = ["P0-REQ-26"]
+depends_on = ["P0-PB-07", "P0-PB-10J"]
+section = "0E"
+repository = "mantra"
+source_paths = ["src/mantra/rebuild/hopfield_replay.py"]
+test_paths = ["src/mantra/rebuild/tests/test_hopfield_replay.py"]
+gate = { repository = "mantra", working_directory = ".", argv = ["/bin/zsh", "-e", "-c", "python -m pyright src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_hopfield_replay.py && python -m pytest src/mantra/rebuild/tests/test_hopfield_replay.py -q && python -m ruff format --check src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_hopfield_replay.py && python -m ruff check src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_hopfield_replay.py"], environment = { PYTHONPATH = "/Users/machina/Developer/ChatGPT/mantra/src:/Users/machina/Developer/ChatGPT/mantra", PYTEST_DISABLE_PLUGIN_AUTOLOAD = "1" } }
 
 [[pair_blocks]]
 id = "P0-PB-10D"
