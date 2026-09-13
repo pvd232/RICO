@@ -605,6 +605,8 @@ count and SHA-256, and emits the terminal Phase 0 registration receipt.
 
 The accepted [registration source](../../tools/register_phase0.py) and
 [observing tests](../../tests/test_register_phase0.py) implement this boundary.
+The successful run is retained as [run identity](../../evidence/phase0/rico/phase0_registration_run.json)
+and [terminal receipt](../../evidence/phase0/rico/phase0_registration_receipt.json).
 
 #### Approved Hopfield artifact set
 
@@ -1954,6 +1956,11 @@ and emit one terminal registration receipt.
 **Gate:** Ruff and the focused tests pass. The real run verifies through
 VIPER, its lineage reaches all three MANTRA producer runs and every RICO
 evidence input, and its receipt reports `passed: true`.
+
+**Completion evidence:** VIPER run `01M2C9563W9TQWT67RBRCG6YD2` succeeded in
+283.833269 seconds. Its [run identity](../../evidence/phase0/rico/phase0_registration_run.json)
+binds the RICO and VIPER commits and its [terminal receipt](../../evidence/phase0/rico/phase0_registration_receipt.json)
+reports `passed: true`.
 
 **Applied paths:** `tools/register_phase0.py`, `tools/artifact_loaders.py`, and
 `tests/test_register_phase0.py` in RICO.

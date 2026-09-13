@@ -42,11 +42,13 @@ current status, review points, and completion evidence.
 
 ## Current focus
 
-**Active tranche:** [`P0-PB-06`](../contracts/mantra-rebuild-phase-0.md#p0-pb-06)
-is restoring the approved files. The applied [`P0-PB-07`](../contracts/mantra-rebuild-phase-0.md#p0-pb-07)
-and [`P0-PB-08`](../contracts/mantra-rebuild-phase-0.md#p0-pb-08) implementations
-can run as soon as restoration supplies their inputs. The resolution table owns
-each PairBlock's current lifecycle state.
+**Active tranche:** Phase 0 execution is complete. The terminal RICO-rooted
+VIPER run succeeded in 283.833269 seconds; its [run identity](../../evidence/phase0/rico/phase0_registration_run.json)
+and [registration receipt](../../evidence/phase0/rico/phase0_registration_receipt.json)
+bind the verified result. The resolution table owns each PairBlock's current
+lifecycle state. Four early blocks remain `Applied` because their historical
+receipts predate the enforced lifecycle chain; their implementation evidence is
+retained without rewriting those records.
 
 The resolution table identifies the next action. `Review` requires the user's
 decision. `Approved` authorizes the user to apply the proposal. `Applied`
@@ -82,26 +84,26 @@ controls. The completed set contains 27 Hopfield and MIL destinations in
 | `P0-PB-04B` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-04b/20260912T070756.106235Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-04b) | [Source](../../../mantra/src/mantra/rebuild/restoration.py) · [Base tests](../../../mantra/src/mantra/rebuild/tests/test_restoration.py) · [Resolver tests](../../../mantra/src/mantra/rebuild/tests/test_control_resolution.py) |
 | `P0-PB-05` | Pending | Drafting | `P0-PB-05A`, `P0-PB-05B` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05) | [Child blocks](../contracts/mantra-rebuild-phase-0.md#p0-pb-05) |
 | `P0-PB-05A` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05a/20260912T163739.537947Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a) | [Source](../../../mantra/src/mantra/rebuild/capacity.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_capacity.py) |
-| `P0-PB-05B` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05b/20260912T192242.315993Z-accept.json)) | Applied | `P0-PB-04B` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05b) | [Source](../../../mantra/src/mantra/rebuild/archive_plan.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_archive_plan.py) |
+| `P0-PB-05B` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05b/20260913T023138.391261Z-register.json)) | Complete | `P0-PB-04B` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05b) | [Source](../../../mantra/src/mantra/rebuild/archive_plan.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_archive_plan.py) |
 | `P0-PB-05C` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05c/20260913T001013.278571Z-register.json)) | Complete | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05c) | [Observer](../../../viper/src/viper/_workers/file_access.py) · [Tests](../../../viper/tests/test_stage_file_access.py) |
-| `P0-PB-05D` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05d/20260912T195229.538244Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05d) | [Verifier](../../../viper/src/viper/_verification/plan.py) · [Tests](../../../viper/tests/test_verification.py) · [Test map](../../../viper/tests/declaration_observers.toml) |
-| `P0-PB-05E` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05e/20260912T224537.731391Z-accept.json)) | Applied | `P0-PB-05D` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05e) | [Run model](../../../viper/src/viper/runs.py) · [Protocol tests](../../../viper/tests/test_protocol.py) · [Relationship tests](../../../viper/tests/test_verification.py) · [Test map](../../../viper/tests/declaration_observers.toml) |
+| `P0-PB-05D` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05d/20260913T023138.819375Z-register.json)) | Complete | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05d) | [Verifier](../../../viper/src/viper/_verification/plan.py) · [Tests](../../../viper/tests/test_verification.py) · [Test map](../../../viper/tests/declaration_observers.toml) |
+| `P0-PB-05E` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05e/20260913T023139.133182Z-register.json)) | Complete | `P0-PB-05D` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05e) | [Run model](../../../viper/src/viper/runs.py) · [Protocol tests](../../../viper/tests/test_protocol.py) · [Relationship tests](../../../viper/tests/test_verification.py) · [Test map](../../../viper/tests/declaration_observers.toml) |
 | `P0-PB-05F` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05f/20260913T001013.563488Z-register.json)) | Complete | `P0-PB-05C` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05f) | [Observer](../../../viper/src/viper/_workers/file_access.py) · [Tests](../../../viper/tests/test_stage_file_access.py) · [Test map](../../../viper/tests/declaration_observers.toml) |
 | `P0-PB-05G` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05g/20260913T001013.825215Z-register.json)) | Complete | `P0-PB-05C` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05g) | [Loader](../../../viper/src/viper/stages.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Tests](../../../viper/tests/test_stage_invocation.py) · [Test map](../../../viper/tests/declaration_observers.toml) |
 | `P0-PB-05H` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05h/20260913T001014.084630Z-register.json)) | Complete | `P0-PB-05C` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05h) | [Observer](../../../viper/src/viper/_workers/file_access.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Tests](../../../viper/tests/test_stage_file_access.py) · [Test map](../../../viper/tests/declaration_observers.toml) |
 | `P0-PB-05I` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05i/20260913T005528.163327Z-register.json)) | Complete | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05i) | [Attempt](../../../viper/src/viper/execution/_attempt.py) · [Publication](../../../viper/src/viper/execution/_publication.py) · [Tests](../../../viper/tests/test_run_execution.py) |
-| `P0-PB-05J` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05j/20260913T012347.279739Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05j) | [Public execution](../../../viper/src/viper/execution/__init__.py) · [Attempt](../../../viper/src/viper/execution/_attempt.py) · [Run dispatch](../../../viper/src/viper/execution/_run.py) · [Tests](../../../viper/tests/test_run_execution.py) |
-| `P0-PB-05K` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05k/20260913T021906.141532Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05k) | [Fetcher](../../../viper/src/viper/execution/_source.py) · [Storage](../../../viper/src/viper/_verification/storage.py) · [Tests](../../../viper/tests/test_storage.py) |
-| `P0-PB-05L` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05l/20260913T021906.638723Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05l) | [Input model](../../../viper/src/viper/inputs.py) · [Draft model](../../../viper/src/viper/benchmark.py) · [Tests](../../../viper/tests/test_prior_run_inputs.py) |
-| `P0-PB-05M` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05m/20260913T021907.360592Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05m) | [Verifier](../../../viper/src/viper/verification.py) · [Tests](../../../viper/tests/test_verification_acceptance.py) |
-| `P0-PB-05N` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05n/20260913T021907.696272Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05n) | [Selector](../../../viper/tools/select_impacted_tests.py) · [Tests](../../../viper/tests/test_impacted_test_selection.py) |
-| `P0-PB-05O` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05o/20260913T021908.011218Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05o) | [Worker](../../../viper/src/viper/_workers/stages.py) · [Policy test](../../../viper/tests/test_process_startup.py) · [File-access tests](../../../viper/tests/test_stage_file_access.py) |
-| `P0-PB-06` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-06/20260912T203846.816608Z-accept.json)) | Applied | `P0-PB-04A`, `P0-PB-04B`, `P0-PB-05A`, `P0-PB-05B`, `P0-PB-05C`, `P0-PB-05D`, `P0-PB-05K`, `P0-PB-05L`, `P0-PB-05M` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-06) | [Bindings](../../../mantra/src/mantra/rebuild/restoration.py) · [VIPER](../../../mantra/src/mantra/rebuild/viper_restore.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_viper_restore.py) |
-| `P0-PB-07` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-07/20260912T205719.212980Z-accept.json)) | Applied | `P0-PB-06` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-07) | [Source](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py) |
-| `P0-PB-08` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-08/20260912T210907.846992Z-accept.json)) | Applied | `P0-PB-06` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-08) | [Source](../../../mantra/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py) |
-| `P0-PB-09` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-09/20260912T212259.707579Z-accept.json)) | Applied | `P0-PB-07`, `P0-PB-08`, `P0-PB-10` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-09) | [Source](../../tools/freeze_phase0.py) · [Tests](../../tests/test_freeze_phase0.py) |
-| `P0-PB-09A` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-09a/20260912T215151.404526Z-accept.json)) | Applied | `P0-PB-07`, `P0-PB-08`, `P0-PB-09` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-09a) | [Source](../../tools/register_phase0.py) · [Loader](../../tools/artifact_loaders.py) · [Tests](../../tests/test_register_phase0.py) |
-| `P0-PB-10` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-10/20260912T035542.464393Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-10) | [Controller](../../tools/pairblock_status/pairblock_controller.py) · [Tests](../../tests/pairblock_status/test_pairblock_controller.py) |
+| `P0-PB-05J` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05j/20260913T023139.443978Z-register.json)) | Complete | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05j) | [Public execution](../../../viper/src/viper/execution/__init__.py) · [Attempt](../../../viper/src/viper/execution/_attempt.py) · [Run dispatch](../../../viper/src/viper/execution/_run.py) · [Tests](../../../viper/tests/test_run_execution.py) |
+| `P0-PB-05K` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05k/20260913T022908.195769Z-register.json)) | Complete | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05k) | [Fetcher](../../../viper/src/viper/execution/_source.py) · [Storage](../../../viper/src/viper/_verification/storage.py) · [Tests](../../../viper/tests/test_storage.py) |
+| `P0-PB-05L` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05l/20260913T022908.498098Z-register.json)) | Complete | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05l) | [Input model](../../../viper/src/viper/inputs.py) · [Draft model](../../../viper/src/viper/benchmark.py) · [Tests](../../../viper/tests/test_prior_run_inputs.py) |
+| `P0-PB-05M` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05m/20260913T022908.801225Z-register.json)) | Complete | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05m) | [Verifier](../../../viper/src/viper/verification.py) · [Tests](../../../viper/tests/test_verification_acceptance.py) |
+| `P0-PB-05N` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05n/20260913T022909.106493Z-register.json)) | Complete | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05n) | [Selector](../../../viper/tools/select_impacted_tests.py) · [Tests](../../../viper/tests/test_impacted_test_selection.py) |
+| `P0-PB-05O` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05o/20260913T022909.413777Z-register.json)) | Complete | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05o) | [Worker](../../../viper/src/viper/_workers/stages.py) · [Policy test](../../../viper/tests/test_process_startup.py) · [File-access tests](../../../viper/tests/test_stage_file_access.py) |
+| `P0-PB-06` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-06/20260913T023139.758509Z-register.json)) | Complete | `P0-PB-04A`, `P0-PB-04B`, `P0-PB-05A`, `P0-PB-05B`, `P0-PB-05C`, `P0-PB-05D`, `P0-PB-05K`, `P0-PB-05L`, `P0-PB-05M` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-06) | [Bindings](../../../mantra/src/mantra/rebuild/restoration.py) · [VIPER](../../../mantra/src/mantra/rebuild/viper_restore.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_viper_restore.py) |
+| `P0-PB-07` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-07/20260913T023140.070651Z-register.json)) | Complete | `P0-PB-06` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-07) | [Source](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py) |
+| `P0-PB-08` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-08/20260913T023140.383343Z-register.json)) | Complete | `P0-PB-06` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-08) | [Source](../../../mantra/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py) |
+| `P0-PB-09` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-09/20260913T023141.025582Z-register.json)) | Complete | `P0-PB-07`, `P0-PB-08`, `P0-PB-10` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-09) | [Source](../../tools/freeze_phase0.py) · [Tests](../../tests/test_freeze_phase0.py) |
+| `P0-PB-09A` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-09a/20260913T023141.344319Z-register.json)) | Complete | `P0-PB-07`, `P0-PB-08`, `P0-PB-09` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-09a) | [Source](../../tools/register_phase0.py) · [Loader](../../tools/artifact_loaders.py) · [Tests](../../tests/test_register_phase0.py) · [Terminal receipt](../../evidence/phase0/rico/phase0_registration_receipt.json) |
+| `P0-PB-10` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-10/20260913T023140.710312Z-register.json)) | Complete | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-10) | [Controller](../../tools/pairblock_status/pairblock_controller.py) · [Tests](../../tests/pairblock_status/test_pairblock_controller.py) |
 
 ## Terminal outcome
 
@@ -196,27 +198,27 @@ This table schedules every requirement in the approved Phase 0 contract once.
 | `P0-REQ-01` | Complete | 0B | None | The approved Hopfield and MIL portions of graph $B$ contain every required file, producer, and edge and exclude parity graph $Q$. |
 | `P0-REQ-02` | In progress | 0C | `P0-REQ-01` | Every absent file in $B$ resolves through exactly one valid `RestorationBinding`. |
 | `P0-REQ-03` | In progress | 0C | `P0-REQ-01` | The capacity receipt records every term in $R_{max}$ and measured free space is at least $R_{max}$. |
-| `P0-REQ-04` | In progress | 0D | `P0-REQ-02`, `P0-REQ-03` | Every restored canonical file matches its approved byte count and SHA-256. |
+| `P0-REQ-04` | Complete | 0D | `P0-REQ-02`, `P0-REQ-03` | Every restored canonical file matches its approved byte count and SHA-256. |
 | `P0-REQ-05` | In progress | 0D | `P0-REQ-02`, `P0-REQ-03` | Restoration runs from the MANTRA root through the verified `mantra` environment, and VIPER retains the environment receipt. |
-| `P0-REQ-06` | In progress | 0D | `P0-REQ-04`, `P0-REQ-05` | VIPER verifies graph $B$; deleting one required node or edge makes verification fail. |
-| `P0-REQ-07` | In progress | 0E | `P0-REQ-06` | Hopfield replay reproduces `0.5861640938949398` within the approved tolerance and retains its predictions. |
-| `P0-REQ-08` | In progress | 0E | `P0-REQ-06` | Standalone v1952 seed-123460 `without_control` replay reproduces `0.6025499488874759` and the approved prediction hashes. |
-| `P0-REQ-09` | In progress | 0F | `P0-REQ-07`, `P0-REQ-08` | Every assessed VIPER check has a usefulness-ledger entry and independently confirmed findings. |
-| `P0-REQ-10` | In progress | 0C | None | A declared proposal gate retains its result and applies only its legal checklist transition; traceability validation rejects broken IDs, dependencies, owners, code links, tests, or gates. |
+| `P0-REQ-06` | Complete | 0D | `P0-REQ-04`, `P0-REQ-05` | VIPER verifies graph $B$; deleting one required node or edge makes verification fail. |
+| `P0-REQ-07` | Complete | 0E | `P0-REQ-06` | Hopfield replay reproduces `0.5861640938949398` within the approved tolerance and retains its predictions. |
+| `P0-REQ-08` | Complete | 0E | `P0-REQ-06` | Standalone v1952 seed-123460 `without_control` replay reproduces `0.6025499488874759` and the approved prediction hashes. |
+| `P0-REQ-09` | Complete | 0F | `P0-REQ-07`, `P0-REQ-08` | Every assessed VIPER check has a usefulness-ledger entry and independently confirmed findings. |
+| `P0-REQ-10` | Complete | 0C | None | A declared proposal gate retains its result and applies only its legal checklist transition; traceability validation rejects broken IDs, dependencies, owners, code links, tests, or gates. |
 | `P0-REQ-11` | Complete | 0C | None | A governed VIPER stage rejects undeclared CPython-visible file-open attempts and retains each successful Python file open, including one read-open for every declared input. |
-| `P0-REQ-12` | In progress | 0C | None | An unbenchmarked VIPER run may select a `model` artifact produced by a non-training stage; a benchmarked run still selects its model from a training stage. |
+| `P0-REQ-12` | Complete | 0C | None | An unbenchmarked VIPER run may select a `model` artifact produced by a non-training stage; a benchmarked run still selects its model from a training stage. |
 | `P0-REQ-13` | In progress | 0C | `P0-REQ-02` | An absent runtime destination binds only to its approved digest in its approved signed archive; a present destination also matches its filesystem-manifest row. |
-| `P0-REQ-14` | In progress | 0C | `P0-REQ-12` | An unbenchmarked run selects any artifact declared by one of its stages; a benchmarked run still selects `model` from a training stage. |
+| `P0-REQ-14` | Complete | 0C | `P0-REQ-12` | An unbenchmarked run selects any artifact declared by one of its stages; a benchmarked run still selects `model` from a training stage. |
 | `P0-REQ-15` | Complete | 0C | `P0-REQ-11` | A governed stage may use the exact operating-system null device without creating a provenance edge or satisfying a declared-input read. |
 | `P0-REQ-16` | Complete | 0C | `P0-REQ-11` | Runtime module lookup uses the workspace module objects loaded with the frozen stage callable and restores the prior module registry afterward. |
 | `P0-REQ-17` | Complete | 0C | `P0-REQ-11` | A governed stage may read exact Python sources in its frozen Git commit without opening the declared data boundary to untracked or non-Python files. |
 | `P0-REQ-18` | Complete | 0C | None | A result-verification failure finalizes one failed attempt without masking the verification error. |
-| `P0-REQ-19` | In progress | 0C | None | An execution caller may explicitly trust additional source repositories whose artifact loaders must run while verifying prior-run inputs. |
-| `P0-REQ-20` | In progress | 0C | None | A stored-input path outside `inputs/` fails during authoring and publishes no pointer. |
-| `P0-REQ-21` | In progress | 0C | None | One execution reuses the authenticated checkout for equal external repository and commit identities. |
-| `P0-REQ-22` | In progress | 0C | None | Equal producer-run references share one verified producer result while artifact checks remain per pointer. |
-| `P0-REQ-23` | In progress | 0C | None | Import bindings do not cause domain widening when CodeQL already identifies the runtime callers. |
-| `P0-REQ-24` | In progress | 0C | None | Repository-owned stage process calls use the spawn-safe subprocess facade. |
+| `P0-REQ-19` | Complete | 0C | None | An execution caller may explicitly trust additional source repositories whose artifact loaders must run while verifying prior-run inputs. |
+| `P0-REQ-20` | Complete | 0C | None | A stored-input path outside `inputs/` fails during authoring and publishes no pointer. |
+| `P0-REQ-21` | Complete | 0C | None | One execution reuses the authenticated checkout for equal external repository and commit identities. |
+| `P0-REQ-22` | Complete | 0C | None | Equal producer-run references share one verified producer result while artifact checks remain per pointer. |
+| `P0-REQ-23` | Complete | 0C | None | Import bindings do not cause domain widening when CodeQL already identifies the runtime callers. |
+| `P0-REQ-24` | Complete | 0C | None | Repository-owned stage process calls use the spawn-safe subprocess facade. |
 
 ## Phase 0A. Verify the MANTRA workspace and environment
 
@@ -270,18 +272,18 @@ definitions in RICO.
       `P0-PB-05A`.
       <!-- pair-block: P0-PB-05A -->
       <!-- pair-block-contract: P0-PB-05A contract=docs/contracts/mantra-rebuild-phase-0.md -->
-- [ ] Produce the ordered archive-chunk plan in `P0-PB-05B` and obtain the
+- [x] Produce the ordered archive-chunk plan in `P0-PB-05B` and obtain the
       user's approval for cache retention and deletion timing.
       <!-- pair-block: P0-PB-05B -->
       <!-- pair-block-contract: P0-PB-05B contract=docs/contracts/mantra-rebuild-phase-0.md -->
 - [x] Add and verify the governed VIPER file-access mode in `P0-PB-05C`.
       <!-- pair-block: P0-PB-05C -->
       <!-- pair-block-contract: P0-PB-05C contract=docs/contracts/mantra-rebuild-phase-0.md -->
-- [ ] Permit an unbenchmarked VIPER restoration run to select its restored
+- [x] Permit an unbenchmarked VIPER restoration run to select its restored
       `model` output in `P0-PB-05D`.
       <!-- pair-block: P0-PB-05D -->
       <!-- pair-block-contract: P0-PB-05D contract=docs/contracts/mantra-rebuild-phase-0.md -->
-- [ ] Permit an unbenchmarked VIPER replay to select its declared terminal
+- [x] Permit an unbenchmarked VIPER replay to select its declared terminal
       receipt in `P0-PB-05E`.
       <!-- pair-block: P0-PB-05E -->
       <!-- pair-block-contract: P0-PB-05E contract=docs/contracts/mantra-rebuild-phase-0.md -->
@@ -301,34 +303,34 @@ definitions in RICO.
       `P0-PB-05I`.
       <!-- pair-block: P0-PB-05I -->
       <!-- pair-block-contract: P0-PB-05I contract=docs/contracts/mantra-rebuild-phase-0.md -->
-- [ ] Permit a caller to approve prior-run source repositories for loader
+- [x] Permit a caller to approve prior-run source repositories for loader
       execution in `P0-PB-05J`.
       <!-- pair-block: P0-PB-05J -->
       <!-- pair-block-contract: P0-PB-05J contract=docs/contracts/mantra-rebuild-phase-0.md -->
-- [ ] Reuse one authenticated checkout for files from the same external Git
+- [x] Reuse one authenticated checkout for files from the same external Git
       revision in `P0-PB-05K`.
       <!-- pair-block: P0-PB-05K -->
       <!-- pair-block-contract: P0-PB-05K contract=docs/contracts/mantra-rebuild-phase-0.md -->
-- [ ] Reject stored-input destinations outside `inputs/` during authoring in
+- [x] Reject stored-input destinations outside `inputs/` during authoring in
       `P0-PB-05L`.
       <!-- pair-block: P0-PB-05L -->
       <!-- pair-block-contract: P0-PB-05L contract=docs/contracts/mantra-rebuild-phase-0.md -->
-- [ ] Verify each exact producer run once per verification pass in
+- [x] Verify each exact producer run once per verification pass in
       `P0-PB-05M`.
       <!-- pair-block: P0-PB-05M -->
       <!-- pair-block-contract: P0-PB-05M contract=docs/contracts/mantra-rebuild-phase-0.md -->
-- [ ] Exclude imported local names from runtime one-hop callers in
+- [x] Exclude imported local names from runtime one-hop callers in
       `P0-PB-05N`.
       <!-- pair-block: P0-PB-05N -->
       <!-- pair-block-contract: P0-PB-05N contract=docs/contracts/mantra-rebuild-phase-0.md -->
-- [ ] Route stage-worker process launches through the spawn-safe facade in
+- [x] Route stage-worker process launches through the spawn-safe facade in
       `P0-PB-05O`.
       <!-- pair-block: P0-PB-05O -->
       <!-- pair-block-contract: P0-PB-05O contract=docs/contracts/mantra-rebuild-phase-0.md -->
 - [ ] Measure free space and save a passing capacity receipt before download.
       <!-- pair-block: P0-PB-05 -->
       <!-- pair-block-contract: P0-PB-05 contract=docs/contracts/mantra-rebuild-phase-0.md -->
-- [ ] Register the active `P0-PB-10` controller and its acceptance evidence in
+- [x] Register the active `P0-PB-10` controller and its acceptance evidence in
       VIPER.
       <!-- pair-block: P0-PB-10 -->
       <!-- pair-block-contract: P0-PB-10 contract=docs/contracts/mantra-rebuild-phase-0.md -->
@@ -364,7 +366,7 @@ after the full Phase 0 artifact set is known.
       <!-- pair-block-contract: P0-PB-01 contract=docs/contracts/mantra-rebuild-phase-0.md -->
 - [ ] Register graph $B$, the environment receipt, the capacity receipt, and
       every restoration receipt in VIPER.
-- [ ] Verify the complete graph and demonstrate failure after removing one
+- [x] Verify the complete graph and demonstrate failure after removing one
       required node or edge.
       <!-- pair-block: P0-PB-06 -->
       <!-- pair-block-contract: P0-PB-06 contract=docs/contracts/mantra-rebuild-phase-0.md -->
@@ -378,11 +380,11 @@ after the focused tests and graph rejection test pass.
 
 **Depends on:** Phase 0D
 
-- [ ] Replay the selected Hopfield raw-gene readout and compare the generated
+- [x] Replay the selected Hopfield raw-gene readout and compare the generated
       predictions and score with parity graph $Q_H$.
       <!-- pair-block: P0-PB-07 -->
       <!-- pair-block-contract: P0-PB-07 contract=docs/contracts/mantra-rebuild-phase-0.md -->
-- [ ] Replay v1952 seed 123460 `without_control` on the historical
+- [x] Replay v1952 seed 123460 `without_control` on the historical
       L4-class environment and compare its output with the approved MIL parity
       references.
       <!-- pair-block: P0-PB-08 -->
@@ -398,11 +400,11 @@ gate passes.
 
 **Depends on:** Phase 0E
 
-- [ ] Complete the VIPER usefulness ledger, register every Phase 0 evidence
+- [x] Complete the VIPER usefulness ledger, register every Phase 0 evidence
       artifact, and obtain the user's approval to begin reconstruction.
       <!-- pair-block: P0-PB-09 -->
       <!-- pair-block-contract: P0-PB-09 contract=docs/contracts/mantra-rebuild-phase-0.md -->
-- [ ] Verify the frozen evidence index in one RICO-rooted VIPER run.
+- [x] Verify the frozen evidence index in one RICO-rooted VIPER run.
       <!-- pair-block: P0-PB-09A -->
       <!-- pair-block-contract: P0-PB-09A contract=docs/contracts/mantra-rebuild-phase-0.md -->
 

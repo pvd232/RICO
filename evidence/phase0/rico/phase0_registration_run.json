@@ -1,0 +1,23 @@
+{
+  "schema_version": "rico.phase0_registration_run.v1",
+  "run_id": "01M2C9563W9TQWT67RBRCG6YD2",
+  "status": "succeeded",
+  "started_at": "2026-09-13T02:22:19.416267Z",
+  "completed_at": "2026-09-13T02:27:03.249536Z",
+  "elapsed_seconds": 283.833269,
+  "rico_commit": "524dadb2193bca1bba501bb1a8584d5ca22afedf",
+  "viper_commit": "3383713d7c6c90528b133df4b402d23bb86ddcee",
+  "resolved_run": {
+    "bytes": 981,
+    "kind": "resolved_run",
+    "sha256": "f291dc0c12259b52305dd6b0cee966c1cf9a2d910a2c830bd08d5c62fcb16e12",
+    "stored_at": {
+      "commit": "2c9355a639fad848489254d038a74c2b49ea0283957cd9406f21cc3ee9e7e603",
+      "kind": "local",
+      "path": "experiments/rico_mantra_phase0_evidence/runs/complete/01M2C9563W9TQWT67RBRCG6YD2/resolved.yaml",
+      "store": ".viper/store",
+      "store_id": "ee7fe68012cd78e4fca5f004490f3ce5",
+      "workspace": "/home/machina/RICO"
+    }
+  }
+}

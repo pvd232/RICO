@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "b70950db55caba851bdd3fee1cde90ba3b8fa397a89f7787ad89cf56ba130da8",
+  "checklist_written_sha256": "30ab4f1d10fea1cbd0d0338c58b31899a0a8cbcc3194b86cff3ba1295e6ce403",
+  "event": "register",
+  "evidence": {
+    "kind": "external",
+    "revision": "f291dc0c12259b52305dd6b0cee966c1cf9a2d910a2c830bd08d5c62fcb16e12",
+    "target": "mantra-g2-replay:/home/machina/RICO/experiments/rico_mantra_phase0_evidence/runs/complete/01M2C9563W9TQWT67RBRCG6YD2/resolved.yaml"
+  },
+  "pair_block_id": "P0-PB-05B",
+  "previous_receipt": "../../evidence/pairblock-lifecycle/p0-pb-05b/20260912T192242.315993Z-accept.json",
+  "recorded_at": "2026-09-13T02:31:38.391261+00:00",
+  "repository_head": "524dadb2193bca1bba501bb1a8584d5ca22afedf",
+  "result": "applied",
+  "schema_version": 1,
+  "status_after": "Complete",
+  "status_before": "Applied"
+}
