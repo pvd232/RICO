@@ -1,0 +1,22 @@
+{
+  "checklist_before_sha256": "ac68e5cf0d8804116dd3e11c14db7abc8464f2f8ea79a1530c2ef5c098ace154",
+  "checklist_written_sha256": "a271964b146932d291c6dc2507e82174a50083beead18e2540002d02ce529b44",
+  "declaration_repository_head": "bdcbc305ff507c9df8717682affebe8d335ce857",
+  "declaration_sha256": "f8410b5c3258f20b4bbd262721ae19a692fd8b449b6248057a838321e2067ba1",
+  "event": "approve",
+  "evidence": {
+    "kind": "external",
+    "revision": "msg_06a20323999b9433016aa63470dc1c87d1a031b4d9784d0d39",
+    "target": "User approval in the Codex task"
+  },
+  "implementation_repository_head": "bdcbc305ff507c9df8717682affebe8d335ce857",
+  "pair_block_fingerprint": "69854745b91280554e4718548024046a819fe5fc7cb4138136b02b835e67036e",
+  "pair_block_id": "P0-PB-10E",
+  "previous_receipt": "evidence/pairblock-gates/p0-pb-10e/20260913T061228.145467Z.json",
+  "recorded_at": "2026-09-13T06:13:14.645890+00:00",
+  "repository_head": "bdcbc305ff507c9df8717682affebe8d335ce857",
+  "result": "applied",
+  "schema_version": 3,
+  "status_after": "Approved",
+  "status_before": "Review"
+}

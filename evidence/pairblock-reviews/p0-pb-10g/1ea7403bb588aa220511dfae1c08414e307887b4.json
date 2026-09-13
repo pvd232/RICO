@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-10G",
+  "requirement_ids": ["P0-REQ-31"],
+  "repository": "https://github.com/pvd232/RICO.git",
+  "base_commit": "f033bd07a07065685f4921e1095bc13a6185306d",
+  "result_commit": "1ea7403bb588aa220511dfae1c08414e307887b4",
+  "owned_paths": [
+    "tools/pairblock_status/projection_transaction.py",
+    "tools/pairblock_status/pairblock_controller.py",
+    "tests/pairblock_status/test_projection_recovery.py"
+  ],
+  "diff_sha256": "5c2d1c57d8eb859409c50d2bc771ae56341f07c94558ec2942a77912ebc25661",
+  "invariants": [
+    "A state transition persists a prepared recovery record before it changes either human projection.",
+    "The authoritative lifecycle receipt is published only after both projection byte identities and the semantic validator agree.",
+    "The next controller invocation completes an interrupted prepared transition idempotently before it begins new work."
+  ],
+  "findings": [],
+  "mechanical_evidence": {
+    "gate_receipt": "evidence/pairblock-gates/p0-pb-10g/20260913T061324.012802Z.json",
+    "result": "4 passed in 0.05s; Pyright, Ruff format check, and Ruff check passed",
+    "git_diff_check": "passed",
+    "upstream_match": "deferred until the reviewed session changes are pushed"
+  },
+  "exclusions": [
+    "The transaction coordinates files within one repository; distributed transactions across repositories remain separate committed operations."
+  ],
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-13T06:13:25Z"
+}
