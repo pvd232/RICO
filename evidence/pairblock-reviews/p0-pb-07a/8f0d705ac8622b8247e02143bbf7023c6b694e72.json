@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-07A",
+  "requirement_ids": [
+    "P0-REQ-26",
+    "P0-REQ-35"
+  ],
+  "repository": "https://github.com/pvd232/MANTRA.git",
+  "base_commit": "07993ada4",
+  "result_commit": "8f0d705ac8622b8247e02143bbf7023c6b694e72",
+  "owned_paths": [
+    "src/mantra/rebuild/hopfield_replay.py",
+    "src/mantra/rebuild/tests/test_hopfield_replay.py"
+  ],
+  "diff_sha256": "b44b992b5aef86c6df02ec556103c58655793c636ecfea7e22098b3dd68956d2",
+  "invariants": [
+    "Every replay input declares its repository or restoration-run source and its expected file identity.",
+    "The prediction and evaluation stages expose role-specific output handles and restore both selected artifacts in one operation.",
+    "The replay passes only when the produced prediction archive matches the approved archive in byte count and SHA-256 and the hold PearsonDelta equals the approved score.",
+    "Array keys, dtypes, shapes, and values remain diagnostic evidence and cannot substitute for file identity."
+  ],
+  "findings": [],
+  "mechanical_evidence": {
+    "focused_command": "python -m pyright src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_hopfield_replay.py && python -m pytest --rootdir=/Users/machina/Developer/ChatGPT/mantra/src --confcutdir=/Users/machina/Developer/ChatGPT/mantra/src src/mantra/rebuild/tests/test_hopfield_replay.py -q && python -m ruff format --check src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_hopfield_replay.py && python -m ruff check src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_hopfield_replay.py",
+    "focused_result": "Pyright reported 0 errors; 14 tests passed in 3.81 seconds; Ruff formatting and lint checks passed.",
+    "git_diff_check": "passed",
+    "implementation_repository_head": "8f0d705ac8622b8247e02143bbf7023c6b694e72",
+    "real_acceptance": "The focused tests reject changed arrays, changed NPZ bytes with equal arrays, changed historical identity, and changed hold PearsonDelta."
+  },
+  "exclusions": [
+    "The L4 replay remains the execution acceptance event and has not run in this review cycle."
+  ],
+  "verdict": "Approve",
+  "reviewer": "Codex self-review following user line review",
+  "reviewed_at": "2026-09-13T07:26:09Z"
+}
