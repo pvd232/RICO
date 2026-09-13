@@ -48,6 +48,7 @@ The [Mantra rebuild master checklist](../checklists/mantra-rebuild.md) owns exec
 | `P0-REQ-16` | Keep the exact workspace module objects loaded with a frozen stage callable available while that callable executes. | [`P0-PB-05G`](#p0-pb-05g) |
 | `P0-REQ-17` | Permit governed reads of exact Python source files present in the run's frozen Git commit without treating those files as data inputs. | [`P0-PB-05H`](#p0-pb-05h) |
 | `P0-REQ-18` | Publish the final failed attempt after result verification rejects a provisional successful attempt. | [`P0-PB-05I`](#p0-pb-05i) |
+| `P0-REQ-19` | Let an execution caller explicitly approve additional source repositories whose artifact loaders must run while verifying prior-run inputs. | [`P0-PB-05J`](#p0-pb-05j) |
 
 ## 2. Required claim
 
@@ -283,12 +284,13 @@ The dependency graph, restoration bindings, environment receipt, capacity receip
 | `P0-VR-15` | The stage loader retains the exact workspace module objects imported with the frozen callable. The worker exposes those objects through `sys.modules` only during invocation and restores every prior entry afterward. Runtime module lookup resolves without reopening repository source or bytecode. | [`P0-PB-05G`](#p0-pb-05g) |
 | `P0-VR-16` | Before governed access begins, the worker derives the exact tracked `.py` paths from the frozen source commit. The observer permits those source reads without recording data-access evidence, while an untracked Python file and a tracked non-Python file remain undeclared reads. | [`P0-PB-05H`](#p0-pb-05h) |
 | `P0-VR-17` | A result-verification failure writes one failed `resolved.yaml` whose failure message preserves the verification error. | [`P0-PB-05I`](#p0-pb-05i) |
+| `P0-VR-18` | Execution trusts the current run source plus only the additional repositories named by the caller. A prior-run loader from an unnamed repository remains rejected. | [`P0-PB-05J`](#p0-pb-05j) |
 
 ## 8. Acceptance boundary
 
 ### Success
 
-Phase 0 passes when `P0-VR-01` through `P0-VR-17` pass, every required provenance record exists in VIPER, the user reviews the complete evidence set, and the repository contains a synced commit recording the approved contract and Phase 0 receipts.
+Phase 0 passes when `P0-VR-01` through `P0-VR-18` pass, every required provenance record exists in VIPER, the user reviews the complete evidence set, and the repository contains a synced commit recording the approved contract and Phase 0 receipts.
 
 ### Rejection
 
@@ -310,6 +312,7 @@ Phase 0 fails when $B$ contains an unnecessary node, omits a required node or ed
 | `P0-PB-05G` | VIPER workspace-module activation during stage invocation | `P0-VR-15`. |
 | `P0-PB-05H` | VIPER frozen-source reads during governed stage invocation | `P0-VR-16`. |
 | `P0-PB-05I` | VIPER failed-attempt finalization after result verification | `P0-VR-17`. |
+| `P0-PB-05J` | Explicit trust for prior-run source repositories during execution | `P0-VR-18`. |
 | `P0-PB-06` | Verified restoration and graph-completeness rejection test | `P0-VR-04` and `P0-VR-06`. |
 | `P0-PB-07` | Hopfield VIPER adapter, focused test, and historical raw-gene readout replay | `P0-VR-07`. |
 | `P0-PB-08` | v1952 MIL seed-123460 `without_control` replay | `P0-VR-08`. |
@@ -339,6 +342,7 @@ Resolution status lives in the [master checklist](../checklists/mantra-rebuild.m
 | [`P0-PB-05G`](../checklists/mantra-rebuild.md#pairblock-resolution) | Preserve the frozen callable's workspace modules during invocation. | Codex implements and independently reviews the VIPER change. | [Loader](../../../viper/src/viper/stages.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Tests](../../../viper/tests/test_stage_invocation.py) | `P0-VR-15` |
 | [`P0-PB-05H`](../checklists/mantra-rebuild.md#pairblock-resolution) | Permit reads of Python source captured by the run's frozen Git commit. | Codex implements and independently reviews the VIPER change. | [Observer](../../../viper/src/viper/_workers/file_access.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Tests](../../../viper/tests/test_stage_file_access.py) | `P0-VR-16` |
 | [`P0-PB-05I`](../checklists/mantra-rebuild.md#pairblock-resolution) | Finalize a failed attempt after result verification rejects it. | Codex implements and independently reviews the VIPER change. | [Attempt execution](../../../viper/src/viper/execution/_attempt.py) · [Publication](../../../viper/src/viper/execution/_publication.py) · [Tests](../../../viper/tests/test_run_execution.py) | `P0-VR-17` |
+| [`P0-PB-05J`](../checklists/mantra-rebuild.md#pairblock-resolution) | Accept explicit trust for prior-run source repositories during execution. | Codex implements and independently reviews the VIPER change. | [Public execution](../../../viper/src/viper/execution/__init__.py) · [Attempt execution](../../../viper/src/viper/execution/_attempt.py) · [Tests](../../../viper/tests/test_run_execution.py) | `P0-VR-18` |
 | [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | Import the 27 restored disk files and verify graph $B$. | Codex implemented and independently reviewed MANTRA through `ee8a23cd1085846a0c14bb9272c336247483a437`. | [Bindings](../../../mantra/src/mantra/rebuild/restoration.py) · [VIPER workflow](../../../mantra/src/mantra/rebuild/viper_restore.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_viper_restore.py) · [Review](../../evidence/pairblock-reviews/p0-pb-06/ee8a23cd1085846a0c14bb9272c336247483a437.json) | `P0-VR-04`, `P0-VR-06`, and `P0-REQ-13` |
 | [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay Hopfield. | Codex independently reviewed the restoration-run linkage through `461d605af8d4dd68c903779136b0cc365fb453e4`. | [Source](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py) · [Review](../../evidence/pairblock-reviews/p0-pb-07/461d605af8d4dd68c903779136b0cc365fb453e4.json) | `P0-VR-07` |
 | [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay standalone MIL application. | Codex independently reviewed the restoration-run linkage through `5e822ffa289d58092a2a6b9edc5799b477e44eee`. | [Source](../../../mantra/src/mantra/rebuild/mil_replay.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py) · [Review](../../evidence/pairblock-reviews/p0-pb-08/5e822ffa289d58092a2a6b9edc5799b477e44eee.json) | `P0-VR-08` |
@@ -472,6 +476,14 @@ When result verification rejects an attempt that completed its stages, publish
 the failed attempt at `attempts/<id>/resolved.yaml` and preserve the original
 verification message in `AttemptFailure.message`. [Review the implementation
 and gate](#p0-pb-05i-proposed-code).
+
+#### P0-PB-05J
+
+Accept an optional set of trusted source-repository URLs on VIPER execution
+entry points. Verification trusts the current run's source and adds only the
+repositories in that caller-supplied set. This lets a RICO run verify and load
+MANTRA prior-run artifacts without granting implicit trust to every referenced
+repository. [Review the implementation and gate](#p0-pb-05j-proposed-code).
 
 #### P0-PB-06
 
@@ -802,6 +814,7 @@ choices.
 | [`P0-PB-05G`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Loader](../../../viper/src/viper/stages.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Tests](../../../viper/tests/test_stage_invocation.py) · [Gate](#p0-pb-05g-proposed-code) |
 | [`P0-PB-05H`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Observer](../../../viper/src/viper/_workers/file_access.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Tests](../../../viper/tests/test_stage_file_access.py) · [Gate](#p0-pb-05h-proposed-code) |
 | [`P0-PB-05I`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Attempt](../../../viper/src/viper/execution/_attempt.py) · [Publication](../../../viper/src/viper/execution/_publication.py) · [Tests](../../../viper/tests/test_run_execution.py) · [Gate](#p0-pb-05i-proposed-code) |
+| [`P0-PB-05J`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Public execution](../../../viper/src/viper/execution/__init__.py) · [Attempt execution](../../../viper/src/viper/execution/_attempt.py) · [Tests](../../../viper/tests/test_run_execution.py) · [Gate](#p0-pb-05j-proposed-code) |
 | [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Bindings](../../../mantra/src/mantra/rebuild/restoration.py) · [VIPER workflow](../../../mantra/src/mantra/rebuild/viper_restore.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_viper_restore.py) · [Gate](#p0-pb-06-proposed-code) · [Review](../../evidence/pairblock-reviews/p0-pb-06/ee8a23cd1085846a0c14bb9272c336247483a437.json) |
 | [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py) · [Gate](#p0-pb-07-accepted-implementation) · [Review](../../evidence/pairblock-reviews/p0-pb-07/461d605af8d4dd68c903779136b0cc365fb453e4.json) |
 | [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/src/mantra/rebuild/mil_replay.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py) · [Gate](#p0-pb-08-accepted-implementation) · [Review](../../evidence/pairblock-reviews/p0-pb-08/5e822ffa289d58092a2a6b9edc5799b477e44eee.json) |
@@ -1431,6 +1444,57 @@ record `failed`, `verification_failed`, and the original verification message.
 **Stop condition:** Reject the patch if it changes successful publication,
 overwrites a terminal attempt from another execution, or replaces the original
 verification message.
+
+### P0-PB-05J implementation record
+
+**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
+
+**Requirement:** Accept explicit trust for prior-run source repositories while
+executing and verifying a run.
+
+**Dependency:** None. RICO terminal registration supplies the MANTRA repository
+as an additional trusted source.
+
+##### `P0-PB-05J` proposed code
+
+**Code boundary:** [public execution](../../../viper/src/viper/execution/__init__.py),
+[run execution](../../../viper/src/viper/execution/_run.py), [attempt execution](../../../viper/src/viper/execution/_attempt.py),
+and [execution tests](../../../viper/tests/test_run_execution.py).
+
+**Implementation requirements:** Execution entry points accept
+`trusted_source_repositories` as an optional frozen set of repository URLs.
+`execute_attempt()` constructs one `VerificationPolicy` from the current run
+source and that explicit set. The default set is empty. The resulting policy is
+used both when prior-run inputs materialize and when the terminal result is
+verified.
+
+**Runtime and workflow effect:** Runs without cross-repository prior inputs add
+no setting. A caller that consumes such an input names its producer repository
+once. Policy construction adds one set union per attempt; model and artifact
+execution are unchanged.
+
+**Focused check:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/viper
+source .venv/bin/activate
+python -m ruff check \
+  src/viper/execution/__init__.py \
+  src/viper/execution/_run.py \
+  src/viper/execution/_attempt.py \
+  tests/test_run_execution.py
+python -m pytest \
+  tests/test_run_execution.py -k 'trusted_source_repositories' -q
+```
+
+**Gate:** The focused tests prove that execution passes the explicit set into
+attempt verification, the current run source remains trusted, an approved
+prior-run source is trusted, and an unapproved source remains rejected.
+
+**Stop condition:** Reject the patch if any referenced repository becomes
+trusted implicitly, the default trusts an additional repository, or the policy
+used for materialization differs from the policy used for terminal
+verification.
 
 ### P0-PB-06 implementation record
 

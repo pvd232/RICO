@@ -90,6 +90,7 @@ controls. The completed set contains 27 Hopfield and MIL destinations in
 | `P0-PB-05G` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05g/20260913T001013.825215Z-register.json)) | Complete | `P0-PB-05C` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05g) | [Loader](../../../viper/src/viper/stages.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Tests](../../../viper/tests/test_stage_invocation.py) · [Test map](../../../viper/tests/declaration_observers.toml) |
 | `P0-PB-05H` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05h/20260913T001014.084630Z-register.json)) | Complete | `P0-PB-05C` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05h) | [Observer](../../../viper/src/viper/_workers/file_access.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Tests](../../../viper/tests/test_stage_file_access.py) · [Test map](../../../viper/tests/declaration_observers.toml) |
 | `P0-PB-05I` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05i/20260913T005528.163327Z-register.json)) | Complete | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05i) | [Attempt](../../../viper/src/viper/execution/_attempt.py) · [Publication](../../../viper/src/viper/execution/_publication.py) · [Tests](../../../viper/tests/test_run_execution.py) |
+| `P0-PB-05J` | Pending | Drafting | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05j) | [Proposed code](../contracts/mantra-rebuild-phase-0.md#p0-pb-05j-proposed-code) |
 | `P0-PB-06` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-06/20260912T203846.816608Z-accept.json)) | Applied | `P0-PB-04A`, `P0-PB-04B`, `P0-PB-05A`, `P0-PB-05B`, `P0-PB-05C`, `P0-PB-05D` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-06) | [Bindings](../../../mantra/src/mantra/rebuild/restoration.py) · [VIPER](../../../mantra/src/mantra/rebuild/viper_restore.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_viper_restore.py) |
 | `P0-PB-07` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-07/20260912T205719.212980Z-accept.json)) | Applied | `P0-PB-06` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-07) | [Source](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py) |
 | `P0-PB-08` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-08/20260912T210907.846992Z-accept.json)) | Applied | `P0-PB-06` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-08) | [Source](../../../mantra/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py) |
@@ -205,6 +206,7 @@ This table schedules every requirement in the approved Phase 0 contract once.
 | `P0-REQ-16` | Complete | 0C | `P0-REQ-11` | Runtime module lookup uses the workspace module objects loaded with the frozen stage callable and restores the prior module registry afterward. |
 | `P0-REQ-17` | Complete | 0C | `P0-REQ-11` | A governed stage may read exact Python sources in its frozen Git commit without opening the declared data boundary to untracked or non-Python files. |
 | `P0-REQ-18` | Complete | 0C | None | A result-verification failure finalizes one failed attempt without masking the verification error. |
+| `P0-REQ-19` | In progress | 0C | None | An execution caller may explicitly trust additional source repositories whose artifact loaders must run while verifying prior-run inputs. |
 
 ## Phase 0A. Verify the MANTRA workspace and environment
 
@@ -289,6 +291,10 @@ definitions in RICO.
       `P0-PB-05I`.
       <!-- pair-block: P0-PB-05I -->
       <!-- pair-block-contract: P0-PB-05I contract=docs/contracts/mantra-rebuild-phase-0.md -->
+- [ ] Permit a caller to approve prior-run source repositories for loader
+      execution in `P0-PB-05J`.
+      <!-- pair-block: P0-PB-05J -->
+      <!-- pair-block-contract: P0-PB-05J contract=docs/contracts/mantra-rebuild-phase-0.md -->
 - [ ] Measure free space and save a passing capacity receipt before download.
       <!-- pair-block: P0-PB-05 -->
       <!-- pair-block-contract: P0-PB-05 contract=docs/contracts/mantra-rebuild-phase-0.md -->
