@@ -1393,7 +1393,10 @@ verification.
 
 **Code boundary:** [attempt execution](../../../viper/src/viper/execution/_attempt.py),
 [attempt publication](../../../viper/src/viper/execution/_publication.py), and
-[execution tests](../../../viper/tests/test_run_execution.py).
+[execution tests](../../../viper/tests/test_run_execution.py). The independent
+[review receipt](../../evidence/pairblock-reviews/p0-pb-05i/68153714be50ec477af808d462ada809b9908acd.json)
+binds the complete change to VIPER commit
+`68153714be50ec477af808d462ada809b9908acd`.
 
 **Implementation requirements:** `write_attempt_document()` retains its
 immutable-write behavior for ordinary publication. The exception path replaces
@@ -1416,7 +1419,9 @@ python -m ruff check \
   src/viper/execution/_publication.py \
   tests/test_run_execution.py
 python -m pytest \
-  tests/test_run_execution.py::test_result_verification_failure_finalizes_failed_attempt -q
+  tests/test_run_execution.py::test_failed_attempt_replaces_provisional_document \
+  tests/test_run_execution.py::test_two_stage_local_run_writes_and_verifies_terminal_result \
+  -q
 ```
 
 **Gate:** The focused test forces `verify_run_result()` to reject a provisional

@@ -1,0 +1,1538 @@
+{
+  "edges": [
+    {
+      "input_name": "bindings",
+      "kind": "consumes",
+      "source": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:prepare_controls:bindings",
+      "target": "stage:restoration:restore"
+    },
+    {
+      "input_name": "control_receipt",
+      "kind": "consumes",
+      "source": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:prepare_controls:control_receipt",
+      "target": "stage:restoration:restore"
+    },
+    {
+      "input_name": "controls",
+      "kind": "consumes",
+      "source": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:prepare_controls:controls",
+      "target": "stage:restoration:restore"
+    },
+    {
+      "input_name": "coefficient_targets",
+      "kind": "consumes",
+      "source": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:coefficient_targets",
+      "target": "stage:hopfield:predict"
+    },
+    {
+      "input_name": "fit_tune_truth",
+      "kind": "consumes",
+      "source": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:fit_tune_gene_deltas",
+      "target": "stage:hopfield:predict"
+    },
+    {
+      "input_name": "hold_truth",
+      "kind": "consumes",
+      "source": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:hold_gene_deltas",
+      "target": "stage:hopfield:evaluate"
+    },
+    {
+      "input_name": "mil_base_step01_predictions",
+      "kind": "consumes",
+      "source": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_base_step01_predictions",
+      "target": "stage:mil:apply"
+    },
+    {
+      "input_name": "mil_cell_program_projections",
+      "kind": "consumes",
+      "source": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_cell_program_projections",
+      "target": "stage:mil:apply"
+    },
+    {
+      "input_name": "mil_coefficient_targets",
+      "kind": "consumes",
+      "source": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_coefficient_targets",
+      "target": "stage:mil:apply"
+    },
+    {
+      "input_name": "mil_control_program_features",
+      "kind": "consumes",
+      "source": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_control_program_features",
+      "target": "stage:mil:apply"
+    },
+    {
+      "input_name": "mil_core83_features",
+      "kind": "consumes",
+      "source": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_core83_features",
+      "target": "stage:mil:apply"
+    },
+    {
+      "input_name": "mil_family64_features",
+      "kind": "consumes",
+      "source": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_family64_features",
+      "target": "stage:mil:apply"
+    },
+    {
+      "input_name": "mil_fit_tune_gene_deltas",
+      "kind": "consumes",
+      "source": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_fit_tune_gene_deltas",
+      "target": "stage:mil:apply"
+    },
+    {
+      "input_name": "mil_hold_control_shift",
+      "kind": "consumes",
+      "source": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_hold_control_shift",
+      "target": "stage:mil:apply"
+    },
+    {
+      "input_name": "mil_hold_gene_deltas",
+      "kind": "consumes",
+      "source": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_hold_gene_deltas",
+      "target": "stage:mil:apply"
+    },
+    {
+      "input_name": "mil_ot_matched_cell_programs",
+      "kind": "consumes",
+      "source": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_ot_matched_cell_programs",
+      "target": "stage:mil:apply"
+    },
+    {
+      "input_name": "mil_parity_step02_predictions",
+      "kind": "consumes",
+      "source": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_parity_step02_predictions",
+      "target": "stage:mil:evaluate"
+    },
+    {
+      "input_name": "mil_parity_step02_weights",
+      "kind": "consumes",
+      "source": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_parity_step02_weights",
+      "target": "stage:mil:evaluate"
+    },
+    {
+      "input_name": "mil_parity_step03_predictions",
+      "kind": "consumes",
+      "source": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_parity_step03_predictions",
+      "target": "stage:mil:evaluate"
+    },
+    {
+      "input_name": "mil_parity_step03_weights",
+      "kind": "consumes",
+      "source": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_parity_step03_weights",
+      "target": "stage:mil:evaluate"
+    },
+    {
+      "input_name": "mil_projected_step01_predictions",
+      "kind": "consumes",
+      "source": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_projected_step01_predictions",
+      "target": "stage:mil:apply"
+    },
+    {
+      "input_name": "mil_proto_identity",
+      "kind": "consumes",
+      "source": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_proto_identity",
+      "target": "stage:mil:apply"
+    },
+    {
+      "input_name": "mil_response40_features",
+      "kind": "consumes",
+      "source": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_response40_features",
+      "target": "stage:mil:apply"
+    },
+    {
+      "input_name": "mil_response_block_contract",
+      "kind": "consumes",
+      "source": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_response_block_contract",
+      "target": "stage:mil:apply"
+    },
+    {
+      "input_name": "mil_response_rotation",
+      "kind": "consumes",
+      "source": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_response_rotation",
+      "target": "stage:mil:apply"
+    },
+    {
+      "input_name": "encoder",
+      "kind": "consumes",
+      "source": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:model",
+      "target": "stage:hopfield:predict"
+    },
+    {
+      "input_name": "response_contract",
+      "kind": "consumes",
+      "source": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:response_program_contract",
+      "target": "stage:hopfield:predict"
+    },
+    {
+      "input_name": "response_rotation",
+      "kind": "consumes",
+      "source": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:response_program_rotation",
+      "target": "stage:hopfield:predict"
+    },
+    {
+      "input_name": "response_similarity",
+      "kind": "consumes",
+      "source": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:response_program_similarity",
+      "target": "stage:hopfield:predict"
+    },
+    {
+      "input_name": "scores",
+      "kind": "consumes",
+      "source": "artifact:cd47771ce8c35c205cb23b0dec4147538916653c1c37e3bb0aaef96456463f5a:apply:scores",
+      "target": "stage:mil:evaluate"
+    },
+    {
+      "input_name": "step02_predictions",
+      "kind": "consumes",
+      "source": "artifact:cd47771ce8c35c205cb23b0dec4147538916653c1c37e3bb0aaef96456463f5a:apply:step02_predictions",
+      "target": "stage:mil:evaluate"
+    },
+    {
+      "input_name": "step02_weights",
+      "kind": "consumes",
+      "source": "artifact:cd47771ce8c35c205cb23b0dec4147538916653c1c37e3bb0aaef96456463f5a:apply:step02_weights",
+      "target": "stage:mil:evaluate"
+    },
+    {
+      "input_name": "step03_predictions",
+      "kind": "consumes",
+      "source": "artifact:cd47771ce8c35c205cb23b0dec4147538916653c1c37e3bb0aaef96456463f5a:apply:step03_predictions",
+      "target": "stage:mil:evaluate"
+    },
+    {
+      "input_name": "step03_weights",
+      "kind": "consumes",
+      "source": "artifact:cd47771ce8c35c205cb23b0dec4147538916653c1c37e3bb0aaef96456463f5a:apply:step03_weights",
+      "target": "stage:mil:evaluate"
+    },
+    {
+      "input_name": "attention",
+      "kind": "consumes",
+      "source": "artifact:e6482dd72beee7010afcec9292e98c0fd71d6f9d823c9add901a8d2d553ac1b1:predict:attention",
+      "target": "stage:hopfield:evaluate"
+    },
+    {
+      "input_name": "predictions",
+      "kind": "consumes",
+      "source": "artifact:e6482dd72beee7010afcec9292e98c0fd71d6f9d823c9add901a8d2d553ac1b1:predict:predictions",
+      "target": "stage:hopfield:evaluate"
+    },
+    {
+      "input_name": "coefficient_targets",
+      "kind": "consumes",
+      "source": "file:experiments/v1938_sota_clean_repro/inputs/coefficient_targets/fit_tune_ctrl19_matched_response_coefficients.npz",
+      "target": "stage:restoration:restore"
+    },
+    {
+      "input_name": "core83",
+      "kind": "consumes",
+      "source": "file:experiments/v1938_sota_clean_repro/inputs/core83/features.npz",
+      "target": "stage:hopfield:predict"
+    },
+    {
+      "input_name": "family64",
+      "kind": "consumes",
+      "source": "file:experiments/v1938_sota_clean_repro/inputs/family64/features.npz",
+      "target": "stage:hopfield:predict"
+    },
+    {
+      "input_name": "fit_tune_gene_deltas",
+      "kind": "consumes",
+      "source": "file:experiments/v1938_sota_clean_repro/inputs/gene_delta_labels/fit_tune_ctrl19_matched_log1p_cp10k_gene_deltas.npz",
+      "target": "stage:restoration:restore"
+    },
+    {
+      "input_name": "hold_gene_deltas",
+      "kind": "consumes",
+      "source": "file:experiments/v1938_sota_clean_repro/inputs/gene_delta_labels/hold_global_control_log1p_cp10k_gene_deltas.npz",
+      "target": "stage:restoration:restore"
+    },
+    {
+      "input_name": "gene_shift",
+      "kind": "consumes",
+      "source": "file:experiments/v1938_sota_clean_repro/inputs/gene_shift/features.npz",
+      "target": "stage:hopfield:predict"
+    },
+    {
+      "input_name": "response40",
+      "kind": "consumes",
+      "source": "file:experiments/v1938_sota_clean_repro/inputs/response40/features.npz",
+      "target": "stage:hopfield:predict"
+    },
+    {
+      "input_name": "response_program_contract",
+      "kind": "consumes",
+      "source": "file:experiments/v1938_sota_clean_repro/inputs/response_programs/response_program_block_contract_16.npz",
+      "target": "stage:restoration:restore"
+    },
+    {
+      "input_name": "response_blocks",
+      "kind": "consumes",
+      "source": "file:experiments/v1938_sota_clean_repro/inputs/response_programs/response_program_blocks_16.json",
+      "target": "stage:hopfield:predict"
+    },
+    {
+      "input_name": "response_program_rotation",
+      "kind": "consumes",
+      "source": "file:experiments/v1938_sota_clean_repro/inputs/response_programs/response_program_rotation_210d.npz",
+      "target": "stage:restoration:restore"
+    },
+    {
+      "input_name": "response_program_similarity",
+      "kind": "consumes",
+      "source": "file:experiments/v1938_sota_clean_repro/inputs/response_programs/response_program_similarity_graph.npz",
+      "target": "stage:restoration:restore"
+    },
+    {
+      "input_name": "mil_base_step01_predictions",
+      "kind": "consumes",
+      "source": "file:experiments/v1938_sota_clean_repro/runs/checkpoint_bootstrap_20260713T030000Z/base_step01/candidates/mixed_src_snk_ripple_raw_pen1_directw2p0_local/checkpoints/mean/HOPFIELD_PREDICTIONS.npz",
+      "target": "stage:restoration:restore"
+    },
+    {
+      "input_name": "mil_projected_step01_predictions",
+      "kind": "consumes",
+      "source": "file:experiments/v1938_sota_clean_repro/runs/checkpoint_bootstrap_20260713T030000Z/projected_step01/candidates/aggregate_proto64_scale2p8_temp0p095/checkpoints/mean/HOPFIELD_PREDICTIONS.npz",
+      "target": "stage:restoration:restore"
+    },
+    {
+      "input_name": "model",
+      "kind": "consumes",
+      "source": "file:experiments/v1938_sota_clean_repro/runs/clean_shared_mil_proto_hyperparam_sweep_20260714T063000Z/base_step01/base_lr2e4/candidates/mixed_src_snk_ripple_raw_pen1_base_lr2e4/checkpoints/weights/BASE_STEP01_MODEL_WEIGHTS.npz",
+      "target": "stage:restoration:restore"
+    },
+    {
+      "input_name": "parity_report",
+      "kind": "consumes",
+      "source": "file:experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/diagnostics/RAW_GENE_READOUT_TUNING_FIT_ONLY_RESULTS.json",
+      "target": "stage:hopfield:evaluate"
+    },
+    {
+      "input_name": "hopfield_parity_predictions",
+      "kind": "consumes",
+      "source": "file:experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/out/raw_gene_readout_tuning_fit_only/best/RAW_GENE_PREDICTIONS.npz",
+      "target": "stage:restoration:restore"
+    },
+    {
+      "input_name": "mil_cell_program_projections",
+      "kind": "consumes",
+      "source": "file:experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/cellwise/cell_program_projections.npz",
+      "target": "stage:restoration:restore"
+    },
+    {
+      "input_name": "mil_ot_matched_cell_programs",
+      "kind": "consumes",
+      "source": "file:experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/cellwise/ot_matched_cell_programs.npz",
+      "target": "stage:restoration:restore"
+    },
+    {
+      "input_name": "mil_coefficient_targets",
+      "kind": "consumes",
+      "source": "file:experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/coefficient_targets/fit_tune_response_coefficients.npz",
+      "target": "stage:restoration:restore"
+    },
+    {
+      "input_name": "mil_control_program_features",
+      "kind": "consumes",
+      "source": "file:experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/control_state/ot_matched_control_program_features.npz",
+      "target": "stage:restoration:restore"
+    },
+    {
+      "input_name": "mil_hold_control_shift",
+      "kind": "consumes",
+      "source": "file:experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/control_state/ot_matched_control_program_gene_shift.npz",
+      "target": "stage:restoration:restore"
+    },
+    {
+      "input_name": "mil_core83_features",
+      "kind": "consumes",
+      "source": "file:experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/core83/features.npz",
+      "target": "stage:restoration:restore"
+    },
+    {
+      "input_name": "mil_family64_features",
+      "kind": "consumes",
+      "source": "file:experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/family64/features.npz",
+      "target": "stage:restoration:restore"
+    },
+    {
+      "input_name": "mil_fit_tune_gene_deltas",
+      "kind": "consumes",
+      "source": "file:experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/gene_delta_labels/fit_tune_ctrl19_matched_log1p_cp10k_gene_deltas.npz",
+      "target": "stage:restoration:restore"
+    },
+    {
+      "input_name": "mil_hold_gene_deltas",
+      "kind": "consumes",
+      "source": "file:experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/gene_delta_labels/hold_global_control_log1p_cp10k_gene_deltas.npz",
+      "target": "stage:restoration:restore"
+    },
+    {
+      "input_name": "mil_response40_features",
+      "kind": "consumes",
+      "source": "file:experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/response40/features.npz",
+      "target": "stage:restoration:restore"
+    },
+    {
+      "input_name": "mil_response_block_contract",
+      "kind": "consumes",
+      "source": "file:experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/response_programs/response_program_block_contract_16.npz",
+      "target": "stage:restoration:restore"
+    },
+    {
+      "input_name": "mil_response_rotation",
+      "kind": "consumes",
+      "source": "file:experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/response_programs/response_program_rotation_210d.npz",
+      "target": "stage:restoration:restore"
+    },
+    {
+      "input_name": "artifact_names",
+      "kind": "consumes",
+      "source": "file:experiments/v1938_sota_clean_repro/specs/runtime/contracts/artifact_names.yaml",
+      "target": "stage:mil:apply"
+    },
+    {
+      "input_name": "input_contract",
+      "kind": "consumes",
+      "source": "file:experiments/v1938_sota_clean_repro/specs/runtime/contracts/base_step01_input_contract.yaml",
+      "target": "stage:hopfield:predict"
+    },
+    {
+      "input_name": "stage_config",
+      "kind": "consumes",
+      "source": "file:experiments/v1938_sota_clean_repro/specs/runtime/stages/base_step01.yaml",
+      "target": "stage:hopfield:predict"
+    },
+    {
+      "input_name": "mil_proto_identity",
+      "kind": "consumes",
+      "source": "file:experiments/v1952_direct_mil_control_term_ablation/runs/control_ablation_seed_123460/checkpoints/transformed_training_memory/derived/mil_proto/mil_proto_identity_vectors.npz",
+      "target": "stage:restoration:restore"
+    },
+    {
+      "input_name": "mil_parity_step02_predictions",
+      "kind": "consumes",
+      "source": "file:experiments/v1953_direct_mil_simplified_scorer_promotion/runs/simplified_scorer_full_stack_20260725T000500Z/step02_step03/checkpoints/mean/STEP02_SLOT_COUPLED_PREDICTIONS.npz",
+      "target": "stage:restoration:restore"
+    },
+    {
+      "input_name": "mil_parity_step03_predictions",
+      "kind": "consumes",
+      "source": "file:experiments/v1953_direct_mil_simplified_scorer_promotion/runs/simplified_scorer_full_stack_20260725T000500Z/step02_step03/checkpoints/mean/STEP03_GENE_PREDICTIONS.npz",
+      "target": "stage:restoration:restore"
+    },
+    {
+      "input_name": "mil_parity_step02_weights",
+      "kind": "consumes",
+      "source": "file:experiments/v1953_direct_mil_simplified_scorer_promotion/runs/simplified_scorer_full_stack_20260725T000500Z/step02_step03/checkpoints/weights/STEP02_MODEL_WEIGHTS.npz",
+      "target": "stage:restoration:restore"
+    },
+    {
+      "input_name": "mil_parity_step03_weights",
+      "kind": "consumes",
+      "source": "file:experiments/v1953_direct_mil_simplified_scorer_promotion/runs/simplified_scorer_full_stack_20260725T000500Z/step02_step03/checkpoints/weights/STEP03_RIDGE_WEIGHTS.npz",
+      "target": "stage:restoration:restore"
+    },
+    {
+      "input_name": "step02_report",
+      "kind": "consumes",
+      "source": "file:experiments/v1953_direct_mil_simplified_scorer_promotion/runs/simplified_scorer_full_stack_20260725T000500Z/step02_step03/diagnostics/STEP02_RESULT_REPORT.json",
+      "target": "stage:mil:evaluate"
+    },
+    {
+      "input_name": "step03_report",
+      "kind": "consumes",
+      "source": "file:experiments/v1953_direct_mil_simplified_scorer_promotion/runs/simplified_scorer_full_stack_20260725T000500Z/step02_step03/diagnostics/STEP03_RESULT_REPORT.json",
+      "target": "stage:mil:evaluate"
+    },
+    {
+      "input_name": "promotion",
+      "kind": "consumes",
+      "source": "file:experiments/v1953_direct_mil_simplified_scorer_promotion/specs/promotion.yaml",
+      "target": "stage:mil:evaluate"
+    },
+    {
+      "input_name": "step02_config",
+      "kind": "consumes",
+      "source": "file:experiments/v1953_direct_mil_simplified_scorer_promotion/specs/runtime/step02.yaml",
+      "target": "stage:mil:apply"
+    },
+    {
+      "input_name": "step02_input_contract",
+      "kind": "consumes",
+      "source": "file:experiments/v1953_direct_mil_simplified_scorer_promotion/specs/runtime/step02_input_contract.yaml",
+      "target": "stage:mil:apply"
+    },
+    {
+      "input_name": "step03_config",
+      "kind": "consumes",
+      "source": "file:experiments/v1953_direct_mil_simplified_scorer_promotion/specs/runtime/step03.yaml",
+      "target": "stage:mil:apply"
+    },
+    {
+      "input_name": "public_key",
+      "kind": "consumes",
+      "source": "file:reinstantiation/CONTROL_SIGNING_PUBLIC_KEY.pem",
+      "target": "stage:restoration:prepare_controls"
+    },
+    {
+      "input_name": "root_release",
+      "kind": "consumes",
+      "source": "file:reinstantiation/REINSTANTIATION_ROOT_RELEASE.json",
+      "target": "stage:restoration:prepare_controls"
+    },
+    {
+      "input_name": "root_signature",
+      "kind": "consumes",
+      "source": "file:reinstantiation/REINSTANTIATION_ROOT_RELEASE_SIGNATURE",
+      "target": "stage:restoration:prepare_controls"
+    },
+    {
+      "kind": "implements",
+      "source": "producer:src/mantra/rebuild/hopfield_replay.py:evaluate_hopfield",
+      "target": "stage:hopfield:evaluate"
+    },
+    {
+      "kind": "implements",
+      "source": "producer:src/mantra/rebuild/hopfield_replay.py:predict_hopfield",
+      "target": "stage:hopfield:predict"
+    },
+    {
+      "kind": "implements",
+      "source": "producer:src/mantra/rebuild/mil_replay.py:apply_mil",
+      "target": "stage:mil:apply"
+    },
+    {
+      "kind": "implements",
+      "source": "producer:src/mantra/rebuild/mil_replay.py:evaluate_mil",
+      "target": "stage:mil:evaluate"
+    },
+    {
+      "kind": "implements",
+      "source": "producer:src/mantra/rebuild/viper_restore.py:import_restored_files",
+      "target": "stage:restoration:restore"
+    },
+    {
+      "kind": "implements",
+      "source": "producer:src/mantra/rebuild/viper_restore.py:prepare_controls",
+      "target": "stage:restoration:prepare_controls"
+    },
+    {
+      "kind": "produces",
+      "output_name": "receipt",
+      "source": "stage:hopfield:evaluate",
+      "target": "artifact:e6482dd72beee7010afcec9292e98c0fd71d6f9d823c9add901a8d2d553ac1b1:evaluate:receipt"
+    },
+    {
+      "kind": "part_of",
+      "source": "stage:hopfield:evaluate",
+      "target": "run:e6482dd72beee7010afcec9292e98c0fd71d6f9d823c9add901a8d2d553ac1b1"
+    },
+    {
+      "kind": "produces",
+      "output_name": "attention",
+      "source": "stage:hopfield:predict",
+      "target": "artifact:e6482dd72beee7010afcec9292e98c0fd71d6f9d823c9add901a8d2d553ac1b1:predict:attention"
+    },
+    {
+      "kind": "produces",
+      "output_name": "predictions",
+      "source": "stage:hopfield:predict",
+      "target": "artifact:e6482dd72beee7010afcec9292e98c0fd71d6f9d823c9add901a8d2d553ac1b1:predict:predictions"
+    },
+    {
+      "kind": "part_of",
+      "source": "stage:hopfield:predict",
+      "target": "run:e6482dd72beee7010afcec9292e98c0fd71d6f9d823c9add901a8d2d553ac1b1"
+    },
+    {
+      "kind": "produces",
+      "output_name": "scores",
+      "source": "stage:mil:apply",
+      "target": "artifact:cd47771ce8c35c205cb23b0dec4147538916653c1c37e3bb0aaef96456463f5a:apply:scores"
+    },
+    {
+      "kind": "produces",
+      "output_name": "step02_predictions",
+      "source": "stage:mil:apply",
+      "target": "artifact:cd47771ce8c35c205cb23b0dec4147538916653c1c37e3bb0aaef96456463f5a:apply:step02_predictions"
+    },
+    {
+      "kind": "produces",
+      "output_name": "step02_weights",
+      "source": "stage:mil:apply",
+      "target": "artifact:cd47771ce8c35c205cb23b0dec4147538916653c1c37e3bb0aaef96456463f5a:apply:step02_weights"
+    },
+    {
+      "kind": "produces",
+      "output_name": "step03_predictions",
+      "source": "stage:mil:apply",
+      "target": "artifact:cd47771ce8c35c205cb23b0dec4147538916653c1c37e3bb0aaef96456463f5a:apply:step03_predictions"
+    },
+    {
+      "kind": "produces",
+      "output_name": "step03_weights",
+      "source": "stage:mil:apply",
+      "target": "artifact:cd47771ce8c35c205cb23b0dec4147538916653c1c37e3bb0aaef96456463f5a:apply:step03_weights"
+    },
+    {
+      "kind": "produces",
+      "output_name": "workspace",
+      "source": "stage:mil:apply",
+      "target": "artifact:cd47771ce8c35c205cb23b0dec4147538916653c1c37e3bb0aaef96456463f5a:apply:workspace"
+    },
+    {
+      "kind": "part_of",
+      "source": "stage:mil:apply",
+      "target": "run:cd47771ce8c35c205cb23b0dec4147538916653c1c37e3bb0aaef96456463f5a"
+    },
+    {
+      "kind": "produces",
+      "output_name": "receipt",
+      "source": "stage:mil:evaluate",
+      "target": "artifact:cd47771ce8c35c205cb23b0dec4147538916653c1c37e3bb0aaef96456463f5a:evaluate:receipt"
+    },
+    {
+      "kind": "part_of",
+      "source": "stage:mil:evaluate",
+      "target": "run:cd47771ce8c35c205cb23b0dec4147538916653c1c37e3bb0aaef96456463f5a"
+    },
+    {
+      "kind": "produces",
+      "output_name": "bindings",
+      "source": "stage:restoration:prepare_controls",
+      "target": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:prepare_controls:bindings"
+    },
+    {
+      "kind": "produces",
+      "output_name": "control_receipt",
+      "source": "stage:restoration:prepare_controls",
+      "target": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:prepare_controls:control_receipt"
+    },
+    {
+      "kind": "produces",
+      "output_name": "controls",
+      "source": "stage:restoration:prepare_controls",
+      "target": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:prepare_controls:controls"
+    },
+    {
+      "kind": "part_of",
+      "source": "stage:restoration:prepare_controls",
+      "target": "run:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c"
+    },
+    {
+      "kind": "produces",
+      "output_name": "coefficient_targets",
+      "source": "stage:restoration:restore",
+      "target": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:coefficient_targets"
+    },
+    {
+      "kind": "produces",
+      "output_name": "evidence",
+      "source": "stage:restoration:restore",
+      "target": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:evidence"
+    },
+    {
+      "kind": "produces",
+      "output_name": "fit_tune_gene_deltas",
+      "source": "stage:restoration:restore",
+      "target": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:fit_tune_gene_deltas"
+    },
+    {
+      "kind": "produces",
+      "output_name": "hold_gene_deltas",
+      "source": "stage:restoration:restore",
+      "target": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:hold_gene_deltas"
+    },
+    {
+      "kind": "produces",
+      "output_name": "hopfield_parity_predictions",
+      "source": "stage:restoration:restore",
+      "target": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:hopfield_parity_predictions"
+    },
+    {
+      "kind": "produces",
+      "output_name": "mil_base_step01_predictions",
+      "source": "stage:restoration:restore",
+      "target": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_base_step01_predictions"
+    },
+    {
+      "kind": "produces",
+      "output_name": "mil_cell_program_projections",
+      "source": "stage:restoration:restore",
+      "target": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_cell_program_projections"
+    },
+    {
+      "kind": "produces",
+      "output_name": "mil_coefficient_targets",
+      "source": "stage:restoration:restore",
+      "target": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_coefficient_targets"
+    },
+    {
+      "kind": "produces",
+      "output_name": "mil_control_program_features",
+      "source": "stage:restoration:restore",
+      "target": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_control_program_features"
+    },
+    {
+      "kind": "produces",
+      "output_name": "mil_core83_features",
+      "source": "stage:restoration:restore",
+      "target": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_core83_features"
+    },
+    {
+      "kind": "produces",
+      "output_name": "mil_family64_features",
+      "source": "stage:restoration:restore",
+      "target": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_family64_features"
+    },
+    {
+      "kind": "produces",
+      "output_name": "mil_fit_tune_gene_deltas",
+      "source": "stage:restoration:restore",
+      "target": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_fit_tune_gene_deltas"
+    },
+    {
+      "kind": "produces",
+      "output_name": "mil_hold_control_shift",
+      "source": "stage:restoration:restore",
+      "target": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_hold_control_shift"
+    },
+    {
+      "kind": "produces",
+      "output_name": "mil_hold_gene_deltas",
+      "source": "stage:restoration:restore",
+      "target": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_hold_gene_deltas"
+    },
+    {
+      "kind": "produces",
+      "output_name": "mil_ot_matched_cell_programs",
+      "source": "stage:restoration:restore",
+      "target": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_ot_matched_cell_programs"
+    },
+    {
+      "kind": "produces",
+      "output_name": "mil_parity_step02_predictions",
+      "source": "stage:restoration:restore",
+      "target": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_parity_step02_predictions"
+    },
+    {
+      "kind": "produces",
+      "output_name": "mil_parity_step02_weights",
+      "source": "stage:restoration:restore",
+      "target": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_parity_step02_weights"
+    },
+    {
+      "kind": "produces",
+      "output_name": "mil_parity_step03_predictions",
+      "source": "stage:restoration:restore",
+      "target": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_parity_step03_predictions"
+    },
+    {
+      "kind": "produces",
+      "output_name": "mil_parity_step03_weights",
+      "source": "stage:restoration:restore",
+      "target": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_parity_step03_weights"
+    },
+    {
+      "kind": "produces",
+      "output_name": "mil_projected_step01_predictions",
+      "source": "stage:restoration:restore",
+      "target": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_projected_step01_predictions"
+    },
+    {
+      "kind": "produces",
+      "output_name": "mil_proto_identity",
+      "source": "stage:restoration:restore",
+      "target": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_proto_identity"
+    },
+    {
+      "kind": "produces",
+      "output_name": "mil_response40_features",
+      "source": "stage:restoration:restore",
+      "target": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_response40_features"
+    },
+    {
+      "kind": "produces",
+      "output_name": "mil_response_block_contract",
+      "source": "stage:restoration:restore",
+      "target": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_response_block_contract"
+    },
+    {
+      "kind": "produces",
+      "output_name": "mil_response_rotation",
+      "source": "stage:restoration:restore",
+      "target": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_response_rotation"
+    },
+    {
+      "kind": "produces",
+      "output_name": "model",
+      "source": "stage:restoration:restore",
+      "target": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:model"
+    },
+    {
+      "kind": "produces",
+      "output_name": "response_program_contract",
+      "source": "stage:restoration:restore",
+      "target": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:response_program_contract"
+    },
+    {
+      "kind": "produces",
+      "output_name": "response_program_rotation",
+      "source": "stage:restoration:restore",
+      "target": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:response_program_rotation"
+    },
+    {
+      "kind": "produces",
+      "output_name": "response_program_similarity",
+      "source": "stage:restoration:restore",
+      "target": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:response_program_similarity"
+    },
+    {
+      "kind": "part_of",
+      "source": "stage:restoration:restore",
+      "target": "run:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c"
+    }
+  ],
+  "nodes": [
+    {
+      "artifact_name": "bindings",
+      "data_role": "benchmark",
+      "id": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:prepare_controls:bindings",
+      "kind": "artifact",
+      "path": "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/prepare_controls/bindings/restoration_bindings.json",
+      "run_sha256": "82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "stage_id": "prepare_controls"
+    },
+    {
+      "artifact_name": "control_receipt",
+      "data_role": "benchmark",
+      "id": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:prepare_controls:control_receipt",
+      "kind": "artifact",
+      "path": "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/prepare_controls/control_receipt/control_receipt.json",
+      "run_sha256": "82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "stage_id": "prepare_controls"
+    },
+    {
+      "artifact_name": "controls",
+      "data_role": "benchmark",
+      "id": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:prepare_controls:controls",
+      "kind": "artifact",
+      "path": "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/prepare_controls/controls/prepared_controls",
+      "run_sha256": "82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "stage_id": "prepare_controls"
+    },
+    {
+      "artifact_name": "coefficient_targets",
+      "data_role": "benchmark",
+      "id": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:coefficient_targets",
+      "kind": "artifact",
+      "path": "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/coefficient_targets/restored/coefficient_targets.bin",
+      "run_sha256": "82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "stage_id": "restore"
+    },
+    {
+      "artifact_name": "evidence",
+      "data_role": "benchmark",
+      "id": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:evidence",
+      "kind": "artifact",
+      "path": "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/evidence/restoration_evidence",
+      "run_sha256": "82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "stage_id": "restore"
+    },
+    {
+      "artifact_name": "fit_tune_gene_deltas",
+      "data_role": "benchmark",
+      "id": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:fit_tune_gene_deltas",
+      "kind": "artifact",
+      "path": "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/fit_tune_gene_deltas/restored/fit_tune_gene_deltas.bin",
+      "run_sha256": "82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "stage_id": "restore"
+    },
+    {
+      "artifact_name": "hold_gene_deltas",
+      "data_role": "benchmark",
+      "id": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:hold_gene_deltas",
+      "kind": "artifact",
+      "path": "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/hold_gene_deltas/restored/hold_gene_deltas.bin",
+      "run_sha256": "82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "stage_id": "restore"
+    },
+    {
+      "artifact_name": "hopfield_parity_predictions",
+      "data_role": "benchmark",
+      "id": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:hopfield_parity_predictions",
+      "kind": "artifact",
+      "path": "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/hopfield_parity_predictions/restored/hopfield_parity_predictions.bin",
+      "run_sha256": "82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "stage_id": "restore"
+    },
+    {
+      "artifact_name": "mil_base_step01_predictions",
+      "data_role": "benchmark",
+      "id": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_base_step01_predictions",
+      "kind": "artifact",
+      "path": "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_base_step01_predictions/restored/mil_base_step01_predictions.bin",
+      "run_sha256": "82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "stage_id": "restore"
+    },
+    {
+      "artifact_name": "mil_cell_program_projections",
+      "data_role": "benchmark",
+      "id": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_cell_program_projections",
+      "kind": "artifact",
+      "path": "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_cell_program_projections/restored/mil_cell_program_projections.bin",
+      "run_sha256": "82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "stage_id": "restore"
+    },
+    {
+      "artifact_name": "mil_coefficient_targets",
+      "data_role": "benchmark",
+      "id": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_coefficient_targets",
+      "kind": "artifact",
+      "path": "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_coefficient_targets/restored/mil_coefficient_targets.bin",
+      "run_sha256": "82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "stage_id": "restore"
+    },
+    {
+      "artifact_name": "mil_control_program_features",
+      "data_role": "benchmark",
+      "id": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_control_program_features",
+      "kind": "artifact",
+      "path": "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_control_program_features/restored/mil_control_program_features.bin",
+      "run_sha256": "82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "stage_id": "restore"
+    },
+    {
+      "artifact_name": "mil_core83_features",
+      "data_role": "benchmark",
+      "id": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_core83_features",
+      "kind": "artifact",
+      "path": "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_core83_features/restored/mil_core83_features.bin",
+      "run_sha256": "82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "stage_id": "restore"
+    },
+    {
+      "artifact_name": "mil_family64_features",
+      "data_role": "benchmark",
+      "id": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_family64_features",
+      "kind": "artifact",
+      "path": "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_family64_features/restored/mil_family64_features.bin",
+      "run_sha256": "82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "stage_id": "restore"
+    },
+    {
+      "artifact_name": "mil_fit_tune_gene_deltas",
+      "data_role": "benchmark",
+      "id": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_fit_tune_gene_deltas",
+      "kind": "artifact",
+      "path": "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_fit_tune_gene_deltas/restored/mil_fit_tune_gene_deltas.bin",
+      "run_sha256": "82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "stage_id": "restore"
+    },
+    {
+      "artifact_name": "mil_hold_control_shift",
+      "data_role": "benchmark",
+      "id": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_hold_control_shift",
+      "kind": "artifact",
+      "path": "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_hold_control_shift/restored/mil_hold_control_shift.bin",
+      "run_sha256": "82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "stage_id": "restore"
+    },
+    {
+      "artifact_name": "mil_hold_gene_deltas",
+      "data_role": "benchmark",
+      "id": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_hold_gene_deltas",
+      "kind": "artifact",
+      "path": "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_hold_gene_deltas/restored/mil_hold_gene_deltas.bin",
+      "run_sha256": "82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "stage_id": "restore"
+    },
+    {
+      "artifact_name": "mil_ot_matched_cell_programs",
+      "data_role": "benchmark",
+      "id": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_ot_matched_cell_programs",
+      "kind": "artifact",
+      "path": "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_ot_matched_cell_programs/restored/mil_ot_matched_cell_programs.bin",
+      "run_sha256": "82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "stage_id": "restore"
+    },
+    {
+      "artifact_name": "mil_parity_step02_predictions",
+      "data_role": "benchmark",
+      "id": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_parity_step02_predictions",
+      "kind": "artifact",
+      "path": "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_parity_step02_predictions/restored/mil_parity_step02_predictions.bin",
+      "run_sha256": "82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "stage_id": "restore"
+    },
+    {
+      "artifact_name": "mil_parity_step02_weights",
+      "data_role": "benchmark",
+      "id": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_parity_step02_weights",
+      "kind": "artifact",
+      "path": "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_parity_step02_weights/restored/mil_parity_step02_weights.bin",
+      "run_sha256": "82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "stage_id": "restore"
+    },
+    {
+      "artifact_name": "mil_parity_step03_predictions",
+      "data_role": "benchmark",
+      "id": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_parity_step03_predictions",
+      "kind": "artifact",
+      "path": "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_parity_step03_predictions/restored/mil_parity_step03_predictions.bin",
+      "run_sha256": "82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "stage_id": "restore"
+    },
+    {
+      "artifact_name": "mil_parity_step03_weights",
+      "data_role": "benchmark",
+      "id": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_parity_step03_weights",
+      "kind": "artifact",
+      "path": "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_parity_step03_weights/restored/mil_parity_step03_weights.bin",
+      "run_sha256": "82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "stage_id": "restore"
+    },
+    {
+      "artifact_name": "mil_projected_step01_predictions",
+      "data_role": "benchmark",
+      "id": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_projected_step01_predictions",
+      "kind": "artifact",
+      "path": "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_projected_step01_predictions/restored/mil_projected_step01_predictions.bin",
+      "run_sha256": "82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "stage_id": "restore"
+    },
+    {
+      "artifact_name": "mil_proto_identity",
+      "data_role": "benchmark",
+      "id": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_proto_identity",
+      "kind": "artifact",
+      "path": "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_proto_identity/restored/mil_proto_identity.bin",
+      "run_sha256": "82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "stage_id": "restore"
+    },
+    {
+      "artifact_name": "mil_response40_features",
+      "data_role": "benchmark",
+      "id": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_response40_features",
+      "kind": "artifact",
+      "path": "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_response40_features/restored/mil_response40_features.bin",
+      "run_sha256": "82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "stage_id": "restore"
+    },
+    {
+      "artifact_name": "mil_response_block_contract",
+      "data_role": "benchmark",
+      "id": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_response_block_contract",
+      "kind": "artifact",
+      "path": "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_response_block_contract/restored/mil_response_block_contract.bin",
+      "run_sha256": "82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "stage_id": "restore"
+    },
+    {
+      "artifact_name": "mil_response_rotation",
+      "data_role": "benchmark",
+      "id": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:mil_response_rotation",
+      "kind": "artifact",
+      "path": "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_response_rotation/restored/mil_response_rotation.bin",
+      "run_sha256": "82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "stage_id": "restore"
+    },
+    {
+      "artifact_name": "model",
+      "data_role": "benchmark",
+      "id": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:model",
+      "kind": "artifact",
+      "path": "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/model/restored/model.bin",
+      "run_sha256": "82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "stage_id": "restore"
+    },
+    {
+      "artifact_name": "response_program_contract",
+      "data_role": "benchmark",
+      "id": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:response_program_contract",
+      "kind": "artifact",
+      "path": "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/response_program_contract/restored/response_program_contract.bin",
+      "run_sha256": "82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "stage_id": "restore"
+    },
+    {
+      "artifact_name": "response_program_rotation",
+      "data_role": "benchmark",
+      "id": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:response_program_rotation",
+      "kind": "artifact",
+      "path": "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/response_program_rotation/restored/response_program_rotation.bin",
+      "run_sha256": "82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "stage_id": "restore"
+    },
+    {
+      "artifact_name": "response_program_similarity",
+      "data_role": "benchmark",
+      "id": "artifact:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c:restore:response_program_similarity",
+      "kind": "artifact",
+      "path": "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/response_program_similarity/restored/response_program_similarity.bin",
+      "run_sha256": "82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "stage_id": "restore"
+    },
+    {
+      "artifact_name": "scores",
+      "data_role": "benchmark",
+      "id": "artifact:cd47771ce8c35c205cb23b0dec4147538916653c1c37e3bb0aaef96456463f5a:apply:scores",
+      "kind": "artifact",
+      "path": "experiments/mantra_mil_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3SVNE98XZ0D8S4CZJ64T8/artifacts/apply/scores/mil_scores.json",
+      "run_sha256": "cd47771ce8c35c205cb23b0dec4147538916653c1c37e3bb0aaef96456463f5a",
+      "stage_id": "apply"
+    },
+    {
+      "artifact_name": "step02_predictions",
+      "data_role": "benchmark",
+      "id": "artifact:cd47771ce8c35c205cb23b0dec4147538916653c1c37e3bb0aaef96456463f5a:apply:step02_predictions",
+      "kind": "artifact",
+      "path": "experiments/mantra_mil_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3SVNE98XZ0D8S4CZJ64T8/artifacts/apply/step02_predictions/step02_predictions.npz",
+      "run_sha256": "cd47771ce8c35c205cb23b0dec4147538916653c1c37e3bb0aaef96456463f5a",
+      "stage_id": "apply"
+    },
+    {
+      "artifact_name": "step02_weights",
+      "data_role": "benchmark",
+      "id": "artifact:cd47771ce8c35c205cb23b0dec4147538916653c1c37e3bb0aaef96456463f5a:apply:step02_weights",
+      "kind": "artifact",
+      "path": "experiments/mantra_mil_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3SVNE98XZ0D8S4CZJ64T8/artifacts/apply/step02_weights/step02_weights.npz",
+      "run_sha256": "cd47771ce8c35c205cb23b0dec4147538916653c1c37e3bb0aaef96456463f5a",
+      "stage_id": "apply"
+    },
+    {
+      "artifact_name": "step03_predictions",
+      "data_role": "benchmark",
+      "id": "artifact:cd47771ce8c35c205cb23b0dec4147538916653c1c37e3bb0aaef96456463f5a:apply:step03_predictions",
+      "kind": "artifact",
+      "path": "experiments/mantra_mil_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3SVNE98XZ0D8S4CZJ64T8/artifacts/apply/step03_predictions/step03_predictions.npz",
+      "run_sha256": "cd47771ce8c35c205cb23b0dec4147538916653c1c37e3bb0aaef96456463f5a",
+      "stage_id": "apply"
+    },
+    {
+      "artifact_name": "step03_weights",
+      "data_role": "benchmark",
+      "id": "artifact:cd47771ce8c35c205cb23b0dec4147538916653c1c37e3bb0aaef96456463f5a:apply:step03_weights",
+      "kind": "artifact",
+      "path": "experiments/mantra_mil_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3SVNE98XZ0D8S4CZJ64T8/artifacts/apply/step03_weights/step03_weights.npz",
+      "run_sha256": "cd47771ce8c35c205cb23b0dec4147538916653c1c37e3bb0aaef96456463f5a",
+      "stage_id": "apply"
+    },
+    {
+      "artifact_name": "workspace",
+      "data_role": "benchmark",
+      "id": "artifact:cd47771ce8c35c205cb23b0dec4147538916653c1c37e3bb0aaef96456463f5a:apply:workspace",
+      "kind": "artifact",
+      "path": "experiments/mantra_mil_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3SVNE98XZ0D8S4CZJ64T8/artifacts/apply/workspace/mil_application",
+      "run_sha256": "cd47771ce8c35c205cb23b0dec4147538916653c1c37e3bb0aaef96456463f5a",
+      "stage_id": "apply"
+    },
+    {
+      "artifact_name": "receipt",
+      "data_role": "benchmark",
+      "id": "artifact:cd47771ce8c35c205cb23b0dec4147538916653c1c37e3bb0aaef96456463f5a:evaluate:receipt",
+      "kind": "artifact",
+      "path": "experiments/mantra_mil_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3SVNE98XZ0D8S4CZJ64T8/artifacts/evaluate/receipt/mil_replay_receipt.json",
+      "run_sha256": "cd47771ce8c35c205cb23b0dec4147538916653c1c37e3bb0aaef96456463f5a",
+      "stage_id": "evaluate"
+    },
+    {
+      "artifact_name": "receipt",
+      "data_role": "benchmark",
+      "id": "artifact:e6482dd72beee7010afcec9292e98c0fd71d6f9d823c9add901a8d2d553ac1b1:evaluate:receipt",
+      "kind": "artifact",
+      "path": "experiments/mantra_hopfield_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3JFXQ2D8A0VB84R5493EY/artifacts/evaluate/receipt/hopfield_replay_receipt.json",
+      "run_sha256": "e6482dd72beee7010afcec9292e98c0fd71d6f9d823c9add901a8d2d553ac1b1",
+      "stage_id": "evaluate"
+    },
+    {
+      "artifact_name": "attention",
+      "data_role": "benchmark",
+      "id": "artifact:e6482dd72beee7010afcec9292e98c0fd71d6f9d823c9add901a8d2d553ac1b1:predict:attention",
+      "kind": "artifact",
+      "path": "experiments/mantra_hopfield_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3JFXQ2D8A0VB84R5493EY/artifacts/predict/attention/hopfield_attention.json",
+      "run_sha256": "e6482dd72beee7010afcec9292e98c0fd71d6f9d823c9add901a8d2d553ac1b1",
+      "stage_id": "predict"
+    },
+    {
+      "artifact_name": "predictions",
+      "data_role": "benchmark",
+      "id": "artifact:e6482dd72beee7010afcec9292e98c0fd71d6f9d823c9add901a8d2d553ac1b1:predict:predictions",
+      "kind": "artifact",
+      "path": "experiments/mantra_hopfield_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3JFXQ2D8A0VB84R5493EY/artifacts/predict/predictions/hopfield_predictions.npz",
+      "run_sha256": "e6482dd72beee7010afcec9292e98c0fd71d6f9d823c9add901a8d2d553ac1b1",
+      "stage_id": "predict"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1938_sota_clean_repro/inputs/coefficient_targets/fit_tune_ctrl19_matched_response_coefficients.npz",
+      "kind": "file",
+      "path": "experiments/v1938_sota_clean_repro/inputs/coefficient_targets/fit_tune_ctrl19_matched_response_coefficients.npz"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1938_sota_clean_repro/inputs/core83/features.npz",
+      "kind": "file",
+      "path": "experiments/v1938_sota_clean_repro/inputs/core83/features.npz"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1938_sota_clean_repro/inputs/family64/features.npz",
+      "kind": "file",
+      "path": "experiments/v1938_sota_clean_repro/inputs/family64/features.npz"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1938_sota_clean_repro/inputs/gene_delta_labels/fit_tune_ctrl19_matched_log1p_cp10k_gene_deltas.npz",
+      "kind": "file",
+      "path": "experiments/v1938_sota_clean_repro/inputs/gene_delta_labels/fit_tune_ctrl19_matched_log1p_cp10k_gene_deltas.npz"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1938_sota_clean_repro/inputs/gene_delta_labels/hold_global_control_log1p_cp10k_gene_deltas.npz",
+      "kind": "file",
+      "path": "experiments/v1938_sota_clean_repro/inputs/gene_delta_labels/hold_global_control_log1p_cp10k_gene_deltas.npz"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1938_sota_clean_repro/inputs/gene_shift/features.npz",
+      "kind": "file",
+      "path": "experiments/v1938_sota_clean_repro/inputs/gene_shift/features.npz"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1938_sota_clean_repro/inputs/response40/features.npz",
+      "kind": "file",
+      "path": "experiments/v1938_sota_clean_repro/inputs/response40/features.npz"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1938_sota_clean_repro/inputs/response_programs/response_program_block_contract_16.npz",
+      "kind": "file",
+      "path": "experiments/v1938_sota_clean_repro/inputs/response_programs/response_program_block_contract_16.npz"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1938_sota_clean_repro/inputs/response_programs/response_program_blocks_16.json",
+      "kind": "file",
+      "path": "experiments/v1938_sota_clean_repro/inputs/response_programs/response_program_blocks_16.json"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1938_sota_clean_repro/inputs/response_programs/response_program_rotation_210d.npz",
+      "kind": "file",
+      "path": "experiments/v1938_sota_clean_repro/inputs/response_programs/response_program_rotation_210d.npz"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1938_sota_clean_repro/inputs/response_programs/response_program_similarity_graph.npz",
+      "kind": "file",
+      "path": "experiments/v1938_sota_clean_repro/inputs/response_programs/response_program_similarity_graph.npz"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1938_sota_clean_repro/runs/checkpoint_bootstrap_20260713T030000Z/base_step01/candidates/mixed_src_snk_ripple_raw_pen1_directw2p0_local/checkpoints/mean/HOPFIELD_PREDICTIONS.npz",
+      "kind": "file",
+      "path": "experiments/v1938_sota_clean_repro/runs/checkpoint_bootstrap_20260713T030000Z/base_step01/candidates/mixed_src_snk_ripple_raw_pen1_directw2p0_local/checkpoints/mean/HOPFIELD_PREDICTIONS.npz"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1938_sota_clean_repro/runs/checkpoint_bootstrap_20260713T030000Z/projected_step01/candidates/aggregate_proto64_scale2p8_temp0p095/checkpoints/mean/HOPFIELD_PREDICTIONS.npz",
+      "kind": "file",
+      "path": "experiments/v1938_sota_clean_repro/runs/checkpoint_bootstrap_20260713T030000Z/projected_step01/candidates/aggregate_proto64_scale2p8_temp0p095/checkpoints/mean/HOPFIELD_PREDICTIONS.npz"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1938_sota_clean_repro/runs/clean_shared_mil_proto_hyperparam_sweep_20260714T063000Z/base_step01/base_lr2e4/candidates/mixed_src_snk_ripple_raw_pen1_base_lr2e4/checkpoints/weights/BASE_STEP01_MODEL_WEIGHTS.npz",
+      "kind": "file",
+      "path": "experiments/v1938_sota_clean_repro/runs/clean_shared_mil_proto_hyperparam_sweep_20260714T063000Z/base_step01/base_lr2e4/candidates/mixed_src_snk_ripple_raw_pen1_base_lr2e4/checkpoints/weights/BASE_STEP01_MODEL_WEIGHTS.npz"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/diagnostics/RAW_GENE_READOUT_TUNING_FIT_ONLY_RESULTS.json",
+      "kind": "file",
+      "path": "experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/diagnostics/RAW_GENE_READOUT_TUNING_FIT_ONLY_RESULTS.json"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/out/raw_gene_readout_tuning_fit_only/best/RAW_GENE_PREDICTIONS.npz",
+      "kind": "file",
+      "path": "experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/out/raw_gene_readout_tuning_fit_only/best/RAW_GENE_PREDICTIONS.npz"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/cellwise/cell_program_projections.npz",
+      "kind": "file",
+      "path": "experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/cellwise/cell_program_projections.npz"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/cellwise/ot_matched_cell_programs.npz",
+      "kind": "file",
+      "path": "experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/cellwise/ot_matched_cell_programs.npz"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/coefficient_targets/fit_tune_response_coefficients.npz",
+      "kind": "file",
+      "path": "experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/coefficient_targets/fit_tune_response_coefficients.npz"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/control_state/ot_matched_control_program_features.npz",
+      "kind": "file",
+      "path": "experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/control_state/ot_matched_control_program_features.npz"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/control_state/ot_matched_control_program_gene_shift.npz",
+      "kind": "file",
+      "path": "experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/control_state/ot_matched_control_program_gene_shift.npz"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/core83/features.npz",
+      "kind": "file",
+      "path": "experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/core83/features.npz"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/family64/features.npz",
+      "kind": "file",
+      "path": "experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/family64/features.npz"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/gene_delta_labels/fit_tune_ctrl19_matched_log1p_cp10k_gene_deltas.npz",
+      "kind": "file",
+      "path": "experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/gene_delta_labels/fit_tune_ctrl19_matched_log1p_cp10k_gene_deltas.npz"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/gene_delta_labels/hold_global_control_log1p_cp10k_gene_deltas.npz",
+      "kind": "file",
+      "path": "experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/gene_delta_labels/hold_global_control_log1p_cp10k_gene_deltas.npz"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/response40/features.npz",
+      "kind": "file",
+      "path": "experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/response40/features.npz"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/response_programs/response_program_block_contract_16.npz",
+      "kind": "file",
+      "path": "experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/response_programs/response_program_block_contract_16.npz"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/response_programs/response_program_rotation_210d.npz",
+      "kind": "file",
+      "path": "experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/response_programs/response_program_rotation_210d.npz"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1938_sota_clean_repro/specs/runtime/contracts/artifact_names.yaml",
+      "kind": "file",
+      "path": "experiments/v1938_sota_clean_repro/specs/runtime/contracts/artifact_names.yaml"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1938_sota_clean_repro/specs/runtime/contracts/base_step01_input_contract.yaml",
+      "kind": "file",
+      "path": "experiments/v1938_sota_clean_repro/specs/runtime/contracts/base_step01_input_contract.yaml"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1938_sota_clean_repro/specs/runtime/stages/base_step01.yaml",
+      "kind": "file",
+      "path": "experiments/v1938_sota_clean_repro/specs/runtime/stages/base_step01.yaml"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1952_direct_mil_control_term_ablation/runs/control_ablation_seed_123460/checkpoints/transformed_training_memory/derived/mil_proto/mil_proto_identity_vectors.npz",
+      "kind": "file",
+      "path": "experiments/v1952_direct_mil_control_term_ablation/runs/control_ablation_seed_123460/checkpoints/transformed_training_memory/derived/mil_proto/mil_proto_identity_vectors.npz"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1953_direct_mil_simplified_scorer_promotion/runs/simplified_scorer_full_stack_20260725T000500Z/step02_step03/checkpoints/mean/STEP02_SLOT_COUPLED_PREDICTIONS.npz",
+      "kind": "file",
+      "path": "experiments/v1953_direct_mil_simplified_scorer_promotion/runs/simplified_scorer_full_stack_20260725T000500Z/step02_step03/checkpoints/mean/STEP02_SLOT_COUPLED_PREDICTIONS.npz"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1953_direct_mil_simplified_scorer_promotion/runs/simplified_scorer_full_stack_20260725T000500Z/step02_step03/checkpoints/mean/STEP03_GENE_PREDICTIONS.npz",
+      "kind": "file",
+      "path": "experiments/v1953_direct_mil_simplified_scorer_promotion/runs/simplified_scorer_full_stack_20260725T000500Z/step02_step03/checkpoints/mean/STEP03_GENE_PREDICTIONS.npz"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1953_direct_mil_simplified_scorer_promotion/runs/simplified_scorer_full_stack_20260725T000500Z/step02_step03/checkpoints/weights/STEP02_MODEL_WEIGHTS.npz",
+      "kind": "file",
+      "path": "experiments/v1953_direct_mil_simplified_scorer_promotion/runs/simplified_scorer_full_stack_20260725T000500Z/step02_step03/checkpoints/weights/STEP02_MODEL_WEIGHTS.npz"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1953_direct_mil_simplified_scorer_promotion/runs/simplified_scorer_full_stack_20260725T000500Z/step02_step03/checkpoints/weights/STEP03_RIDGE_WEIGHTS.npz",
+      "kind": "file",
+      "path": "experiments/v1953_direct_mil_simplified_scorer_promotion/runs/simplified_scorer_full_stack_20260725T000500Z/step02_step03/checkpoints/weights/STEP03_RIDGE_WEIGHTS.npz"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1953_direct_mil_simplified_scorer_promotion/runs/simplified_scorer_full_stack_20260725T000500Z/step02_step03/diagnostics/STEP02_RESULT_REPORT.json",
+      "kind": "file",
+      "path": "experiments/v1953_direct_mil_simplified_scorer_promotion/runs/simplified_scorer_full_stack_20260725T000500Z/step02_step03/diagnostics/STEP02_RESULT_REPORT.json"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1953_direct_mil_simplified_scorer_promotion/runs/simplified_scorer_full_stack_20260725T000500Z/step02_step03/diagnostics/STEP03_RESULT_REPORT.json",
+      "kind": "file",
+      "path": "experiments/v1953_direct_mil_simplified_scorer_promotion/runs/simplified_scorer_full_stack_20260725T000500Z/step02_step03/diagnostics/STEP03_RESULT_REPORT.json"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1953_direct_mil_simplified_scorer_promotion/specs/promotion.yaml",
+      "kind": "file",
+      "path": "experiments/v1953_direct_mil_simplified_scorer_promotion/specs/promotion.yaml"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1953_direct_mil_simplified_scorer_promotion/specs/runtime/step02.yaml",
+      "kind": "file",
+      "path": "experiments/v1953_direct_mil_simplified_scorer_promotion/specs/runtime/step02.yaml"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1953_direct_mil_simplified_scorer_promotion/specs/runtime/step02_input_contract.yaml",
+      "kind": "file",
+      "path": "experiments/v1953_direct_mil_simplified_scorer_promotion/specs/runtime/step02_input_contract.yaml"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:experiments/v1953_direct_mil_simplified_scorer_promotion/specs/runtime/step03.yaml",
+      "kind": "file",
+      "path": "experiments/v1953_direct_mil_simplified_scorer_promotion/specs/runtime/step03.yaml"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:reinstantiation/CONTROL_SIGNING_PUBLIC_KEY.pem",
+      "kind": "file",
+      "path": "reinstantiation/CONTROL_SIGNING_PUBLIC_KEY.pem"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:reinstantiation/REINSTANTIATION_ROOT_RELEASE.json",
+      "kind": "file",
+      "path": "reinstantiation/REINSTANTIATION_ROOT_RELEASE.json"
+    },
+    {
+      "data_role": "benchmark",
+      "id": "file:reinstantiation/REINSTANTIATION_ROOT_RELEASE_SIGNATURE",
+      "kind": "file",
+      "path": "reinstantiation/REINSTANTIATION_ROOT_RELEASE_SIGNATURE"
+    },
+    {
+      "id": "producer:src/mantra/rebuild/hopfield_replay.py:evaluate_hopfield",
+      "kind": "producer_entrypoint",
+      "path": "src/mantra/rebuild/hopfield_replay.py",
+      "sha256": "d99f01477dd13c03a2fb309571ca1bc31b153498f01ee7d734f408da8b571510",
+      "symbol": "evaluate_hopfield"
+    },
+    {
+      "id": "producer:src/mantra/rebuild/hopfield_replay.py:predict_hopfield",
+      "kind": "producer_entrypoint",
+      "path": "src/mantra/rebuild/hopfield_replay.py",
+      "sha256": "d99f01477dd13c03a2fb309571ca1bc31b153498f01ee7d734f408da8b571510",
+      "symbol": "predict_hopfield"
+    },
+    {
+      "id": "producer:src/mantra/rebuild/mil_replay.py:apply_mil",
+      "kind": "producer_entrypoint",
+      "path": "src/mantra/rebuild/mil_replay.py",
+      "sha256": "735c2d11a5f4b073dfaf144651008b87dce5a8b388f3c5a0774747f4cc43a15f",
+      "symbol": "apply_mil"
+    },
+    {
+      "id": "producer:src/mantra/rebuild/mil_replay.py:evaluate_mil",
+      "kind": "producer_entrypoint",
+      "path": "src/mantra/rebuild/mil_replay.py",
+      "sha256": "735c2d11a5f4b073dfaf144651008b87dce5a8b388f3c5a0774747f4cc43a15f",
+      "symbol": "evaluate_mil"
+    },
+    {
+      "id": "producer:src/mantra/rebuild/viper_restore.py:import_restored_files",
+      "kind": "producer_entrypoint",
+      "path": "src/mantra/rebuild/viper_restore.py",
+      "sha256": "b94b67e487cc2eee48b7b1d330ee310a45f95c2eb3af0efdc42b24f6739dc8c7",
+      "symbol": "import_restored_files"
+    },
+    {
+      "id": "producer:src/mantra/rebuild/viper_restore.py:prepare_controls",
+      "kind": "producer_entrypoint",
+      "path": "src/mantra/rebuild/viper_restore.py",
+      "sha256": "b94b67e487cc2eee48b7b1d330ee310a45f95c2eb3af0efdc42b24f6739dc8c7",
+      "symbol": "prepare_controls"
+    },
+    {
+      "id": "run:82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "kind": "verified_run",
+      "name": "restoration",
+      "run_id": "01M2C319YF5PN1G8DN2YGEAQ4K"
+    },
+    {
+      "id": "run:cd47771ce8c35c205cb23b0dec4147538916653c1c37e3bb0aaef96456463f5a",
+      "kind": "verified_run",
+      "name": "mil",
+      "run_id": "01M2C3SVNE98XZ0D8S4CZJ64T8"
+    },
+    {
+      "id": "run:e6482dd72beee7010afcec9292e98c0fd71d6f9d823c9add901a8d2d553ac1b1",
+      "kind": "verified_run",
+      "name": "hopfield",
+      "run_id": "01M2C3JFXQ2D8A0VB84R5493EY"
+    },
+    {
+      "id": "stage:hopfield:evaluate",
+      "kind": "stage",
+      "run": "hopfield",
+      "stage_id": "evaluate"
+    },
+    {
+      "id": "stage:hopfield:predict",
+      "kind": "stage",
+      "run": "hopfield",
+      "stage_id": "predict"
+    },
+    {
+      "id": "stage:mil:apply",
+      "kind": "stage",
+      "run": "mil",
+      "stage_id": "apply"
+    },
+    {
+      "id": "stage:mil:evaluate",
+      "kind": "stage",
+      "run": "mil",
+      "stage_id": "evaluate"
+    },
+    {
+      "id": "stage:restoration:prepare_controls",
+      "kind": "stage",
+      "run": "restoration",
+      "stage_id": "prepare_controls"
+    },
+    {
+      "id": "stage:restoration:restore",
+      "kind": "stage",
+      "run": "restoration",
+      "stage_id": "restore"
+    }
+  ],
+  "schema_version": "rico.phase0_dependency_graph.v1",
+  "terminal_runs": {
+    "hopfield": "e6482dd72beee7010afcec9292e98c0fd71d6f9d823c9add901a8d2d553ac1b1",
+    "mil": "cd47771ce8c35c205cb23b0dec4147538916653c1c37e3bb0aaef96456463f5a"
+  }
+}

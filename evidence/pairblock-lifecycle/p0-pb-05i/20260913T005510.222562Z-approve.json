@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "40a222b2cb2faad67ed894aefcf7012034ba890d7750afee6b9a4f5f16dfeb92",
+  "checklist_written_sha256": "485570611718c90b404a168a3958987d4b40688960dd306591d8e4b59413bd84",
+  "event": "approve",
+  "evidence": {
+    "kind": "artifact",
+    "revision": "68153714be50ec477af808d462ada809b9908acd",
+    "target": "evidence/pairblock-reviews/p0-pb-05i/68153714be50ec477af808d462ada809b9908acd.json"
+  },
+  "pair_block_id": "P0-PB-05I",
+  "previous_receipt": "../../evidence/pairblock-gates/p0-pb-05i/20260913T005415.278993Z.json",
+  "recorded_at": "2026-09-13T00:55:10.222562+00:00",
+  "repository_head": "fde647fff311afdbc798aae812287ea2ce2b551c",
+  "result": "applied",
+  "schema_version": 1,
+  "status_after": "Approved",
+  "status_before": "Review"
+}

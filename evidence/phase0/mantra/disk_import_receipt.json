@@ -1,0 +1,166 @@
+{
+  "files": [
+    {
+      "byte_count": 9470125,
+      "destination": "experiments/v1938_sota_clean_repro/inputs/coefficient_targets/fit_tune_ctrl19_matched_response_coefficients.npz",
+      "output_name": "coefficient_targets",
+      "sha256": "387b195778ce7c5a5b33024b3a841fdb9a294bc44ff35ab19d32d8b07da1e5fd"
+    },
+    {
+      "byte_count": 64472752,
+      "destination": "experiments/v1938_sota_clean_repro/inputs/gene_delta_labels/fit_tune_ctrl19_matched_log1p_cp10k_gene_deltas.npz",
+      "output_name": "fit_tune_gene_deltas",
+      "sha256": "4df4d1fd20e26f43a19c2108d6432a8597aecaee99838af09eed91f178cde5b3"
+    },
+    {
+      "byte_count": 5087281,
+      "destination": "experiments/v1938_sota_clean_repro/inputs/gene_delta_labels/hold_global_control_log1p_cp10k_gene_deltas.npz",
+      "output_name": "hold_gene_deltas",
+      "sha256": "30ab233c4563a27afbb8680ca44ead200db1066da1cb6a64c0f7496e8adf1585"
+    },
+    {
+      "byte_count": 4504,
+      "destination": "experiments/v1938_sota_clean_repro/inputs/response_programs/response_program_block_contract_16.npz",
+      "output_name": "response_program_contract",
+      "sha256": "a7e551e8e2f5a637ba5c8801d50b9109007e225536a213bd3bca2894c6331166"
+    },
+    {
+      "byte_count": 4102000,
+      "destination": "experiments/v1938_sota_clean_repro/inputs/response_programs/response_program_rotation_210d.npz",
+      "output_name": "response_program_rotation",
+      "sha256": "85cf1d7dff2ece81b9cbe7d9bb2b9bcb2aaed3dba48d948a4234a9f275301364"
+    },
+    {
+      "byte_count": 609109,
+      "destination": "experiments/v1938_sota_clean_repro/inputs/response_programs/response_program_similarity_graph.npz",
+      "output_name": "response_program_similarity",
+      "sha256": "a9680ddf0082a1072328e0329bb8e0c63b251375c3d22ec7ff4b342605f9ec10"
+    },
+    {
+      "byte_count": 40099328,
+      "destination": "experiments/v1938_sota_clean_repro/runs/checkpoint_bootstrap_20260713T030000Z/base_step01/candidates/mixed_src_snk_ripple_raw_pen1_directw2p0_local/checkpoints/mean/HOPFIELD_PREDICTIONS.npz",
+      "output_name": "mil_base_step01_predictions",
+      "sha256": "8b7be8b858cd8b4115610247c81062893fc589931698c8aa81f6f2328cee771a"
+    },
+    {
+      "byte_count": 40090084,
+      "destination": "experiments/v1938_sota_clean_repro/runs/checkpoint_bootstrap_20260713T030000Z/projected_step01/candidates/aggregate_proto64_scale2p8_temp0p095/checkpoints/mean/HOPFIELD_PREDICTIONS.npz",
+      "output_name": "mil_projected_step01_predictions",
+      "sha256": "7db1d609d7459086bd6d622cc6b974850d3267101ba171dce8830fd8b0b72dd5"
+    },
+    {
+      "byte_count": 1084512,
+      "destination": "experiments/v1938_sota_clean_repro/runs/clean_shared_mil_proto_hyperparam_sweep_20260714T063000Z/base_step01/base_lr2e4/candidates/mixed_src_snk_ripple_raw_pen1_base_lr2e4/checkpoints/weights/BASE_STEP01_MODEL_WEIGHTS.npz",
+      "output_name": "model",
+      "sha256": "2433527c3b23b66a16cedc0f7bc43867e4298af4d7a0733b202a8018ba876610"
+    },
+    {
+      "byte_count": 38397104,
+      "destination": "experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/out/raw_gene_readout_tuning_fit_only/best/RAW_GENE_PREDICTIONS.npz",
+      "output_name": "hopfield_parity_predictions",
+      "sha256": "d7180c4669a11b0b2fb184814aafb48ebafe75b02e4bd07998c337aa64dc59b7"
+    },
+    {
+      "byte_count": 221240428,
+      "destination": "experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/cellwise/cell_program_projections.npz",
+      "output_name": "mil_cell_program_projections",
+      "sha256": "9a4d5a2096e85c5ee656c888031c6467067394ca55a9e969a7ebf4a5aec94696"
+    },
+    {
+      "byte_count": 217234324,
+      "destination": "experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/cellwise/ot_matched_cell_programs.npz",
+      "output_name": "mil_ot_matched_cell_programs",
+      "sha256": "752ba594aea89cb2bfe282a1f45aea022bbb31898f77a86076f91840b44f3195"
+    },
+    {
+      "byte_count": 9686318,
+      "destination": "experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/coefficient_targets/fit_tune_response_coefficients.npz",
+      "output_name": "mil_coefficient_targets",
+      "sha256": "e80d7c5aa1d7ae5d09d41a2bb04c1f9aeb4225387fd8634bd7d1dd092c652db6"
+    },
+    {
+      "byte_count": 299314,
+      "destination": "experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/control_state/ot_matched_control_program_features.npz",
+      "output_name": "mil_control_program_features",
+      "sha256": "27b3c7a8995a751a63aa00950c54bd5c2e0e8a88c878cbf8df4ef198f2e3d3e9"
+    },
+    {
+      "byte_count": 34624193,
+      "destination": "experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/control_state/ot_matched_control_program_gene_shift.npz",
+      "output_name": "mil_hold_control_shift",
+      "sha256": "c6ea6627d845ad55cab739e73c65dd08fe1ec7d88a9ea3da40307b0bca0fe42d"
+    },
+    {
+      "byte_count": 652627,
+      "destination": "experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/core83/features.npz",
+      "output_name": "mil_core83_features",
+      "sha256": "a5830b935877fa9cfdbe42d294ebf036a362a20a62958d2a8b8c17e193389f8c"
+    },
+    {
+      "byte_count": 1122658,
+      "destination": "experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/family64/features.npz",
+      "output_name": "mil_family64_features",
+      "sha256": "ea240504e699af234ff04ca7f833fe4425f4ed35048bcaae4cf3fed1d22f1fa8"
+    },
+    {
+      "byte_count": 64472752,
+      "destination": "experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/gene_delta_labels/fit_tune_ctrl19_matched_log1p_cp10k_gene_deltas.npz",
+      "output_name": "mil_fit_tune_gene_deltas",
+      "sha256": "4df4d1fd20e26f43a19c2108d6432a8597aecaee99838af09eed91f178cde5b3"
+    },
+    {
+      "byte_count": 5087281,
+      "destination": "experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/gene_delta_labels/hold_global_control_log1p_cp10k_gene_deltas.npz",
+      "output_name": "mil_hold_gene_deltas",
+      "sha256": "30ab233c4563a27afbb8680ca44ead200db1066da1cb6a64c0f7496e8adf1585"
+    },
+    {
+      "byte_count": 320754,
+      "destination": "experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/response40/features.npz",
+      "output_name": "mil_response40_features",
+      "sha256": "3a244eb8c290c657e5612a2895274d2519a3613bd17b5e4777ffab1b08d70716"
+    },
+    {
+      "byte_count": 4504,
+      "destination": "experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/response_programs/response_program_block_contract_16.npz",
+      "output_name": "mil_response_block_contract",
+      "sha256": "a7e551e8e2f5a637ba5c8801d50b9109007e225536a213bd3bca2894c6331166"
+    },
+    {
+      "byte_count": 4102000,
+      "destination": "experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/reproduce_top_donor_long_train_standard_spread/out/input_root/inputs/response_programs/response_program_rotation_210d.npz",
+      "output_name": "mil_response_rotation",
+      "sha256": "85cf1d7dff2ece81b9cbe7d9bb2b9bcb2aaed3dba48d948a4234a9f275301364"
+    },
+    {
+      "byte_count": 3813307,
+      "destination": "experiments/v1952_direct_mil_control_term_ablation/runs/control_ablation_seed_123460/checkpoints/transformed_training_memory/derived/mil_proto/mil_proto_identity_vectors.npz",
+      "output_name": "mil_proto_identity",
+      "sha256": "5a6d2c568a99124ffbda5132736b8d84002713ad2213a5fc149e06218f89fa0b"
+    },
+    {
+      "byte_count": 1627125,
+      "destination": "experiments/v1953_direct_mil_simplified_scorer_promotion/runs/simplified_scorer_full_stack_20260725T000500Z/step02_step03/checkpoints/mean/STEP02_SLOT_COUPLED_PREDICTIONS.npz",
+      "output_name": "mil_parity_step02_predictions",
+      "sha256": "c0011d71436c540bde8dd00f9e2f8ac8fb46aa787161460a1aefce5f0f1277be"
+    },
+    {
+      "byte_count": 38473137,
+      "destination": "experiments/v1953_direct_mil_simplified_scorer_promotion/runs/simplified_scorer_full_stack_20260725T000500Z/step02_step03/checkpoints/mean/STEP03_GENE_PREDICTIONS.npz",
+      "output_name": "mil_parity_step03_predictions",
+      "sha256": "e39230c8c17954602a2c3dbfc26ed4759922be36bdabc6b27ffb96204a07f7fd"
+    },
+    {
+      "byte_count": 10992,
+      "destination": "experiments/v1953_direct_mil_simplified_scorer_promotion/runs/simplified_scorer_full_stack_20260725T000500Z/step02_step03/checkpoints/weights/STEP02_MODEL_WEIGHTS.npz",
+      "output_name": "mil_parity_step02_weights",
+      "sha256": "8290145991446afd9f45c3f3be1ad7fe95518dfe6f75e1e950b86a2b84c323ab"
+    },
+    {
+      "byte_count": 4941578,
+      "destination": "experiments/v1953_direct_mil_simplified_scorer_promotion/runs/simplified_scorer_full_stack_20260725T000500Z/step02_step03/checkpoints/weights/STEP03_RIDGE_WEIGHTS.npz",
+      "output_name": "mil_parity_step03_weights",
+      "sha256": "372e4409468d7d0441383833601d2a008ab24fd309ae4cd6fb2ebaa36e1dd3f0"
+    }
+  ]
+}

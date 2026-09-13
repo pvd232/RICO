@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "e8bb8fc1c06619c625d0cd6c38a48faed5a67acfb0fbaae32cbac8989c9a3dcc",
+  "checklist_written_sha256": "9509e42262322388b5f0a32d497719eff6aab3f20335dab91ae166aa51cb017d",
+  "event": "register",
+  "evidence": {
+    "kind": "external",
+    "revision": "01M2C2VB6QESCN8MTDQZQ3HNBW",
+    "target": "MANTRA run 01M2C2VB6QESCN8MTDQZQ3HNBW retained verification_failed after provisional publication"
+  },
+  "pair_block_id": "P0-PB-05I",
+  "previous_receipt": "../../evidence/pairblock-lifecycle/p0-pb-05i/20260913T005527.916360Z-accept.json",
+  "recorded_at": "2026-09-13T00:55:28.163327+00:00",
+  "repository_head": "fde647fff311afdbc798aae812287ea2ce2b551c",
+  "result": "applied",
+  "schema_version": 1,
+  "status_after": "Complete",
+  "status_before": "Applied"
+}

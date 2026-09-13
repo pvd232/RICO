@@ -1,0 +1,213 @@
+{
+  "passed": true,
+  "runs": {
+    "hopfield": [
+      {
+        "mode": "declared",
+        "reads": [
+          ".viper/workspaces/01M2C3JFXQ2D8A0VB84R5493EY/attempt-1/inputs/predict/core83.npz",
+          ".viper/workspaces/01M2C3JFXQ2D8A0VB84R5493EY/attempt-1/inputs/predict/family64.npz",
+          ".viper/workspaces/01M2C3JFXQ2D8A0VB84R5493EY/attempt-1/inputs/predict/gene_shift.npz",
+          ".viper/workspaces/01M2C3JFXQ2D8A0VB84R5493EY/attempt-1/inputs/predict/input_contract.yaml",
+          ".viper/workspaces/01M2C3JFXQ2D8A0VB84R5493EY/attempt-1/inputs/predict/response40.npz",
+          ".viper/workspaces/01M2C3JFXQ2D8A0VB84R5493EY/attempt-1/inputs/predict/response_blocks.json",
+          ".viper/workspaces/01M2C3JFXQ2D8A0VB84R5493EY/attempt-1/inputs/predict/stage_config.yaml",
+          "experiments/mantra_hopfield_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3JFXQ2D8A0VB84R5493EY/artifacts/predict/predictions/hopfield_predictions.npz",
+          "inputs/mantra_hopfield_replay/coefficient_targets.npz",
+          "inputs/mantra_hopfield_replay/encoder.npz",
+          "inputs/mantra_hopfield_replay/fit_tune_truth.npz",
+          "inputs/mantra_hopfield_replay/response_contract.npz",
+          "inputs/mantra_hopfield_replay/response_rotation.npz",
+          "inputs/mantra_hopfield_replay/response_similarity.npz"
+        ],
+        "stage_id": "predict",
+        "writes": [
+          "experiments/mantra_hopfield_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3JFXQ2D8A0VB84R5493EY/artifacts/predict/attention/hopfield_attention.json",
+          "experiments/mantra_hopfield_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3JFXQ2D8A0VB84R5493EY/artifacts/predict/predictions/hopfield_predictions.npz"
+        ]
+      },
+      {
+        "mode": "declared",
+        "reads": [
+          ".viper/workspaces/01M2C3JFXQ2D8A0VB84R5493EY/attempt-1/inputs/evaluate/parity_report.json",
+          "experiments/mantra_hopfield_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3JFXQ2D8A0VB84R5493EY/artifacts/predict/attention/hopfield_attention.json",
+          "experiments/mantra_hopfield_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3JFXQ2D8A0VB84R5493EY/artifacts/predict/predictions/hopfield_predictions.npz",
+          "inputs/mantra_hopfield_replay/hold_truth.npz"
+        ],
+        "stage_id": "evaluate",
+        "writes": [
+          "experiments/mantra_hopfield_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3JFXQ2D8A0VB84R5493EY/artifacts/evaluate/receipt/hopfield_replay_receipt.json"
+        ]
+      }
+    ],
+    "mil": [
+      {
+        "mode": "declared",
+        "reads": [
+          ".viper/workspaces/01M2C3SVNE98XZ0D8S4CZJ64T8/attempt-1/inputs/apply/artifact_names.yaml",
+          ".viper/workspaces/01M2C3SVNE98XZ0D8S4CZJ64T8/attempt-1/inputs/apply/step02_config.yaml",
+          ".viper/workspaces/01M2C3SVNE98XZ0D8S4CZJ64T8/attempt-1/inputs/apply/step02_input_contract.yaml",
+          ".viper/workspaces/01M2C3SVNE98XZ0D8S4CZJ64T8/attempt-1/inputs/apply/step03_config.yaml",
+          "experiments/mantra_mil_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3SVNE98XZ0D8S4CZJ64T8/artifacts/apply/workspace/mil_application/run/checkpoints/mean/STEP02_SLOT_COUPLED_PREDICTIONS.npz",
+          "experiments/mantra_mil_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3SVNE98XZ0D8S4CZJ64T8/artifacts/apply/workspace/mil_application/run/checkpoints/mean/STEP03_GENE_PREDICTIONS.npz",
+          "experiments/mantra_mil_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3SVNE98XZ0D8S4CZJ64T8/artifacts/apply/workspace/mil_application/run/checkpoints/weights/STEP02_MODEL_WEIGHTS.npz",
+          "experiments/mantra_mil_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3SVNE98XZ0D8S4CZJ64T8/artifacts/apply/workspace/mil_application/run/checkpoints/weights/STEP03_RIDGE_WEIGHTS.npz",
+          "experiments/mantra_mil_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3SVNE98XZ0D8S4CZJ64T8/artifacts/apply/workspace/mil_application/run/diagnostics/STEP02_RESULT_REPORT.json",
+          "inputs/mantra_mil_replay/mil_base_step01_predictions.npz",
+          "inputs/mantra_mil_replay/mil_cell_program_projections.npz",
+          "inputs/mantra_mil_replay/mil_coefficient_targets.npz",
+          "inputs/mantra_mil_replay/mil_control_program_features.npz",
+          "inputs/mantra_mil_replay/mil_core83_features.npz",
+          "inputs/mantra_mil_replay/mil_family64_features.npz",
+          "inputs/mantra_mil_replay/mil_fit_tune_gene_deltas.npz",
+          "inputs/mantra_mil_replay/mil_hold_control_shift.npz",
+          "inputs/mantra_mil_replay/mil_hold_gene_deltas.npz",
+          "inputs/mantra_mil_replay/mil_ot_matched_cell_programs.npz",
+          "inputs/mantra_mil_replay/mil_projected_step01_predictions.npz",
+          "inputs/mantra_mil_replay/mil_proto_identity.npz",
+          "inputs/mantra_mil_replay/mil_response40_features.npz",
+          "inputs/mantra_mil_replay/mil_response_block_contract.npz",
+          "inputs/mantra_mil_replay/mil_response_rotation.npz"
+        ],
+        "stage_id": "apply",
+        "writes": [
+          "experiments/mantra_mil_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3SVNE98XZ0D8S4CZJ64T8/artifacts/apply/scores/mil_scores.json",
+          "experiments/mantra_mil_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3SVNE98XZ0D8S4CZJ64T8/artifacts/apply/step02_predictions/step02_predictions.npz",
+          "experiments/mantra_mil_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3SVNE98XZ0D8S4CZJ64T8/artifacts/apply/step02_weights/step02_weights.npz",
+          "experiments/mantra_mil_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3SVNE98XZ0D8S4CZJ64T8/artifacts/apply/step03_predictions/step03_predictions.npz",
+          "experiments/mantra_mil_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3SVNE98XZ0D8S4CZJ64T8/artifacts/apply/step03_weights/step03_weights.npz",
+          "experiments/mantra_mil_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3SVNE98XZ0D8S4CZJ64T8/artifacts/apply/workspace/mil_application/run/checkpoints/mean/STEP02_SLOT_COUPLED_PREDICTIONS.npz",
+          "experiments/mantra_mil_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3SVNE98XZ0D8S4CZJ64T8/artifacts/apply/workspace/mil_application/run/checkpoints/mean/STEP03_GENE_PREDICTIONS.npz",
+          "experiments/mantra_mil_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3SVNE98XZ0D8S4CZJ64T8/artifacts/apply/workspace/mil_application/run/checkpoints/weights/STEP02_MODEL_WEIGHTS.npz",
+          "experiments/mantra_mil_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3SVNE98XZ0D8S4CZJ64T8/artifacts/apply/workspace/mil_application/run/checkpoints/weights/STEP03_RIDGE_WEIGHTS.npz",
+          "experiments/mantra_mil_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3SVNE98XZ0D8S4CZJ64T8/artifacts/apply/workspace/mil_application/run/diagnostics/STEP02_RESULT_REPORT.json",
+          "experiments/mantra_mil_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3SVNE98XZ0D8S4CZJ64T8/artifacts/apply/workspace/mil_application/run/diagnostics/STEP03_RESULT_REPORT.json",
+          "experiments/mantra_mil_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3SVNE98XZ0D8S4CZJ64T8/artifacts/apply/workspace/mil_application/run/logs/run_step02_step03.log"
+        ]
+      },
+      {
+        "mode": "declared",
+        "reads": [
+          ".viper/workspaces/01M2C3SVNE98XZ0D8S4CZJ64T8/attempt-1/inputs/evaluate/promotion.yaml",
+          ".viper/workspaces/01M2C3SVNE98XZ0D8S4CZJ64T8/attempt-1/inputs/evaluate/step02_report.json",
+          ".viper/workspaces/01M2C3SVNE98XZ0D8S4CZJ64T8/attempt-1/inputs/evaluate/step03_report.json",
+          "experiments/mantra_mil_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3SVNE98XZ0D8S4CZJ64T8/artifacts/apply/scores/mil_scores.json",
+          "experiments/mantra_mil_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3SVNE98XZ0D8S4CZJ64T8/artifacts/apply/step02_predictions/step02_predictions.npz",
+          "experiments/mantra_mil_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3SVNE98XZ0D8S4CZJ64T8/artifacts/apply/step02_weights/step02_weights.npz",
+          "experiments/mantra_mil_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3SVNE98XZ0D8S4CZJ64T8/artifacts/apply/step03_predictions/step03_predictions.npz",
+          "experiments/mantra_mil_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3SVNE98XZ0D8S4CZJ64T8/artifacts/apply/step03_weights/step03_weights.npz",
+          "inputs/mantra_mil_replay/mil_parity_step02_predictions.npz",
+          "inputs/mantra_mil_replay/mil_parity_step02_weights.npz",
+          "inputs/mantra_mil_replay/mil_parity_step03_predictions.npz",
+          "inputs/mantra_mil_replay/mil_parity_step03_weights.npz"
+        ],
+        "stage_id": "evaluate",
+        "writes": [
+          "experiments/mantra_mil_replay_7c76c9772378_82a5072ebc68/runs/selected/01M2C3SVNE98XZ0D8S4CZJ64T8/artifacts/evaluate/receipt/mil_replay_receipt.json"
+        ]
+      }
+    ],
+    "restoration": [
+      {
+        "mode": "unrestricted",
+        "stage_id": "prepare_controls"
+      },
+      {
+        "mode": "declared",
+        "reads": [
+          ".viper/workspaces/01M2C319YF5PN1G8DN2YGEAQ4K/attempt-1/inputs/restore/coefficient_targets.npz",
+          ".viper/workspaces/01M2C319YF5PN1G8DN2YGEAQ4K/attempt-1/inputs/restore/fit_tune_gene_deltas.npz",
+          ".viper/workspaces/01M2C319YF5PN1G8DN2YGEAQ4K/attempt-1/inputs/restore/hold_gene_deltas.npz",
+          ".viper/workspaces/01M2C319YF5PN1G8DN2YGEAQ4K/attempt-1/inputs/restore/hopfield_parity_predictions.npz",
+          ".viper/workspaces/01M2C319YF5PN1G8DN2YGEAQ4K/attempt-1/inputs/restore/mil_base_step01_predictions.npz",
+          ".viper/workspaces/01M2C319YF5PN1G8DN2YGEAQ4K/attempt-1/inputs/restore/mil_cell_program_projections.npz",
+          ".viper/workspaces/01M2C319YF5PN1G8DN2YGEAQ4K/attempt-1/inputs/restore/mil_coefficient_targets.npz",
+          ".viper/workspaces/01M2C319YF5PN1G8DN2YGEAQ4K/attempt-1/inputs/restore/mil_control_program_features.npz",
+          ".viper/workspaces/01M2C319YF5PN1G8DN2YGEAQ4K/attempt-1/inputs/restore/mil_core83_features.npz",
+          ".viper/workspaces/01M2C319YF5PN1G8DN2YGEAQ4K/attempt-1/inputs/restore/mil_family64_features.npz",
+          ".viper/workspaces/01M2C319YF5PN1G8DN2YGEAQ4K/attempt-1/inputs/restore/mil_fit_tune_gene_deltas.npz",
+          ".viper/workspaces/01M2C319YF5PN1G8DN2YGEAQ4K/attempt-1/inputs/restore/mil_hold_control_shift.npz",
+          ".viper/workspaces/01M2C319YF5PN1G8DN2YGEAQ4K/attempt-1/inputs/restore/mil_hold_gene_deltas.npz",
+          ".viper/workspaces/01M2C319YF5PN1G8DN2YGEAQ4K/attempt-1/inputs/restore/mil_ot_matched_cell_programs.npz",
+          ".viper/workspaces/01M2C319YF5PN1G8DN2YGEAQ4K/attempt-1/inputs/restore/mil_parity_step02_predictions.npz",
+          ".viper/workspaces/01M2C319YF5PN1G8DN2YGEAQ4K/attempt-1/inputs/restore/mil_parity_step02_weights.npz",
+          ".viper/workspaces/01M2C319YF5PN1G8DN2YGEAQ4K/attempt-1/inputs/restore/mil_parity_step03_predictions.npz",
+          ".viper/workspaces/01M2C319YF5PN1G8DN2YGEAQ4K/attempt-1/inputs/restore/mil_parity_step03_weights.npz",
+          ".viper/workspaces/01M2C319YF5PN1G8DN2YGEAQ4K/attempt-1/inputs/restore/mil_projected_step01_predictions.npz",
+          ".viper/workspaces/01M2C319YF5PN1G8DN2YGEAQ4K/attempt-1/inputs/restore/mil_proto_identity.npz",
+          ".viper/workspaces/01M2C319YF5PN1G8DN2YGEAQ4K/attempt-1/inputs/restore/mil_response40_features.npz",
+          ".viper/workspaces/01M2C319YF5PN1G8DN2YGEAQ4K/attempt-1/inputs/restore/mil_response_block_contract.npz",
+          ".viper/workspaces/01M2C319YF5PN1G8DN2YGEAQ4K/attempt-1/inputs/restore/mil_response_rotation.npz",
+          ".viper/workspaces/01M2C319YF5PN1G8DN2YGEAQ4K/attempt-1/inputs/restore/model.npz",
+          ".viper/workspaces/01M2C319YF5PN1G8DN2YGEAQ4K/attempt-1/inputs/restore/response_program_contract.npz",
+          ".viper/workspaces/01M2C319YF5PN1G8DN2YGEAQ4K/attempt-1/inputs/restore/response_program_rotation.npz",
+          ".viper/workspaces/01M2C319YF5PN1G8DN2YGEAQ4K/attempt-1/inputs/restore/response_program_similarity.npz",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/prepare_controls/bindings/restoration_bindings.json",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/prepare_controls/control_receipt/control_receipt.json",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/prepare_controls/controls/prepared_controls/control/ARCHIVE_INDEX.json",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/coefficient_targets/restored/coefficient_targets.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/fit_tune_gene_deltas/restored/fit_tune_gene_deltas.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/hold_gene_deltas/restored/hold_gene_deltas.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/hopfield_parity_predictions/restored/hopfield_parity_predictions.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_base_step01_predictions/restored/mil_base_step01_predictions.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_cell_program_projections/restored/mil_cell_program_projections.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_coefficient_targets/restored/mil_coefficient_targets.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_control_program_features/restored/mil_control_program_features.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_core83_features/restored/mil_core83_features.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_family64_features/restored/mil_family64_features.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_fit_tune_gene_deltas/restored/mil_fit_tune_gene_deltas.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_hold_control_shift/restored/mil_hold_control_shift.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_hold_gene_deltas/restored/mil_hold_gene_deltas.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_ot_matched_cell_programs/restored/mil_ot_matched_cell_programs.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_parity_step02_predictions/restored/mil_parity_step02_predictions.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_parity_step02_weights/restored/mil_parity_step02_weights.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_parity_step03_predictions/restored/mil_parity_step03_predictions.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_parity_step03_weights/restored/mil_parity_step03_weights.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_projected_step01_predictions/restored/mil_projected_step01_predictions.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_proto_identity/restored/mil_proto_identity.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_response40_features/restored/mil_response40_features.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_response_block_contract/restored/mil_response_block_contract.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_response_rotation/restored/mil_response_rotation.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/model/restored/model.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/response_program_contract/restored/response_program_contract.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/response_program_rotation/restored/response_program_rotation.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/response_program_similarity/restored/response_program_similarity.bin"
+        ],
+        "stage_id": "restore",
+        "writes": [
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/coefficient_targets/restored/coefficient_targets.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/evidence/restoration_evidence/archive_plan.json",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/evidence/restoration_evidence/capacity_receipt.json",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/evidence/restoration_evidence/disk_import_receipt.json",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/fit_tune_gene_deltas/restored/fit_tune_gene_deltas.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/hold_gene_deltas/restored/hold_gene_deltas.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/hopfield_parity_predictions/restored/hopfield_parity_predictions.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_base_step01_predictions/restored/mil_base_step01_predictions.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_cell_program_projections/restored/mil_cell_program_projections.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_coefficient_targets/restored/mil_coefficient_targets.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_control_program_features/restored/mil_control_program_features.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_core83_features/restored/mil_core83_features.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_family64_features/restored/mil_family64_features.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_fit_tune_gene_deltas/restored/mil_fit_tune_gene_deltas.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_hold_control_shift/restored/mil_hold_control_shift.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_hold_gene_deltas/restored/mil_hold_gene_deltas.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_ot_matched_cell_programs/restored/mil_ot_matched_cell_programs.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_parity_step02_predictions/restored/mil_parity_step02_predictions.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_parity_step02_weights/restored/mil_parity_step02_weights.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_parity_step03_predictions/restored/mil_parity_step03_predictions.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_parity_step03_weights/restored/mil_parity_step03_weights.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_projected_step01_predictions/restored/mil_projected_step01_predictions.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_proto_identity/restored/mil_proto_identity.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_response40_features/restored/mil_response40_features.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_response_block_contract/restored/mil_response_block_contract.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/mil_response_rotation/restored/mil_response_rotation.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/model/restored/model.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/response_program_contract/restored/response_program_contract.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/response_program_rotation/restored/response_program_rotation.bin",
+          "experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/response_program_similarity/restored/response_program_similarity.bin"
+        ]
+      }
+    ]
+  },
+  "schema_version": "rico.phase0_stage_file_access.v1"
+}

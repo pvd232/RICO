@@ -3,7 +3,10 @@
   "assessed_checks": [
     "local-cross-workspace-prior-run",
     "declared-stage-file-access",
-    "unbenchmarked-build-model"
+    "unbenchmarked-build-model",
+    "failed-attempt-finalization",
+    "stored-input-materialization-namespace",
+    "repeated-prior-run-verification"
   ],
   "assessments": [
     {
@@ -46,6 +49,47 @@
       "elapsed_seconds": 2.129657,
       "work_added": "The plan verifier changed one estimator guard and added two focused cases; the final gate took 2.13 seconds.",
       "later_reuse": "P0-PB-06 selects the restored encoder artifact as the estimator of an unbenchmarked restoration run."
+    },
+    {
+      "check_id": "failed-attempt-finalization",
+      "claimed_guarantee": "A result-verification failure replaces the provisional successful attempt document with a failed attempt that preserves the verification error.",
+      "observed_result": "The original failure path attempted an immutable rewrite and masked the artifact loader error. The repaired path retained status failed, code verification_failed, and the original loader-verification message.",
+      "defect_classification": "framework_gap",
+      "independent_check": "VIPER tests/test_run_execution.py::test_two_stage_local_run_writes_and_verifies_terminal_result, RICO evidence/pairblock-reviews/p0-pb-05i/68153714be50ec477af808d462ada809b9908acd.json, and MANTRA run 01M2C2VB6QESCN8MTDQZQ3HNBW",
+      "ordinary_check_equivalent": "The end-to-end execution test detects the defect; the original direct publication test did not observe the exception-path caller.",
+      "false_alarms": [],
+      "infrastructure_failures": [],
+      "elapsed_seconds": 37.1,
+      "work_added": "The exception path gained one atomic replacement flag, one direct publication case, and one end-to-end verification-failure case.",
+      "later_reuse": "Every later VIPER run now retains its originating verification failure instead of reporting a secondary publication error."
+    },
+    {
+      "check_id": "stored-input-materialization-namespace",
+      "claimed_guarantee": "A prior-run artifact materializes beneath the consumer workspace's inputs directory.",
+      "observed_result": "VIPER rejected MANTRA paths beneath experiments after prediction completed. MANTRA now materializes every restored replay input beneath inputs/mantra_hopfield_replay or inputs/mantra_mil_replay.",
+      "defect_classification": "intentional_restriction",
+      "independent_check": "MANTRA run 01M2C36JYT7JSQKZ62XBESVNJZ and the 14-case Hopfield and MIL declaration gate for commit 7c76c9772378f94f55012a06fc9f13354a46a4e7",
+      "ordinary_check_equivalent": "A frozen-plan test would detect the invalid namespace before execution; the earlier authoring tests inspected only selected paths.",
+      "false_alarms": [],
+      "infrastructure_failures": [
+        "The verifier enforced the valid restriction only after the full prediction stage had run."
+      ],
+      "elapsed_seconds": 180.0,
+      "work_added": "Four MANTRA materialization declarations changed and both replay tests now cover every restored input path.",
+      "later_reuse": "Connected Hopfield run 01M2C3JFXQ2D8A0VB84R5493EY and MIL run 01M2C3SVNE98XZ0D8S4CZJ64T8 use the canonical namespace."
+    },
+    {
+      "check_id": "repeated-prior-run-verification",
+      "claimed_guarantee": "Each stored input reaches and verifies its producer run and selected artifact.",
+      "observed_result": "The guarantee passed, but verify_stored_inputs called verify_promoted_artifact separately for every pointer and each call re-ran verify_run_result for the same restoration run.",
+      "defect_classification": "framework_gap",
+      "independent_check": "VIPER src/viper/verification.py::verify_stored_inputs and ::verify_promoted_artifact plus the timed Phase 0 graph-evidence run",
+      "ordinary_check_equivalent": "Correctness tests pass despite the repeated work; a call-count or shared-ancestor performance test is required.",
+      "false_alarms": [],
+      "infrastructure_failures": [],
+      "elapsed_seconds": 288.0,
+      "work_added": "No repair was added during Phase 0; the evidence run exposed the need for per-verification-call producer-run memoization.",
+      "later_reuse": "Memoizing one verified producer result will reduce validation overhead for reconstruction stages that consume many artifacts from one upstream run."
     }
   ]
 }

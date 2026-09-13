@@ -1,0 +1,19 @@
+{
+  "device": "cuda",
+  "effective_topk": 1427,
+  "expected_hold_PearsonDelta": 0.5861640938949398,
+  "family64_scale": 1.3,
+  "memory_splits": [
+    "fit"
+  ],
+  "passed": true,
+  "prediction_bytes": 38397104,
+  "prediction_sha256": "d7180c4669a11b0b2fb184814aafb48ebafe75b02e4bd07998c337aa64dc59b7",
+  "requested_topk": 1600,
+  "scores": {
+    "hold_PearsonDelta": 0.5861640938949398
+  },
+  "temperature": 0.055,
+  "tolerance": 1e-10,
+  "variant_name": "mixed_src_snk_ripple_raw_pen1_base_lr2e4"
+}

@@ -1,0 +1,35 @@
+{
+  "baseline_verification": {
+    "hopfield": {
+      "run_id": "01M2C3JFXQ2D8A0VB84R5493EY",
+      "run_sha256": "e6482dd72beee7010afcec9292e98c0fd71d6f9d823c9add901a8d2d553ac1b1",
+      "status": "succeeded"
+    },
+    "mil": {
+      "run_id": "01M2C3SVNE98XZ0D8S4CZJ64T8",
+      "run_sha256": "cd47771ce8c35c205cb23b0dec4147538916653c1c37e3bb0aaef96456463f5a",
+      "status": "succeeded"
+    },
+    "restoration": {
+      "run_id": "01M2C319YF5PN1G8DN2YGEAQ4K",
+      "run_sha256": "82a5072ebc688dd009e69c6d17d908f4aa4ac2f7fb9f1f1559ec70fe1563625c",
+      "status": "succeeded"
+    }
+  },
+  "passed": true,
+  "schema_version": "rico.phase0_viper_graph.v1",
+  "severed_edges": [
+    {
+      "edge_kind": "input",
+      "error": "stage 'restore' does not embed its stage spec",
+      "name": "coefficient_targets",
+      "outcome": "rejected"
+    },
+    {
+      "edge_kind": "output",
+      "error": "run estimator must select a declared stage artifact",
+      "name": "model",
+      "outcome": "rejected"
+    }
+  ]
+}

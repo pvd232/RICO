@@ -1,0 +1,29 @@
+{
+  "array_parity": {
+    "step02_predictions": true,
+    "step02_weights": true,
+    "step03_predictions": true,
+    "step03_weights": true
+  },
+  "array_parity_required": true,
+  "device": "cuda",
+  "passed": true,
+  "produced_sha256": {
+    "step02_predictions": "c0011d71436c540bde8dd00f9e2f8ac8fb46aa787161460a1aefce5f0f1277be",
+    "step02_weights": "8290145991446afd9f45c3f3be1ad7fe95518dfe6f75e1e950b86a2b84c323ab",
+    "step03_predictions": "e39230c8c17954602a2c3dbfc26ed4759922be36bdabc6b27ffb96204a07f7fd",
+    "step03_weights": "372e4409468d7d0441383833601d2a008ab24fd309ae4cd6fb2ebaa36e1dd3f0"
+  },
+  "reference_sha256": {
+    "mil_parity_step02_predictions": "c0011d71436c540bde8dd00f9e2f8ac8fb46aa787161460a1aefce5f0f1277be",
+    "mil_parity_step02_weights": "8290145991446afd9f45c3f3be1ad7fe95518dfe6f75e1e950b86a2b84c323ab",
+    "mil_parity_step03_predictions": "e39230c8c17954602a2c3dbfc26ed4759922be36bdabc6b27ffb96204a07f7fd",
+    "mil_parity_step03_weights": "372e4409468d7d0441383833601d2a008ab24fd309ae4cd6fb2ebaa36e1dd3f0"
+  },
+  "score_parity": true,
+  "scores": {
+    "step02_hold_PearsonDelta": 0.5924883417873266,
+    "step03_hold_PearsonDelta": 0.6025499488874759
+  },
+  "tolerance": 1e-08
+}

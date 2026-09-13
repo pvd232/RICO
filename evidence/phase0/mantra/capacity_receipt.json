@@ -1,0 +1,11 @@
+{
+  "canonical_bytes": 0,
+  "compressed_cache_bytes": 0,
+  "filesys_path": "/home/machina/MANTRA/experiments/mantra_historical_restoration_3baf1e541fb4/runs/selected/01M2C319YF5PN1G8DN2YGEAQ4K/artifacts/restore/evidence/restoration_evidence",
+  "free_bytes": 52620079104,
+  "passed": true,
+  "required_bytes": 1853986370,
+  "reserved_bytes": 10485760,
+  "temporary_bytes": 221240428,
+  "viper_bytes": 1622260182
+}

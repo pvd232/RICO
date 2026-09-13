@@ -1,0 +1,77 @@
+{
+  "evidence": {
+    "capacity_receipt": {
+      "byte_count": 414,
+      "path": "evidence/phase0/mantra/capacity_receipt.json",
+      "repository": "rico",
+      "sha256": "d0ef33fb6bf94ccd405ba4d83349bdaef6e5a7cf61fe901e476320d13bc38a86"
+    },
+    "cross_workspace_assessment": {
+      "byte_count": 3729,
+      "path": "evidence/viper-assessments/local-prior-run-cross-workspace.json",
+      "repository": "rico",
+      "sha256": "4a3033ce22d90138eb60fe81d0591599990164ebc003a0ef8e0a479e529cbede"
+    },
+    "dependency_graph": {
+      "byte_count": 76078,
+      "path": "evidence/phase0/dependency_graph.json",
+      "repository": "rico",
+      "sha256": "759d9f200fb6e5a24cf7111cde687ead4782ab7aadb9d1a06ff3d05ea2b6e039"
+    },
+    "environment_receipt": {
+      "byte_count": 811,
+      "path": "evidence/phase0/environment-receipt.json",
+      "repository": "rico",
+      "sha256": "a1b850a30d936a564bd14357d8145207d8a7cf166b274191bc87d42571cec977"
+    },
+    "graph_completeness_report": {
+      "byte_count": 84309,
+      "path": "evidence/phase0/mantra/graph_completeness_report.json",
+      "repository": "rico",
+      "sha256": "81d22d0b978aeb0eb0e9862b1547c7484abb25cdb73e962916e642da3422eb45"
+    },
+    "hopfield_replay_receipt": {
+      "byte_count": 500,
+      "path": "evidence/phase0/mantra/hopfield_replay_receipt.json",
+      "repository": "rico",
+      "sha256": "047d2d16b26196a014464a122bc7385cf63a069c9288b35b0295859bffb2d4c4"
+    },
+    "mil_replay_receipt": {
+      "byte_count": 1221,
+      "path": "evidence/phase0/mantra/mil_replay_receipt.json",
+      "repository": "rico",
+      "sha256": "9e9006163012070621625492e6d4e70fc746e8bd1e6d1c0aa3d7ac0ca8fe0b08"
+    },
+    "restoration_bindings": {
+      "byte_count": 16867,
+      "path": "evidence/phase0/mantra/restoration_bindings.json",
+      "repository": "rico",
+      "sha256": "489fbdb5708056345c054f02fca29b3867a66f96dc5540feba3b8ff7ebc07608"
+    },
+    "restoration_receipt": {
+      "byte_count": 9974,
+      "path": "evidence/phase0/mantra/disk_import_receipt.json",
+      "repository": "rico",
+      "sha256": "08a07272448538bf4111c2314a2d26ddf691ff1e5212e4a9c04125a6bc2a4b7b"
+    },
+    "stage_file_access_receipt": {
+      "byte_count": 23611,
+      "path": "evidence/phase0/mantra/stage_file_access_receipt.json",
+      "repository": "rico",
+      "sha256": "b2543cb50c875ce191c2ed06285022b827bff3f6b7b11ab8b20c3b79f8d1aae0"
+    },
+    "viper_graph_receipt": {
+      "byte_count": 1021,
+      "path": "evidence/phase0/mantra/viper_graph_receipt.json",
+      "repository": "rico",
+      "sha256": "c0fdd5d1a148d64ebfae7c08a02d54fd151dc0e28af44adacc87189910944457"
+    }
+  },
+  "schema_version": "rico.phase0_evidence.v1",
+  "viper_usefulness_ledger": {
+    "byte_count": 7955,
+    "path": "evidence/viper-usefulness-ledger.json",
+    "repository": "rico",
+    "sha256": "18d2bbdd0b2d8c676e3edca4ad7663cd45d6670f7d0b64dafe6730439f68468e"
+  }
+}

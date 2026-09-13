@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-05I",
+  "requirement_ids": [
+    "P0-REQ-18"
+  ],
+  "repository": "https://github.com/pvd232/viper.git",
+  "base_commit": "15cde7ff22f0ce5e641a506c8bce51ce9d81cf39",
+  "result_commit": "68153714be50ec477af808d462ada809b9908acd",
+  "owned_paths": [
+    "src/viper/execution/_attempt.py",
+    "src/viper/execution/_publication.py",
+    "tests/declaration_observers.toml",
+    "tests/test_run_execution.py"
+  ],
+  "diff_sha256": "f420ba182fe0c5f866831f90dbda85007e76acaacea5613da93cb77b2d5c9dc1",
+  "invariants": [
+    "A result-verification exception replaces the provisional successful attempt document with one failed attempt document at the same canonical path.",
+    "The failed attempt preserves the verification failure code and message.",
+    "A later retry can succeed after the verification fault is removed."
+  ],
+  "findings": [
+    {
+      "severity": "P1",
+      "counterexample": "The original focused test called write_attempt_document directly, so removing replace_existing=True from execute_attempt would leave the test passing while the real failure path regressed.",
+      "repair": "Force result verification to fail inside the existing local-run acceptance test, inspect the replaced attempt document, then remove the fault and prove a later retry succeeds.",
+      "status": "repaired",
+      "observing_test": "tests/test_run_execution.py::test_two_stage_local_run_writes_and_verifies_terminal_result"
+    }
+  ],
+  "mechanical_evidence": {
+    "focused_command": "python -m pytest -q tests/test_run_execution.py::test_failed_attempt_replaces_provisional_document tests/test_run_execution.py::test_two_stage_local_run_writes_and_verifies_terminal_result",
+    "focused_result": "2 passed in 37.10 seconds",
+    "ruff": "passed",
+    "git_diff_check": "passed",
+    "upstream_match": "passed",
+    "real_acceptance": "MANTRA run 01M2C2VB6QESCN8MTDQZQ3HNBW retained status failed, code verification_failed, and the loader verification message after provisional publication.",
+    "impact_selection": "CodeQL one-hop selection widened because imported aliases remain unmapped; the deferred full-suite fallback is recorded as a selector limitation rather than claimed as executed."
+  },
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-13T00:50:52Z"
+}
