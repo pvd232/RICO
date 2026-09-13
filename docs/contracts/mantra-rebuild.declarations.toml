@@ -100,6 +100,16 @@ gate = { kind = "test", target = "P0-VR-35" }
 verifier_ids = ["P0-VR-35"]
 pair_block_ids = ["P0-PB-05Q"]
 
+[[requirements]]
+id = "P0-REQ-37"
+claim = "VIPER defines one exact file-byte identity, and MANTRA uses that type without changing its historical restoration-record schema."
+phase = 6
+order = 38
+depends_on = ["P0-REQ-36"]
+gate = { kind = "test", target = "P0-VR-36" }
+verifier_ids = ["P0-VR-36"]
+pair_block_ids = ["P0-PB-05R", "P0-PB-07B"]
+
 [[verifiers]]
 id = "P0-VR-25"
 requirement_ids = ["P0-REQ-26"]
@@ -246,6 +256,22 @@ rejection_cases = [
   "Restore a record that omits the retained declared path.",
 ]
 
+[[verifiers]]
+id = "P0-VR-36"
+requirement_ids = ["P0-REQ-37"]
+conditions = [
+  "FileIdentity owns SHA-256 and nonnegative byte-count validation.",
+  "ResolvedFileRef, SnapshotFileRef, and ReuseFileIdentity inherit that identity without dropping serialized fields.",
+  "MANTRA uses FileIdentity for restoration and Hopfield replay inputs.",
+  "MANTRA reads and writes historical restoration identities with the byte_count field unchanged.",
+]
+success_case = "Round-trip a historical MANTRA restoration binding through the shared VIPER identity and pass the affected restoration and replay tests."
+rejection_cases = [
+  "Accept an invalid digest or negative byte count through a derived VIPER reference.",
+  "Rename byte_count in a historical MANTRA restoration record.",
+  "Retain a second MANTRA byte-identity class.",
+]
+
 [[pair_blocks]]
 id = "P0-PB-07A"
 requirement_ids = ["P0-REQ-26", "P0-REQ-35"]
@@ -275,6 +301,26 @@ repository = "viper"
 source_paths = ["src/viper/outputs.py", "src/viper/artifacts.py", "src/viper/authoring.py", "src/viper/stages.py", "src/viper/execution/_stage.py", "src/viper/execution/_reuse.py", "src/viper/execution/_materialization.py", "src/viper/execution/_restore.py", "src/viper/_verification/storage.py", "src/viper/_verification/attempt.py", "docs/how-to/retry-restore-compare.md"]
 test_paths = ["tests/test_authoring.py", "tests/test_config_validation.py", "tests/test_generated_project_acceptance.py", "tests/test_metric_provenance.py", "tests/test_preflight.py", "tests/test_protocol.py", "tests/test_run_execution.py", "tests/test_storage.py", "tests/test_verification.py", "tests/test_verification_acceptance.py"]
 gate = { repository = "viper", working_directory = ".", argv = ["/bin/zsh", "-e", "-c", "python -m pyright src/viper/outputs.py src/viper/artifacts.py src/viper/authoring.py src/viper/stages.py src/viper/execution/_stage.py src/viper/execution/_reuse.py src/viper/execution/_materialization.py src/viper/execution/_restore.py src/viper/_verification/storage.py src/viper/_verification/attempt.py tests/test_authoring.py tests/test_config_validation.py tests/test_generated_project_acceptance.py tests/test_metric_provenance.py tests/test_preflight.py tests/test_protocol.py tests/test_run_execution.py tests/test_storage.py tests/test_verification.py tests/test_verification_acceptance.py && python -m pytest tests/test_authoring.py tests/test_config_validation.py tests/test_generated_project_acceptance.py tests/test_metric_provenance.py tests/test_preflight.py tests/test_protocol.py tests/test_run_execution.py tests/test_storage.py tests/test_verification.py tests/test_verification_acceptance.py -q && python -m ruff format --check src/viper/outputs.py src/viper/artifacts.py src/viper/authoring.py src/viper/stages.py src/viper/execution/_stage.py src/viper/execution/_reuse.py src/viper/execution/_materialization.py src/viper/execution/_restore.py src/viper/_verification/storage.py src/viper/_verification/attempt.py tests/test_authoring.py tests/test_config_validation.py tests/test_generated_project_acceptance.py tests/test_metric_provenance.py tests/test_preflight.py tests/test_protocol.py tests/test_run_execution.py tests/test_storage.py tests/test_verification.py tests/test_verification_acceptance.py && python -m ruff check src/viper/outputs.py src/viper/artifacts.py src/viper/authoring.py src/viper/stages.py src/viper/execution/_stage.py src/viper/execution/_reuse.py src/viper/execution/_materialization.py src/viper/execution/_restore.py src/viper/_verification/storage.py src/viper/_verification/attempt.py tests/test_authoring.py tests/test_config_validation.py tests/test_generated_project_acceptance.py tests/test_metric_provenance.py tests/test_preflight.py tests/test_protocol.py tests/test_run_execution.py tests/test_storage.py tests/test_verification.py tests/test_verification_acceptance.py"], environment = { PYTEST_DISABLE_PLUGIN_AUTOLOAD = "1" } }
+
+[[pair_blocks]]
+id = "P0-PB-05R"
+requirement_ids = ["P0-REQ-37"]
+depends_on = ["P0-PB-05Q", "P0-PB-10J"]
+section = "0E"
+repository = "viper"
+source_paths = ["src/viper/references.py", "src/viper/reuse.py"]
+test_paths = ["tests/test_protocol.py", "tests/test_public_api.py"]
+gate = { repository = "viper", working_directory = ".", argv = ["/bin/zsh", "-e", "-c", "python -m pyright src/viper/references.py src/viper/reuse.py tests/test_protocol.py && PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest tests/test_protocol.py tests/test_public_api.py -q && python -m ruff format --check src/viper/references.py src/viper/reuse.py tests/test_protocol.py && python -m ruff check src/viper/references.py src/viper/reuse.py tests/test_protocol.py"], environment = {} }
+
+[[pair_blocks]]
+id = "P0-PB-07B"
+requirement_ids = ["P0-REQ-37"]
+depends_on = ["P0-PB-05R", "P0-PB-07A"]
+section = "0E"
+repository = "mantra"
+source_paths = ["src/mantra/rebuild/restoration.py", "src/mantra/rebuild/archive_plan.py", "src/mantra/rebuild/archive_restore.py", "src/mantra/rebuild/viper_restore.py", "src/mantra/rebuild/hopfield_replay.py"]
+test_paths = ["src/mantra/rebuild/tests/test_restoration.py", "src/mantra/rebuild/tests/test_control_resolution.py", "src/mantra/rebuild/tests/test_archive_plan.py", "src/mantra/rebuild/tests/test_archive_restore.py", "src/mantra/rebuild/tests/test_viper_restore.py", "src/mantra/rebuild/tests/test_hopfield_replay.py"]
+gate = { repository = "mantra", working_directory = ".", argv = ["/bin/zsh", "-e", "-c", "python -m pyright src/mantra/rebuild/restoration.py src/mantra/rebuild/archive_plan.py src/mantra/rebuild/archive_restore.py src/mantra/rebuild/viper_restore.py src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_restoration.py src/mantra/rebuild/tests/test_control_resolution.py src/mantra/rebuild/tests/test_archive_plan.py src/mantra/rebuild/tests/test_archive_restore.py src/mantra/rebuild/tests/test_viper_restore.py src/mantra/rebuild/tests/test_hopfield_replay.py && PYTHONPATH=$PWD/src:$PWD PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest --rootdir=$PWD/src --confcutdir=$PWD/src src/mantra/rebuild/tests/test_restoration.py src/mantra/rebuild/tests/test_control_resolution.py src/mantra/rebuild/tests/test_archive_plan.py src/mantra/rebuild/tests/test_archive_restore.py src/mantra/rebuild/tests/test_viper_restore.py src/mantra/rebuild/tests/test_hopfield_replay.py -q && python -m ruff format --check src/mantra/rebuild/restoration.py src/mantra/rebuild/archive_plan.py src/mantra/rebuild/archive_restore.py src/mantra/rebuild/viper_restore.py src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_restoration.py src/mantra/rebuild/tests/test_control_resolution.py src/mantra/rebuild/tests/test_archive_plan.py src/mantra/rebuild/tests/test_archive_restore.py src/mantra/rebuild/tests/test_viper_restore.py src/mantra/rebuild/tests/test_hopfield_replay.py && python -m ruff check src/mantra/rebuild/restoration.py src/mantra/rebuild/archive_plan.py src/mantra/rebuild/archive_restore.py src/mantra/rebuild/viper_restore.py src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_restoration.py src/mantra/rebuild/tests/test_control_resolution.py src/mantra/rebuild/tests/test_archive_plan.py src/mantra/rebuild/tests/test_archive_restore.py src/mantra/rebuild/tests/test_viper_restore.py src/mantra/rebuild/tests/test_hopfield_replay.py"], environment = { PYTHONPATH = "/Users/machina/Developer/ChatGPT/mantra/src:/Users/machina/Developer/ChatGPT/mantra", PYTEST_DISABLE_PLUGIN_AUTOLOAD = "1" } }
 
 [[pair_blocks]]
 id = "P0-PB-10D"

@@ -2317,32 +2317,17 @@ an unrelated block loses valid evidence,
 or the bridge requires migration of the historical records before
 `P0-PB-07A` succeeds.
 
-### Future work: shared file identity
+### Shared file identity
 
-MANTRA currently defines the same byte-identity fields twice:
-`mantra.rebuild.hopfield_replay.FileIdentity` and
-`mantra.rebuild.restoration.RestoredFileIdentity` each store `byte_count` and
-`sha256`. VIPER's `viper.references.ResolvedFileRef` stores the same content
-identity as `bytes` and `sha256`, then adds `stored_at` to identify where VIPER
-can retrieve those bytes.
+`P0-PB-05R` defines `viper.references.FileIdentity` with `sha256: SHA256`
+and nonnegative `bytes`. `ResolvedFileRef`, `SnapshotFileRef`, and
+`ReuseFileIdentity` inherit that content identity. `P0-PB-07B` removes
+MANTRA's two duplicate identity classes and uses the VIPER type for restoration
+and Hopfield replay inputs. `RestorationBinding.to_mapping()` preserves the
+historical `byte_count` field, while its parser maps that field to
+`FileIdentity.bytes`.
 
-After `P0-PB-07A` completes through the manifest-native workflow, a proposed
-`P0-PB-07B` will add `viper.references.FileIdentity` with `sha256: SHA256` and
-`bytes: int` constrained to nonnegative values. `ResolvedFileRef`,
-`SnapshotFileRef`, and `ReuseFileIdentity` will derive their shared content
-identity from that type. MANTRA will consume the VIPER type and remove its two
-local identity classes. The restoration parser will continue accepting the
-historical `byte_count` field and map it to `FileIdentity.bytes`.
-
-`P0-PB-10B` can close independently because the declaration protocol and the
-file-identity hierarchy have separate runtime paths and acceptance tests.
-Promotion requires tests
-that preserve the serialized fields and validation of existing VIPER reference
-types, preserve the restoration manifest's `byte_count` field, reject an
-invalid digest or byte count through the shared base type, and rerun the
-restoration and Hopfield parity gates.
-
-### Future work: discriminated lifecycle-evidence union
+### Deferred work: discriminated lifecycle-evidence union
 
 The active declaration and lifecycle records use one closed vocabulary for
 `kind` while retaining `target: str` and `revision: str`. Those strings name
@@ -2485,6 +2470,41 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 /bin/zsh -e -c 'python -m pyright src/viper/out
 # Lifecycle complete.
 ```
 
+#### Manifest-native block P0-PB-05R
+
+**Status:** Drafting
+
+**Requirements:**
+
+- `P0-REQ-37`: VIPER defines one exact file-byte identity, and MANTRA uses that type without changing its historical restoration-record schema.
+
+**Verifier conditions:**
+
+- `P0-VR-36`: FileIdentity owns SHA-256 and nonnegative byte-count validation.
+- `P0-VR-36`: ResolvedFileRef, SnapshotFileRef, and ReuseFileIdentity inherit that identity without dropping serialized fields.
+- `P0-VR-36`: MANTRA uses FileIdentity for restoration and Hopfield replay inputs.
+- `P0-VR-36`: MANTRA reads and writes historical restoration identities with the byte_count field unchanged.
+
+**Dependencies:** `P0-PB-05Q`, `P0-PB-10J`
+
+**Implementation:** [references.py](../../../viper/src/viper/references.py) · [reuse.py](../../../viper/src/viper/reuse.py) · [test_protocol.py](../../../viper/tests/test_protocol.py) · [test_public_api.py](../../../viper/tests/test_public_api.py)
+
+**Current receipt:** None
+
+**Gate:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/viper
+/bin/zsh -e -c 'python -m pyright src/viper/references.py src/viper/reuse.py tests/test_protocol.py && PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest tests/test_protocol.py tests/test_public_api.py -q && python -m ruff format --check src/viper/references.py src/viper/reuse.py tests/test_protocol.py && python -m ruff check src/viper/references.py src/viper/reuse.py tests/test_protocol.py'
+```
+
+**Next transition:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/RICO
+python -m tools.pairblock_status.pairblock_controller gate P0-PB-05R
+```
+
 #### Manifest-native block P0-PB-07A
 
 **Status:** Complete
@@ -2522,6 +2542,40 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONPATH=/Users/machina/Developer/ChatGPT/man
 
 ```bash
 # Lifecycle complete.
+```
+
+#### Manifest-native block P0-PB-07B
+
+**Status:** Waiting for P0-PB-05R
+
+**Requirements:**
+
+- `P0-REQ-37`: VIPER defines one exact file-byte identity, and MANTRA uses that type without changing its historical restoration-record schema.
+
+**Verifier conditions:**
+
+- `P0-VR-36`: FileIdentity owns SHA-256 and nonnegative byte-count validation.
+- `P0-VR-36`: ResolvedFileRef, SnapshotFileRef, and ReuseFileIdentity inherit that identity without dropping serialized fields.
+- `P0-VR-36`: MANTRA uses FileIdentity for restoration and Hopfield replay inputs.
+- `P0-VR-36`: MANTRA reads and writes historical restoration identities with the byte_count field unchanged.
+
+**Dependencies:** `P0-PB-05R`, `P0-PB-07A`
+
+**Implementation:** [restoration.py](../../../mantra/src/mantra/rebuild/restoration.py) · [archive_plan.py](../../../mantra/src/mantra/rebuild/archive_plan.py) · [archive_restore.py](../../../mantra/src/mantra/rebuild/archive_restore.py) · [viper_restore.py](../../../mantra/src/mantra/rebuild/viper_restore.py) · [hopfield_replay.py](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [test_restoration.py](../../../mantra/src/mantra/rebuild/tests/test_restoration.py) · [test_control_resolution.py](../../../mantra/src/mantra/rebuild/tests/test_control_resolution.py) · [test_archive_plan.py](../../../mantra/src/mantra/rebuild/tests/test_archive_plan.py) · [test_archive_restore.py](../../../mantra/src/mantra/rebuild/tests/test_archive_restore.py) · [test_viper_restore.py](../../../mantra/src/mantra/rebuild/tests/test_viper_restore.py) · [test_hopfield_replay.py](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py)
+
+**Current receipt:** None
+
+**Gate:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/mantra
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONPATH=/Users/machina/Developer/ChatGPT/mantra/src:/Users/machina/Developer/ChatGPT/mantra /bin/zsh -e -c 'python -m pyright src/mantra/rebuild/restoration.py src/mantra/rebuild/archive_plan.py src/mantra/rebuild/archive_restore.py src/mantra/rebuild/viper_restore.py src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_restoration.py src/mantra/rebuild/tests/test_control_resolution.py src/mantra/rebuild/tests/test_archive_plan.py src/mantra/rebuild/tests/test_archive_restore.py src/mantra/rebuild/tests/test_viper_restore.py src/mantra/rebuild/tests/test_hopfield_replay.py && PYTHONPATH=$PWD/src:$PWD PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest --rootdir=$PWD/src --confcutdir=$PWD/src src/mantra/rebuild/tests/test_restoration.py src/mantra/rebuild/tests/test_control_resolution.py src/mantra/rebuild/tests/test_archive_plan.py src/mantra/rebuild/tests/test_archive_restore.py src/mantra/rebuild/tests/test_viper_restore.py src/mantra/rebuild/tests/test_hopfield_replay.py -q && python -m ruff format --check src/mantra/rebuild/restoration.py src/mantra/rebuild/archive_plan.py src/mantra/rebuild/archive_restore.py src/mantra/rebuild/viper_restore.py src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_restoration.py src/mantra/rebuild/tests/test_control_resolution.py src/mantra/rebuild/tests/test_archive_plan.py src/mantra/rebuild/tests/test_archive_restore.py src/mantra/rebuild/tests/test_viper_restore.py src/mantra/rebuild/tests/test_hopfield_replay.py && python -m ruff check src/mantra/rebuild/restoration.py src/mantra/rebuild/archive_plan.py src/mantra/rebuild/archive_restore.py src/mantra/rebuild/viper_restore.py src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_restoration.py src/mantra/rebuild/tests/test_control_resolution.py src/mantra/rebuild/tests/test_archive_plan.py src/mantra/rebuild/tests/test_archive_restore.py src/mantra/rebuild/tests/test_viper_restore.py src/mantra/rebuild/tests/test_hopfield_replay.py'
+```
+
+**Next transition:**
+
+```bash
+# Waiting for a declared dependency.
 ```
 
 #### Manifest-native block P0-PB-10D
