@@ -109,6 +109,14 @@ def test_registers_every_indexed_evidence_identity(tmp_path: Path) -> None:
     assert receipt["index_sha256"] == sha256_file(context.inputs["index"])
 
 
+def test_reads_the_approved_disk_import_receipt_from_restoration_evidence() -> None:
+    """Bind the restoration role to the receipt produced by the disk-import route."""
+
+    assert RESTORATION_BUNDLE_FILES["restoration_receipt"] == (
+        "disk_import_receipt.json"
+    )
+
+
 @pytest.mark.parametrize("role", sorted(REQUIRED_EVIDENCE_ROLES))
 def test_rejects_changed_evidence_identity(tmp_path: Path, role: str) -> None:
     """Expose a changed direct or restoration-bundle evidence file."""

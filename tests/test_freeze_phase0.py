@@ -104,7 +104,9 @@ def test_output_is_deterministic(tmp_path: Path) -> None:
             repository_roots=roots,
             evidence=evidence,
             assessment_ledger=ledger,
-            output=EvidenceLocation("rico", output.relative_to(roots["rico"]).as_posix()),
+            output=EvidenceLocation(
+                "rico", output.relative_to(roots["rico"]).as_posix()
+            ),
         )
 
     assert first.read_bytes() == second.read_bytes()

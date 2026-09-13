@@ -41,7 +41,12 @@ ASSESSMENT_FIELDS = frozenset(
 )
 CONFIRMED_DEFECTS = frozenset({"framework_gap", "implementation_defect"})
 DEFECT_CLASSIFICATIONS = CONFIRMED_DEFECTS | frozenset(
-    {"expected_behavior", "false_alarm", "infrastructure_failure", "intentional_restriction"}
+    {
+        "expected_behavior",
+        "false_alarm",
+        "infrastructure_failure",
+        "intentional_restriction",
+    }
 )
 TEXT_ASSESSMENT_FIELDS = ASSESSMENT_FIELDS - {
     "false_alarms",
@@ -71,7 +76,9 @@ class EvidenceLocation:
             or ".." in candidate.parts
             or "\\" in self.path
         ):
-            raise Phase0EvidenceError("evidence location must use a repository-relative path")
+            raise Phase0EvidenceError(
+                "evidence location must use a repository-relative path"
+            )
         if candidate.as_posix() != self.path or self.path in {"", "."}:
             raise Phase0EvidenceError("evidence path must use normalized POSIX syntax")
 
@@ -93,9 +100,7 @@ def _resolve_location(
     """Resolve one evidence location beneath its declared repository root."""
 
     if location.repository not in repository_roots:
-        raise Phase0EvidenceError(
-            f"unknown evidence repository: {location.repository}"
-        )
+        raise Phase0EvidenceError(f"unknown evidence repository: {location.repository}")
     root = repository_roots[location.repository].resolve(strict=True)
     resolved = (root / location.path).resolve(strict=True)
     if not resolved.is_relative_to(root) or not resolved.is_file():
@@ -165,9 +170,7 @@ def _validate_assessment_ledger(value: object) -> None:
             if not isinstance(values, list) or any(
                 not isinstance(item, str) or not item for item in values
             ):
-                raise Phase0EvidenceError(
-                    f"VIPER assessment {index} {field} differs"
-                )
+                raise Phase0EvidenceError(f"VIPER assessment {index} {field} differs")
         elapsed = assessment["elapsed_seconds"]
         if (
             isinstance(elapsed, bool)
@@ -179,9 +182,10 @@ def _validate_assessment_ledger(value: object) -> None:
                 f"VIPER assessment {index} elapsed seconds differs"
             )
         observed_ids.append(check_id)
-        if assessment["defect_classification"] in CONFIRMED_DEFECTS and not assessment[
-            "independent_check"
-        ]:
+        if (
+            assessment["defect_classification"] in CONFIRMED_DEFECTS
+            and not assessment["independent_check"]
+        ):
             raise Phase0EvidenceError(
                 f"VIPER assessment {check_id} lacks independent confirmation"
             )

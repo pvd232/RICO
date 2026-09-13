@@ -21,7 +21,7 @@ from tools.freeze_phase0 import REQUIRED_EVIDENCE_ROLES, sha256_file
 
 RESTORATION_BUNDLE_FILES = {
     "capacity_receipt": "capacity_receipt.json",
-    "restoration_receipt": "extraction_receipt.json",
+    "restoration_receipt": "disk_import_receipt.json",
 }
 DIRECT_EVIDENCE_ROLES = REQUIRED_EVIDENCE_ROLES - RESTORATION_BUNDLE_FILES.keys()
 REQUIRED_STAGE_INPUTS = DIRECT_EVIDENCE_ROLES | {
@@ -69,7 +69,10 @@ def register_phase0(context: StageContext[BuildConfig]) -> None:
     """Verify every frozen identity and write the terminal Phase 0 receipt."""
 
     index = load_json(context.inputs["index"])
-    if not isinstance(index, dict) or index.get("schema_version") != "rico.phase0_evidence.v1":
+    if (
+        not isinstance(index, dict)
+        or index.get("schema_version") != "rico.phase0_evidence.v1"
+    ):
         raise Phase0RegistrationError("Phase 0 index schema differs")
     evidence = index.get("evidence")
     ledger_identity = index.get("viper_usefulness_ledger")
@@ -84,7 +87,10 @@ def register_phase0(context: StageContext[BuildConfig]) -> None:
             raise Phase0RegistrationError(f"Phase 0 evidence identity differs: {role}")
         path = _evidence_path(context, role)
         actual = _identity(path)
-        if any(actual.get(field) != expected.get(field) for field in ("byte_count", "sha256")):
+        if any(
+            actual.get(field) != expected.get(field)
+            for field in ("byte_count", "sha256")
+        ):
             raise Phase0RegistrationError(f"Phase 0 evidence identity differs: {role}")
         observed[role] = actual
     actual_ledger = _identity(context.inputs["ledger"])
