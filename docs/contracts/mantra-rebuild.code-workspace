@@ -1,0 +1,70 @@
+{
+	"folders": [
+		{
+			"path": "../../../mantra"
+		},
+		{
+			"path": "../.."
+		},
+		{
+			"path": "../../../viper"
+		}
+	],
+	"settings": {
+		"git.ignoreLimitWarning": true,
+		"python.languageServer": "Pylance",
+		"codeQL.githubDatabase.download": "never",
+		"search.useIgnoreFiles": true,
+		"search.useGlobalIgnoreFiles": true,
+		"search.exclude": {
+			"**/.git": true,
+			"**/.mypy_cache": true,
+			"**/.pytest_cache": true,
+			"**/.ruff_cache": true,
+			"**/.tox": true,
+			"**/.venv": true,
+			"**/venv": true,
+			"**/__pycache__": true,
+			"**/*.pyc": true,
+			"**/node_modules": true,
+			"**/build": true,
+			"**/dist": true,
+			"**/.viper/store": true,
+			"**/data/raw": true,
+			"**/data/cache": true,
+			"**/experiments/**/checkpoints": true,
+			"**/experiments/**/logs": true,
+			"**/experiments/**/runs": true,
+			"**/*.arrow": true,
+			"**/*.ckpt": true,
+			"**/*.db": true,
+			"**/*.h5": true,
+			"**/*.h5ad": true,
+			"**/*.npy": true,
+			"**/*.npz": true,
+			"**/*.parquet": true,
+			"**/*.pt": true,
+			"**/*.pth": true,
+			"**/*.sqlite": true
+		},
+		"files.watcherExclude": {
+			"**/.git/**": true,
+			"**/.mypy_cache/**": true,
+			"**/.pytest_cache/**": true,
+			"**/.ruff_cache/**": true,
+			"**/.tox/**": true,
+			"**/.venv/**": true,
+			"**/venv/**": true,
+			"**/__pycache__/**": true,
+			"**/node_modules/**": true,
+			"**/build/**": true,
+			"**/dist/**": true,
+			"**/.viper/store/**": true,
+			"**/data/raw/**": true,
+			"**/data/cache/**": true,
+			"**/experiments/**/checkpoints/**": true,
+			"**/experiments/**/logs/**": true,
+			"**/experiments/**/runs/**": true
+		}
+	}
+}
