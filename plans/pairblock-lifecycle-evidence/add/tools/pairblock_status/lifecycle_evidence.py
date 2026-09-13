@@ -43,7 +43,7 @@ class RepositoryRecordRef:
             or self.path == PurePosixPath(".")
             or ".." in self.path.parts
         ):
-            raise ValueError("record path must stay beneath the repository root")
+            raise ValueError("record path must stay beneath the repo root")
         if not isinstance(self.sha256, str) or _SHA256.fullmatch(self.sha256) is None:
             raise ValueError("record sha256 must contain 64 lowercase hex characters")
 
@@ -166,7 +166,6 @@ class AcceptanceTransition:
 @dataclass(frozen=True, slots=True)
 class RegistrationTransition:
     """Pair a register event with the VIPER record that authorizes completion.
-
     Attributes:
         evidence: Retained record that binds VIPER verification to the PairBlock.
         event: Serialized discriminator for the register transition.
