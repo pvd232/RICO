@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "35f9d8cf1f92f2192d19011e177be0023c060bd5fcffab4778844849a15e5c89",
+  "checklist_written_sha256": "8ee456780ea683c8d405ead5439587483ea8af885e2cb9db398d4f0872e4cee6",
+  "event": "accept",
+  "evidence": {
+    "kind": "artifact",
+    "revision": "54f01105cf6c09d4a5c4f44da6064d82152adffd",
+    "target": "https://github.com/pvd232/viper/commit/54f01105cf6c09d4a5c4f44da6064d82152adffd"
+  },
+  "pair_block_id": "P0-PB-05J",
+  "previous_receipt": "../../evidence/pairblock-lifecycle/p0-pb-05j/20260913T012332.027506Z-approve.json",
+  "recorded_at": "2026-09-13T01:23:47.279739+00:00",
+  "repository_head": "c4e5d362387b9d932055f7c890bd35d44c8bbac5",
+  "result": "applied",
+  "schema_version": 1,
+  "status_after": "Applied",
+  "status_before": "Approved"
+}
