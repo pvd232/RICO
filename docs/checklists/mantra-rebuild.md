@@ -88,6 +88,7 @@ controls. The completed set contains 27 Hopfield and MIL destinations in
 | `P0-PB-05E` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05e/20260912T224537.731391Z-accept.json)) | Applied | `P0-PB-05D` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05e) | [Run model](../../../viper/src/viper/runs.py) · [Protocol tests](../../../viper/tests/test_protocol.py) · [Relationship tests](../../../viper/tests/test_verification.py) · [Test map](../../../viper/tests/declaration_observers.toml) |
 | `P0-PB-05F` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05f/20260912T230455.080492Z-accept.json)) | Applied | `P0-PB-05C` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05f) | [Observer](../../../viper/src/viper/_workers/file_access.py) · [Tests](../../../viper/tests/test_stage_file_access.py) · [Test map](../../../viper/tests/declaration_observers.toml) |
 | `P0-PB-05G` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05g/20260912T235628.021543Z-accept.json)) | Applied | `P0-PB-05C` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05g) | [Loader](../../../viper/src/viper/stages.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Tests](../../../viper/tests/test_stage_invocation.py) · [Test map](../../../viper/tests/declaration_observers.toml) |
+| `P0-PB-05H` | Pending | Drafting | `P0-PB-05C` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05h) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-05h-proposed-code) · [Observer](../../../viper/src/viper/_workers/file_access.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Tests](../../../viper/tests/test_stage_file_access.py) · [Test map](../../../viper/tests/declaration_observers.toml) |
 | `P0-PB-06` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-06/20260912T203846.816608Z-accept.json)) | Applied | `P0-PB-04A`, `P0-PB-04B`, `P0-PB-05A`, `P0-PB-05B`, `P0-PB-05C`, `P0-PB-05D` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-06) | [Control helper](../../../mantra/cleanup/reinstantiation_archive.py) · [Bindings](../../../mantra/src/mantra/rebuild/restoration.py) · [Extraction](../../../mantra/src/mantra/rebuild/archive_restore.py) · [VIPER](../../../mantra/src/mantra/rebuild/viper_restore.py) · [Tests](../../../mantra/src/mantra/rebuild/tests) |
 | `P0-PB-07` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-07/20260912T205719.212980Z-accept.json)) | Applied | `P0-PB-06` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-07) | [Source](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py) |
 | `P0-PB-08` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-08/20260912T210907.846992Z-accept.json)) | Applied | `P0-PB-06` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-08) | [Source](../../../mantra/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py) |
@@ -158,7 +159,7 @@ applies only to branches and worktrees created for this rebuild.
 
 | Work unit | Current state | Owning phase | Completion evidence |
 |---|---|---|---|
-| [Phase 0 contract](../contracts/mantra-rebuild-phase-0.md) | In progress | Phase 0 | `P0-REQ-01` through `P0-REQ-16` and every mapped PairBlock close. |
+| [Phase 0 contract](../contracts/mantra-rebuild-phase-0.md) | In progress | Phase 0 | `P0-REQ-01` through `P0-REQ-17` and every mapped PairBlock close. |
 | Hopfield reconstruction contract | Pending | Phase 1A | User-approved contract with exact intermediate and final parity gates. |
 | MIL reconstruction contract | Pending | Phase 2A | User-approved contract with exact intermediate and final parity gates. |
 | Graph encoder contract | Design complete; contract pending | Phase 3A | User-approved contract covering identity, topology, features, training, evaluation, and VIPER evidence. |
@@ -201,6 +202,7 @@ This table schedules every requirement in the approved Phase 0 contract once.
 | `P0-REQ-14` | In progress | 0C | `P0-REQ-12` | An unbenchmarked run selects any artifact declared by one of its stages; a benchmarked run still selects `model` from a training stage. |
 | `P0-REQ-15` | In progress | 0C | `P0-REQ-11` | A governed stage may use the exact operating-system null device without creating a provenance edge or satisfying a declared-input read. |
 | `P0-REQ-16` | In progress | 0C | `P0-REQ-11` | Runtime module lookup uses the workspace module objects loaded with the frozen stage callable and restores the prior module registry afterward. |
+| `P0-REQ-17` | In progress | 0C | `P0-REQ-11` | A governed stage may read exact Python sources in its frozen Git commit without opening the declared data boundary to untracked or non-Python files. |
 
 ## Phase 0A. Verify the MANTRA workspace and environment
 
@@ -277,6 +279,10 @@ definitions in RICO.
       in `P0-PB-05G`.
       <!-- pair-block: P0-PB-05G -->
       <!-- pair-block-contract: P0-PB-05G contract=docs/contracts/mantra-rebuild-phase-0.md -->
+- [ ] Permit governed reads of exact Python files captured by the frozen source
+      commit in `P0-PB-05H`.
+      <!-- pair-block: P0-PB-05H -->
+      <!-- pair-block-contract: P0-PB-05H contract=docs/contracts/mantra-rebuild-phase-0.md -->
 - [ ] Measure free space and save a passing capacity receipt before download.
       <!-- pair-block: P0-PB-05 -->
       <!-- pair-block-contract: P0-PB-05 contract=docs/contracts/mantra-rebuild-phase-0.md -->

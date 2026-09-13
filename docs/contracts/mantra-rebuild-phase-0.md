@@ -46,6 +46,7 @@ The [Mantra rebuild master checklist](../checklists/mantra-rebuild.md) owns exec
 | `P0-REQ-14` | Permit an unbenchmarked VIPER run to select any artifact declared by one of its stages while retaining model selection from a training stage for benchmarked runs. | [`P0-PB-05E`](#p0-pb-05e) |
 | `P0-REQ-15` | Permit a governed stage to open the operating system's null device without treating it as a data input or persisted output. | [`P0-PB-05F`](#p0-pb-05f) |
 | `P0-REQ-16` | Keep the exact workspace module objects loaded with a frozen stage callable available while that callable executes. | [`P0-PB-05G`](#p0-pb-05g) |
+| `P0-REQ-17` | Permit governed reads of exact Python source files present in the run's frozen Git commit without treating those files as data inputs. | [`P0-PB-05H`](#p0-pb-05h) |
 
 ## 2. Required claim
 
@@ -277,12 +278,13 @@ The dependency graph, restoration bindings, environment receipt, capacity receip
 | `P0-VR-13` | An unbenchmarked `RunSpec` accepts a selected artifact with any declared output name. Plan verification rejects an output absent from its selected stage. A benchmarked `RunSpec` accepts only the `model` output, and plan verification requires a training-stage producer. | [`P0-PB-05E`](#p0-pb-05e) |
 | `P0-VR-14` | A stage using `file_access="declared"` may read from or write to the exact path returned by `os.devnull`. The observer excludes that path from retained data-access evidence and continues to reject every other undeclared device path. | [`P0-PB-05F`](#p0-pb-05f) |
 | `P0-VR-15` | The stage loader retains the exact workspace module objects imported with the frozen callable. The worker exposes those objects through `sys.modules` only during invocation and restores every prior entry afterward. Runtime module lookup resolves without reopening repository source or bytecode. | [`P0-PB-05G`](#p0-pb-05g) |
+| `P0-VR-16` | Before governed access begins, the worker derives the exact tracked `.py` paths from the frozen source commit. The observer permits those source reads without recording data-access evidence, while an untracked Python file and a tracked non-Python file remain undeclared reads. | [`P0-PB-05H`](#p0-pb-05h) |
 
 ## 8. Acceptance boundary
 
 ### Success
 
-Phase 0 passes when `P0-VR-01` through `P0-VR-15` pass, every required provenance record exists in VIPER, the user reviews the complete evidence set, and the repository contains a synced commit recording the approved contract and Phase 0 receipts.
+Phase 0 passes when `P0-VR-01` through `P0-VR-16` pass, every required provenance record exists in VIPER, the user reviews the complete evidence set, and the repository contains a synced commit recording the approved contract and Phase 0 receipts.
 
 ### Rejection
 
@@ -302,6 +304,7 @@ Phase 0 fails when $B$ contains an unnecessary node, omits a required node or ed
 | `P0-PB-05E` | VIPER support for unbenchmarked terminal artifacts | `P0-VR-13`. |
 | `P0-PB-05F` | VIPER null-device handling in governed stages | `P0-VR-14`. |
 | `P0-PB-05G` | VIPER workspace-module activation during stage invocation | `P0-VR-15`. |
+| `P0-PB-05H` | VIPER frozen-source reads during governed stage invocation | `P0-VR-16`. |
 | `P0-PB-06` | Verified restoration and graph-completeness rejection test | `P0-VR-04` and `P0-VR-06`. |
 | `P0-PB-07` | Hopfield VIPER adapter, focused test, and historical raw-gene readout replay | `P0-VR-07`. |
 | `P0-PB-08` | v1952 MIL seed-123460 `without_control` replay | `P0-VR-08`. |
@@ -329,6 +332,7 @@ Resolution status lives in the [master checklist](../checklists/mantra-rebuild.m
 | [`P0-PB-05E`](../checklists/mantra-rebuild.md#pairblock-resolution) | Permit an unbenchmarked run to select a declared terminal artifact such as a replay receipt. | Codex implements and independently reviews the VIPER change. | [Run model](../../../viper/src/viper/runs.py) · [Protocol tests](../../../viper/tests/test_protocol.py) · [Relationship tests](../../../viper/tests/test_verification.py) | `P0-VR-13` |
 | [`P0-PB-05F`](../checklists/mantra-rebuild.md#pairblock-resolution) | Exclude the operating system's null device from governed data-access evidence. | Codex implements and independently reviews the VIPER change. | [Observer](../../../viper/src/viper/_workers/file_access.py) · [Tests](../../../viper/tests/test_stage_file_access.py) | `P0-VR-14` |
 | [`P0-PB-05G`](../checklists/mantra-rebuild.md#pairblock-resolution) | Preserve the frozen callable's workspace modules during invocation. | Codex implements and independently reviews the VIPER change. | [Loader](../../../viper/src/viper/stages.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Tests](../../../viper/tests/test_stage_invocation.py) | `P0-VR-15` |
+| [`P0-PB-05H`](../checklists/mantra-rebuild.md#pairblock-resolution) | Permit reads of Python source captured by the run's frozen Git commit. | Codex implements and independently reviews the VIPER change. | [Observer](../../../viper/src/viper/_workers/file_access.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Tests](../../../viper/tests/test_stage_file_access.py) | `P0-VR-16` |
 | [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | Restore files and verify graph $B$. | Codex implements, runs, and independently reviews each bounded commit. | [Bindings](../../../mantra/src/mantra/rebuild/restoration.py) · [Extraction](../../../mantra/src/mantra/rebuild/archive_restore.py) · [VIPER workflow](../../../mantra/src/mantra/rebuild/viper_restore.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests) | `P0-VR-04`, `P0-VR-06`, and `P0-REQ-13` |
 | [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay Hopfield. | Codex implemented and independently reviewed MANTRA commits `0d06e069` and `e1025457`. | [Source](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py) · [Review](../../evidence/pairblock-reviews/p0-pb-07/e10254570214e92ef1785b92794752222387e9a1.json) | `P0-VR-07` |
 | [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay standalone MIL application. | Codex implemented and independently reviewed MANTRA commit `28490068`. | [Source](../../../mantra/src/mantra/rebuild/mil_replay.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py) · [Review](../../evidence/pairblock-reviews/p0-pb-08/2849006816f7dc4e58c94b1f06b76cf4ac42457f.json) | `P0-VR-08` |
@@ -448,6 +452,13 @@ stage callable. Expose those objects through Python's module registry during
 the call, then restore the registry. This lets deserialization resolve the
 already-loaded implementation modules without reopening repository source or
 bytecode. [Review the implementation and gate](#p0-pb-05g-proposed-code).
+
+#### P0-PB-05H
+
+Derive the exact tracked Python paths from the run's frozen Git source before
+governed access begins. Permit those implementation reads while retaining the
+declared data boundary for every untracked path and tracked non-Python file.
+[Review the implementation and gate](#p0-pb-05h-proposed-code).
 
 #### P0-PB-06
 
@@ -779,6 +790,7 @@ choices.
 | [`P0-PB-05E`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Run model](../../../viper/src/viper/runs.py) · [Protocol tests](../../../viper/tests/test_protocol.py) · [Relationship tests](../../../viper/tests/test_verification.py) · [Gate](#p0-pb-05e-proposed-code) |
 | [`P0-PB-05F`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Observer](../../../viper/src/viper/_workers/file_access.py) · [Tests](../../../viper/tests/test_stage_file_access.py) · [Gate](#p0-pb-05f-proposed-code) |
 | [`P0-PB-05G`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Loader](../../../viper/src/viper/stages.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Tests](../../../viper/tests/test_stage_invocation.py) · [Gate](#p0-pb-05g-proposed-code) |
+| [`P0-PB-05H`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Observer](../../../viper/src/viper/_workers/file_access.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Tests](../../../viper/tests/test_stage_file_access.py) · [Gate](#p0-pb-05h-proposed-code) |
 | [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Bindings](../../../mantra/src/mantra/rebuild/restoration.py) · [Extraction](../../../mantra/src/mantra/rebuild/archive_restore.py) · [VIPER workflow](../../../mantra/src/mantra/rebuild/viper_restore.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests) · [Gate](#p0-pb-06-proposed-code) · [Review receipt](../../evidence/pairblock-reviews/p0-pb-06/75e7ce38dc85918c1f593886f20ed33601daa288.json) |
 | [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py) · [Gate](#p0-pb-07-accepted-implementation) · [Review](../../evidence/pairblock-reviews/p0-pb-07/e10254570214e92ef1785b92794752222387e9a1.json) |
 | [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/src/mantra/rebuild/mil_replay.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py) · [Gate](#p0-pb-08-accepted-implementation) · [Review](../../evidence/pairblock-reviews/p0-pb-08/2849006816f7dc4e58c94b1f06b76cf4ac42457f.json) |
@@ -1308,6 +1320,53 @@ inputs under `file_access="declared"`.
 the workspace package prefixes, leaves a loaded workspace module installed
 after invocation, replaces the framework's running `viper` package, or permits
 an undeclared data-file read.
+
+### P0-PB-05H implementation record
+
+**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
+
+**Requirement:** Distinguish source-code reads covered by the run's frozen Git
+identity from data reads governed by stage inputs.
+
+**Dependency:** Applied `P0-PB-05C` file-access observer.
+
+##### `P0-PB-05H` proposed code
+
+**Code boundary:** [file-access observer](../../../viper/src/viper/_workers/file_access.py),
+[stage worker](../../../viper/src/viper/_workers/stages.py),
+[observing tests](../../../viper/tests/test_stage_file_access.py), and the
+[declaration-to-test map](../../../viper/tests/declaration_observers.toml).
+
+**Implementation requirements:** before activating file-access enforcement,
+the worker asks Git for the files present in `run.source.commit` and retains
+only paths ending in `.py`. The observer permits reads of those exact paths as
+source reads. Source reads create no data-access evidence and cannot satisfy a
+declared-input read. Every untracked path and every tracked path with another
+suffix remains governed by the declared input and output sets.
+
+**Focused check:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/viper
+source .venv/bin/activate
+python -m ruff check \
+  src/viper/_workers/file_access.py \
+  src/viper/_workers/stages.py \
+  tests/test_stage_file_access.py
+python -m pytest \
+  tests/test_stage_file_access.py::test_frozen_python_source_is_runtime_code \
+  tests/test_stage_file_access.py::test_untracked_python_source_is_rejected \
+  tests/test_stage_file_access.py::test_tracked_non_python_file_is_rejected -q
+```
+
+**Gate:** Ruff passes. The source test proves an exact frozen `.py` read creates
+no data-access evidence. The counterexamples prove path suffix alone grants no
+access and Git tracking grants no access to non-Python data. The real MIL replay
+runs under declared access without a repository source-read rejection.
+
+**Stop condition:** Reject the patch if it permits every `.py` path, permits a
+tracked non-Python path, lets a source read satisfy a data input, invokes Git
+after the observer is active, or requires a new stage-author setting.
 
 ### P0-PB-06 implementation record
 
