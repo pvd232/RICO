@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "3bc31e6dbf9a3513dac051607519f7593cb8e4d89bb74c174a1ca09401dea153",
+  "checklist_written_sha256": "942d2447a0e8640ca4783dbc02e5587e1bc7cfdba819dd57ca1c2e2a307eff5c",
+  "event": "confirm",
+  "evidence": {
+    "kind": "external",
+    "revision": "e030e4fbc538e03e41fe03ae7ab3de2508366d4316a7b5055abac264a184ceee",
+    "target": "Terminal Phase 0 registration verifies capacity and archive planning and user instruction authorizes aggregate closure"
+  },
+  "pair_block_id": "P0-PB-05",
+  "previous_receipt": "../../evidence/pairblock-lifecycle/p0-pb-05/20260913T024520.739610Z-submit.json",
+  "recorded_at": "2026-09-13T02:45:21.071472+00:00",
+  "repository_head": "7b7ea7c6a8cc5ed70b04c548d2f110823235043b",
+  "result": "applied",
+  "schema_version": 1,
+  "status_after": "Complete",
+  "status_before": "Review"
+}

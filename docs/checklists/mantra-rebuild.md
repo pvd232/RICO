@@ -46,9 +46,10 @@ current status, review points, and completion evidence.
 VIPER run succeeded in 283.833269 seconds; its [run identity](../../evidence/phase0/rico/phase0_registration_run.json)
 and [registration receipt](../../evidence/phase0/rico/phase0_registration_receipt.json)
 bind the verified result. The resolution table owns each PairBlock's current
-lifecycle state. Four early blocks remain `Applied` because their historical
-receipts predate the enforced lifecycle chain; their implementation evidence is
-retained without rewriting those records.
+lifecycle state. All Phase 0 PairBlocks and requirements are complete. The
+`certify` receipts for `P0-PB-01`, `P0-PB-04A`, `P0-PB-04B`, and `P0-PB-05A`
+preserve their pre-protocol records and bind their completion to the terminal
+Phase 0 artifact.
 
 The resolution table identifies the next action. `Review` requires the user's
 decision. `Approved` authorizes the user to apply the proposal. `Applied`
@@ -76,14 +77,14 @@ controls. The completed set contains 27 Hopfield and MIL destinations in
 
 | PairBlock | Proposal gate | Resolution status | Depends on | Contract block | Proposed code |
 |---|---|---|---|---|---|
-| `P0-PB-01` | Environment check passed | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-01) | [Accepted implementation](../contracts/mantra-rebuild-phase-0.md#p0-pb-01-accepted-implementation) |
+| `P0-PB-01` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-01/20260913T024518.735984Z-certify.json)) | Complete | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-01) | [Accepted implementation](../contracts/mantra-rebuild-phase-0.md#p0-pb-01-accepted-implementation) |
 | `P0-PB-02` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-02/20260912T184646.515912Z-confirm.json)) | Complete | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-02) | [Work description](../contracts/mantra-rebuild-phase-0.md#p0-pb-02) |
 | `P0-PB-03` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-03/20260912T203922.293506Z-confirm.json)) | Complete | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-03) | [Work description](../contracts/mantra-rebuild-phase-0.md#p0-pb-03) |
-| `P0-PB-04` | Pending | Drafting | `P0-PB-04A`, `P0-PB-04B` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-04) | [Child blocks](../contracts/mantra-rebuild-phase-0.md#p0-pb-04) |
-| `P0-PB-04A` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-04a/20260912T070755.867088Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-04a) | [Source](../../../mantra/src/mantra/rebuild/restoration.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_restoration.py) |
-| `P0-PB-04B` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-04b/20260912T070756.106235Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-04b) | [Source](../../../mantra/src/mantra/rebuild/restoration.py) · [Base tests](../../../mantra/src/mantra/rebuild/tests/test_restoration.py) · [Resolver tests](../../../mantra/src/mantra/rebuild/tests/test_control_resolution.py) |
-| `P0-PB-05` | Pending | Drafting | `P0-PB-05A`, `P0-PB-05B` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05) | [Child blocks](../contracts/mantra-rebuild-phase-0.md#p0-pb-05) |
-| `P0-PB-05A` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05a/20260912T163739.537947Z-accept.json)) | Applied | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a) | [Source](../../../mantra/src/mantra/rebuild/capacity.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_capacity.py) |
+| `P0-PB-04` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-04/20260913T024520.405075Z-confirm.json)) | Complete | `P0-PB-04A`, `P0-PB-04B` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-04) | [Child blocks](../contracts/mantra-rebuild-phase-0.md#p0-pb-04) |
+| `P0-PB-04A` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-04a/20260913T024519.074399Z-certify.json)) | Complete | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-04a) | [Source](../../../mantra/src/mantra/rebuild/restoration.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_restoration.py) |
+| `P0-PB-04B` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-04b/20260913T024519.409010Z-certify.json)) | Complete | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-04b) | [Source](../../../mantra/src/mantra/rebuild/restoration.py) · [Base tests](../../../mantra/src/mantra/rebuild/tests/test_restoration.py) · [Resolver tests](../../../mantra/src/mantra/rebuild/tests/test_control_resolution.py) |
+| `P0-PB-05` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05/20260913T024521.071472Z-confirm.json)) | Complete | `P0-PB-05A`, `P0-PB-05B` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05) | [Child blocks](../contracts/mantra-rebuild-phase-0.md#p0-pb-05) |
+| `P0-PB-05A` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05a/20260913T024519.741712Z-certify.json)) | Complete | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05a) | [Source](../../../mantra/src/mantra/rebuild/capacity.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_capacity.py) |
 | `P0-PB-05B` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05b/20260913T023138.391261Z-register.json)) | Complete | `P0-PB-04B` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05b) | [Source](../../../mantra/src/mantra/rebuild/archive_plan.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_archive_plan.py) |
 | `P0-PB-05C` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05c/20260913T001013.278571Z-register.json)) | Complete | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05c) | [Observer](../../../viper/src/viper/_workers/file_access.py) · [Tests](../../../viper/tests/test_stage_file_access.py) |
 | `P0-PB-05D` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05d/20260913T023138.819375Z-register.json)) | Complete | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05d) | [Verifier](../../../viper/src/viper/_verification/plan.py) · [Tests](../../../viper/tests/test_verification.py) · [Test map](../../../viper/tests/declaration_observers.toml) |
@@ -104,7 +105,7 @@ controls. The completed set contains 27 Hopfield and MIL destinations in
 | `P0-PB-09` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-09/20260913T023141.025582Z-register.json)) | Complete | `P0-PB-07`, `P0-PB-08`, `P0-PB-10` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-09) | [Source](../../tools/freeze_phase0.py) · [Tests](../../tests/test_freeze_phase0.py) |
 | `P0-PB-09A` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-09a/20260913T023141.344319Z-register.json)) | Complete | `P0-PB-07`, `P0-PB-08`, `P0-PB-09` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-09a) | [Source](../../tools/register_phase0.py) · [Loader](../../tools/artifact_loaders.py) · [Tests](../../tests/test_register_phase0.py) · [Terminal receipt](../../evidence/phase0/rico/phase0_registration_receipt.json) |
 | `P0-PB-10` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-10/20260913T023140.710312Z-register.json)) | Complete | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-10) | [Controller](../../tools/pairblock_status/pairblock_controller.py) · [Tests](../../tests/pairblock_status/test_pairblock_controller.py) |
-| `P0-PB-10A` | Passed: `61` tests ([receipt](../../evidence/pairblock-gates/p0-pb-10a/20260913T024406.546356Z.json)) | Review | `P0-PB-10` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-10a) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-10a-proposed-code) |
+| `P0-PB-10A` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-10a/20260913T024518.399844Z-register.json)) | Complete | `P0-PB-10` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-10a) | [Profile](../../tools/pairblock_status/profile.py) · [Controller](../../tools/pairblock_status/pairblock_controller.py) · [Validator](../../tools/pairblock_status/checklist_profile.py) · [Fixtures](../../tests/pairblock_status/conftest.py) · [Tests](../../tests/pairblock_status/test_pairblock_controller.py) |
 
 ## Terminal outcome
 
@@ -169,7 +170,7 @@ applies only to branches and worktrees created for this rebuild.
 
 | Work unit | Current state | Owning phase | Completion evidence |
 |---|---|---|---|
-| [Phase 0 contract](../contracts/mantra-rebuild-phase-0.md) | In progress | Phase 0 | `P0-REQ-01` through `P0-REQ-17` and every mapped PairBlock close. |
+| [Phase 0 contract](../contracts/mantra-rebuild-phase-0.md) | Complete | Phase 0 | `P0-REQ-01` through `P0-REQ-17` and every mapped PairBlock close. |
 | Hopfield reconstruction contract | Pending | Phase 1A | User-approved contract with exact intermediate and final parity gates. |
 | MIL reconstruction contract | Pending | Phase 2A | User-approved contract with exact intermediate and final parity gates. |
 | Graph encoder contract | Design complete; contract pending | Phase 3A | User-approved contract covering identity, topology, features, training, evaluation, and VIPER evidence. |
@@ -197,10 +198,10 @@ This table schedules every requirement in the approved Phase 0 contract once.
 | Requirement | State | Phase | Depends on | Gate |
 |---|---|---|---|---|
 | `P0-REQ-01` | Complete | 0B | None | The approved Hopfield and MIL portions of graph $B$ contain every required file, producer, and edge and exclude parity graph $Q$. |
-| `P0-REQ-02` | In progress | 0C | `P0-REQ-01` | Every absent file in $B$ resolves through exactly one valid `RestorationBinding`. |
-| `P0-REQ-03` | In progress | 0C | `P0-REQ-01` | The capacity receipt records every term in $R_{max}$ and measured free space is at least $R_{max}$. |
+| `P0-REQ-02` | Complete | 0C | `P0-REQ-01` | Every absent file in $B$ resolves through exactly one valid `RestorationBinding`. |
+| `P0-REQ-03` | Complete | 0C | `P0-REQ-01` | The capacity receipt records every term in $R_{max}$ and measured free space is at least $R_{max}$. |
 | `P0-REQ-04` | Complete | 0D | `P0-REQ-02`, `P0-REQ-03` | Every restored canonical file matches its approved byte count and SHA-256. |
-| `P0-REQ-05` | In progress | 0D | `P0-REQ-02`, `P0-REQ-03` | Restoration runs from the MANTRA root through the verified `mantra` environment, and VIPER retains the environment receipt. |
+| `P0-REQ-05` | Complete | 0D | `P0-REQ-02`, `P0-REQ-03` | Restoration runs from the MANTRA root through the verified `mantra` environment, and VIPER retains the environment receipt. |
 | `P0-REQ-06` | Complete | 0D | `P0-REQ-04`, `P0-REQ-05` | VIPER verifies graph $B$; deleting one required node or edge makes verification fail. |
 | `P0-REQ-07` | Complete | 0E | `P0-REQ-06` | Hopfield replay reproduces `0.5861640938949398` within the approved tolerance and retains its predictions. |
 | `P0-REQ-08` | Complete | 0E | `P0-REQ-06` | Standalone v1952 seed-123460 `without_control` replay reproduces `0.6025499488874759` and the approved prediction hashes. |
@@ -208,7 +209,7 @@ This table schedules every requirement in the approved Phase 0 contract once.
 | `P0-REQ-10` | Complete | 0C | None | A declared proposal gate retains its result and applies only its legal checklist transition; traceability validation rejects broken IDs, dependencies, owners, code links, tests, or gates. |
 | `P0-REQ-11` | Complete | 0C | None | A governed VIPER stage rejects undeclared CPython-visible file-open attempts and retains each successful Python file open, including one read-open for every declared input. |
 | `P0-REQ-12` | Complete | 0C | None | An unbenchmarked VIPER run may select a `model` artifact produced by a non-training stage; a benchmarked run still selects its model from a training stage. |
-| `P0-REQ-13` | In progress | 0C | `P0-REQ-02` | An absent runtime destination binds only to its approved digest in its approved signed archive; a present destination also matches its filesystem-manifest row. |
+| `P0-REQ-13` | Complete | 0C | `P0-REQ-02` | An absent runtime destination binds only to its approved digest in its approved signed archive; a present destination also matches its filesystem-manifest row. |
 | `P0-REQ-14` | Complete | 0C | `P0-REQ-12` | An unbenchmarked run selects any artifact declared by one of its stages; a benchmarked run still selects `model` from a training stage. |
 | `P0-REQ-15` | Complete | 0C | `P0-REQ-11` | A governed stage may use the exact operating-system null device without creating a provenance edge or satisfying a declared-input read. |
 | `P0-REQ-16` | Complete | 0C | `P0-REQ-11` | Runtime module lookup uses the workspace module objects loaded with the frozen stage callable and restores the prior module registry afterward. |
@@ -220,7 +221,7 @@ This table schedules every requirement in the approved Phase 0 contract once.
 | `P0-REQ-22` | Complete | 0C | None | Equal producer-run references share one verified producer result while artifact checks remain per pointer. |
 | `P0-REQ-23` | Complete | 0C | None | Import bindings do not cause domain widening when CodeQL already identifies the runtime callers. |
 | `P0-REQ-24` | Complete | 0C | None | Repository-owned stage process calls use the spawn-safe subprocess facade. |
-| `P0-REQ-25` | In progress | 0C | `P0-REQ-10` | A named pre-protocol PairBlock closes only from a reasoned certification receipt bound to the terminal Phase 0 artifact. |
+| `P0-REQ-25` | Complete | 0C | `P0-REQ-10` | A named pre-protocol PairBlock closes only from a reasoned certification receipt bound to the terminal Phase 0 artifact. |
 
 ## Phase 0A. Verify the MANTRA workspace and environment
 
@@ -259,18 +260,18 @@ definitions in RICO.
 
 **Depends on:** Phase 0B
 
-- [ ] Implement and test the strict `RestorationBinding` value type proposed in
+- [x] Implement and test the strict `RestorationBinding` value type proposed in
       `P0-PB-04A`.
       <!-- pair-block: P0-PB-04A -->
       <!-- pair-block-contract: P0-PB-04A contract=docs/contracts/mantra-rebuild-phase-0.md -->
-- [ ] Implement and test the control-record resolver proposed in `P0-PB-04B` so
+- [x] Implement and test the control-record resolver proposed in `P0-PB-04B` so
       one approved MANTRA path resolves to one archive member.
       <!-- pair-block: P0-PB-04B -->
       <!-- pair-block-contract: P0-PB-04B contract=docs/contracts/mantra-rebuild-phase-0.md -->
-- [ ] Validate one binding record for every absent file in graph $B$.
+- [x] Validate one binding record for every absent file in graph $B$.
       <!-- pair-block: P0-PB-04 -->
       <!-- pair-block-contract: P0-PB-04 contract=docs/contracts/mantra-rebuild-phase-0.md -->
-- [ ] Implement and test the `CapacityPlan` and `CapacityReceipt` proposed in
+- [x] Implement and test the `CapacityPlan` and `CapacityReceipt` proposed in
       `P0-PB-05A`.
       <!-- pair-block: P0-PB-05A -->
       <!-- pair-block-contract: P0-PB-05A contract=docs/contracts/mantra-rebuild-phase-0.md -->
@@ -329,14 +330,14 @@ definitions in RICO.
       `P0-PB-05O`.
       <!-- pair-block: P0-PB-05O -->
       <!-- pair-block-contract: P0-PB-05O contract=docs/contracts/mantra-rebuild-phase-0.md -->
-- [ ] Measure free space and save a passing capacity receipt before download.
+- [x] Measure free space and save a passing capacity receipt before download.
       <!-- pair-block: P0-PB-05 -->
       <!-- pair-block-contract: P0-PB-05 contract=docs/contracts/mantra-rebuild-phase-0.md -->
 - [x] Register the active `P0-PB-10` controller and its acceptance evidence in
       VIPER.
       <!-- pair-block: P0-PB-10 -->
       <!-- pair-block-contract: P0-PB-10 contract=docs/contracts/mantra-rebuild-phase-0.md -->
-- [ ] Certify the four named pre-protocol PairBlocks from the terminal Phase 0
+- [x] Certify the four named pre-protocol PairBlocks from the terminal Phase 0
       artifact in `P0-PB-10A`.
       <!-- pair-block: P0-PB-10A -->
       <!-- pair-block-contract: P0-PB-10A contract=docs/contracts/mantra-rebuild-phase-0.md -->
@@ -366,7 +367,7 @@ after the full Phase 0 artifact set is known.
 
 - [ ] Verify the 27 approved files on the restored MANTRA disk, publish their
       exact bytes as named VIPER outputs, and persist the disk-import receipt.
-- [ ] Run restoration from the MANTRA root through the Conda environment named
+- [x] Run restoration from the MANTRA root through the Conda environment named
       `mantra` and register the environment receipt in VIPER.
       <!-- pair-block: P0-PB-01 -->
       <!-- pair-block-contract: P0-PB-01 contract=docs/contracts/mantra-rebuild-phase-0.md -->

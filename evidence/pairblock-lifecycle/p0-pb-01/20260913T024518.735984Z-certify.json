@@ -1,0 +1,19 @@
+{
+  "certification_reason": "The applied workspace marker and environment check predate lifecycle receipts; terminal Phase 0 registration verifies the retained environment evidence.",
+  "checklist_before_sha256": "f5e5e7a17c93eaebe0aca1ac4d8dd5f4ea313935be5b58e710d355d63eae577a",
+  "checklist_written_sha256": "622d6a11784423123fa36514c62db7b833bc9620dfce471bc1cc349c68093399",
+  "event": "certify",
+  "evidence": {
+    "kind": "artifact",
+    "revision": "e030e4fbc538e03e41fe03ae7ab3de2508366d4316a7b5055abac264a184ceee",
+    "target": "evidence/phase0/rico/phase0_registration_receipt.json"
+  },
+  "pair_block_id": "P0-PB-01",
+  "previous_receipt": null,
+  "recorded_at": "2026-09-13T02:45:18.735984+00:00",
+  "repository_head": "7b7ea7c6a8cc5ed70b04c548d2f110823235043b",
+  "result": "applied",
+  "schema_version": 2,
+  "status_after": "Complete",
+  "status_before": "Applied"
+}

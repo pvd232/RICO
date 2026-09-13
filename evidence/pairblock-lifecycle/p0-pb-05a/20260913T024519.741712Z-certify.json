@@ -1,0 +1,19 @@
+{
+  "certification_reason": "The preserved approval receipt lacks the predecessor link introduced by the later lifecycle protocol; terminal Phase 0 registration verifies the accepted capacity implementation and receipt.",
+  "checklist_before_sha256": "f65fb8f481cd7bdd929aff9a3700f1b1cd32ecb08934c9926520edb0aafbe134",
+  "checklist_written_sha256": "10b9b3a4ef0c73bafec1520dfc4b4117f0102a784ce4b3022af3573f128383dc",
+  "event": "certify",
+  "evidence": {
+    "kind": "artifact",
+    "revision": "e030e4fbc538e03e41fe03ae7ab3de2508366d4316a7b5055abac264a184ceee",
+    "target": "evidence/phase0/rico/phase0_registration_receipt.json"
+  },
+  "pair_block_id": "P0-PB-05A",
+  "previous_receipt": "../../evidence/pairblock-lifecycle/p0-pb-05a/20260912T163739.537947Z-accept.json",
+  "recorded_at": "2026-09-13T02:45:19.741712+00:00",
+  "repository_head": "7b7ea7c6a8cc5ed70b04c548d2f110823235043b",
+  "result": "applied",
+  "schema_version": 2,
+  "status_after": "Complete",
+  "status_before": "Applied"
+}

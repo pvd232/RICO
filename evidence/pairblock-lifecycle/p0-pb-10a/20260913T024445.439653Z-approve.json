@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "d7265088a2a87b8637766e97f353a240e088a5a042031fb3ab88ac2bd7afad29",
+  "checklist_written_sha256": "763a96b40fec450f159a761de735f043bc4bba56ed969245e48842cf3b10dbc9",
+  "event": "approve",
+  "evidence": {
+    "kind": "external",
+    "revision": "2026-09-12",
+    "target": "User instruction to close the four named legacy PairBlocks in the active Codex task"
+  },
+  "pair_block_id": "P0-PB-10A",
+  "previous_receipt": "../../evidence/pairblock-gates/p0-pb-10a/20260913T024406.546356Z.json",
+  "recorded_at": "2026-09-13T02:44:45.439653+00:00",
+  "repository_head": "7b7ea7c6a8cc5ed70b04c548d2f110823235043b",
+  "result": "applied",
+  "schema_version": 1,
+  "status_after": "Approved",
+  "status_before": "Review"
+}

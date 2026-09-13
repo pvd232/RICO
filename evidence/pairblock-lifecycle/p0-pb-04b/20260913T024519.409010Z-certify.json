@@ -1,0 +1,19 @@
+{
+  "certification_reason": "The preserved gate receipt uses the superseded status vocabulary; terminal Phase 0 registration verifies the accepted control resolver and restoration evidence.",
+  "checklist_before_sha256": "9ac9222d1ddc3c4d798cef0bc623c7453c3cadf93c301529864ace6643765dc2",
+  "checklist_written_sha256": "f65fb8f481cd7bdd929aff9a3700f1b1cd32ecb08934c9926520edb0aafbe134",
+  "event": "certify",
+  "evidence": {
+    "kind": "artifact",
+    "revision": "e030e4fbc538e03e41fe03ae7ab3de2508366d4316a7b5055abac264a184ceee",
+    "target": "evidence/phase0/rico/phase0_registration_receipt.json"
+  },
+  "pair_block_id": "P0-PB-04B",
+  "previous_receipt": "../../evidence/pairblock-lifecycle/p0-pb-04b/20260912T070756.106235Z-accept.json",
+  "recorded_at": "2026-09-13T02:45:19.409010+00:00",
+  "repository_head": "7b7ea7c6a8cc5ed70b04c548d2f110823235043b",
+  "result": "applied",
+  "schema_version": 2,
+  "status_after": "Complete",
+  "status_before": "Applied"
+}

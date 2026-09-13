@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "7e2f2d8bbea079bafe16a81bacc3f0cc1709d500ec1501d271657b66f7097f82",
+  "checklist_written_sha256": "98c5f8e35e683edf45e664fe8bccd2c2b162b8cd97c2eedcba554664ab1b89e7",
+  "event": "confirm",
+  "evidence": {
+    "kind": "external",
+    "revision": "e030e4fbc538e03e41fe03ae7ab3de2508366d4316a7b5055abac264a184ceee",
+    "target": "Terminal Phase 0 registration verifies all restoration bindings and user instruction authorizes aggregate closure"
+  },
+  "pair_block_id": "P0-PB-04",
+  "previous_receipt": "../../evidence/pairblock-lifecycle/p0-pb-04/20260913T024520.069723Z-submit.json",
+  "recorded_at": "2026-09-13T02:45:20.405075+00:00",
+  "repository_head": "7b7ea7c6a8cc5ed70b04c548d2f110823235043b",
+  "result": "applied",
+  "schema_version": 1,
+  "status_after": "Complete",
+  "status_before": "Review"
+}

@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "ec565eac79887215930e4312f730659daefbe9dd2544c0ecad50faf3ffaaa236",
+  "checklist_written_sha256": "c32e7c0d340069d06010e466bd4a3ff3457403354f0cdd3bf7bec1989886498d",
+  "event": "accept",
+  "evidence": {
+    "kind": "test",
+    "revision": "7b7ea7c6a8cc5ed70b04c548d2f110823235043b",
+    "target": "tests/pairblock_status/test_pairblock_controller.py"
+  },
+  "pair_block_id": "P0-PB-10A",
+  "previous_receipt": "../../evidence/pairblock-lifecycle/p0-pb-10a/20260913T024445.439653Z-approve.json",
+  "recorded_at": "2026-09-13T02:45:17.911813+00:00",
+  "repository_head": "7b7ea7c6a8cc5ed70b04c548d2f110823235043b",
+  "result": "applied",
+  "schema_version": 1,
+  "status_after": "Applied",
+  "status_before": "Approved"
+}
