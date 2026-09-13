@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-10I",
+  "requirement_ids": ["P0-REQ-33"],
+  "repository": "https://github.com/pvd232/RICO.git",
+  "base_commit": "f033bd07a07065685f4921e1095bc13a6185306d",
+  "result_commit": "1ea7403bb588aa220511dfae1c08414e307887b4",
+  "owned_paths": [
+    "tools/pairblock_status/pairblock_controller.py",
+    "tests/pairblock_status/test_cross_origin_dependencies.py"
+  ],
+  "diff_sha256": "001d582c477afde2eb0227e209fe0d62c680cf07150086aa4f21a36c758a6875",
+  "invariants": [
+    "Waiting-state derivation combines receipt-backed native states with parsed legacy states.",
+    "The rendered waiting state and gate rejection agree for an unresolved dependency regardless of declaration origin.",
+    "The render command regenerates both human views without changing lifecycle state."
+  ],
+  "findings": [],
+  "mechanical_evidence": {
+    "gate_receipt": "evidence/pairblock-gates/p0-pb-10i/20260913T061240.283246Z.json",
+    "result": "1 passed in 0.60s; Pyright, Ruff format check, and Ruff check passed",
+    "git_diff_check": "passed",
+    "upstream_match": "deferred until the reviewed session changes are pushed"
+  },
+  "exclusions": [],
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-13T06:12:41Z"
+}

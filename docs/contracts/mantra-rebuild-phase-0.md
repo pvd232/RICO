@@ -2415,7 +2415,7 @@ translate without rewriting their bytes.
 <!-- generated:manifest-native-contract:start -->
 #### Manifest-native block P0-PB-10D
 
-**Status:** Review
+**Status:** Applied
 
 **Requirements:**
 
@@ -2430,7 +2430,7 @@ translate without rewriting their bytes.
 
 **Implementation:** [profile.py](../../tools/pairblock_status/profile.py) · [pairblock_controller.py](../../tools/pairblock_status/pairblock_controller.py) · [test_lifecycle_evidence.py](../../tests/pairblock_status/test_lifecycle_evidence.py)
 
-**Current receipt:** [receipt](../../evidence/pairblock-gates/p0-pb-10d/20260913T061028.441391Z.json)
+**Current receipt:** [receipt](../../evidence/pairblock-lifecycle/p0-pb-10d/20260913T061220.270166Z-accept.json)
 
 **Gate:**
 
@@ -2443,12 +2443,12 @@ PYTHONPATH=. /bin/zsh -e -c 'python -m pyright tools/pairblock_status/profile.py
 
 ```bash
 cd /Users/machina/Developer/ChatGPT/RICO
-python -m tools.pairblock_status.pairblock_controller advance P0-PB-10D approve --evidence-kind KIND --evidence-target TARGET --evidence-revision REVISION
+python -m tools.pairblock_status.pairblock_controller advance P0-PB-10D register --evidence-kind KIND --evidence-target TARGET --evidence-revision REVISION
 ```
 
 #### Manifest-native block P0-PB-10E
 
-**Status:** Waiting for P0-PB-10D
+**Status:** Review
 
 **Requirements:**
 
@@ -2464,7 +2464,7 @@ python -m tools.pairblock_status.pairblock_controller advance P0-PB-10D approve 
 
 **Implementation:** [execution_identity.py](../../tools/pairblock_status/execution_identity.py) · [receipt_validation.py](../../tools/pairblock_status/receipt_validation.py) · [pairblock_controller.py](../../tools/pairblock_status/pairblock_controller.py) · [test_receipt_integrity.py](../../tests/pairblock_status/test_receipt_integrity.py)
 
-**Current receipt:** None
+**Current receipt:** [receipt](../../evidence/pairblock-gates/p0-pb-10e/20260913T061228.145467Z.json)
 
 **Gate:**
 
@@ -2476,12 +2476,13 @@ PYTHONPATH=. /bin/zsh -e -c 'python -m pyright tools/pairblock_status/execution_
 **Next transition:**
 
 ```bash
-# Waiting for a declared dependency.
+cd /Users/machina/Developer/ChatGPT/RICO
+python -m tools.pairblock_status.pairblock_controller advance P0-PB-10E approve --evidence-kind KIND --evidence-target TARGET --evidence-revision REVISION
 ```
 
 #### Manifest-native block P0-PB-10F
 
-**Status:** Review
+**Status:** Applied
 
 **Requirements:**
 
@@ -2497,7 +2498,7 @@ PYTHONPATH=. /bin/zsh -e -c 'python -m pyright tools/pairblock_status/execution_
 
 **Implementation:** [declaration_manifest.py](../../tools/pairblock_status/declaration_manifest.py) · [pairblock_controller.py](../../tools/pairblock_status/pairblock_controller.py) · [test_declaration_revision_integrity.py](../../tests/pairblock_status/test_declaration_revision_integrity.py)
 
-**Current receipt:** [receipt](../../evidence/pairblock-gates/p0-pb-10f/20260913T061037.705018Z.json)
+**Current receipt:** [receipt](../../evidence/pairblock-lifecycle/p0-pb-10f/20260913T061221.508549Z-accept.json)
 
 **Gate:**
 
@@ -2510,12 +2511,12 @@ PYTHONPATH=. /bin/zsh -e -c 'python -m pyright tools/pairblock_status/declaratio
 
 ```bash
 cd /Users/machina/Developer/ChatGPT/RICO
-python -m tools.pairblock_status.pairblock_controller advance P0-PB-10F approve --evidence-kind KIND --evidence-target TARGET --evidence-revision REVISION
+python -m tools.pairblock_status.pairblock_controller advance P0-PB-10F register --evidence-kind KIND --evidence-target TARGET --evidence-revision REVISION
 ```
 
 #### Manifest-native block P0-PB-10G
 
-**Status:** Waiting for P0-PB-10E, P0-PB-10F
+**Status:** Waiting for P0-PB-10E
 
 **Requirements:**
 
@@ -2548,7 +2549,7 @@ PYTHONPATH=. /bin/zsh -e -c 'python -m pyright tools/pairblock_status/projection
 
 #### Manifest-native block P0-PB-10H
 
-**Status:** Review
+**Status:** Applied
 
 **Requirements:**
 
@@ -2563,7 +2564,7 @@ PYTHONPATH=. /bin/zsh -e -c 'python -m pyright tools/pairblock_status/projection
 
 **Implementation:** [markdown_renderer.py](../../tools/pairblock_status/markdown_renderer.py) · [test_markdown_renderer.py](../../tests/pairblock_status/test_markdown_renderer.py)
 
-**Current receipt:** [receipt](../../evidence/pairblock-gates/p0-pb-10h/20260913T061042.075279Z.json)
+**Current receipt:** [receipt](../../evidence/pairblock-lifecycle/p0-pb-10h/20260913T061222.687709Z-accept.json)
 
 **Gate:**
 
@@ -2576,12 +2577,12 @@ PYTHONPATH=. /bin/zsh -e -c 'python -m pyright tools/pairblock_status/markdown_r
 
 ```bash
 cd /Users/machina/Developer/ChatGPT/RICO
-python -m tools.pairblock_status.pairblock_controller advance P0-PB-10H approve --evidence-kind KIND --evidence-target TARGET --evidence-revision REVISION
+python -m tools.pairblock_status.pairblock_controller advance P0-PB-10H register --evidence-kind KIND --evidence-target TARGET --evidence-revision REVISION
 ```
 
 #### Manifest-native block P0-PB-10I
 
-**Status:** Waiting for P0-PB-10H
+**Status:** Review
 
 **Requirements:**
 
@@ -2597,7 +2598,7 @@ python -m tools.pairblock_status.pairblock_controller advance P0-PB-10H approve 
 
 **Implementation:** [pairblock_controller.py](../../tools/pairblock_status/pairblock_controller.py) · [test_cross_origin_dependencies.py](../../tests/pairblock_status/test_cross_origin_dependencies.py)
 
-**Current receipt:** None
+**Current receipt:** [receipt](../../evidence/pairblock-gates/p0-pb-10i/20260913T061240.283246Z.json)
 
 **Gate:**
 
@@ -2609,7 +2610,8 @@ PYTHONPATH=. /bin/zsh -e -c 'python -m pyright tools/pairblock_status/pairblock_
 **Next transition:**
 
 ```bash
-# Waiting for a declared dependency.
+cd /Users/machina/Developer/ChatGPT/RICO
+python -m tools.pairblock_status.pairblock_controller advance P0-PB-10I approve --evidence-kind KIND --evidence-target TARGET --evidence-revision REVISION
 ```
 <!-- generated:manifest-native-contract:end -->
 

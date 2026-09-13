@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-10E",
+  "requirement_ids": ["P0-REQ-29"],
+  "repository": "https://github.com/pvd232/RICO.git",
+  "base_commit": "f033bd07a07065685f4921e1095bc13a6185306d",
+  "result_commit": "1ea7403bb588aa220511dfae1c08414e307887b4",
+  "owned_paths": [
+    "tools/pairblock_status/execution_identity.py",
+    "tools/pairblock_status/receipt_validation.py",
+    "tools/pairblock_status/pairblock_controller.py",
+    "tests/pairblock_status/test_receipt_integrity.py"
+  ],
+  "diff_sha256": "5fd494752788cabdf63f33a2da6235ce32c984a5636b2811b02cca9217127f1e",
+  "invariants": [
+    "Native gate and lifecycle receipts reject unknown fields and malformed nested identities.",
+    "Receipt verification recomputes declared commands, outputs, declaration identities, predecessor links, and retained artifact digests.",
+    "Cross-repository operations retain separate declaration-repository and implementation-repository identities."
+  ],
+  "findings": [],
+  "mechanical_evidence": {
+    "gate_receipt": "evidence/pairblock-gates/p0-pb-10e/20260913T061228.145467Z.json",
+    "result": "10 passed in 8.63s; Pyright, Ruff format check, and Ruff check passed",
+    "git_diff_check": "passed",
+    "upstream_match": "deferred until the reviewed session changes are pushed"
+  },
+  "exclusions": [
+    "The review commit remains the trust anchor against coordinated tampering with both an artifact and the receipt that identifies it."
+  ],
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-13T06:12:41Z"
+}
