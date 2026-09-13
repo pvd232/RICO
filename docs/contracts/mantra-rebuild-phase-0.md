@@ -2417,13 +2417,49 @@ translate without rewriting their bytes.
 ## 11. Sources
 
 <!-- generated:manifest-native-contract:start -->
+#### Manifest-native block P0-PB-05P
+
+**Status:** Drafting
+
+**Requirements:**
+
+- `P0-REQ-35`: A replay declares role-specific typed outputs once, and VIPER restores several selected artifacts beneath one destination using their declared relative paths.
+
+**Verifier conditions:**
+
+- `P0-VR-34`: A multi-artifact restore joins the destination directory to each frozen output path.
+- `P0-VR-34`: The restore planner rejects declared paths that overlap beneath the destination.
+- `P0-VR-34`: The Hopfield stages expose typed raw-gene prediction, attention-summary, and parity-receipt outputs.
+- `P0-VR-34`: The Hopfield runner restores its selected outputs with one execution.restore call and repeats no output filename.
+
+**Dependencies:** `P0-PB-05K`, `P0-PB-10J`
+
+**Implementation:** [_restore.py](../../../viper/src/viper/execution/_restore.py) · [retry-restore-compare.md](../../../viper/docs/how-to/retry-restore-compare.md) · [test_storage.py](../../../viper/tests/test_storage.py)
+
+**Current receipt:** None
+
+**Gate:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/viper
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 /bin/zsh -e -c 'python -m pyright src/viper/execution/_restore.py tests/test_storage.py && python -m pytest tests/test_storage.py -q && python -m ruff format --check src/viper/execution/_restore.py tests/test_storage.py && python -m ruff check src/viper/execution/_restore.py tests/test_storage.py'
+```
+
+**Next transition:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/RICO
+python -m tools.pairblock_status.pairblock_controller gate P0-PB-05P
+```
+
 #### Manifest-native block P0-PB-07A
 
-**Status:** Review
+**Status:** Waiting for P0-PB-05P
 
 **Requirements:**
 
 - `P0-REQ-26`: The selected Hopfield replay passes only when its prediction arrays and hold PearsonDelta match the approved historical result.
+- `P0-REQ-35`: A replay declares role-specific typed outputs once, and VIPER restores several selected artifacts beneath one destination using their declared relative paths.
 
 **Verifier conditions:**
 
@@ -2431,12 +2467,16 @@ translate without rewriting their bytes.
 - `P0-VR-25`: Each archive contains the approved keys in order, with equal shapes, dtypes, and values.
 - `P0-VR-25`: The receipt records the byte count and SHA-256 of both prediction archives.
 - `P0-VR-25`: The parity decision requires both prediction-array parity and score parity.
+- `P0-VR-34`: A multi-artifact restore joins the destination directory to each frozen output path.
+- `P0-VR-34`: The restore planner rejects declared paths that overlap beneath the destination.
+- `P0-VR-34`: The Hopfield stages expose typed raw-gene prediction, attention-summary, and parity-receipt outputs.
+- `P0-VR-34`: The Hopfield runner restores its selected outputs with one execution.restore call and repeats no output filename.
 
-**Dependencies:** `P0-PB-07`, `P0-PB-10J`
+**Dependencies:** `P0-PB-05P`, `P0-PB-07`, `P0-PB-10J`
 
 **Implementation:** [hopfield_replay.py](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [test_hopfield_replay.py](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py)
 
-**Current receipt:** [receipt](../../evidence/pairblock-gates/p0-pb-07a/20260913T063012.890580Z.json)
+**Current receipt:** None
 
 **Gate:**
 
@@ -2448,8 +2488,7 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONPATH=/Users/machina/Developer/ChatGPT/man
 **Next transition:**
 
 ```bash
-cd /Users/machina/Developer/ChatGPT/RICO
-python -m tools.pairblock_status.pairblock_controller advance P0-PB-07A approve --evidence-kind KIND --evidence-target TARGET --evidence-revision REVISION
+# Waiting for a declared dependency.
 ```
 
 #### Manifest-native block P0-PB-10D

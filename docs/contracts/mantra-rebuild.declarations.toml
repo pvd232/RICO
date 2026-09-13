@@ -3,9 +3,9 @@ schema_version = 1
 [[requirements]]
 id = "P0-REQ-26"
 claim = "The selected Hopfield replay passes only when its prediction arrays and hold PearsonDelta match the approved historical result."
-phase = 4
-order = 26
-depends_on = ["P0-REQ-07"]
+phase = 6
+order = 36
+depends_on = ["P0-REQ-07", "P0-REQ-35"]
 gate = { kind = "test", target = "P0-VR-25" }
 verifier_ids = ["P0-VR-25"]
 pair_block_ids = ["P0-PB-07A"]
@@ -79,6 +79,16 @@ depends_on = ["P0-REQ-25"]
 gate = { kind = "test", target = "P0-VR-33" }
 verifier_ids = ["P0-VR-33"]
 pair_block_ids = ["P0-PB-10J"]
+
+[[requirements]]
+id = "P0-REQ-35"
+claim = "A replay declares role-specific typed outputs once, and VIPER restores several selected artifacts beneath one destination using their declared relative paths."
+phase = 6
+order = 35
+depends_on = ["P0-REQ-27"]
+gate = { kind = "test", target = "P0-VR-34" }
+verifier_ids = ["P0-VR-34"]
+pair_block_ids = ["P0-PB-05P", "P0-PB-07A"]
 
 [[verifiers]]
 id = "P0-VR-25"
@@ -194,15 +204,41 @@ rejection_cases = [
   "Change the configured terminal artifact after certification.",
 ]
 
+[[verifiers]]
+id = "P0-VR-34"
+requirement_ids = ["P0-REQ-35"]
+conditions = [
+  "A multi-artifact restore joins the destination directory to each frozen output path.",
+  "The restore planner rejects declared paths that overlap beneath the destination.",
+  "The Hopfield stages expose typed raw-gene prediction, attention-summary, and parity-receipt outputs.",
+  "The Hopfield runner restores its selected outputs with one execution.restore call and repeats no output filename.",
+]
+success_case = "Restore the raw-gene predictions and parity receipt to their declared filenames beneath the replay result directory."
+rejection_cases = [
+  "Derive a destination from VIPER's internal stored-at path.",
+  "Repeat either output filename in the Hopfield runner.",
+  "Issue one restore call per selected Hopfield artifact.",
+]
+
 [[pair_blocks]]
 id = "P0-PB-07A"
-requirement_ids = ["P0-REQ-26"]
-depends_on = ["P0-PB-07", "P0-PB-10J"]
+requirement_ids = ["P0-REQ-26", "P0-REQ-35"]
+depends_on = ["P0-PB-05P", "P0-PB-07", "P0-PB-10J"]
 section = "0E"
 repository = "mantra"
 source_paths = ["src/mantra/rebuild/hopfield_replay.py"]
 test_paths = ["src/mantra/rebuild/tests/test_hopfield_replay.py"]
 gate = { repository = "mantra", working_directory = ".", argv = ["/bin/zsh", "-e", "-c", "python -m pyright src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_hopfield_replay.py && python -m pytest --rootdir=/Users/machina/Developer/ChatGPT/mantra/src --confcutdir=/Users/machina/Developer/ChatGPT/mantra/src src/mantra/rebuild/tests/test_hopfield_replay.py -q && python -m ruff format --check src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_hopfield_replay.py && python -m ruff check src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_hopfield_replay.py"], environment = { PYTHONPATH = "/Users/machina/Developer/ChatGPT/mantra/src:/Users/machina/Developer/ChatGPT/mantra", PYTEST_DISABLE_PLUGIN_AUTOLOAD = "1" } }
+
+[[pair_blocks]]
+id = "P0-PB-05P"
+requirement_ids = ["P0-REQ-35"]
+depends_on = ["P0-PB-05K", "P0-PB-10J"]
+section = "0E"
+repository = "viper"
+source_paths = ["src/viper/execution/_restore.py", "docs/how-to/retry-restore-compare.md"]
+test_paths = ["tests/test_storage.py"]
+gate = { repository = "viper", working_directory = ".", argv = ["/bin/zsh", "-e", "-c", "python -m pyright src/viper/execution/_restore.py tests/test_storage.py && python -m pytest tests/test_storage.py -q && python -m ruff format --check src/viper/execution/_restore.py tests/test_storage.py && python -m ruff check src/viper/execution/_restore.py tests/test_storage.py"], environment = { PYTEST_DISABLE_PLUGIN_AUTOLOAD = "1" } }
 
 [[pair_blocks]]
 id = "P0-PB-10D"
