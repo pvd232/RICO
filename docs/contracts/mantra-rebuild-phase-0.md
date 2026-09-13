@@ -2454,7 +2454,7 @@ python -m tools.pairblock_status.pairblock_controller advance P0-PB-05P register
 
 #### Manifest-native block P0-PB-07A
 
-**Status:** Review
+**Status:** Approved
 
 **Requirements:**
 
@@ -2476,7 +2476,7 @@ python -m tools.pairblock_status.pairblock_controller advance P0-PB-05P register
 
 **Implementation:** [hopfield_replay.py](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [test_hopfield_replay.py](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py)
 
-**Current receipt:** [receipt](../../evidence/pairblock-gates/p0-pb-07a/20260913T072602.343866Z.json)
+**Current receipt:** [receipt](../../evidence/pairblock-lifecycle/p0-pb-07a/20260913T072724.277219Z-approve.json)
 
 **Gate:**
 
@@ -2489,7 +2489,7 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONPATH=/Users/machina/Developer/ChatGPT/man
 
 ```bash
 cd /Users/machina/Developer/ChatGPT/RICO
-python -m tools.pairblock_status.pairblock_controller advance P0-PB-07A approve --evidence-kind KIND --evidence-target TARGET --evidence-revision REVISION
+python -m tools.pairblock_status.pairblock_controller advance P0-PB-07A accept --evidence-kind KIND --evidence-target TARGET --evidence-revision REVISION
 ```
 
 #### Manifest-native block P0-PB-10D
