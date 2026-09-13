@@ -2458,15 +2458,15 @@ python -m tools.pairblock_status.pairblock_controller advance P0-PB-05P approve 
 
 **Requirements:**
 
-- `P0-REQ-26`: The selected Hopfield replay passes only when its prediction arrays and hold PearsonDelta match the approved historical result.
+- `P0-REQ-26`: The selected Hopfield replay passes only when its prediction file bytes and hold PearsonDelta exactly match the approved historical result.
 - `P0-REQ-35`: A replay declares role-specific typed outputs once, and VIPER restores several selected artifacts beneath one destination using their declared relative paths.
 
 **Verifier conditions:**
 
 - `P0-VR-25`: The evaluation stage consumes both the replayed and historical prediction archives.
-- `P0-VR-25`: Each archive contains the approved keys in order, with equal shapes, dtypes, and values.
-- `P0-VR-25`: The receipt records the byte count and SHA-256 of both prediction archives.
-- `P0-VR-25`: The parity decision requires both prediction-array parity and score parity.
+- `P0-VR-25`: The receipt records and compares the byte count and SHA-256 of both prediction archives.
+- `P0-VR-25`: The parity decision requires equal prediction-file identities and an exactly equal hold PearsonDelta.
+- `P0-VR-25`: The receipt retains exact array equality as diagnostic evidence.
 - `P0-VR-34`: A multi-artifact restore joins the destination directory to each frozen output path.
 - `P0-VR-34`: The restore planner rejects declared paths that overlap beneath the destination.
 - `P0-VR-34`: The Hopfield stages expose typed raw-gene prediction, attention-summary, and parity-receipt outputs.

@@ -2,7 +2,7 @@ schema_version = 1
 
 [[requirements]]
 id = "P0-REQ-26"
-claim = "The selected Hopfield replay passes only when its prediction arrays and hold PearsonDelta match the approved historical result."
+claim = "The selected Hopfield replay passes only when its prediction file bytes and hold PearsonDelta exactly match the approved historical result."
 phase = 6
 order = 36
 depends_on = ["P0-REQ-07", "P0-REQ-35"]
@@ -95,15 +95,15 @@ id = "P0-VR-25"
 requirement_ids = ["P0-REQ-26"]
 conditions = [
   "The evaluation stage consumes both the replayed and historical prediction archives.",
-  "Each archive contains the approved keys in order, with equal shapes, dtypes, and values.",
-  "The receipt records the byte count and SHA-256 of both prediction archives.",
-  "The parity decision requires both prediction-array parity and score parity.",
+  "The receipt records and compares the byte count and SHA-256 of both prediction archives.",
+  "The parity decision requires equal prediction-file identities and an exactly equal hold PearsonDelta.",
+  "The receipt retains exact array equality as diagnostic evidence.",
 ]
-success_case = "Reproduce the historical prediction arrays and hold PearsonDelta exactly within the declared score tolerance."
+success_case = "Reproduce the historical prediction file and hold PearsonDelta exactly."
 rejection_cases = [
-  "Produce a different prediction value while retaining the historical hold PearsonDelta.",
-  "Change an array key, shape, or dtype.",
-  "Change either prediction archive after its identity is recorded.",
+  "Produce different prediction bytes while retaining the historical hold PearsonDelta.",
+  "Produce equal arrays in an archive with a different byte identity.",
+  "Produce a different hold PearsonDelta.",
 ]
 
 [[verifiers]]
