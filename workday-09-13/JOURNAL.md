@@ -150,3 +150,73 @@ Phase 0 is closed. Phase 1 begins from two trusted historical baselines and a
 connected provenance graph. The first Phase 1 result should be an exact,
 identity-bearing reconstruction of Hopfield preprocessing intermediates. Encoder
 training follows that reconstruction.
+
+## Post-closure VIPER hardening and release
+
+Phase 0 exposed two costs that would recur throughout reconstruction: prior-run
+inputs could collide at one shared materialization path, and separate runs
+repeated the same remote retrieval and external Git checkout work. VIPER
+`0.1.0a4` now owns both lifecycles.
+
+For prior-run inputs, a new plan records `materialization: attempt_workspace`.
+Execution places each verified input beneath the consuming run attempt and gives
+that path to the stage. Saved records created before this change continue to use
+their recorded declared path. Tests cover distinct retry paths, same-path reuse,
+serialization, and verification.
+
+For remote evidence, VIPER now stores verified bytes by SHA-256 beneath
+`.viper/cache/verified-objects/`. Each cache hit rechecks byte count and SHA-256;
+a corrupt entry is fetched again and replaced atomically. External Git evidence
+uses locked persistent checkouts beneath `.viper/cache/git-checkouts/`, with the
+remote URL and exact commit checked before every read. Both caches are disposable
+performance state and do not replace run evidence.
+
+The implementation was preserved in separate review commits:
+
+- `8a89adc`: isolate stored inputs by run attempt;
+- `9d891d3`: cache verified remote evidence across runs;
+- `dab5b92`: document the new behavior;
+- `48a552a`, `6b69219`, and `eb0f4c3`: align local and CI validation, preserve
+  static test inspection, and make the file-access gate portable across Python
+  runtimes; and
+- `513ba84`: repair executable documentation examples found by the final CI run.
+
+The signed tag `v0.1.0a4` identifies source commit
+`513ba8437c47e22fc31847de7cb69cf405dd79a2`. CI run `34751040123` passed on
+Python 3.11 through 3.14. Its Python 3.14 boundaries included 455 unit and
+contract tests with nine subtests and 132 integration tests with 22 subtests.
+Publication run `34751893813` verified the candidate from TestPyPI before
+publishing the same wheel and source distribution to PyPI.
+
+The published files are:
+
+| Distribution | Bytes | SHA-256 |
+|---|---:|---|
+| `viper_provenance-0.1.0a4-py3-none-any.whl` | 245,134 | `a1af45a46e842762a170120e3302cb69e0e0b1c4ba8c68936e6ab0a73ff82612` |
+| `viper_provenance-0.1.0a4.tar.gz` | 445,356 | `4ac12023ff7b0ef89ba4829fe48e9ea5a1947ef6abad62990e790770a66b12a5` |
+
+PyPI and TestPyPI serve those exact hashes. The local MANTRA Python 3.13
+environment now imports `0.1.0a4` from `site-packages`, rather than from the
+editable VIPER checkout.
+
+The L4 base runtime also imports the published `0.1.0a4` wheel from
+`site-packages`. Its historical scientific dependencies remain at NumPy 1.26.4,
+Click 8.1.8, PyTorch 2.10.0+cu129, and the pre-existing Hugging Face stack. VIPER
+was installed there without dependency replacement because the current package
+metadata requires NumPy 2 while the preserved MANTRA stack requires NumPy 1.26.
+CUDA remained available after installation. Phase 1 should either keep that
+explicit compatibility boundary or create a dedicated GPU runtime before adding
+new dependencies.
+
+The final CI cycle found three portability defects before release: repository
+history was too shallow for Git-backed provenance tests, Python 3.14 did not emit
+the thread audit event relied upon by declared file access, and five executable
+documentation snippets had drifted from the public API. The fixes request full
+history in provenance jobs, wrap `threading.Thread.start` only while the observer
+is active, and keep the affected API names inside complete executable examples.
+The published documentation retains the existing task-oriented structure and
+adds only the new cache, materialization, restoration, and release facts.
+
+VIPER commit `d3b95a6` adds the final release receipt and publication links. The
+receipt records the signed tag, CI and publication runs, distribution identities,
+registry checks, and installed-package acceptance.
