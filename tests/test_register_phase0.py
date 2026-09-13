@@ -20,6 +20,7 @@ from tools.register_phase0 import (
     Phase0RegistrationError,
     build_phase0_registration_study,
     register_phase0,
+    run_phase0_registration,
 )
 
 
@@ -189,3 +190,27 @@ def test_rico_declares_its_viper_workspace_and_runtime_dependency() -> None:
     assert (proposal_root / "requirements.txt").read_text(encoding="utf-8") == (
         "viper-provenance\n"
     )
+
+
+def test_registration_forwards_explicit_prior_run_source_trust(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Pass the approved MANTRA repository to VIPER execution."""
+    trusted = frozenset({"https://github.com/pvd232/MANTRA.git"})
+    observed: dict[str, object] = {}
+
+    def run(plan, **kwargs):
+        observed.update(plan=plan, **kwargs)
+        return object()
+
+    monkeypatch.setattr("tools.register_phase0.execution.run", run)
+    repository_root = Path(__file__).parents[1]
+
+    run_phase0_registration(
+        repository_root,
+        declared_stage_inputs(tmp_path),
+        trusted_source_repositories=trusted,
+    )
+
+    assert observed["trusted_source_repositories"] == trusted

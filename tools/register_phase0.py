@@ -152,8 +152,13 @@ def build_phase0_registration_study(stage_inputs: Mapping[str, Any]):
     )
 
 
-def run_phase0_registration(repository_root: Path, stage_inputs: Mapping[str, Any]):
-    """Execute the terminal Phase 0 evidence-registration study."""
+def run_phase0_registration(
+    repository_root: Path,
+    stage_inputs: Mapping[str, Any],
+    *,
+    trusted_source_repositories: frozenset[str] = frozenset(),
+):
+    """Execute registration with explicit trust for prior-run source loaders."""
 
     source = read_source(repository_root)
     environment = LocalEnvSpec(
@@ -171,4 +176,5 @@ def run_phase0_registration(repository_root: Path, stage_inputs: Mapping[str, An
             env=environment,
         ),
         repository_root=repository_root,
+        trusted_source_repositories=trusted_source_repositories,
     )
