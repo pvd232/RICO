@@ -69,9 +69,9 @@
   },
   "schema_version": "rico.phase0_evidence.v1",
   "viper_usefulness_ledger": {
-    "byte_count": 7955,
+    "byte_count": 12915,
     "path": "evidence/viper-usefulness-ledger.json",
     "repository": "rico",
-    "sha256": "18d2bbdd0b2d8c676e3edca4ad7663cd45d6670f7d0b64dafe6730439f68468e"
+    "sha256": "d947689026006c8783317127a0784945013a976e331169cbcf64787cf0235364"
   }
 }

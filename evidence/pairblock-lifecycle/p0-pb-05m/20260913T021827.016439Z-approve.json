@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "9ddd7dc3084aabaa3d8ee7deb79e3cf90b858eb4d0a9030461af712bc2c1ddc0",
+  "checklist_written_sha256": "a9e8f88a3a7ab66fe4b8036a92677a2184936186641f00716d3a99e884f0a277",
+  "event": "approve",
+  "evidence": {
+    "kind": "external",
+    "revision": "2026-09-12",
+    "target": "User instruction to repair every identified VIPER shortcoming live"
+  },
+  "pair_block_id": "P0-PB-05M",
+  "previous_receipt": "../../evidence/pairblock-gates/p0-pb-05m/20260913T021750.032976Z.json",
+  "recorded_at": "2026-09-13T02:18:27.016439+00:00",
+  "repository_head": "3b575be150cfd9691fac75d2b0586af14f665527",
+  "result": "applied",
+  "schema_version": 1,
+  "status_after": "Approved",
+  "status_before": "Review"
+}

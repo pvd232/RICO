@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-05M",
+  "requirement_ids": ["P0-REQ-22"],
+  "repository": "https://github.com/pvd232/viper.git",
+  "base_commit": "cdd7ec5b9fde062a336d175a7ec98eff2e5ea12f",
+  "result_commit": "427f189467d0f2787a98bd95a44ee52f720f0a29",
+  "owned_paths": ["src/viper/verification.py", "tests/test_verification_acceptance.py"],
+  "diff_sha256": "19fadd9d1d2b0c814ba07041d49c2745755c7efc67475c8f2456518367b7db41",
+  "invariants": ["The cache key is the exact frozen ResolvedRunRef.", "Producer verification runs once for equal references in one verification call.", "Artifact identity, role, and materialization remain pointer-specific."],
+  "findings": [{"severity": "P1", "counterexample": "A first extraction referenced the removed local resolved_run variable when selecting the successful attempt.", "repair": "Read successful_attempt_id from VerifiedRunResult.result and rerun the acceptance cases.", "status": "repaired", "observing_test": "tests/test_verification_acceptance.py::CompleteProvenanceAcceptanceTests::test_stored_inputs_verify_one_shared_producer_run_once"}],
+  "mechanical_evidence": {"focused_command": "python -m pytest tests/test_verification_acceptance.py -k 'stored_inputs_verify_one_shared_producer_run_once or stored_input_role_must_match_the_selected_artifact' -q", "focused_result": "2 passed, 32 deselected in 20.13 seconds", "ruff": "passed", "git_diff_check": "passed", "upstream_match": "passed", "real_acceptance": "Pending a new terminal RICO registration run using this revision."},
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-13T02:19:30Z"
+}

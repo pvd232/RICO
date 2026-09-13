@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "2a1f557172e7ee383b472e87a12b026cf30824ccc0f0b66bb5b6d8b6e042b5c3",
+  "checklist_written_sha256": "025176d96d8b7551ad723628fa61c40af2e5feae49731dc8f052a7d6b1a5a3c5",
+  "event": "accept",
+  "evidence": {
+    "kind": "artifact",
+    "revision": "cdd7ec5b9fde062a336d175a7ec98eff2e5ea12f",
+    "target": "https://github.com/pvd232/viper.git"
+  },
+  "pair_block_id": "P0-PB-05L",
+  "previous_receipt": "../../evidence/pairblock-lifecycle/p0-pb-05l/20260913T021826.721351Z-approve.json",
+  "recorded_at": "2026-09-13T02:19:06.638723+00:00",
+  "repository_head": "3b575be150cfd9691fac75d2b0586af14f665527",
+  "result": "applied",
+  "schema_version": 1,
+  "status_after": "Applied",
+  "status_before": "Approved"
+}

@@ -49,6 +49,11 @@ The [Mantra rebuild master checklist](../checklists/mantra-rebuild.md) owns exec
 | `P0-REQ-17` | Permit governed reads of exact Python source files present in the run's frozen Git commit without treating those files as data inputs. | [`P0-PB-05H`](#p0-pb-05h) |
 | `P0-REQ-18` | Publish the final failed attempt after result verification rejects a provisional successful attempt. | [`P0-PB-05I`](#p0-pb-05i) |
 | `P0-REQ-19` | Let an execution caller explicitly approve additional source repositories whose artifact loaders must run while verifying prior-run inputs. | [`P0-PB-05J`](#p0-pb-05j) |
+| `P0-REQ-20` | Reject a stored-input destination outside `inputs/` while authoring the plan. | [`P0-PB-05L`](#p0-pb-05l) |
+| `P0-REQ-21` | Reuse authenticated Git state while one execution retrieves several files from the same external repository revision. | [`P0-PB-05K`](#p0-pb-05k) |
+| `P0-REQ-22` | Verify one exact producer run once while one verification pass checks several pointers into that run. | [`P0-PB-05M`](#p0-pb-05m) |
+| `P0-REQ-23` | Exclude imported local names from a changed declaration's runtime-dependent one-hop callers. | [`P0-PB-05N`](#p0-pb-05n) |
+| `P0-REQ-24` | Route repository-owned stage-worker child processes through VIPER's spawn-safe subprocess facade. | [`P0-PB-05O`](#p0-pb-05o) |
 
 ## 2. Required claim
 
@@ -285,12 +290,17 @@ The dependency graph, restoration bindings, environment receipt, capacity receip
 | `P0-VR-16` | Before governed access begins, the worker derives the exact tracked `.py` paths from the frozen source commit. The observer permits those source reads without recording data-access evidence, while an untracked Python file and a tracked non-Python file remain undeclared reads. | [`P0-PB-05H`](#p0-pb-05h) |
 | `P0-VR-17` | A result-verification failure writes one failed `resolved.yaml` whose failure message preserves the verification error. | [`P0-PB-05I`](#p0-pb-05i) |
 | `P0-VR-18` | Execution trusts the current run source plus only the additional repositories named by the caller. A prior-run loader from an unnamed repository remains rejected. | [`P0-PB-05J`](#p0-pb-05j) |
+| `P0-VR-19` | `run_artifact()` rejects a materialization path outside `inputs/` before it publishes a pointer or constructs an executable plan. Deserializing `StoredInputRef` enforces the same rule. | [`P0-PB-05L`](#p0-pb-05l) |
+| `P0-VR-20` | One `RunFetcher` creates at most one checkout for each external repository and commit, verifies that checkout's origin and fetched commit, and retains no more than 64 MiB of exact fetched file bytes. | [`P0-PB-05K`](#p0-pb-05k) |
+| `P0-VR-21` | `verify_stored_inputs()` calls producer-run verification once for equal `ResolvedRunRef` values and still checks each selected artifact, data role, and materialization path. | [`P0-PB-05M`](#p0-pb-05m) |
+| `P0-VR-22` | An `imports` edge does not create an independent one-hop caller for its target. An import selected as the changed declaration still requires a reachable test or domain fallback. | [`P0-PB-05N`](#p0-pb-05n) |
+| `P0-VR-23` | The repository AST policy finds no direct standard-library `subprocess` import outside the facade and its own observer test; stage source inspection and file-access tests pass through the facade. | [`P0-PB-05O`](#p0-pb-05o) |
 
 ## 8. Acceptance boundary
 
 ### Success
 
-Phase 0 passes when `P0-VR-01` through `P0-VR-18` pass, every required provenance record exists in VIPER, the user reviews the complete evidence set, and the repository contains a synced commit recording the approved contract and Phase 0 receipts.
+Phase 0 passes when `P0-VR-01` through `P0-VR-23` pass, every required provenance record exists in VIPER, the user reviews the complete evidence set, and the repository contains a synced commit recording the approved contract and Phase 0 receipts.
 
 ### Rejection
 
@@ -313,6 +323,11 @@ Phase 0 fails when $B$ contains an unnecessary node, omits a required node or ed
 | `P0-PB-05H` | VIPER frozen-source reads during governed stage invocation | `P0-VR-16`. |
 | `P0-PB-05I` | VIPER failed-attempt finalization after result verification | `P0-VR-17`. |
 | `P0-PB-05J` | Explicit trust for prior-run source repositories during execution | `P0-VR-18`. |
+| `P0-PB-05K` | Reused external Git checkout and bounded file cache | `P0-VR-20`. |
+| `P0-PB-05L` | Authoring-time stored-input namespace validation | `P0-VR-19`. |
+| `P0-PB-05M` | Per-verification producer-run reuse | `P0-VR-21`. |
+| `P0-PB-05N` | Import-aware CodeQL one-hop test selection | `P0-VR-22`. |
+| `P0-PB-05O` | Spawn-safe stage-worker process calls | `P0-VR-23`. |
 | `P0-PB-06` | Verified restoration and graph-completeness rejection test | `P0-VR-04` and `P0-VR-06`. |
 | `P0-PB-07` | Hopfield VIPER adapter, focused test, and historical raw-gene readout replay | `P0-VR-07`. |
 | `P0-PB-08` | v1952 MIL seed-123460 `without_control` replay | `P0-VR-08`. |
@@ -343,11 +358,16 @@ Resolution status lives in the [master checklist](../checklists/mantra-rebuild.m
 | [`P0-PB-05H`](../checklists/mantra-rebuild.md#pairblock-resolution) | Permit reads of Python source captured by the run's frozen Git commit. | Codex implements and independently reviews the VIPER change. | [Observer](../../../viper/src/viper/_workers/file_access.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Tests](../../../viper/tests/test_stage_file_access.py) | `P0-VR-16` |
 | [`P0-PB-05I`](../checklists/mantra-rebuild.md#pairblock-resolution) | Finalize a failed attempt after result verification rejects it. | Codex implements and independently reviews the VIPER change. | [Attempt execution](../../../viper/src/viper/execution/_attempt.py) · [Publication](../../../viper/src/viper/execution/_publication.py) · [Tests](../../../viper/tests/test_run_execution.py) | `P0-VR-17` |
 | [`P0-PB-05J`](../checklists/mantra-rebuild.md#pairblock-resolution) | Accept explicit trust for prior-run source repositories during execution. | Codex implements and independently reviews the VIPER change. | [Public execution](../../../viper/src/viper/execution/__init__.py) · [Attempt execution](../../../viper/src/viper/execution/_attempt.py) · [Tests](../../../viper/tests/test_run_execution.py) | `P0-VR-18` |
+| [`P0-PB-05K`](../checklists/mantra-rebuild.md#pairblock-resolution) | Reuse one authenticated external Git checkout during an execution. | Codex implemented and independently reviewed VIPER commits `08d78749` and `fe2114ef`. | [Fetcher](../../../viper/src/viper/execution/_source.py) · [Storage](../../../viper/src/viper/_verification/storage.py) · [Tests](../../../viper/tests/test_storage.py) | `P0-VR-20` |
+| [`P0-PB-05L`](../checklists/mantra-rebuild.md#pairblock-resolution) | Reject invalid stored-input paths during authoring. | Codex implemented and independently reviewed VIPER commit `cdd7ec5b`. | [Input model](../../../viper/src/viper/inputs.py) · [Draft model](../../../viper/src/viper/benchmark.py) · [Tests](../../../viper/tests/test_prior_run_inputs.py) | `P0-VR-19` |
+| [`P0-PB-05M`](../checklists/mantra-rebuild.md#pairblock-resolution) | Reuse one verified producer result across equal run references. | Codex implemented and independently reviewed VIPER commit `427f1894`. | [Verifier](../../../viper/src/viper/verification.py) · [Tests](../../../viper/tests/test_verification_acceptance.py) | `P0-VR-21` |
+| [`P0-PB-05N`](../checklists/mantra-rebuild.md#pairblock-resolution) | Resolve one-hop runtime callers without treating imported names as callers. | Codex implemented and independently reviewed VIPER commit `98dcf084`. | [Selector](../../../viper/tools/select_impacted_tests.py) · [Tests](../../../viper/tests/test_impacted_test_selection.py) | `P0-VR-22` |
+| [`P0-PB-05O`](../checklists/mantra-rebuild.md#pairblock-resolution) | Route stage-worker process calls through the shared facade. | Codex implemented and independently reviewed VIPER commit `3383713d`. | [Worker](../../../viper/src/viper/_workers/stages.py) · [Policy test](../../../viper/tests/test_process_startup.py) · [File-access tests](../../../viper/tests/test_stage_file_access.py) | `P0-VR-23` |
 | [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | Import the 27 restored disk files and verify graph $B$. | Codex implemented and independently reviewed MANTRA through `ee8a23cd1085846a0c14bb9272c336247483a437`. | [Bindings](../../../mantra/src/mantra/rebuild/restoration.py) · [VIPER workflow](../../../mantra/src/mantra/rebuild/viper_restore.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_viper_restore.py) · [Review](../../evidence/pairblock-reviews/p0-pb-06/ee8a23cd1085846a0c14bb9272c336247483a437.json) | `P0-VR-04`, `P0-VR-06`, and `P0-REQ-13` |
 | [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay Hopfield. | Codex independently reviewed the restoration-run linkage through `461d605af8d4dd68c903779136b0cc365fb453e4`. | [Source](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py) · [Review](../../evidence/pairblock-reviews/p0-pb-07/461d605af8d4dd68c903779136b0cc365fb453e4.json) | `P0-VR-07` |
 | [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay standalone MIL application. | Codex independently reviewed the restoration-run linkage through `5e822ffa289d58092a2a6b9edc5799b477e44eee`. | [Source](../../../mantra/src/mantra/rebuild/mil_replay.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py) · [Review](../../evidence/pairblock-reviews/p0-pb-08/5e822ffa289d58092a2a6b9edc5799b477e44eee.json) | `P0-VR-08` |
 | [`P0-PB-09`](../checklists/mantra-rebuild.md#pairblock-resolution) | Freeze evidence and assess VIPER. | Codex implemented and independently reviewed RICO commit `64964135`. | [Source](../../tools/freeze_phase0.py) · [Tests](../../tests/test_freeze_phase0.py) · [Review](../../evidence/pairblock-reviews/p0-pb-09/64964135b66a4706501d9e768527241941397566.json) | `P0-VR-09` |
-| [`P0-PB-09A`](../checklists/mantra-rebuild.md#pairblock-resolution) | Register and verify the frozen evidence through VIPER. | Codex implemented and independently reviewed RICO commits `428a2506` and `b2f1d3fb`; the real run supplies completion evidence. | [Source](../../tools/register_phase0.py) · [Tests](../../tests/test_register_phase0.py) · [Review](../../evidence/pairblock-reviews/p0-pb-09a/b2f1d3fb8574bde0aef19bb8c90627ba8cac6f7e.json) | `P0-VR-09` |
+| [`P0-PB-09A`](../checklists/mantra-rebuild.md#pairblock-resolution) | Register and verify the frozen evidence through VIPER. | Codex implemented and independently reviewed RICO through commit `3b575be1`; the real run supplies completion evidence. | [Source](../../tools/register_phase0.py) · [Loader](../../tools/artifact_loaders.py) · [Tests](../../tests/test_register_phase0.py) · [Latest review](../../evidence/pairblock-reviews/p0-pb-09a/3b575be150cfd9691fac75d2b0586af14f665527.json) | `P0-VR-09` |
 | [`P0-PB-10`](../checklists/mantra-rebuild.md#pairblock-resolution) | Validate PairBlock traceability and retain each tested-code or externally reviewed non-code lifecycle transition. | RICO owns the active controller; the user reviews lifecycle changes. | [Active source and tests](#p0-pb-10-accepted-implementation) | `P0-VR-10` |
 
 ### Blocks
@@ -484,6 +504,32 @@ entry points. Verification trusts the current run's source and adds only the
 repositories in that caller-supplied set. This lets a RICO run verify and load
 MANTRA prior-run artifacts without granting implicit trust to every referenced
 repository. [Review the implementation and gate](#p0-pb-05j-proposed-code).
+
+#### P0-PB-05K
+
+Reuse one verified checkout for files from the same external repository and
+commit. [Inspect the implementation and gate](#p0-pb-05k-implementation-record).
+
+#### P0-PB-05L
+
+Reject a stored-input path outside `inputs/` during authoring, before pointer
+publication or execution. [Inspect the implementation and gate](#p0-pb-05l-implementation-record).
+
+#### P0-PB-05M
+
+Verify an exact producer run once per verification pass while retaining every
+pointer-specific check. [Inspect the implementation and gate](#p0-pb-05m-implementation-record).
+
+#### P0-PB-05N
+
+Exclude import bindings from a changed declaration's runtime caller set while
+retaining fallback for a changed unobserved import. [Inspect the implementation
+and gate](#p0-pb-05n-implementation-record).
+
+#### P0-PB-05O
+
+Route stage-worker process launches through VIPER's spawn-safe subprocess
+facade. [Inspect the implementation and gate](#p0-pb-05o-implementation-record).
 
 #### P0-PB-06
 
@@ -815,11 +861,16 @@ choices.
 | [`P0-PB-05H`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Observer](../../../viper/src/viper/_workers/file_access.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Tests](../../../viper/tests/test_stage_file_access.py) · [Gate](#p0-pb-05h-proposed-code) |
 | [`P0-PB-05I`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Attempt](../../../viper/src/viper/execution/_attempt.py) · [Publication](../../../viper/src/viper/execution/_publication.py) · [Tests](../../../viper/tests/test_run_execution.py) · [Gate](#p0-pb-05i-proposed-code) |
 | [`P0-PB-05J`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Public execution](../../../viper/src/viper/execution/__init__.py) · [Attempt execution](../../../viper/src/viper/execution/_attempt.py) · [Tests](../../../viper/tests/test_run_execution.py) · [Gate](#p0-pb-05j-proposed-code) |
+| [`P0-PB-05K`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Fetcher](../../../viper/src/viper/execution/_source.py) · [Storage](../../../viper/src/viper/_verification/storage.py) · [Tests](../../../viper/tests/test_storage.py) · [Gate](#p0-pb-05k-implementation-record) |
+| [`P0-PB-05L`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Input model](../../../viper/src/viper/inputs.py) · [Draft model](../../../viper/src/viper/benchmark.py) · [Tests](../../../viper/tests/test_prior_run_inputs.py) · [Gate](#p0-pb-05l-implementation-record) |
+| [`P0-PB-05M`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Verifier](../../../viper/src/viper/verification.py) · [Tests](../../../viper/tests/test_verification_acceptance.py) · [Gate](#p0-pb-05m-implementation-record) |
+| [`P0-PB-05N`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Selector](../../../viper/tools/select_impacted_tests.py) · [Tests](../../../viper/tests/test_impacted_test_selection.py) · [Gate](#p0-pb-05n-implementation-record) |
+| [`P0-PB-05O`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Worker](../../../viper/src/viper/_workers/stages.py) · [Policy test](../../../viper/tests/test_process_startup.py) · [File-access tests](../../../viper/tests/test_stage_file_access.py) · [Gate](#p0-pb-05o-implementation-record) |
 | [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Bindings](../../../mantra/src/mantra/rebuild/restoration.py) · [VIPER workflow](../../../mantra/src/mantra/rebuild/viper_restore.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_viper_restore.py) · [Gate](#p0-pb-06-proposed-code) · [Review](../../evidence/pairblock-reviews/p0-pb-06/ee8a23cd1085846a0c14bb9272c336247483a437.json) |
 | [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py) · [Gate](#p0-pb-07-accepted-implementation) · [Review](../../evidence/pairblock-reviews/p0-pb-07/461d605af8d4dd68c903779136b0cc365fb453e4.json) |
 | [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../../mantra/src/mantra/rebuild/mil_replay.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py) · [Gate](#p0-pb-08-accepted-implementation) · [Review](../../evidence/pairblock-reviews/p0-pb-08/5e822ffa289d58092a2a6b9edc5799b477e44eee.json) |
 | [`P0-PB-09`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../tools/freeze_phase0.py) · [Tests](../../tests/test_freeze_phase0.py) · [Gate](#p0-pb-09-accepted-implementation) · [Review](../../evidence/pairblock-reviews/p0-pb-09/64964135b66a4706501d9e768527241941397566.json) |
-| [`P0-PB-09A`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../tools/register_phase0.py) · [Tests](../../tests/test_register_phase0.py) · [Gate](#p0-pb-09a-accepted-implementation) · [Review](../../evidence/pairblock-reviews/p0-pb-09a/b2f1d3fb8574bde0aef19bb8c90627ba8cac6f7e.json) |
+| [`P0-PB-09A`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../tools/register_phase0.py) · [Loader](../../tools/artifact_loaders.py) · [Tests](../../tests/test_register_phase0.py) · [Gate](#p0-pb-09a-accepted-implementation) · [Latest review](../../evidence/pairblock-reviews/p0-pb-09a/3b575be150cfd9691fac75d2b0586af14f665527.json) |
 | [`P0-PB-10`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Active implementation](#p0-pb-10-accepted-implementation) |
 
 A pending row links its block definition and checklist state while omitting an implementation body.
@@ -1499,6 +1550,134 @@ trusted implicitly, the default trusts an additional repository, or the policy
 used for materialization differs from the policy used for terminal
 verification.
 
+### P0-PB-05K implementation record
+
+**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
+
+**Requirement:** Reuse authenticated Git state when one execution reads files
+from the same external repository and commit.
+
+##### `P0-PB-05K` proposed code
+
+**Code boundary:** [fetcher](../../../viper/src/viper/execution/_source.py),
+[Git storage](../../../viper/src/viper/_verification/storage.py), and
+[tests](../../../viper/tests/test_storage.py) at VIPER commits `08d78749` and
+`fe2114ef`.
+
+**Focused check:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/viper
+source .venv/bin/activate
+python -m ruff check src/viper/execution/_source.py src/viper/_verification/storage.py tests/test_storage.py
+python -m pytest tests/test_storage.py -k 'external_git' -q
+```
+
+**Gate:** Equal repository-and-commit references share one checkout; exact file
+bytes remain content-bound; the in-memory cache never exceeds 64 MiB.
+
+### P0-PB-05L implementation record
+
+**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
+
+**Requirement:** Reject an invalid stored-input namespace before execution can
+start or a pointer can be published.
+
+##### `P0-PB-05L` proposed code
+
+**Code boundary:** [input model](../../../viper/src/viper/inputs.py),
+[draft model](../../../viper/src/viper/benchmark.py), and
+[tests](../../../viper/tests/test_prior_run_inputs.py) at VIPER commit
+`cdd7ec5b`.
+
+**Focused check:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/viper
+source .venv/bin/activate
+python -m ruff check src/viper/inputs.py src/viper/benchmark.py tests/test_prior_run_inputs.py
+python -m pytest tests/test_prior_run_inputs.py -q
+```
+
+**Gate:** `run_artifact()` rejects a path outside `inputs/`, publishes no
+pointer, and `StoredInputRef` enforces the same serialized boundary.
+
+### P0-PB-05M implementation record
+
+**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
+
+**Requirement:** Reuse one verified producer result while checking several
+stored inputs that carry the same exact run reference.
+
+##### `P0-PB-05M` proposed code
+
+**Code boundary:** [verifier](../../../viper/src/viper/verification.py) and
+[acceptance tests](../../../viper/tests/test_verification_acceptance.py) at
+VIPER commit `427f1894`.
+
+**Focused check:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/viper
+source .venv/bin/activate
+python -m ruff check src/viper/verification.py tests/test_verification_acceptance.py
+python -m pytest tests/test_verification_acceptance.py -k 'stored_inputs_verify_one_shared_producer_run_once or stored_input_role_must_match_the_selected_artifact' -q
+```
+
+**Gate:** Equal `ResolvedRunRef` values cause one producer verification while
+each pointer retains artifact, role, and materialization validation.
+
+### P0-PB-05N implementation record
+
+**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
+
+**Requirement:** Select runtime-dependent callers from the CodeQL/AST graph
+without treating a local import name as another caller.
+
+##### `P0-PB-05N` proposed code
+
+**Code boundary:** [selector](../../../viper/tools/select_impacted_tests.py) and
+[tests](../../../viper/tests/test_impacted_test_selection.py) at VIPER commit
+`98dcf084`.
+
+**Focused check:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/viper
+source .venv/bin/activate
+python -m ruff check tools/select_impacted_tests.py tests/test_impacted_test_selection.py
+python -m pytest tests/test_impacted_test_selection.py -q
+```
+
+**Gate:** An import edge cannot force domain fallback for its imported target;
+an unobserved import selected as the changed declaration still does.
+
+### P0-PB-05O implementation record
+
+**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
+
+**Requirement:** Route stage-worker and stage-file-access test process calls
+through VIPER's spawn-safe facade.
+
+##### `P0-PB-05O` proposed code
+
+**Code boundary:** [worker](../../../viper/src/viper/_workers/stages.py),
+[repository policy](../../../viper/tests/test_process_startup.py), and
+[file-access tests](../../../viper/tests/test_stage_file_access.py) at VIPER
+commit `3383713d`.
+
+**Focused check:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/viper
+source .venv/bin/activate
+python -m ruff check src/viper/_workers/stages.py tests/test_stage_file_access.py
+python -m pytest tests/test_process_startup.py::test_repository_launch_sites_use_spawn_safe_subprocess tests/test_stage_file_access.py tests/test_stage_invocation.py -q
+```
+
+**Gate:** The AST policy finds no direct subprocess import, and the stage
+invocation and declared-file-access behavior still pass.
+
 ### P0-PB-06 implementation record
 
 **Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
@@ -1761,6 +1940,7 @@ RICO-rooted VIPER run and retain its registration receipt.
 runs and evidence index must exist before registration executes.
 
 **Code boundary:** [Registration source](../../tools/register_phase0.py),
+[self-contained artifact loader](../../tools/artifact_loaders.py),
 [observing tests](../../tests/test_register_phase0.py),
 [workspace marker](../../viper.toml), and
 [runtime dependency](../../requirements.txt).
@@ -1775,14 +1955,14 @@ and emit one terminal registration receipt.
 VIPER, its lineage reaches all three MANTRA producer runs and every RICO
 evidence input, and its receipt reports `passed: true`.
 
-**Applied paths:** `tools/register_phase0.py` and
+**Applied paths:** `tools/register_phase0.py`, `tools/artifact_loaders.py`, and
 `tests/test_register_phase0.py` in RICO.
 
 **Applied check:**
 
 ```bash
 cd /Users/machina/Developer/ChatGPT/RICO
-python -m ruff check tools/register_phase0.py tests/test_register_phase0.py && \
+python -m ruff check tools/register_phase0.py tools/artifact_loaders.py tests/test_register_phase0.py && \
 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
 python -m pytest tests/test_register_phase0.py -q
 ```

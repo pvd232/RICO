@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-09A",
+  "requirement_ids": ["P0-REQ-09"],
+  "repository": "https://github.com/pvd232/RICO.git",
+  "base_commit": "75661ea2055058f5ff2a4942d5e9bb26be834342",
+  "result_commit": "3b575be150cfd9691fac75d2b0586af14f665527",
+  "owned_paths": ["tools/artifact_loaders.py", "tools/register_phase0.py", "tests/test_register_phase0.py"],
+  "diff_sha256": "d23c12f89adc55f451549e1553c7434f9ed1e61e6295e8bb19c6b9fc3403c03f",
+  "invariants": ["The registration output loader imports from its loader-only verification workspace.", "The registration stage retains the complete evidence-input set.", "Every prior-run materialization path is beneath inputs/."],
+  "findings": [{"severity": "P1", "counterexample": "The original output loader lived in register_phase0.py, whose sibling import was absent from VIPER's disposable loader workspace.", "repair": "Select the self-contained tools/artifact_loaders.py load_json function and cover that declaration in the registration test.", "status": "repaired", "observing_test": "tests/test_register_phase0.py::test_declares_one_governed_registration_stage"}],
+  "mechanical_evidence": {"focused_command": "python -m pytest tests/test_register_phase0.py -q", "focused_result": "22 passed in 1.22 seconds", "ruff": "passed", "git_diff_check": "passed", "upstream_match": "passed", "real_acceptance": "Pending the next RICO terminal registration run."},
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-13T02:19:30Z"
+}

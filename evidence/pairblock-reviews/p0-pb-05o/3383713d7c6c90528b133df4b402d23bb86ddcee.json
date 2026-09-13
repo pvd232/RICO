@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-05O",
+  "requirement_ids": ["P0-REQ-24"],
+  "repository": "https://github.com/pvd232/viper.git",
+  "base_commit": "98dcf0843a6d402db62ef60900e394fe6760d154",
+  "result_commit": "3383713d7c6c90528b133df4b402d23bb86ddcee",
+  "owned_paths": ["src/viper/_workers/stages.py", "tests/test_stage_file_access.py"],
+  "diff_sha256": "0ac785461f213f2fb984a610c0ed96f37d843e7d3aa4e153d42a65d520ac4243",
+  "invariants": ["Repository-owned process calls use viper._subprocess.", "The governed subprocess escape case still raises StageFileAccessError.", "Frozen Python source discovery still reads the selected Git commit."],
+  "findings": [{"severity": "P1", "counterexample": "Repairing only the production worker left a direct subprocess import in the file-access test module.", "repair": "Route both the production and test call sites through the facade; retain the AST repository policy.", "status": "repaired", "observing_test": "tests/test_process_startup.py::test_repository_launch_sites_use_spawn_safe_subprocess"}],
+  "mechanical_evidence": {"focused_command": "python -m pytest tests/test_process_startup.py::test_repository_launch_sites_use_spawn_safe_subprocess tests/test_stage_file_access.py tests/test_stage_invocation.py -q", "focused_result": "34 passed in 3.26 seconds", "ruff": "passed", "git_diff_check": "passed", "upstream_match": "passed", "real_acceptance": "The repository policy and both affected behavior suites pass."},
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-13T02:19:30Z"
+}

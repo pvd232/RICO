@@ -6,7 +6,11 @@
     "unbenchmarked-build-model",
     "failed-attempt-finalization",
     "stored-input-materialization-namespace",
-    "repeated-prior-run-verification"
+    "repeated-prior-run-verification",
+    "external-git-retrieval-reuse",
+    "declaration-impact-import-alias",
+    "spawn-safe-stage-processes",
+    "artifact-loader-module-isolation"
   ],
   "assessments": [
     {
@@ -66,30 +70,84 @@
     {
       "check_id": "stored-input-materialization-namespace",
       "claimed_guarantee": "A prior-run artifact materializes beneath the consumer workspace's inputs directory.",
-      "observed_result": "VIPER rejected MANTRA paths beneath experiments after prediction completed. MANTRA now materializes every restored replay input beneath inputs/mantra_hopfield_replay or inputs/mantra_mil_replay.",
-      "defect_classification": "intentional_restriction",
-      "independent_check": "MANTRA run 01M2C36JYT7JSQKZ62XBESVNJZ and the 14-case Hopfield and MIL declaration gate for commit 7c76c9772378f94f55012a06fc9f13354a46a4e7",
+      "observed_result": "The inputs namespace is an intentional custody boundary, but VIPER originally rejected an invalid path only after prediction completed. StoredInputRef and RunArtifactDraft now reject the path during authoring.",
+      "defect_classification": "framework_gap",
+      "independent_check": "MANTRA run 01M2C36JYT7JSQKZ62XBESVNJZ and VIPER test_prior_run_input_rejects_non_input_destination_before_pointer_publication at commit cdd7ec5b9fde062a336d175a7ec98eff2e5ea12f",
       "ordinary_check_equivalent": "A frozen-plan test would detect the invalid namespace before execution; the earlier authoring tests inspected only selected paths.",
       "false_alarms": [],
       "infrastructure_failures": [
         "The verifier enforced the valid restriction only after the full prediction stage had run."
       ],
       "elapsed_seconds": 180.0,
-      "work_added": "Four MANTRA materialization declarations changed and both replay tests now cover every restored input path.",
+      "work_added": "Four MANTRA declarations changed; VIPER added one shared path validator and one public-authoring regression test.",
       "later_reuse": "Connected Hopfield run 01M2C3JFXQ2D8A0VB84R5493EY and MIL run 01M2C3SVNE98XZ0D8S4CZJ64T8 use the canonical namespace."
     },
     {
       "check_id": "repeated-prior-run-verification",
       "claimed_guarantee": "Each stored input reaches and verifies its producer run and selected artifact.",
-      "observed_result": "The guarantee passed, but verify_stored_inputs called verify_promoted_artifact separately for every pointer and each call re-ran verify_run_result for the same restoration run.",
+      "observed_result": "The guarantee passed, but each pointer re-ran verification for the same restoration producer. verify_stored_inputs now caches VerifiedRunResult by exact ResolvedRunRef while retaining per-pointer artifact checks.",
       "defect_classification": "framework_gap",
-      "independent_check": "VIPER src/viper/verification.py::verify_stored_inputs and ::verify_promoted_artifact plus the timed Phase 0 graph-evidence run",
+      "independent_check": "VIPER test_stored_inputs_verify_one_shared_producer_run_once at commit 427f189467d0f2787a98bd95a44ee52f720f0a29 and RICO registration attempts 1 through 3",
       "ordinary_check_equivalent": "Correctness tests pass despite the repeated work; a call-count or shared-ancestor performance test is required.",
       "false_alarms": [],
       "infrastructure_failures": [],
       "elapsed_seconds": 288.0,
-      "work_added": "No repair was added during Phase 0; the evidence run exposed the need for per-verification-call producer-run memoization.",
-      "later_reuse": "Memoizing one verified producer result will reduce validation overhead for reconstruction stages that consume many artifacts from one upstream run."
+      "work_added": "Verification gained one execution-local producer map, two private verification steps, and a call-count acceptance test.",
+      "later_reuse": "Reconstruction stages that consume many artifacts from one upstream run verify that producer once per verification pass."
+    },
+    {
+      "check_id": "external-git-retrieval-reuse",
+      "claimed_guarantee": "Verification retrieves exact files from an explicitly trusted external repository and immutable commit.",
+      "observed_result": "The guarantee held, but each file created another temporary Git repository and fetched the same commit. RunFetcher now reuses one verified checkout per repository and commit and retains up to 64 MiB of exact file bytes per execution.",
+      "defect_classification": "framework_gap",
+      "independent_check": "VIPER storage tests for repeated external Git reads and same-commit checkout reuse at commits 08d7874918317d105e7461ca29d6de2deb9041b0 and fe2114ef47261517d0efce02f757b4ab3a041ea4",
+      "ordinary_check_equivalent": "Correctness tests do not detect redundant network retrieval; call-count tests and a timed cross-repository run do.",
+      "false_alarms": [],
+      "infrastructure_failures": [],
+      "elapsed_seconds": 1640.0,
+      "work_added": "RunFetcher gained bounded byte caching and one temporary checkout per external repository and commit.",
+      "later_reuse": "Cross-repository model and evidence runs reuse authenticated Git state throughout one execution."
+    },
+    {
+      "check_id": "declaration-impact-import-alias",
+      "claimed_guarantee": "The change-aware selector widens only when a changed declaration or runtime-dependent caller lacks a reachable observing test.",
+      "observed_result": "The selector treated imported local names as independent callers even though CodeQL connected real callers directly to the changed declaration. Import edges no longer enter the one-hop neighbor set; a changed import remains a target and still widens when unobserved.",
+      "defect_classification": "framework_gap",
+      "independent_check": "VIPER tests/test_impacted_test_selection.py at commit 98dcf0843a6d402db62ef60900e394fe6760d154",
+      "ordinary_check_equivalent": "Only selector-result inspection exposes unnecessary domain widening; product tests still pass.",
+      "false_alarms": [],
+      "infrastructure_failures": [],
+      "elapsed_seconds": 0.11,
+      "work_added": "One edge-kind filter and one import-alias regression test were added.",
+      "later_reuse": "One-hop validation can retain exact node IDs when import bindings are the only non-runtime neighbors."
+    },
+    {
+      "check_id": "spawn-safe-stage-processes",
+      "claimed_guarantee": "Repository-owned child-process launches use VIPER's spawn-safe subprocess facade.",
+      "observed_result": "The repository policy test found direct standard-library subprocess imports in the stage worker and its file-access tests. Both now use the spawn-safe facade.",
+      "defect_classification": "implementation_defect",
+      "independent_check": "VIPER test_repository_launch_sites_use_spawn_safe_subprocess and 33 stage invocation and file-access tests at commit 3383713d7c6c90528b133df4b402d23bb86ddcee",
+      "ordinary_check_equivalent": "The repository AST policy test detects the imports; feature tests alone do not enforce the shared process boundary.",
+      "false_alarms": [],
+      "infrastructure_failures": [],
+      "elapsed_seconds": 4.5,
+      "work_added": "Two modules changed their subprocess import; production behavior continues through the existing facade.",
+      "later_reuse": "Stage source inspection and governed escape tests now share the process-launch policy used elsewhere in VIPER."
+    },
+    {
+      "check_id": "artifact-loader-module-isolation",
+      "claimed_guarantee": "A frozen artifact loader imports and validates its output inside the disposable verification workspace.",
+      "observed_result": "RICO selected register_phase0.py as the loader even though that module imports a sibling file absent from the disposable workspace. RICO now selects a self-contained JSON loader module.",
+      "defect_classification": "implementation_defect",
+      "independent_check": "RICO registration attempt 3 and tests/test_register_phase0.py at commit 3b575be150cfd9691fac75d2b0586af14f665527",
+      "ordinary_check_equivalent": "The unit tests originally inspected the callable but did not execute it from a loader-only workspace; terminal VIPER verification exposed the missing dependency.",
+      "false_alarms": [],
+      "infrastructure_failures": [
+        "The worker returned only artifact.loader: loader import failed, so the retained failure omitted the missing module name."
+      ],
+      "elapsed_seconds": 433.5,
+      "work_added": "RICO added one self-contained JSON loader and bound the output declaration to it.",
+      "later_reuse": "Phase 0 registration and later evidence-only outputs can use the same dependency-free loader."
     }
   ]
 }

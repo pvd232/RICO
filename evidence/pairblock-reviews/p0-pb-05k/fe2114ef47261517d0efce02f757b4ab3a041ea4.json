@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-05K",
+  "requirement_ids": ["P0-REQ-21"],
+  "repository": "https://github.com/pvd232/viper.git",
+  "base_commit": "54f01105cf6c09d4a5c4f44da6064d82152adffd",
+  "result_commit": "fe2114ef47261517d0efce02f757b4ab3a041ea4",
+  "owned_paths": ["src/viper/execution/_source.py", "src/viper/_verification/storage.py", "tests/test_storage.py"],
+  "diff_sha256": "27cf05611e8127b58207e78a528d90c21f6b41851479e5951570f3fb3c352b7e",
+  "invariants": ["One execution reuses a checkout only for equal repository and commit identities.", "Each reused checkout verifies its origin and fetched commit.", "Retained exact file bytes never exceed 64 MiB."],
+  "findings": [{"severity": "P1", "counterexample": "Caching one file still created another checkout for a second file at the same commit.", "repair": "Key one execution-owned checkout by repository and commit, then retrieve each path from that verified checkout.", "status": "repaired", "observing_test": "tests/test_storage.py"}],
+  "mechanical_evidence": {"focused_command": "python -m pytest tests/test_storage.py -k 'external_git' -q", "focused_result": "2 passed, 15 deselected in 1.65 seconds", "ruff": "passed", "git_diff_check": "passed", "upstream_match": "passed", "real_acceptance": "RICO registration attempt 3 reduced the repeated external retrieval path but exposed later producer-verification and loader costs."},
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-13T02:19:30Z"
+}

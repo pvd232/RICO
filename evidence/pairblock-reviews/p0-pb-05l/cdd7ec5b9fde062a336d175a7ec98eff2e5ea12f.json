@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-05L",
+  "requirement_ids": ["P0-REQ-20"],
+  "repository": "https://github.com/pvd232/viper.git",
+  "base_commit": "fe2114ef47261517d0efce02f757b4ab3a041ea4",
+  "result_commit": "cdd7ec5b9fde062a336d175a7ec98eff2e5ea12f",
+  "owned_paths": ["src/viper/inputs.py", "src/viper/benchmark.py", "tests/test_prior_run_inputs.py"],
+  "diff_sha256": "0d088455cda7f6c23fd2b6208a72372201c891a9831d6a4ba7af4c880af84597",
+  "invariants": ["Every stored input materializes beneath inputs/.", "The public authoring call rejects an invalid path before pointer publication.", "Serialized StoredInputRef values enforce the same path rule."],
+  "findings": [{"severity": "P1", "counterexample": "Validating only StoredInputRef would still publish the pointer before constructing that model.", "repair": "Apply one shared validator to RunArtifactDraft and StoredInputRef.", "status": "repaired", "observing_test": "tests/test_prior_run_inputs.py::test_prior_run_input_rejects_non_input_destination_before_pointer_publication"}],
+  "mechanical_evidence": {"focused_command": "python -m pytest tests/test_prior_run_inputs.py -q", "focused_result": "6 passed in 1.15 seconds", "ruff": "passed", "git_diff_check": "passed", "upstream_match": "passed", "real_acceptance": "Future invalid plans fail during run_artifact authoring rather than after model execution."},
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-13T02:19:30Z"
+}
