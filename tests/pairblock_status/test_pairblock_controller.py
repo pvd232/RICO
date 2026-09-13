@@ -1154,38 +1154,38 @@ class TestDeclarationRevision:
             manifest.read_text(encoding="utf-8")
             + """
 
-    [[requirements]]
-    id = "REQ-OTHER"
-    claim = "An independent block retains its own result."
-    phase = 0
-    order = 2
-    depends_on = []
-    gate = { kind = "test", target = "VR-OTHER" }
-    verifier_ids = ["VR-OTHER"]
-    pair_block_ids = ["PB-OTHER"]
+[[requirements]]
+id = "REQ-OTHER"
+claim = "An independent block retains its own result."
+phase = 0
+order = 2
+depends_on = []
+gate = { kind = "test", target = "VR-OTHER" }
+verifier_ids = ["VR-OTHER"]
+pair_block_ids = ["PB-OTHER"]
 
-    [[verifiers]]
-    id = "VR-OTHER"
-    requirement_ids = ["REQ-OTHER"]
-    conditions = ["The independent command passes."]
-    success_case = "The independent receipt records the command."
-    rejection_cases = ["The independent command fails."]
+[[verifiers]]
+id = "VR-OTHER"
+requirement_ids = ["REQ-OTHER"]
+conditions = ["The independent command passes."]
+success_case = "The independent receipt records the command."
+rejection_cases = ["The independent command fails."]
 
-    [[pair_blocks]]
-    id = "PB-OTHER"
-    requirement_ids = ["REQ-OTHER"]
-    depends_on = []
-    section = "0B"
-    repository = "test"
-    source_paths = ["tools/pairblock_status/checklist_profile.py"]
-    test_paths = ["tests/pairblock_status/test_pairblock_controller.py"]
+[[pair_blocks]]
+id = "PB-OTHER"
+requirement_ids = ["REQ-OTHER"]
+depends_on = []
+section = "0B"
+repository = "test"
+source_paths = ["tools/pairblock_status/checklist_profile.py"]
+test_paths = ["tests/pairblock_status/test_pairblock_controller.py"]
 
-    [pair_blocks.gate]
-    repository = "test"
-    working_directory = "."
-    argv = ["python", "-c", "print('2 passed in 0.01s')"]
-    environment = { PYTEST_DISABLE_PLUGIN_AUTOLOAD = "1" }
-    """,
+[pair_blocks.gate]
+repository = "test"
+working_directory = "."
+argv = ["python", "-c", "print('2 passed in 0.01s')"]
+environment = { PYTEST_DISABLE_PLUGIN_AUTOLOAD = "1" }
+""",
             encoding="utf-8",
         )
 
