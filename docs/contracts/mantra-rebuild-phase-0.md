@@ -2516,7 +2516,7 @@ python -m tools.pairblock_status.pairblock_controller advance P0-PB-10F register
 
 #### Manifest-native block P0-PB-10G
 
-**Status:** Review
+**Status:** Applied
 
 **Requirements:**
 
@@ -2532,7 +2532,7 @@ python -m tools.pairblock_status.pairblock_controller advance P0-PB-10F register
 
 **Implementation:** [projection_transaction.py](../../tools/pairblock_status/projection_transaction.py) · [pairblock_controller.py](../../tools/pairblock_status/pairblock_controller.py) · [test_projection_recovery.py](../../tests/pairblock_status/test_projection_recovery.py)
 
-**Current receipt:** [receipt](../../evidence/pairblock-gates/p0-pb-10g/20260913T061324.012802Z.json)
+**Current receipt:** [receipt](../../evidence/pairblock-lifecycle/p0-pb-10g/20260913T061351.350332Z-accept.json)
 
 **Gate:**
 
@@ -2545,7 +2545,7 @@ PYTHONPATH=. /bin/zsh -e -c 'python -m pyright tools/pairblock_status/projection
 
 ```bash
 cd /Users/machina/Developer/ChatGPT/RICO
-python -m tools.pairblock_status.pairblock_controller advance P0-PB-10G approve --evidence-kind KIND --evidence-target TARGET --evidence-revision REVISION
+python -m tools.pairblock_status.pairblock_controller advance P0-PB-10G register --evidence-kind KIND --evidence-target TARGET --evidence-revision REVISION
 ```
 
 #### Manifest-native block P0-PB-10H
