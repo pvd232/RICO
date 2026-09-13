@@ -104,6 +104,7 @@ controls. The completed set contains 27 Hopfield and MIL destinations in
 | `P0-PB-09` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-09/20260913T023141.025582Z-register.json)) | Complete | `P0-PB-07`, `P0-PB-08`, `P0-PB-10` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-09) | [Source](../../tools/freeze_phase0.py) · [Tests](../../tests/test_freeze_phase0.py) |
 | `P0-PB-09A` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-09a/20260913T023141.344319Z-register.json)) | Complete | `P0-PB-07`, `P0-PB-08`, `P0-PB-09` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-09a) | [Source](../../tools/register_phase0.py) · [Loader](../../tools/artifact_loaders.py) · [Tests](../../tests/test_register_phase0.py) · [Terminal receipt](../../evidence/phase0/rico/phase0_registration_receipt.json) |
 | `P0-PB-10` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-10/20260913T023140.710312Z-register.json)) | Complete | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-10) | [Controller](../../tools/pairblock_status/pairblock_controller.py) · [Tests](../../tests/pairblock_status/test_pairblock_controller.py) |
+| `P0-PB-10A` | Passed: `61` tests ([receipt](../../evidence/pairblock-gates/p0-pb-10a/20260913T024406.546356Z.json)) | Review | `P0-PB-10` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-10a) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-10a-proposed-code) |
 
 ## Terminal outcome
 
@@ -219,6 +220,7 @@ This table schedules every requirement in the approved Phase 0 contract once.
 | `P0-REQ-22` | Complete | 0C | None | Equal producer-run references share one verified producer result while artifact checks remain per pointer. |
 | `P0-REQ-23` | Complete | 0C | None | Import bindings do not cause domain widening when CodeQL already identifies the runtime callers. |
 | `P0-REQ-24` | Complete | 0C | None | Repository-owned stage process calls use the spawn-safe subprocess facade. |
+| `P0-REQ-25` | In progress | 0C | `P0-REQ-10` | A named pre-protocol PairBlock closes only from a reasoned certification receipt bound to the terminal Phase 0 artifact. |
 
 ## Phase 0A. Verify the MANTRA workspace and environment
 
@@ -334,6 +336,10 @@ definitions in RICO.
       VIPER.
       <!-- pair-block: P0-PB-10 -->
       <!-- pair-block-contract: P0-PB-10 contract=docs/contracts/mantra-rebuild-phase-0.md -->
+- [ ] Certify the four named pre-protocol PairBlocks from the terminal Phase 0
+      artifact in `P0-PB-10A`.
+      <!-- pair-block: P0-PB-10A -->
+      <!-- pair-block-contract: P0-PB-10A contract=docs/contracts/mantra-rebuild-phase-0.md -->
 
 **Gate:** Run the MANTRA restoration and capacity tests and the separate
 `P0-PB-05C` VIPER focused check. The tests must reject malformed paths,

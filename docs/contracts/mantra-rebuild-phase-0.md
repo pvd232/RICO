@@ -54,6 +54,7 @@ The [Mantra rebuild master checklist](../checklists/mantra-rebuild.md) owns exec
 | `P0-REQ-22` | Verify one exact producer run once while one verification pass checks several pointers into that run. | [`P0-PB-05M`](#p0-pb-05m) |
 | `P0-REQ-23` | Exclude imported local names from a changed declaration's runtime-dependent one-hop callers. | [`P0-PB-05N`](#p0-pb-05n) |
 | `P0-REQ-24` | Route repository-owned stage-worker child processes through VIPER's spawn-safe subprocess facade. | [`P0-PB-05O`](#p0-pb-05o) |
+| `P0-REQ-25` | Certify a named legacy PairBlock from one retained terminal artifact while preserving its incomplete historical receipt chain and recording the reason for the exception. | [`P0-PB-10A`](#p0-pb-10a) |
 
 ## 2. Required claim
 
@@ -295,12 +296,13 @@ The dependency graph, restoration bindings, environment receipt, capacity receip
 | `P0-VR-21` | `verify_stored_inputs()` calls producer-run verification once for equal `ResolvedRunRef` values and still checks each selected artifact, data role, and materialization path. | [`P0-PB-05M`](#p0-pb-05m) |
 | `P0-VR-22` | An `imports` edge does not create an independent one-hop caller for its target. An import selected as the changed declaration still requires a reachable test or domain fallback. | [`P0-PB-05N`](#p0-pb-05n) |
 | `P0-VR-23` | The repository AST policy finds no direct standard-library `subprocess` import outside the facade and its own observer test; stage source inspection and file-access tests pass through the facade. | [`P0-PB-05O`](#p0-pb-05o) |
+| `P0-VR-24` | The `certify` event accepts only a PairBlock named by `ChecklistProfile.legacy_certifiable_pair_blocks`, requires `artifact` evidence and a nonempty reason, preserves any existing receipt link, and produces the same derived `Complete` state as an ordinary completion receipt. | [`P0-PB-10A`](#p0-pb-10a) |
 
 ## 8. Acceptance boundary
 
 ### Success
 
-Phase 0 passes when `P0-VR-01` through `P0-VR-23` pass, every required provenance record exists in VIPER, the user reviews the complete evidence set, and the repository contains a synced commit recording the approved contract and Phase 0 receipts.
+Phase 0 passes when `P0-VR-01` through `P0-VR-24` pass, every required provenance record exists in VIPER, the user reviews the complete evidence set, and the repository contains a synced commit recording the approved contract and Phase 0 receipts.
 
 ### Rejection
 
@@ -334,6 +336,7 @@ Phase 0 fails when $B$ contains an unnecessary node, omits a required node or ed
 | `P0-PB-09` | Phase 0 evidence freeze and usefulness assessment | `P0-VR-09` and user approval. |
 | `P0-PB-09A` | RICO-rooted registration of the frozen Phase 0 evidence | `P0-VR-09`. |
 | `P0-PB-10` | Traceability validation, proposal-gate receipts, and legal checklist transitions | `P0-VR-10`. |
+| `P0-PB-10A` | Explicit certification of named pre-protocol PairBlocks | `P0-VR-24`. |
 
 ### Phase 0 ownership record
 
@@ -369,6 +372,7 @@ Resolution status lives in the [master checklist](../checklists/mantra-rebuild.m
 | [`P0-PB-09`](../checklists/mantra-rebuild.md#pairblock-resolution) | Freeze evidence and assess VIPER. | Codex implemented and independently reviewed RICO commit `64964135`. | [Source](../../tools/freeze_phase0.py) · [Tests](../../tests/test_freeze_phase0.py) · [Review](../../evidence/pairblock-reviews/p0-pb-09/64964135b66a4706501d9e768527241941397566.json) | `P0-VR-09` |
 | [`P0-PB-09A`](../checklists/mantra-rebuild.md#pairblock-resolution) | Register and verify the frozen evidence through VIPER. | Codex implemented and independently reviewed RICO through commit `3b575be1`; the real run supplies completion evidence. | [Source](../../tools/register_phase0.py) · [Loader](../../tools/artifact_loaders.py) · [Tests](../../tests/test_register_phase0.py) · [Latest review](../../evidence/pairblock-reviews/p0-pb-09a/3b575be150cfd9691fac75d2b0586af14f665527.json) | `P0-VR-09` |
 | [`P0-PB-10`](../checklists/mantra-rebuild.md#pairblock-resolution) | Validate PairBlock traceability and retain each tested-code or externally reviewed non-code lifecycle transition. | RICO owns the active controller; the user reviews lifecycle changes. | [Active source and tests](#p0-pb-10-accepted-implementation) | `P0-VR-10` |
+| [`P0-PB-10A`](../checklists/mantra-rebuild.md#pairblock-resolution) | Certify the four applied PairBlocks whose preserved records predate the active receipt chain. | Codex implements and independently reviews the compatibility path. | [Implementation and gate](#p0-pb-10a-implementation-record) | `P0-VR-24` |
 
 ### Blocks
 
@@ -874,6 +878,7 @@ choices.
 | [`P0-PB-09`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../tools/freeze_phase0.py) · [Tests](../../tests/test_freeze_phase0.py) · [Gate](#p0-pb-09-accepted-implementation) · [Review](../../evidence/pairblock-reviews/p0-pb-09/64964135b66a4706501d9e768527241941397566.json) |
 | [`P0-PB-09A`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Source](../../tools/register_phase0.py) · [Loader](../../tools/artifact_loaders.py) · [Tests](../../tests/test_register_phase0.py) · [Gate](#p0-pb-09a-accepted-implementation) · [Latest review](../../evidence/pairblock-reviews/p0-pb-09a/3b575be150cfd9691fac75d2b0586af14f665527.json) |
 | [`P0-PB-10`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Active implementation](#p0-pb-10-accepted-implementation) |
+| [`P0-PB-10A`](../checklists/mantra-rebuild.md#pairblock-resolution) | [Controller](../../tools/pairblock_status/pairblock_controller.py) · [Profile](../../tools/pairblock_status/profile.py) · [Validator](../../tools/pairblock_status/checklist_profile.py) · [Tests](../../tests/pairblock_status/test_pairblock_controller.py) · [Gate](#p0-pb-10a-implementation-record) |
 
 A pending row links its block definition and checklist state while omitting an implementation body.
 
@@ -2053,6 +2058,46 @@ focused RICO check passes `54` cases. Historical receipts retain the paths and
 file identities captured when they were written; current links resolve to the
 accepted functional paths above. The [master-checklist resolution table](../checklists/mantra-rebuild.md#pairblock-resolution)
 owns the current lifecycle state and links its supporting receipt.
+
+#### P0-PB-10A
+
+Certify the four named pre-protocol PairBlocks from the terminal Phase 0
+registration artifact. [Inspect the implementation and gate](#p0-pb-10a-implementation-record).
+
+### P0-PB-10A implementation record
+
+**Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
+
+**Requirement:** Close only the four named Phase 0 PairBlocks whose accepted
+implementations predate the active receipt chain. Preserve their historical
+receipts and attach the terminal Phase 0 artifact plus an explicit reason to
+each certification receipt.
+
+##### `P0-PB-10A` proposed code
+
+**Code boundary:** [lifecycle policy](../../tools/pairblock_status/profile.py),
+[controller](../../tools/pairblock_status/pairblock_controller.py),
+[completion validator](../../tools/pairblock_status/checklist_profile.py),
+[fixture profile](../../tests/pairblock_status/conftest.py), and
+[observing tests](../../tests/pairblock_status/test_pairblock_controller.py).
+
+**Focused check:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/RICO
+python -m ruff check tools/pairblock_status tests/pairblock_status
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+python -m pytest tests/pairblock_status/test_pairblock_controller.py -q
+```
+
+**Gate:** A named legacy block reaches `Complete` from `Applied` through one
+`certify` receipt. The receipt requires `artifact` evidence and a nonempty
+reason, retains the prior receipt link when one exists, and updates the
+checkbox, requirement, and contract state. The controller rejects certification
+for every PairBlock absent from `legacy_certifiable_pair_blocks`.
+
+**Stop condition:** Keep each legacy block `Applied` when its terminal artifact
+is absent, its reason is empty, or the profile does not name its PairBlock ID.
 
 ## 11. Sources
 

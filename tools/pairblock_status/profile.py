@@ -20,12 +20,14 @@ class LifecyclePolicy:
         drafting_status: Status assigned while Codex prepares a proposal.
         review_status: Status assigned after the proposal gate passes.
         proposal_gate_states: Statuses from which the proposal gate may run.
-        non_code_review_event: Event that submits a block without runnable code.
+        non_code_review_event: Event that submits a documentation-only block.
         non_code_complete_event: Event that accepts that reviewed block.
         transitions: Evidence events paired with their required current and
             resulting statuses.
         resolved_dependency_states: Statuses that make a dependent PairBlock
             ready for drafting.
+        legacy_certification_event: Event that closes an applied block whose
+            preserved receipts predate the active lifecycle policy.
     """
 
     normalized_states: tuple[tuple[str, str], ...]
@@ -37,6 +39,7 @@ class LifecyclePolicy:
     non_code_complete_event: str
     transitions: tuple[tuple[str, str, str], ...]
     resolved_dependency_states: frozenset[str]
+    legacy_certification_event: str | None = None
 
     def __post_init__(self) -> None:
         """Reject ambiguous labels and transitions when the profile is created."""
@@ -55,6 +58,8 @@ class LifecyclePolicy:
             self.non_code_complete_event,
             *(event for event, _, _ in self.transitions),
         ]
+        if self.legacy_certification_event is not None:
+            transition_events.append(self.legacy_certification_event)
         if len(transition_events) != len(set(transition_events)):
             raise ValueError("lifecycle transition events must be unique")
         if any(not event for event in transition_events):
@@ -118,6 +123,11 @@ class LifecyclePolicy:
             self.review_status,
             self.complete_status,
         )
+        if self.legacy_certification_event is not None:
+            transitions[self.legacy_certification_event] = (
+                self.transitions[-1][1],
+                self.complete_status,
+            )
         try:
             before, after = transitions[event]
         except KeyError as error:
@@ -136,15 +146,18 @@ class LifecyclePolicy:
     def transition_events(self) -> tuple[str, ...]:
         """Return legal evidence events in lifecycle order."""
 
-        return (
+        events = (
             self.non_code_review_event,
             self.non_code_complete_event,
             *(event for event, _, _ in self.transitions),
         )
+        if self.legacy_certification_event is None:
+            return events
+        return (*events, self.legacy_certification_event)
 
     @property
     def non_code_transitions(self) -> tuple[tuple[str, str, str], ...]:
-        """Return the external-review route for a block without runnable code."""
+        """Return the external-review route for a documentation-only block."""
 
         return (
             (
@@ -169,6 +182,17 @@ class LifecyclePolicy:
             return self.non_code_transitions
         if final_event == self.transitions[-1][0]:
             return self.transitions
+        if (
+            self.legacy_certification_event is not None
+            and final_event == self.legacy_certification_event
+        ):
+            return (
+                (
+                    self.legacy_certification_event,
+                    self.transitions[-1][1],
+                    self.complete_status,
+                ),
+            )
         raise ValueError(f"unknown completion event: {final_event}")
 
 
@@ -188,6 +212,8 @@ class ChecklistProfile:
         lifecycle: Project status vocabulary and legal gate transitions.
         proposal_source_roots: Paths, resolved from the checklist repository,
             that may own reviewed proposal files.
+        legacy_certifiable_pair_blocks: Applied blocks permitted to use the
+            lifecycle policy's exceptional certification event.
     """
 
     checklist_path: Path
@@ -200,6 +226,7 @@ class ChecklistProfile:
     phase_pattern: str
     lifecycle: LifecyclePolicy
     proposal_source_roots: tuple[Path, ...] = ()
+    legacy_certifiable_pair_blocks: frozenset[str] = frozenset()
 
     def __post_init__(self) -> None:
         """Reject invalid paths, identities, and identifier expressions."""
@@ -213,6 +240,15 @@ class ChecklistProfile:
         for source_root in self.proposal_source_roots:
             if source_root.is_absolute():
                 raise ValueError("proposal_source_roots must be repository-relative")
+        invalid_legacy_ids = sorted(
+            value
+            for value in self.legacy_certifiable_pair_blocks
+            if not self.accepts_pair_block_id(value)
+        )
+        if invalid_legacy_ids:
+            raise ValueError(
+                f"invalid legacy-certifiable PairBlock IDs: {invalid_legacy_ids}"
+            )
         for label, value in (
             ("checklist_id", self.checklist_id),
             ("contract_id", self.contract_id),
@@ -285,6 +321,10 @@ MANTRA_PHASE0_PROFILE = ChecklistProfile(
             ("register", "Applied", "Complete"),
         ),
         resolved_dependency_states=frozenset({"Applied", "Complete"}),
+        legacy_certification_event="certify",
     ),
     proposal_source_roots=(Path("../mantra"), Path("../viper")),
+    legacy_certifiable_pair_blocks=frozenset(
+        {"P0-PB-01", "P0-PB-04A", "P0-PB-04B", "P0-PB-05A"}
+    ),
 )

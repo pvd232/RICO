@@ -32,6 +32,7 @@ from tools.pairblock_status.checklist_profile import (
     MANTRA_PHASE0_ADAPTER,
     MarkdownChecklistAdapter,
 )
+from tools.pairblock_status.execution_identity import sha256_file
 from tools.pairblock_status.pairblock_controller import (
     DEFAULT_MASTER_CHECKLIST_VALIDATOR,
     EvidenceRef,
@@ -74,18 +75,28 @@ def advance_test_block(
     event: str,
     *,
     evidence_kind: str = "external",
+    certification_reason: str | None = None,
 ) -> Path:
     """Advance the test PairBlock with one compact evidence reference."""
 
+    target = f"{event} evidence"
+    revision = "test-revision"
+    if evidence_kind == "artifact":
+        artifact = repository / "evidence" / "terminal.json"
+        artifact.parent.mkdir(parents=True, exist_ok=True)
+        artifact.write_text('{"passed": true}\n', encoding="utf-8")
+        target = artifact.relative_to(repository).as_posix()
+        revision = sha256_file(artifact)
     return advance_pairblock(
         repository,
         PAIR_BLOCK_ID,
         event,
         EvidenceRef(
             kind=evidence_kind,
-            target=f"{event} evidence",
-            revision="test-revision",
+            target=target,
+            revision=revision,
         ),
+        certification_reason=certification_reason,
         now=NOW,
         adapter=TEST_ADAPTER,
     )
@@ -122,7 +133,7 @@ def test_profile_fixture_compiles_with_global_validator(
 
 
 def test_lifecycle_policy_rejects_undeclared_transition_status() -> None:
-    """Reject a transition whose status has no normalized-state definition."""
+    """Reject a transition whose status lacks a normalized-state definition."""
 
     with pytest.raises(ValueError, match="undeclared statuses"):
         replace(TEST_PROFILE.lifecycle, review_status="Unlisted")
@@ -463,6 +474,110 @@ def test_completion_rejects_a_broken_receipt_chain(
         validate_test_repository(repository)
 
 
+def test_legacy_certification_closes_one_named_applied_block(
+    repository_factory: RepositoryFactory,
+) -> None:
+    """Close a named legacy block while preserving its existing receipt."""
+
+    repository = repository_factory(command=passing_command())
+    run_test_gate(repository)
+    advance_test_block(repository, "approve")
+    accepted = advance_test_block(repository, "accept")
+
+    certified = advance_test_block(
+        repository,
+        "certify",
+        evidence_kind="artifact",
+        certification_reason="The retained approval predates receipt chaining.",
+    )
+    receipt = json.loads(certified.read_text(encoding="utf-8"))
+    rows, manifest = validate_test_repository(repository)
+
+    assert receipt["previous_receipt"].endswith(accepted.name)
+    assert receipt["schema_version"] == 2
+    assert receipt["certification_reason"].startswith("The retained approval")
+    assert rows[PAIR_BLOCK_ID].status == "Complete"
+    assert manifest["pair_blocks"][0]["state"] == "complete"
+
+
+@pytest.mark.parametrize(
+    ("evidence_kind", "reason", "message"),
+    [
+        ("external", "Historical chain.", "requires artifact evidence"),
+        ("artifact", None, "requires a reason"),
+    ],
+)
+def test_legacy_certification_requires_artifact_and_reason(
+    repository_factory: RepositoryFactory,
+    evidence_kind: str,
+    reason: str | None,
+    message: str,
+) -> None:
+    """Require artifact evidence and a reason for compatibility closure."""
+
+    repository = repository_factory(command=passing_command())
+    run_test_gate(repository)
+    advance_test_block(repository, "approve")
+    advance_test_block(repository, "accept")
+
+    with pytest.raises(PairBlockGateError, match=message):
+        advance_test_block(
+            repository,
+            "certify",
+            evidence_kind=evidence_kind,
+            certification_reason=reason,
+        )
+
+
+def test_legacy_certification_rejects_an_unnamed_block(
+    repository_factory: RepositoryFactory,
+) -> None:
+    """Keep compatibility closure limited to the profile's explicit set."""
+
+    repository = repository_factory(command=passing_command())
+    run_test_gate(repository)
+    advance_test_block(repository, "approve")
+    advance_test_block(repository, "accept")
+    adapter = replace(
+        TEST_ADAPTER,
+        profile=replace(TEST_PROFILE, legacy_certifiable_pair_blocks=frozenset()),
+    )
+
+    with pytest.raises(PairBlockGateError, match="not approved"):
+        advance_pairblock(
+            repository,
+            PAIR_BLOCK_ID,
+            "certify",
+            EvidenceRef("artifact", "terminal receipt", "test-revision"),
+            certification_reason="Historical chain.",
+            now=NOW,
+            adapter=adapter,
+        )
+
+
+def test_legacy_certification_rejects_a_changed_terminal_artifact(
+    repository_factory: RepositoryFactory,
+) -> None:
+    """Reject a completed legacy block after its terminal artifact changes."""
+
+    repository = repository_factory(command=passing_command())
+    run_test_gate(repository)
+    advance_test_block(repository, "approve")
+    advance_test_block(repository, "accept")
+    advance_test_block(
+        repository,
+        "certify",
+        evidence_kind="artifact",
+        certification_reason="The retained approval predates receipt chaining.",
+    )
+    (repository / "evidence" / "terminal.json").write_text(
+        '{"passed": false}\n', encoding="utf-8"
+    )
+
+    with pytest.raises(PairBlockGateError, match="artifact differs"):
+        validate_test_repository(repository)
+
+
 def test_illegal_lifecycle_event_changes_no_status(
     repository_factory: RepositoryFactory,
 ) -> None:
@@ -596,7 +711,7 @@ def test_html_declaration_anchor_is_not_a_navigation_target(
 def test_broken_document_fragment_is_rejected(
     repository_factory: RepositoryFactory,
 ) -> None:
-    """Reject any contract or checklist link that names no native heading."""
+    """Reject a contract or checklist link that misses every native heading."""
 
     repository = repository_factory(command=passing_command())
     checklist = repository / CHECKLIST_PATH
@@ -861,7 +976,7 @@ def test_every_contract_pair_block_requires_one_status_row(
 def test_unresolved_pair_block_dependency_blocks_gate(
     repository_factory: RepositoryFactory,
 ) -> None:
-    """Do not run a proposal whose declared predecessor remains in drafting."""
+    """Block a proposal while its declared predecessor remains in drafting."""
 
     dependency = PairBlockFixture(
         DEPENDENCY_PAIR_BLOCK_ID,

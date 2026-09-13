@@ -27,6 +27,7 @@ from .execution_identity import (
     capture_execution_identity,
     compare_execution_identities,
     sha256_bytes,
+    sha256_file,
 )
 from .profile import ChecklistProfile
 
@@ -102,7 +103,7 @@ class EvidenceRef:
     revision: str
 
     def __post_init__(self) -> None:
-        """Reject evidence that the global manifest cannot represent."""
+        """Require evidence that the global manifest can represent."""
 
         if self.kind not in {"artifact", "command", "external", "test"}:
             raise PairBlockGateError(f"invalid evidence kind: {self.kind}")
@@ -127,6 +128,8 @@ class LifecycleReceipt:
         checklist_written_sha256: Digest of the projected checklist, if valid.
         evidence: Observation that authorizes this event.
         previous_receipt: Receipt linked by the previous status row, if any.
+        certification_reason: Explanation of the historical-chain defect that
+            authorizes certification for one named legacy block.
     """
 
     schema_version: int
@@ -141,6 +144,7 @@ class LifecycleReceipt:
     checklist_written_sha256: str | None
     evidence: EvidenceRef
     previous_receipt: str | None
+    certification_reason: str | None = None
 
 
 def _atomic_write(path: Path, content: bytes) -> None:
@@ -163,12 +167,21 @@ def _atomic_write(path: Path, content: bytes) -> None:
             temporary.unlink()
 
 
+def _lifecycle_receipt_bytes(receipt: LifecycleReceipt) -> bytes:
+    """Serialize a lifecycle receipt while preserving the version-1 field set."""
+
+    payload = asdict(receipt)
+    if receipt.certification_reason is None:
+        payload.pop("certification_reason")
+    return (json.dumps(payload, indent=2, sort_keys=True) + "\n").encode()
+
+
 def _reject_nested_conda_run(command: str) -> None:
     """Reject a Conda-owned gate that would invoke another ``conda run``.
 
     A proposal command owns its declared environment. Starting this controller
     inside a different non-base Conda environment can cause a nested
-    ``conda run`` to reuse the controller interpreter instead of the declared
+    ``conda run`` to reuse the controller interpreter in place of the declared
     target. Refusing that launch preserves the proposal's runtime boundary.
     """
 
@@ -201,6 +214,24 @@ def _require_resolved_dependencies(
                 f"{row.pair_block_id} dependency {dependency} is not resolved: "
                 f"{dependency_status}"
             )
+
+
+def _require_certification_artifact(
+    repository: Path,
+    evidence: EvidenceRef,
+) -> None:
+    """Require one repository artifact whose bytes match its evidence revision."""
+
+    target = Path(evidence.target)
+    if target.is_absolute() or ".." in target.parts:
+        raise PairBlockGateError(
+            "legacy certification artifact must be repository-relative"
+        )
+    resolved = (repository / target).resolve()
+    if not resolved.is_relative_to(repository) or not resolved.is_file():
+        raise PairBlockGateError("legacy certification artifact is missing")
+    if sha256_file(resolved) != evidence.revision:
+        raise PairBlockGateError("legacy certification artifact digest differs")
 
 
 def run_gate(
@@ -361,6 +392,7 @@ def advance_pairblock(
     event: str,
     evidence: EvidenceRef,
     *,
+    certification_reason: str | None = None,
     now: datetime | None = None,
     validator_path: Path = DEFAULT_MASTER_CHECKLIST_VALIDATOR,
     adapter: MarkdownChecklistAdapter = MANTRA_PHASE0_ADAPTER,
@@ -384,6 +416,24 @@ def advance_pairblock(
         profile.lifecycle.non_code_review_event,
         profile.lifecycle.non_code_complete_event,
     }
+    is_legacy_certification = (
+        profile.lifecycle.legacy_certification_event is not None
+        and event == profile.lifecycle.legacy_certification_event
+    )
+    if is_legacy_certification:
+        if pair_block_id not in profile.legacy_certifiable_pair_blocks:
+            raise PairBlockGateError(
+                f"{pair_block_id} is not approved for legacy certification"
+            )
+        if evidence.kind != "artifact":
+            raise PairBlockGateError("legacy certification requires artifact evidence")
+        if certification_reason is None or not certification_reason.strip():
+            raise PairBlockGateError("legacy certification requires a reason")
+        _require_certification_artifact(repository, evidence)
+    elif certification_reason is not None:
+        raise PairBlockGateError(
+            "certification reason is valid only for legacy certification"
+        )
     if event in non_code_events:
         if adapter.has_proposed_code(row):
             raise PairBlockGateError(
@@ -422,7 +472,7 @@ def advance_pairblock(
         text=True,
     ).stdout.strip()
     receipt = LifecycleReceipt(
-        schema_version=1,
+        schema_version=2 if is_legacy_certification else 1,
         pair_block_id=pair_block_id,
         event=event,
         result="applied",
@@ -434,10 +484,11 @@ def advance_pairblock(
         checklist_written_sha256=None,
         evidence=evidence,
         previous_receipt=adapter.current_receipt(row),
+        certification_reason=certification_reason,
     )
     _atomic_write(
         receipt_path,
-        (json.dumps(asdict(receipt), indent=2, sort_keys=True) + "\n").encode(),
+        _lifecycle_receipt_bytes(receipt),
     )
 
     try:
@@ -464,7 +515,7 @@ def advance_pairblock(
         rejected = replace(receipt, result="rejected")
         _atomic_write(
             receipt_path,
-            (json.dumps(asdict(rejected), indent=2, sort_keys=True) + "\n").encode(),
+            _lifecycle_receipt_bytes(rejected),
         )
         raise
 
@@ -474,7 +525,7 @@ def advance_pairblock(
     )
     _atomic_write(
         receipt_path,
-        (json.dumps(asdict(receipt), indent=2, sort_keys=True) + "\n").encode(),
+        _lifecycle_receipt_bytes(receipt),
     )
     _atomic_write(checklist_path, checklist_after)
     adapter.validate_traceability(
@@ -506,6 +557,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     advance.add_argument("--evidence-kind", required=True)
     advance.add_argument("--evidence-target", required=True)
     advance.add_argument("--evidence-revision", required=True)
+    advance.add_argument("--certification-reason")
     arguments = parser.parse_args(argv)
     if arguments.operation == "gate":
         receipt_path = run_gate(
@@ -523,6 +575,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 target=arguments.evidence_target,
                 revision=arguments.evidence_revision,
             ),
+            certification_reason=arguments.certification_reason,
             validator_path=arguments.master_validator,
         )
     receipt = json.loads(receipt_path.read_text(encoding="utf-8"))

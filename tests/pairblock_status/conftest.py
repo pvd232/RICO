@@ -64,7 +64,9 @@ TEST_PROFILE = ChecklistProfile(
             ("register", "Applied", "Complete"),
         ),
         resolved_dependency_states=frozenset({"Applied", "Complete"}),
+        legacy_certification_event="certify",
     ),
+    legacy_certifiable_pair_blocks=frozenset({PAIR_BLOCK_ID}),
 )
 
 TEST_DIALECT = MarkdownChecklistDialect(

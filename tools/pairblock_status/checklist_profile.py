@@ -997,6 +997,67 @@ def _validate_completion_chain(
             f"completion receipt is not an object for {pair_block_id}"
         )
     final = current
+    is_legacy_certification = (
+        profile.lifecycle.legacy_certification_event is not None
+        and current.get("event") == profile.lifecycle.legacy_certification_event
+    )
+    if is_legacy_certification:
+        if pair_block_id not in profile.legacy_certifiable_pair_blocks:
+            raise PairBlockGateError(
+                f"legacy certification is not approved for {pair_block_id}"
+            )
+        if current.get("schema_version") != 2:
+            raise PairBlockGateError(
+                f"legacy certification schema differs for {pair_block_id}"
+            )
+        expected_before = profile.lifecycle.transitions[-1][1]
+        if (
+            current.get("pair_block_id") != pair_block_id
+            or current.get("result") != "applied"
+            or current.get("status_before") != expected_before
+            or current.get("status_after") != profile.lifecycle.complete_status
+        ):
+            raise PairBlockGateError(
+                f"legacy certification differs for {pair_block_id}"
+            )
+        reason = current.get("certification_reason")
+        if not isinstance(reason, str) or not reason.strip():
+            raise PairBlockGateError(
+                f"legacy certification lacks a reason for {pair_block_id}"
+            )
+        evidence = current.get("evidence")
+        if (
+            not isinstance(evidence, dict)
+            or set(evidence) != {"kind", "target", "revision"}
+            or evidence.get("kind") != "artifact"
+            or not isinstance(evidence.get("target"), str)
+            or not evidence["target"].strip()
+            or not isinstance(evidence.get("revision"), str)
+            or not evidence["revision"].strip()
+        ):
+            raise PairBlockGateError(
+                f"legacy certification lacks artifact evidence for {pair_block_id}"
+            )
+        target = Path(evidence["target"])
+        resolved_target = (repository / target).resolve()
+        if (
+            target.is_absolute()
+            or ".." in target.parts
+            or not resolved_target.is_relative_to(repository)
+            or not resolved_target.is_file()
+            or sha256_file(resolved_target) != evidence["revision"]
+        ):
+            raise PairBlockGateError(
+                f"legacy certification artifact differs for {pair_block_id}"
+            )
+        previous = current.get("previous_receipt")
+        if previous is not None:
+            if not isinstance(previous, str) or not previous:
+                raise PairBlockGateError(
+                    f"legacy certification has an invalid predecessor for {pair_block_id}"
+                )
+            _load_receipt(repository, checklist_path, previous)
+        return final
     try:
         transitions = profile.lifecycle.completion_transitions(current.get("event"))
     except ValueError as error:
