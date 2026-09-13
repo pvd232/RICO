@@ -2621,7 +2621,7 @@ python -m tools.pairblock_status.pairblock_controller advance P0-PB-10I register
 
 #### Manifest-native block P0-PB-10J
 
-**Status:** Drafting
+**Status:** Applied
 
 **Requirements:**
 
@@ -2637,7 +2637,7 @@ python -m tools.pairblock_status.pairblock_controller advance P0-PB-10I register
 
 **Implementation:** [profile.py](../../tools/pairblock_status/profile.py) · [pairblock_controller.py](../../tools/pairblock_status/pairblock_controller.py) · [checklist_profile.py](../../tools/pairblock_status/checklist_profile.py) · [conftest.py](../../tests/pairblock_status/conftest.py) · [test_pairblock_controller.py](../../tests/pairblock_status/test_pairblock_controller.py)
 
-**Current receipt:** None
+**Current receipt:** [receipt](../../evidence/pairblock-lifecycle/p0-pb-10j/20260913T062009.909781Z-accept.json)
 
 **Gate:**
 
@@ -2650,7 +2650,7 @@ PYTHONPATH=. /bin/zsh -e -c 'python -m pyright tools/pairblock_status/profile.py
 
 ```bash
 cd /Users/machina/Developer/ChatGPT/RICO
-python -m tools.pairblock_status.pairblock_controller gate P0-PB-10J
+python -m tools.pairblock_status.pairblock_controller advance P0-PB-10J register --evidence-kind KIND --evidence-target TARGET --evidence-revision REVISION
 ```
 <!-- generated:manifest-native-contract:end -->
 
