@@ -17,6 +17,7 @@ from viper.repository import read_source
 from viper.runtime import LocalEnvSpec, observe_python_env
 from viper.stages import StageContext, build
 
+from tools.artifact_loaders import load_json
 from tools.freeze_phase0 import REQUIRED_EVIDENCE_ROLES, sha256_file
 
 RESTORATION_BUNDLE_FILES = {
@@ -41,12 +42,6 @@ PRIOR_RUN_EVIDENCE_ROLES = frozenset(
 
 class Phase0RegistrationError(RuntimeError):
     """Report disagreement between the index and a registered evidence input."""
-
-
-def load_json(path: Path) -> object:
-    """Load one JSON evidence artifact."""
-
-    return json.loads(path.read_text(encoding="utf-8"))
 
 
 def _identity(path: Path) -> dict[str, object]:

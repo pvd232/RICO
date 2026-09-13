@@ -11,6 +11,7 @@ from viper.artifacts import StageArtifactRef
 from viper.authoring import input, run_artifact
 from viper.references import LocalFileRef, ResolvedRunRef
 
+from tools.artifact_loaders import load_json
 from tools.freeze_phase0 import REQUIRED_EVIDENCE_ROLES, sha256_file
 from tools.register_phase0 import (
     DIRECT_EVIDENCE_ROLES,
@@ -92,7 +93,7 @@ def declared_stage_inputs(tmp_path: Path) -> dict[str, object]:
         stage_inputs[name] = run_artifact(
             run,
             StageArtifactRef(stage_id="build", artifact_name=name),
-            path=f"evidence/{name}.json",
+            path=f"inputs/evidence/{name}.json",
             data_role="benchmark",
         )
     return stage_inputs
@@ -153,6 +154,7 @@ def test_declares_one_governed_registration_stage(tmp_path: Path) -> None:
     assert set(registration.spec.inputs) == REQUIRED_STAGE_INPUTS
     assert set(registration.spec.outputs.keys()) == {"receipt"}
     assert registration.spec.file_access == "declared"
+    assert registration.spec.outputs["receipt"].loader is load_json
     assert study.variants["complete"].estimator == registration.outputs["receipt"]
     assert DIRECT_EVIDENCE_ROLES < REQUIRED_STAGE_INPUTS
 
