@@ -84,10 +84,13 @@ def test_freezes_every_required_role_across_repository_owners(tmp_path: Path) ->
     """Retain a portable identity for every contract-required evidence role."""
 
     payload = freeze_fixture(tmp_path)
+    evidence = payload["evidence"]
 
-    assert set(payload["evidence"]) == REQUIRED_EVIDENCE_ROLES
+    assert isinstance(evidence, dict)
+    assert set(evidence) == REQUIRED_EVIDENCE_ROLES
     assert payload["schema_version"] == "rico.phase0_evidence.v1"
-    assert {item["repository"] for item in payload["evidence"].values()} == {
+    assert all(isinstance(item, dict) for item in evidence.values())
+    assert {item["repository"] for item in evidence.values()} == {
         "rico",
         "mantra",
     }

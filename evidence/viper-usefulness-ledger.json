@@ -10,7 +10,9 @@
     "external-git-retrieval-reuse",
     "declaration-impact-import-alias",
     "spawn-safe-stage-processes",
-    "artifact-loader-module-isolation"
+    "artifact-loader-module-isolation",
+    "multi-artifact-declared-layout",
+    "declared-artifact-path-retention"
   ],
   "assessments": [
     {
@@ -148,6 +150,34 @@
       "elapsed_seconds": 433.5,
       "work_added": "RICO added one self-contained JSON loader and bound the output declaration to it.",
       "later_reuse": "Phase 0 registration and later evidence-only outputs can use the same dependency-free loader."
+    },
+    {
+      "check_id": "multi-artifact-declared-layout",
+      "claimed_guarantee": "One restore operation can materialize several selected artifacts beneath one destination using the filenames declared by their producing stages.",
+      "observed_result": "VIPER previously accepted several selectors but exposed one output root without a declared-layout operation. The repaired restore planner indexes the selected outputs once, rejects overlapping destinations, and restores each artifact to its declared relative path.",
+      "defect_classification": "framework_gap",
+      "independent_check": "VIPER tests/test_storage.py and RICO evidence/viper-assessments/p0-pb-05q-retained-path.json",
+      "ordinary_check_equivalent": "A replay integration test could expose duplicate restore calls or incorrect names; focused storage tests establish the general multi-artifact rule.",
+      "false_alarms": [],
+      "infrastructure_failures": [],
+      "elapsed_seconds": 3.790067,
+      "work_added": "The restore API gained a declared layout, collision validation, documentation, and focused storage tests.",
+      "later_reuse": "Hopfield replay restores its prediction archive and parity receipt through one restore call; later model runs can restore any typed output set the same way."
+    },
+    {
+      "check_id": "declared-artifact-path-retention",
+      "claimed_guarantee": "A frozen artifact preserves the path declared by its author separately from the path used to store immutable run bytes.",
+      "observed_result": "The first restore implementation tried to recover the declared filename from the run-owned storage path. A live Hopfield replay exposed that the frozen path had already been rewritten beneath the run artifact namespace. Resolved artifacts now retain relative_path and validation joins it explicitly to the immutable storage reference.",
+      "defect_classification": "framework_gap",
+      "independent_check": "VIPER protocol and restoration tests at commits b3c58b501198f8b0516e4a41d63f29ee8e94cf5a and f47bea79f060aa66f76f220c80a3a28d1e969eab; RICO evidence/viper-assessments/p0-pb-05q-retained-path.json",
+      "ordinary_check_equivalent": "A run-shaped restoration test detects this defect; isolated destination tests that reuse author paths as storage paths do not.",
+      "false_alarms": [],
+      "infrastructure_failures": [
+        "The initial regression fixture preserved the artifact namespace prefix and therefore failed to distinguish the author path from the run-owned storage path."
+      ],
+      "elapsed_seconds": 221.709314,
+      "work_added": "Output, resolved-artifact, execution, reuse, verification, protocol fixtures, restoration documentation, and ten observing test modules changed.",
+      "later_reuse": "Every restored model, checkpoint, receipt, and diagnostic can retain its public filename without parsing VIPER's internal storage hierarchy."
     }
   ]
 }

@@ -4,12 +4,13 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from types import SimpleNamespace
 
 import pytest
 from viper.artifacts import StageArtifactRef
-from viper.authoring import input, run_artifact
+from viper.authoring import BuildSpecDraft, input, run_artifact
+from viper.config import BuildConfig
 from viper.references import LocalFileRef, ResolvedRunRef
+from viper.stages import StageContext
 
 from tools.artifact_loaders import load_json
 from tools.freeze_phase0 import REQUIRED_EVIDENCE_ROLES, sha256_file
@@ -25,7 +26,7 @@ from tools.register_phase0 import (
 )
 
 
-def write_fixture(root: Path) -> SimpleNamespace:
+def write_fixture(root: Path) -> StageContext[BuildConfig]:
     """Write one complete materialized evidence set and its frozen index."""
 
     bundle = root / "restoration"
@@ -65,10 +66,15 @@ def write_fixture(root: Path) -> SimpleNamespace:
         encoding="utf-8",
     )
     inputs["index"] = index
-    return SimpleNamespace(
+    return StageContext(
+        run_id="fixture-run",
+        attempt_id=1,
+        stage_id="register",
         inputs=inputs,
         outputs={"receipt": root / "receipt.json"},
-        config=SimpleNamespace(),
+        config=BuildConfig(),
+        metrics={},
+        numpy_generators={},
     )
 
 
@@ -151,6 +157,7 @@ def test_declares_one_governed_registration_stage(tmp_path: Path) -> None:
     study = build_phase0_registration_study(stage_inputs)
     registration = study.variants["complete"].stages["register"]
 
+    assert isinstance(registration.spec, BuildSpecDraft)
     assert set(registration.spec.inputs) == REQUIRED_STAGE_INPUTS
     assert set(registration.spec.outputs.keys()) == {"receipt"}
     assert registration.spec.file_access == "declared"
@@ -189,9 +196,9 @@ def test_rico_declares_its_viper_workspace_and_runtime_dependency() -> None:
     assert (proposal_root / "viper.toml").read_text(encoding="utf-8") == (
         "[workspace]\nschema_version = 2\n"
     )
-    assert (proposal_root / "requirements.txt").read_text(encoding="utf-8") == (
-        "viper-provenance\n"
-    )
+    assert (proposal_root / "requirements.txt").read_text(
+        encoding="utf-8"
+    ).splitlines() == ["pyright", "pytest", "ruff", "viper-provenance"]
 
 
 def test_registration_forwards_explicit_prior_run_source_trust(

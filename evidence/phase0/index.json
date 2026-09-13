@@ -31,10 +31,10 @@
       "sha256": "81d22d0b978aeb0eb0e9862b1547c7484abb25cdb73e962916e642da3422eb45"
     },
     "hopfield_replay_receipt": {
-      "byte_count": 500,
-      "path": "evidence/phase0/mantra/hopfield_replay_receipt.json",
+      "byte_count": 772,
+      "path": "evidence/phase0/mantra/hopfield_output_parity_receipt.json",
       "repository": "rico",
-      "sha256": "047d2d16b26196a014464a122bc7385cf63a069c9288b35b0295859bffb2d4c4"
+      "sha256": "2b26e9314d386daefc467fb9439fbeac710df814e78a964c863c69a059082de8"
     },
     "mil_replay_receipt": {
       "byte_count": 1221,
@@ -69,9 +69,9 @@
   },
   "schema_version": "rico.phase0_evidence.v1",
   "viper_usefulness_ledger": {
-    "byte_count": 12915,
+    "byte_count": 15914,
     "path": "evidence/viper-usefulness-ledger.json",
     "repository": "rico",
-    "sha256": "d947689026006c8783317127a0784945013a976e331169cbcf64787cf0235364"
+    "sha256": "b9921f11bb64dafa9f291e5ff9c0eeb338599709ceda8e173845c18a2cfacd4c"
   }
 }
