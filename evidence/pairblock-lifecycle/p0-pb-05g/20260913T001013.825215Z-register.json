@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "5733f0a7e64c10c5bb28ed2b5001389ded0bafa58e4417f94a618dc7e1b730d6",
+  "checklist_written_sha256": "350e92579c7b221fd874ed1ee496308ee86b24ea147f344eb9a384ea27b39161",
+  "event": "register",
+  "evidence": {
+    "kind": "external",
+    "revision": "e0c7ece7d1ca05ce7ed5aaaa0231c7015e6a3e28ce53052bc70dd26ac810da12",
+    "target": "MANTRA MIL run 01M2C1A6K4T39Z4K5YTVDSZ8EX resolved workspace modules without repository bytecode reads"
+  },
+  "pair_block_id": "P0-PB-05G",
+  "previous_receipt": "../../evidence/pairblock-lifecycle/p0-pb-05g/20260912T235628.021543Z-accept.json",
+  "recorded_at": "2026-09-13T00:10:13.825215+00:00",
+  "repository_head": "d095d80d829758d8a8687a5371cf5c0d60bbb23e",
+  "result": "applied",
+  "schema_version": 1,
+  "status_after": "Complete",
+  "status_before": "Applied"
+}

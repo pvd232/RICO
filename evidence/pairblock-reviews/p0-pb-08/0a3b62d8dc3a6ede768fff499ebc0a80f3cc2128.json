@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-08",
+  "requirement_ids": [
+    "P0-REQ-08"
+  ],
+  "repository": "https://github.com/pvd232/MANTRA.git",
+  "base_commit": "2849006816f7dc4e58c94b1f06b76cf4ac42457f",
+  "result_commit": "0a3b62d8dc3a6ede768fff499ebc0a80f3cc2128",
+  "owned_paths": [
+    "src/mantra/rebuild/mil_replay.py",
+    "src/mantra/rebuild/loaders.py",
+    "src/mantra/rebuild/tests/test_mil_replay.py",
+    "src/mantra/rebuild/tests/test_loaders.py"
+  ],
+  "diff_sha256": "68a69eac8097829bab21fcc16069abbd2afd52e1bf8a2a9a064506d81a4e2af1",
+  "invariants": [
+    "The standalone replay consumes no Hopfield rebuild output.",
+    "The historical runtime reads each compute input through its VIPER-materialized path.",
+    "CUDA execution declares one NVIDIA L4 in the VIPER environment.",
+    "The four produced prediction and weight archives match their approved historical identities.",
+    "Step02 and Step03 hold PearsonDelta equal their approved values within 1e-8."
+  ],
+  "findings": [
+    {
+      "severity": "P1",
+      "counterexample": "The legacy input_root reopened repository files instead of the stage's materialized inputs.",
+      "repair": "Build a temporary legacy layout whose links resolve to the exact stage inputs.",
+      "status": "repaired"
+    },
+    {
+      "severity": "P1",
+      "counterexample": "A repaired stage attempted to replace the immutable experiment specification of an earlier implementation.",
+      "repair": "Derive the VIPER experiment identity from the MANTRA source commit.",
+      "status": "repaired"
+    },
+    {
+      "severity": "P2",
+      "counterexample": "Generic recursive cleanup emitted file-descriptor-relative paths that the observer could not resolve.",
+      "repair": "Remove only the exact links and directories created by the adapter.",
+      "status": "repaired"
+    }
+  ],
+  "mechanical_evidence": {
+    "focused_result": "8 passed",
+    "replay_reference_sha256": "e0c7ece7d1ca05ce7ed5aaaa0231c7015e6a3e28ce53052bc70dd26ac810da12",
+    "run_id": "01M2C1A6K4T39Z4K5YTVDSZ8EX",
+    "receipt_sha256": "9e9006163012070621625492e6d4e70fc746e8bd1e6d1c0aa3d7ac0ca8fe0b08",
+    "step02_hold_pearson_delta": "0.5924883417873266",
+    "step03_hold_pearson_delta": "0.6025499488874759",
+    "array_parity": "all four archives passed",
+    "ruff": "passed",
+    "git_diff_check": "passed",
+    "upstream_match": "passed"
+  },
+  "findings_status": "none unresolved",
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-13T00:08:00Z"
+}

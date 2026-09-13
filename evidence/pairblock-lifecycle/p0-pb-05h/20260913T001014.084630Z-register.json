@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "350e92579c7b221fd874ed1ee496308ee86b24ea147f344eb9a384ea27b39161",
+  "checklist_written_sha256": "700f5ac4c5e1a693f60ea09c461d3fecfefc750b01dd44b95e87ba68e20ee1d3",
+  "event": "register",
+  "evidence": {
+    "kind": "external",
+    "revision": "e0c7ece7d1ca05ce7ed5aaaa0231c7015e6a3e28ce53052bc70dd26ac810da12",
+    "target": "MANTRA MIL run 01M2C1A6K4T39Z4K5YTVDSZ8EX admitted frozen Python source and rejected undeclared data reads"
+  },
+  "pair_block_id": "P0-PB-05H",
+  "previous_receipt": "../../evidence/pairblock-lifecycle/p0-pb-05h/20260913T000240.859447Z-accept.json",
+  "recorded_at": "2026-09-13T00:10:14.084630+00:00",
+  "repository_head": "d095d80d829758d8a8687a5371cf5c0d60bbb23e",
+  "result": "applied",
+  "schema_version": 1,
+  "status_after": "Complete",
+  "status_before": "Applied"
+}

@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "c98d56d6f2d2a17a2f1bc441e4ac69dbc5c05662bdef9cd1d31cae844e605346",
+  "checklist_written_sha256": "5733f0a7e64c10c5bb28ed2b5001389ded0bafa58e4417f94a618dc7e1b730d6",
+  "event": "register",
+  "evidence": {
+    "kind": "external",
+    "revision": "aecbb5e1dbdf9585dac82939a30d90db9cdddae22c09cd00d80329d5df9b3316",
+    "target": "MANTRA Hopfield run 01M2BZB2KRTDN1A5XEKDMD1MB2 under governed file access"
+  },
+  "pair_block_id": "P0-PB-05F",
+  "previous_receipt": "../../evidence/pairblock-lifecycle/p0-pb-05f/20260912T230455.080492Z-accept.json",
+  "recorded_at": "2026-09-13T00:10:13.563488+00:00",
+  "repository_head": "d095d80d829758d8a8687a5371cf5c0d60bbb23e",
+  "result": "applied",
+  "schema_version": 1,
+  "status_after": "Complete",
+  "status_before": "Applied"
+}

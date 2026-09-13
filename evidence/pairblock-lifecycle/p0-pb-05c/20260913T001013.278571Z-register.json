@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "f21e4557cef9ab7b229a2031a13bc143b545367ca25411b6d19c4fad87fac519",
+  "checklist_written_sha256": "c98d56d6f2d2a17a2f1bc441e4ac69dbc5c05662bdef9cd1d31cae844e605346",
+  "event": "register",
+  "evidence": {
+    "kind": "external",
+    "revision": "e0c7ece7d1ca05ce7ed5aaaa0231c7015e6a3e28ce53052bc70dd26ac810da12",
+    "target": "MANTRA MIL run 01M2C1A6K4T39Z4K5YTVDSZ8EX: governed apply and evaluate invocation receipts"
+  },
+  "pair_block_id": "P0-PB-05C",
+  "previous_receipt": "../../evidence/pairblock-lifecycle/p0-pb-05c/20260912T183000.036271Z-accept.json",
+  "recorded_at": "2026-09-13T00:10:13.278571+00:00",
+  "repository_head": "d095d80d829758d8a8687a5371cf5c0d60bbb23e",
+  "result": "applied",
+  "schema_version": 1,
+  "status_after": "Complete",
+  "status_before": "Applied"
+}

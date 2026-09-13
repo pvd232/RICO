@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-05H",
+  "requirement_ids": [
+    "P0-REQ-17"
+  ],
+  "repository": "https://github.com/pvd232/viper.git",
+  "base_commit": "6d1e54145045016322140486eb43aabf41bbdf62",
+  "result_commit": "5250ad5fcc73f7933001719fbdc2ac4dcc0a2251",
+  "owned_paths": [
+    "src/viper/_workers/file_access.py",
+    "src/viper/_workers/stages.py",
+    "tests/declaration_observers.toml",
+    "tests/test_stage_file_access.py"
+  ],
+  "diff_sha256": "9752a2db7e632e536fcb284841547fd84b2e5b3a60311272301bd68674b9ad56",
+  "invariants": [
+    "The source allowlist contains only regular non-symlink .py files present in the frozen Git commit.",
+    "Tracked Python working-tree bytes must match the frozen source commit before a stage runs.",
+    "Frozen source reads create no data-access evidence and cannot satisfy a declared input.",
+    "Untracked Python files and tracked non-Python files remain governed data reads.",
+    "Git inspection completes before the file-access observer activates."
+  ],
+  "findings": [
+    {
+      "severity": "P1",
+      "counterexample": "A tracked model.py symlink could redirect the initial implementation to arbitrary workspace bytes.",
+      "repair": "Reject every symlink in the frozen Python source allowlist.",
+      "status": "repaired",
+      "observing_test": "tests/test_stage_file_access.py::test_tracked_python_symlink_is_rejected"
+    }
+  ],
+  "mechanical_evidence": {
+    "focused_command": "python -m pytest tests/test_stage_file_access.py -q",
+    "focused_result": "27 passed",
+    "codeql_selection": "6 selected tests; no deferred tests; no fallback domains; no incomplete declarations",
+    "ruff": "passed",
+    "git_diff_check": "passed",
+    "upstream_match": "passed"
+  },
+  "tradeoffs": {
+    "workflow": "No stage-author configuration is added.",
+    "runtime": "Each governed stage runs one Git diff check and one Git tree listing before invocation.",
+    "scope": "Only exact tracked .py paths receive source-read treatment; configuration and data files remain declared inputs."
+  },
+  "exclusions": [
+    "Non-Python package resources require explicit data declarations.",
+    "The full integration and distribution suites remain session-closure gates."
+  ],
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-13T00:02:14Z"
+}
