@@ -76,6 +76,7 @@ TEST_PROFILE = ChecklistProfile(
         ),
     ),
     legacy_certifiable_pair_blocks=frozenset({PAIR_BLOCK_ID}),
+    legacy_certification_artifact=Path("evidence/terminal.json"),
 )
 
 TEST_DIALECT = MarkdownChecklistDialect(

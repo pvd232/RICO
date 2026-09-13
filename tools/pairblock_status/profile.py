@@ -274,6 +274,8 @@ class ChecklistProfile:
             checklist repository.
         legacy_certifiable_pair_blocks: Applied blocks permitted to use the
             lifecycle policy's exceptional certification event.
+        legacy_certification_artifact: Repository-relative terminal artifact
+            accepted by the exceptional certification event.
     """
 
     checklist_path: Path
@@ -289,6 +291,7 @@ class ChecklistProfile:
     declaration_path: Path | None = None
     repository_roots: tuple[tuple[str, Path], ...] = ()
     legacy_certifiable_pair_blocks: frozenset[str] = frozenset()
+    legacy_certification_artifact: Path | None = None
 
     def __post_init__(self) -> None:
         """Reject invalid paths, identities, and identifier expressions."""
@@ -322,6 +325,20 @@ class ChecklistProfile:
         if invalid_legacy_ids:
             raise ValueError(
                 f"invalid legacy-certifiable PairBlock IDs: {invalid_legacy_ids}"
+            )
+        if self.legacy_certifiable_pair_blocks and (
+            self.lifecycle.legacy_certification_event is None
+            or self.legacy_certification_artifact is None
+        ):
+            raise ValueError(
+                "legacy certification requires an event and terminal artifact"
+            )
+        if self.legacy_certification_artifact is not None and (
+            self.legacy_certification_artifact.is_absolute()
+            or ".." in self.legacy_certification_artifact.parts
+        ):
+            raise ValueError(
+                "legacy_certification_artifact must be repository-relative"
             )
         for label, value in (
             ("checklist_id", self.checklist_id),
@@ -368,6 +385,13 @@ class ChecklistProfile:
         if self.declaration_path is None:
             raise PairBlockGateError("profile has no declaration_path")
         return self.declaration_path
+
+    def require_legacy_certification_artifact(self) -> Path:
+        """Return the sole artifact accepted for legacy certification."""
+
+        if self.legacy_certification_artifact is None:
+            raise PairBlockGateError("profile has no legacy certification artifact")
+        return self.legacy_certification_artifact
 
 
 MANTRA_PHASE0_PROFILE = ChecklistProfile(
@@ -418,5 +442,8 @@ MANTRA_PHASE0_PROFILE = ChecklistProfile(
     ),
     legacy_certifiable_pair_blocks=frozenset(
         {"P0-PB-01", "P0-PB-04A", "P0-PB-04B", "P0-PB-05A"}
+    ),
+    legacy_certification_artifact=Path(
+        "evidence/phase0/rico/phase0_registration_receipt.json"
     ),
 )

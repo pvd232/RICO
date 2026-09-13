@@ -653,6 +653,64 @@ def test_legacy_certification_rejects_a_changed_terminal_artifact(
         validate_test_repository(repository)
 
 
+def test_legacy_certification_rejects_a_nonterminal_artifact(
+    repository_factory: RepositoryFactory,
+) -> None:
+    """Reject a valid file identity that names another repository artifact."""
+
+    repository = repository_factory(command=passing_command())
+    run_test_gate(repository)
+    advance_test_block(repository, "approve")
+    advance_test_block(repository, "accept")
+    other = repository / "evidence" / "other.json"
+    other.parent.mkdir(parents=True, exist_ok=True)
+    other.write_text('{"passed": true}\n', encoding="utf-8")
+
+    with pytest.raises(PairBlockGateError, match="configured terminal artifact"):
+        advance_pairblock(
+            repository,
+            PAIR_BLOCK_ID,
+            "certify",
+            EvidenceRef("artifact", "evidence/other.json", sha256_file(other)),
+            certification_reason="Historical chain.",
+            now=NOW,
+            adapter=TEST_ADAPTER,
+        )
+
+
+def test_legacy_completion_rejects_a_nonterminal_artifact(
+    repository_factory: RepositoryFactory,
+) -> None:
+    """Recheck the configured terminal path when loading completion evidence."""
+
+    repository = repository_factory(command=passing_command())
+    run_test_gate(repository)
+    advance_test_block(repository, "approve")
+    advance_test_block(repository, "accept")
+    certified = advance_test_block(
+        repository,
+        "certify",
+        evidence_kind="artifact",
+        certification_reason="The retained approval predates receipt chaining.",
+    )
+    other = repository / "evidence" / "other.json"
+    other.write_text('{"passed": true}\n', encoding="utf-8")
+    receipt = json.loads(certified.read_text(encoding="utf-8"))
+    receipt["evidence"]["target"] = "evidence/other.json"
+    receipt["evidence"]["revision"] = sha256_file(other)
+    certified.write_text(json.dumps(receipt), encoding="utf-8")
+
+    with pytest.raises(PairBlockGateError, match="artifact differs"):
+        validate_test_repository(repository)
+
+
+def test_legacy_certification_profile_requires_a_terminal_artifact() -> None:
+    """Reject an enabled certification route with no artifact identity."""
+
+    with pytest.raises(ValueError, match="requires an event and terminal artifact"):
+        replace(TEST_PROFILE, legacy_certification_artifact=None)
+
+
 def test_illegal_lifecycle_event_changes_no_status(
     repository_factory: RepositoryFactory,
 ) -> None:

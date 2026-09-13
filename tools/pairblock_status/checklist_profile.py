@@ -1192,9 +1192,11 @@ def _validate_completion_chain(
                 f"legacy certification lacks artifact evidence for {pair_block_id}"
             )
         target = Path(evidence["target"])
+        expected_target = profile.require_legacy_certification_artifact()
         resolved_target = (repository / target).resolve()
         if (
-            target.is_absolute()
+            target != expected_target
+            or target.is_absolute()
             or ".." in target.parts
             or not resolved_target.is_relative_to(repository)
             or not resolved_target.is_file()

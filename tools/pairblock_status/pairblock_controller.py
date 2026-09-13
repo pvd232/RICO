@@ -303,10 +303,15 @@ def _require_resolved_dependencies(
 def _require_certification_artifact(
     repository: Path,
     evidence: EvidenceRef,
+    profile: ChecklistProfile,
 ) -> None:
-    """Require one repository artifact whose bytes match its evidence revision."""
+    """Require the profile's terminal artifact and its exact byte identity."""
 
     target = Path(evidence.target)
+    if target != profile.require_legacy_certification_artifact():
+        raise PairBlockGateError(
+            "legacy certification must use the configured terminal artifact"
+        )
     if target.is_absolute() or ".." in target.parts:
         raise PairBlockGateError(
             "legacy certification artifact must be repository-relative"
@@ -1837,7 +1842,7 @@ def _advance_markdown_pairblock(
             raise PairBlockGateError("legacy certification requires artifact evidence")
         if certification_reason is None or not certification_reason.strip():
             raise PairBlockGateError("legacy certification requires a reason")
-        _require_certification_artifact(repository, evidence)
+        _require_certification_artifact(repository, evidence, profile)
     elif certification_reason is not None:
         raise PairBlockGateError(
             "certification reason is valid only for legacy certification"
