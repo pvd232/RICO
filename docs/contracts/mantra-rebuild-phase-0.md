@@ -1459,9 +1459,12 @@ as an additional trusted source.
 
 **Code boundary:** [public execution](../../../viper/src/viper/execution/__init__.py),
 [run execution](../../../viper/src/viper/execution/_run.py), [attempt execution](../../../viper/src/viper/execution/_attempt.py),
-and [execution tests](../../../viper/tests/test_run_execution.py).
+and [execution tests](../../../viper/tests/test_run_execution.py). The
+[independent review receipt](../../evidence/pairblock-reviews/p0-pb-05j/54f01105cf6c09d4a5c4f44da6064d82152adffd.json)
+binds the change to VIPER commit
+`54f01105cf6c09d4a5c4f44da6064d82152adffd`.
 
-**Implementation requirements:** Execution entry points accept
+**Implementation requirements:** `execution.run()` and `execution.retry()` accept
 `trusted_source_repositories` as an optional frozen set of repository URLs.
 `execute_attempt()` constructs one `VerificationPolicy` from the current run
 source and that explicit set. The default set is empty. The resulting policy is
