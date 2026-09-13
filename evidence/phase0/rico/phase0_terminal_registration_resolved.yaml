@@ -1,0 +1,26 @@
+schema_version: 2
+spec:
+  sha256: 9c74228339ae76a0c28de17108db91c3daead2b0a8a23d30409b4bb6bd34bd60
+  bytes: 18577
+  stored_at:
+    kind: local
+    workspace: /home/machina/RICO
+    store: .viper/store
+    store_id: ee7fe68012cd78e4fca5f004490f3ce5
+    commit: 1ade9740e52230c01cfaf45dccdda8f72aab152cd4bd6525627c3ebc71c17f99
+    path: experiments/rico_mantra_phase0_evidence/runs/complete/01M2CZF2JEWDPMSDE9083MWR5E/spec.yaml
+  kind: run_spec
+status: succeeded
+attempts:
+- sha256: 7a55bf603ee800548ba2935cb5ae221ab3b04bd1300f7326248c369cbd2ed0dd
+  bytes: 2469
+  stored_at:
+    kind: local
+    workspace: /home/machina/RICO
+    store: .viper/store
+    store_id: ee7fe68012cd78e4fca5f004490f3ce5
+    commit: 9d3a9fd6d085f61ee43dac5941ec8c33f1b7271831b2d80d14dd792f8b542aae
+    path: experiments/rico_mantra_phase0_evidence/runs/complete/01M2CZF2JEWDPMSDE9083MWR5E/attempts/1/resolved.yaml
+  kind: resolved_attempt
+successful_attempt_id: 1
+completed_at: '2026-09-13T08:57:35.663400Z'

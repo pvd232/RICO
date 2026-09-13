@@ -1,0 +1,22 @@
+{
+  "checklist_before_sha256": "a00b1b028e8b1bcb9b5a9826848d4d9d5ec39edad70e326e177bc5d91cd25dec",
+  "checklist_written_sha256": "1486e1bbdcbc87ab96d92f4abf1bd86e8dadd06f19098ba3d1ed02f176f70369",
+  "declaration_repository_head": "cd0eb5bbfc028e001a52322c36c1ea8b407285eb",
+  "declaration_sha256": "02f3df4800f5d7cafc7e40808e86a1c4eebc117f4861b81d0d0ff5dfb2559d8d",
+  "event": "register",
+  "evidence": {
+    "kind": "artifact",
+    "revision": "4f1831f9002a729a0379323cf059e391d359237e90404744c038ee78ae9948bc",
+    "target": "evidence/phase0/rico/phase0_terminal_registration_receipt.json"
+  },
+  "implementation_repository_head": "cd0eb5bbfc028e001a52322c36c1ea8b407285eb",
+  "pair_block_fingerprint": "de30a51dc5e7a6bf01e1896b4e439100f714bbd74385446dd513f0dfbc6a99bf",
+  "pair_block_id": "P0-PB-10I",
+  "previous_receipt": "evidence/pairblock-lifecycle/p0-pb-10i/20260913T061319.163029Z-accept.json",
+  "recorded_at": "2026-09-13T09:00:54.387758+00:00",
+  "repository_head": "cd0eb5bbfc028e001a52322c36c1ea8b407285eb",
+  "result": "applied",
+  "schema_version": 3,
+  "status_after": "Complete",
+  "status_before": "Applied"
+}
