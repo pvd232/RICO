@@ -236,9 +236,9 @@ requirement_ids = ["P0-REQ-35"]
 depends_on = ["P0-PB-05K", "P0-PB-10J"]
 section = "0E"
 repository = "viper"
-source_paths = ["src/viper/execution/_restore.py", "docs/how-to/retry-restore-compare.md"]
+source_paths = ["src/viper/execution/_restore.py", "src/viper/restoration.py", "docs/how-to/retry-restore-compare.md"]
 test_paths = ["tests/test_storage.py"]
-gate = { repository = "viper", working_directory = ".", argv = ["/bin/zsh", "-e", "-c", "python -m pyright src/viper/execution/_restore.py tests/test_storage.py && python -m pytest tests/test_storage.py -q && python -m ruff format --check src/viper/execution/_restore.py tests/test_storage.py && python -m ruff check src/viper/execution/_restore.py tests/test_storage.py"], environment = { PYTEST_DISABLE_PLUGIN_AUTOLOAD = "1" } }
+gate = { repository = "viper", working_directory = ".", argv = ["/bin/zsh", "-e", "-c", "python -m pyright src/viper/execution/_restore.py src/viper/restoration.py tests/test_storage.py && python -m pytest tests/test_storage.py -q && python -m ruff format --check src/viper/execution/_restore.py src/viper/restoration.py tests/test_storage.py && python -m ruff check src/viper/execution/_restore.py src/viper/restoration.py tests/test_storage.py"], environment = { PYTEST_DISABLE_PLUGIN_AUTOLOAD = "1" } }
 
 [[pair_blocks]]
 id = "P0-PB-10D"

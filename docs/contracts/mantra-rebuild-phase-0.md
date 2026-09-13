@@ -2434,7 +2434,7 @@ translate without rewriting their bytes.
 
 **Dependencies:** `P0-PB-05K`, `P0-PB-10J`
 
-**Implementation:** [_restore.py](../../../viper/src/viper/execution/_restore.py) · [retry-restore-compare.md](../../../viper/docs/how-to/retry-restore-compare.md) · [test_storage.py](../../../viper/tests/test_storage.py)
+**Implementation:** [_restore.py](../../../viper/src/viper/execution/_restore.py) · [restoration.py](../../../viper/src/viper/restoration.py) · [retry-restore-compare.md](../../../viper/docs/how-to/retry-restore-compare.md) · [test_storage.py](../../../viper/tests/test_storage.py)
 
 **Current receipt:** None
 
@@ -2442,7 +2442,7 @@ translate without rewriting their bytes.
 
 ```bash
 cd /Users/machina/Developer/ChatGPT/viper
-PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 /bin/zsh -e -c 'python -m pyright src/viper/execution/_restore.py tests/test_storage.py && python -m pytest tests/test_storage.py -q && python -m ruff format --check src/viper/execution/_restore.py tests/test_storage.py && python -m ruff check src/viper/execution/_restore.py tests/test_storage.py'
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 /bin/zsh -e -c 'python -m pyright src/viper/execution/_restore.py src/viper/restoration.py tests/test_storage.py && python -m pytest tests/test_storage.py -q && python -m ruff format --check src/viper/execution/_restore.py src/viper/restoration.py tests/test_storage.py && python -m ruff check src/viper/execution/_restore.py src/viper/restoration.py tests/test_storage.py'
 ```
 
 **Next transition:**
