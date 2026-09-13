@@ -5,9 +5,46 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Literal, TypeGuard
 
 _GLOBAL_ID = re.compile(r"[A-Za-z][A-Za-z0-9_.-]*")
 _GLOBAL_STATES = frozenset({"planned", "in_progress", "complete", "deferred"})
+
+type EvidenceKind = Literal["artifact", "command", "external", "test"]
+EVIDENCE_KINDS: frozenset[EvidenceKind] = frozenset(
+    {"artifact", "command", "external", "test"}
+)
+
+
+def is_evidence_kind(value: object) -> TypeGuard[EvidenceKind]:
+    """Return whether ``value`` names a global gate or evidence category."""
+
+    return isinstance(value, str) and value in EVIDENCE_KINDS
+
+
+class PairBlockGateError(RuntimeError):
+    """Report a declaration, validation, or lifecycle violation."""
+
+
+@dataclass(frozen=True, slots=True)
+class LifecycleEvidenceRule:
+    """Assign one accepted evidence category to a lifecycle event.
+
+    Attributes:
+        event: Lifecycle event governed by the rule.
+        kind: Evidence category accepted for that event.
+    """
+
+    event: str
+    kind: EvidenceKind
+
+    def __post_init__(self) -> None:
+        """Reject empty event names and unsupported evidence categories."""
+
+        if not self.event:
+            raise ValueError("lifecycle evidence event must not be empty")
+        if not is_evidence_kind(self.kind):
+            raise ValueError(f"invalid lifecycle evidence kind: {self.kind}")
 
 
 @dataclass(frozen=True, slots=True)
@@ -28,6 +65,7 @@ class LifecyclePolicy:
             ready for drafting.
         legacy_certification_event: Event that closes an applied block whose
             preserved receipts predate the active lifecycle policy.
+        evidence_rules: Evidence categories required by executable events.
     """
 
     normalized_states: tuple[tuple[str, str], ...]
@@ -40,6 +78,7 @@ class LifecyclePolicy:
     transitions: tuple[tuple[str, str, str], ...]
     resolved_dependency_states: frozenset[str]
     legacy_certification_event: str | None = None
+    evidence_rules: tuple[LifecycleEvidenceRule, ...] = ()
 
     def __post_init__(self) -> None:
         """Reject ambiguous labels and transitions when the profile is created."""
@@ -96,6 +135,14 @@ class LifecyclePolicy:
             expected_before = after
         if self.normalize(expected_before) != "complete":
             raise ValueError("lifecycle transition chain must end at complete")
+        executable_events = {event for event, _, _ in self.transitions}
+        evidence_events = [rule.event for rule in self.evidence_rules]
+        if len(evidence_events) != len(set(evidence_events)):
+            raise ValueError("lifecycle evidence events must be unique")
+        if set(evidence_events) != executable_events:
+            raise ValueError(
+                "lifecycle evidence rules must cover every executable event"
+            )
 
     def normalize(self, status: str) -> str:
         """Return the global checklist state represented by one project status."""
@@ -135,6 +182,16 @@ class LifecyclePolicy:
         if status != before:
             raise ValueError(f"{event} cannot advance {status}; expected {before}")
         return after
+
+    def required_evidence_kind(self, event: str) -> EvidenceKind:
+        """Return the evidence category assigned to one executable event."""
+
+        try:
+            return next(
+                rule.kind for rule in self.evidence_rules if rule.event == event
+            )
+        except StopIteration as error:
+            raise ValueError(f"event has no evidence rule: {event}") from error
 
     @property
     def complete_status(self) -> str:
@@ -212,6 +269,9 @@ class ChecklistProfile:
         lifecycle: Project status vocabulary and legal gate transitions.
         proposal_source_roots: Paths, resolved from the checklist repository,
             that may own reviewed proposal files.
+        declaration_path: Repository-relative typed declaration manifest.
+        repository_roots: Repository IDs paired with paths resolved from the
+            checklist repository.
         legacy_certifiable_pair_blocks: Applied blocks permitted to use the
             lifecycle policy's exceptional certification event.
     """
@@ -226,6 +286,8 @@ class ChecklistProfile:
     phase_pattern: str
     lifecycle: LifecyclePolicy
     proposal_source_roots: tuple[Path, ...] = ()
+    declaration_path: Path | None = None
+    repository_roots: tuple[tuple[str, Path], ...] = ()
     legacy_certifiable_pair_blocks: frozenset[str] = frozenset()
 
     def __post_init__(self) -> None:
@@ -240,6 +302,18 @@ class ChecklistProfile:
         for source_root in self.proposal_source_roots:
             if source_root.is_absolute():
                 raise ValueError("proposal_source_roots must be repository-relative")
+        if self.declaration_path is not None and (
+            self.declaration_path.is_absolute() or ".." in self.declaration_path.parts
+        ):
+            raise ValueError("declaration_path must be repository-relative")
+        repository_ids = [repository_id for repository_id, _ in self.repository_roots]
+        if len(repository_ids) != len(set(repository_ids)):
+            raise ValueError("repository_roots IDs must be unique")
+        for repository_id, repository_root in self.repository_roots:
+            if _GLOBAL_ID.fullmatch(repository_id) is None:
+                raise ValueError(f"invalid repository ID: {repository_id}")
+            if repository_root.is_absolute():
+                raise ValueError("repository_roots paths must be repository-relative")
         invalid_legacy_ids = sorted(
             value
             for value in self.legacy_certifiable_pair_blocks
@@ -288,6 +362,13 @@ class ChecklistProfile:
             and re.fullmatch(self.requirement_pattern, value) is not None
         )
 
+    def require_declaration_path(self) -> Path:
+        """Return the declaration path required by manifest-native operations."""
+
+        if self.declaration_path is None:
+            raise PairBlockGateError("profile has no declaration_path")
+        return self.declaration_path
+
 
 MANTRA_PHASE0_PROFILE = ChecklistProfile(
     checklist_path=Path("docs/checklists/mantra-rebuild.md"),
@@ -322,8 +403,19 @@ MANTRA_PHASE0_PROFILE = ChecklistProfile(
         ),
         resolved_dependency_states=frozenset({"Applied", "Complete"}),
         legacy_certification_event="certify",
+        evidence_rules=(
+            LifecycleEvidenceRule("approve", "external"),
+            LifecycleEvidenceRule("accept", "artifact"),
+            LifecycleEvidenceRule("register", "artifact"),
+        ),
     ),
     proposal_source_roots=(Path("../mantra"), Path("../viper")),
+    declaration_path=Path("docs/contracts/mantra-rebuild.declarations.toml"),
+    repository_roots=(
+        ("rico", Path(".")),
+        ("mantra", Path("../mantra")),
+        ("viper", Path("../viper")),
+    ),
     legacy_certifiable_pair_blocks=frozenset(
         {"P0-PB-01", "P0-PB-04A", "P0-PB-04B", "P0-PB-05A"}
     ),

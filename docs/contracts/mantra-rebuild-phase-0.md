@@ -4,7 +4,7 @@
 
 **Contract status:** In progress
 
-**Approval state:** `P0-PB-10B` charter approved; implementation pending
+**Implementation state:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
 
 This contract governs artifact discovery, capacity planning, restoration, and provenance capture before the Hopfield or MIL rebuild begins. The model rebuild remains out of scope until every Phase 0 acceptance condition passes. The user actively reviews each PairBlock's scope, proposed work, observed result, and gate evidence before the next PairBlock begins.
 
@@ -300,7 +300,7 @@ The dependency graph, restoration bindings, environment receipt, capacity receip
 | `P0-VR-22` | An `imports` edge does not create an independent one-hop caller for its target. An import selected as the changed declaration still requires a reachable test or domain fallback. | [`P0-PB-05N`](#p0-pb-05n) |
 | `P0-VR-23` | The repository AST policy finds no direct standard-library `subprocess` import outside the facade and its own observer test; stage source inspection and file-access tests pass through the facade. | [`P0-PB-05O`](#p0-pb-05o) |
 | `P0-VR-24` | The `certify` event accepts only a PairBlock named by `ChecklistProfile.legacy_certifiable_pair_blocks`, requires `artifact` evidence and a nonempty reason, preserves any existing receipt link, and produces the same derived `Complete` state as an ordinary completion receipt. | [`P0-PB-10A`](#p0-pb-10a) |
-| `P0-VR-26` | For a manifest-native PairBlock, the declaration manifest is the only source for IDs, relationships, paths, gates, and the initial `Drafting` state; lifecycle receipts determine each later state; an accepted declaration revision reopens exactly the PairBlocks whose semantic fingerprints changed and their transitive dependents; deterministic rendering supplies every human link and command; validation rejects an unapproved declaration change, duplicate legacy ownership, a severed reference, receipt disagreement, or manual changes inside a generated region. | [`P0-PB-10B`](#p0-pb-10b) |
+| `P0-VR-26` | For a manifest-native PairBlock, the declaration manifest is the only source for IDs, relationships, paths, gates, and the initial `Drafting` state; lifecycle receipts determine each later state; revision validation recomputes changed records and affected PairBlocks from adjacent accepted manifests, validates the external approval reference's schema, and resolves every superseded receipt; deterministic rendering supplies every human link and command; directory discovery requires documentation for every active Python definition, dataclass field, and persisted `TypedDict` field; validation rejects an unapproved declaration change, duplicate legacy ownership, a severed reference, receipt disagreement, undocumented source, or manual changes inside a generated region. | [`P0-PB-10B`](#p0-pb-10b) |
 
 ## 8. Acceptance boundary
 
@@ -2166,21 +2166,24 @@ repository, working directory, argument vector, and environment variables. The
 renderer turns those fields into the displayed shell command; the controller
 executes the argument vector.
 
+##### `P0-PB-10B` proposed code
+
 **Code boundary:** The implementation may change only these RICO paths:
 
-- `docs/contracts/mantra-rebuild.declarations.toml`
-- `docs/contracts/mantra-rebuild-phase-0.md`
-- `docs/checklists/mantra-rebuild.md`
-- `tools/pairblock_status/declaration_manifest.py`
-- `tools/pairblock_status/markdown_renderer.py`
-- `tools/pairblock_status/profile.py`
-- `tools/pairblock_status/checklist_profile.py`
-- `tools/pairblock_status/pairblock_controller.py`
-- `tests/pairblock_status/fixtures/minimal_profile/declarations.toml`
-- `tests/pairblock_status/conftest.py`
-- `tests/pairblock_status/test_declaration_manifest.py`
-- `tests/pairblock_status/test_markdown_renderer.py`
-- `tests/pairblock_status/test_pairblock_controller.py`
+- [declaration manifest](mantra-rebuild.declarations.toml)
+- [Python dependencies](../../requirements.txt)
+- [Phase 0 contract](mantra-rebuild-phase-0.md)
+- [master checklist](../checklists/mantra-rebuild.md)
+- [typed declaration loader](../../tools/pairblock_status/declaration_manifest.py)
+- [Markdown renderer](../../tools/pairblock_status/markdown_renderer.py)
+- [project profile](../../tools/pairblock_status/profile.py)
+- [legacy bridge](../../tools/pairblock_status/checklist_profile.py)
+- [lifecycle controller](../../tools/pairblock_status/pairblock_controller.py)
+- [fixture declarations](../../tests/pairblock_status/fixtures/minimal_profile/declarations.toml)
+- [fixture builder](../../tests/pairblock_status/conftest.py)
+- [declaration tests](../../tests/pairblock_status/test_declaration_manifest.py)
+- [renderer tests](../../tests/pairblock_status/test_markdown_renderer.py)
+- [controller tests](../../tests/pairblock_status/test_pairblock_controller.py)
 
 **Implementation requirements:**
 
@@ -2215,20 +2218,56 @@ executes the argument vector.
     from its last accepted revision. After `revise`, render affected blocks as
     `Drafting`, render their transitive dependents as waiting, and preserve every
     unaffected receipt and state.
+11. Execute each legacy multi-command gate with fail-fast shell semantics so an
+    earlier failed check determines the gate result.
+12. Recompute each accepted revision's record changes and affected PairBlock
+    closure from its preceding accepted manifest. Validate the receipt schema,
+    external approval reference, chain joins, and every referenced superseded
+    receipt before using the accepted manifest.
+13. Document every active PairBlock-status module, class, function, method,
+    test, dataclass field, and persisted `TypedDict` field. Discover active
+    Python modules from the source and test directories so a newly added module
+    enters the documentation gate automatically.
+
+**Declaration revision workflow:** Run the read-only plan before asking for
+approval. The accepted revision command binds that reviewed plan to the user's
+approval reference.
+
+```bash
+cd /Users/machina/Developer/ChatGPT/RICO
+python -m tools.pairblock_status.pairblock_controller plan-revision
+python -m tools.pairblock_status.pairblock_controller revise \
+  --approval-target 'USER_REVIEW' \
+  --approval-revision 'REVIEW_MESSAGE_ID'
+```
 
 **Focused check:**
 
 ```bash
 cd /Users/machina/Developer/ChatGPT/RICO
-python -m ruff check tools/pairblock_status tests/pairblock_status
+python_paths=(
+  tools/pairblock_status/checklist_profile.py
+  tools/pairblock_status/declaration_manifest.py
+  tools/pairblock_status/markdown_renderer.py
+  tools/pairblock_status/pairblock_controller.py
+  tools/pairblock_status/profile.py
+  tests/pairblock_status/conftest.py
+  tests/pairblock_status/test_declaration_manifest.py
+  tests/pairblock_status/test_markdown_renderer.py
+  tests/pairblock_status/test_pairblock_controller.py
+)
+python -m pyright "${python_paths[@]}" &&
 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
 python -m pytest \
   tests/pairblock_status/test_declaration_manifest.py \
   tests/pairblock_status/test_markdown_renderer.py \
-  tests/pairblock_status/test_pairblock_controller.py -q
+  tests/pairblock_status/test_pairblock_controller.py -q &&
+python -m ruff format --check "${python_paths[@]}" &&
+python -m ruff check "${python_paths[@]}"
 ```
 
-**Gate:** The focused tests pass and establish six results: one manifest edit
+**Gate:** Ruff passes, Pyright reports no errors, and the focused tests establish
+six results: one manifest edit
 creates every machine and human relationship for a new block; equal inputs
 render equal bytes; a receipt transition updates every displayed status; a
 manual generated-region edit fails check mode; a missing or duplicate reference
@@ -2244,6 +2283,12 @@ for a manifest-native block. The revision tests establish five more results:
 - `test_unapproved_declaration_change_blocks_execution` prevents a stale gate
   or lifecycle transition.
 - `test_referenced_record_removal_is_rejected` preserves referential integrity.
+- `test_revision_receipt_recomputes_or_validates_each_evidence_claim` rejects
+  altered change records, affected blocks, approval evidence, and superseded
+  receipt heads.
+- `test_pairblock_modules_and_definitions_have_documentation` discovers every
+  active module and requires documentation for each definition, dataclass
+  field, and persisted `TypedDict` field.
 
 **Acceptance case:** A fixture requirement, verifier, and PairBlock advance
 through `gate`, `approve`, `accept`, and `register`. Each transition writes one
@@ -2253,7 +2298,12 @@ receipt, updates the normalized manifest, and changes the generated human view.
 the verifier reference, duplicates the PairBlock in the legacy inventory,
 changes a generated link, corrupts the current receipt reference, or changes an
 accepted declaration while the latest `revise` receipt identifies the earlier
-digest.
+digest. The revision loader rejects altered derived evidence and an invalid
+superseded-receipt reference. The documentation gate discovers a newly added
+Python module and rejects any undocumented definition, dataclass field, or
+persisted `TypedDict` field. A
+legacy command sequence also fails when an earlier command exits unsuccessfully,
+even when a later command would pass.
 
 **Stop condition:** Return the proposal for revision if a manifest-native field
 can originate in Markdown, a rendered edit can change execution, a receipt-free
@@ -2263,7 +2313,305 @@ an unrelated block loses valid evidence,
 or the bridge requires migration of the historical records before
 `P0-PB-07A` succeeds.
 
+### Future work: shared file identity
+
+MANTRA currently defines the same byte-identity fields twice:
+`mantra.rebuild.hopfield_replay.FileIdentity` and
+`mantra.rebuild.restoration.RestoredFileIdentity` each store `byte_count` and
+`sha256`. VIPER's `viper.references.ResolvedFileRef` stores the same content
+identity as `bytes` and `sha256`, then adds `stored_at` to identify where VIPER
+can retrieve those bytes.
+
+After `P0-PB-07A` completes through the manifest-native workflow, a proposed
+`P0-PB-07B` will add `viper.references.FileIdentity` with `sha256: SHA256` and
+`bytes: int` constrained to nonnegative values. `ResolvedFileRef`,
+`SnapshotFileRef`, and `ReuseFileIdentity` will derive their shared content
+identity from that type. MANTRA will consume the VIPER type and remove its two
+local identity classes. The restoration parser will continue accepting the
+historical `byte_count` field and map it to `FileIdentity.bytes`.
+
+`P0-PB-10B` can close independently because the declaration protocol and the
+file-identity hierarchy have separate runtime paths and acceptance tests.
+Promotion requires tests
+that preserve the serialized fields and validation of existing VIPER reference
+types, preserve the restoration manifest's `byte_count` field, reject an
+invalid digest or byte count through the shared base type, and rerun the
+restoration and Hopfield parity gates.
+
+### Future work: discriminated lifecycle-evidence union
+
+The active declaration and lifecycle records use one closed vocabulary for
+`kind` while retaining `target: str` and `revision: str`. Those strings name
+different objects: a pytest node ID, command, repository-relative artifact,
+external review, Git commit, content digest, or provenance identity. The
+current controller validates, serializes, and displays them. No active caller
+dispatches a kind-specific operation through either string.
+
+Do not add the full union to `P0-PB-07B`; that block owns byte identity. A
+separate proposed PairBlock will introduce these models only after a runtime
+consumer needs kind-specific parsing or validation:
+
+```python
+@dataclass(frozen=True, slots=True)
+class TestRunEvidenceRef:
+    kind: Literal["test_run"]
+    target: PytestNodeId
+    revision: GateReceiptSHA256
+
+
+@dataclass(frozen=True, slots=True)
+class NonTestCommandRunEvidenceRef:
+    kind: Literal["command_run"]
+    target: CommandIdentity
+    revision: GateReceiptSHA256
+
+
+@dataclass(frozen=True, slots=True)
+class ArtifactEvidenceRef:
+    kind: Literal["artifact"]
+    target: RepositoryArtifactPath
+    revision: FileIdentity | ViperContentId | GitCommit
+
+
+@dataclass(frozen=True, slots=True)
+class ApprovalEvidenceRef:
+    kind: Literal["approval"]
+    target: ReviewRecordLocator
+    revision: ReviewRecordIdentity
+
+
+type GateRunEvidenceRef = TestRunEvidenceRef | NonTestCommandRunEvidenceRef
+type LifecycleEvidenceRef = (
+    GateRunEvidenceRef | ArtifactEvidenceRef | ApprovalEvidenceRef
+)
+```
+
+`LifecycleEvidenceRef` is the discriminated union, and each leaf record's
+literal `kind` field is its discriminator. The union partitions references by
+the thing that supplies evidence: a gate run, an immutable artifact, or a
+review decision. `GateRunEvidenceRef` then partitions gate runs into test-run
+and non-test command-run references. Origin is metadata on the referenced
+record, not a peer classification axis.
+
+Every referenced name other than `Literal` and `FileIdentity` is proposed. The
+future contract must define each value type from observed examples before code
+is written. It must assign the parser, serializer, CLI adapter, global schema
+mapping, and migration reader for every leaf variant. It must increment the
+schema version and write only `test_run`, `command_run`, `artifact`, and
+`approval` in new records. Existing receipts remain immutable audit evidence;
+the migration reader translates their prior tags without rewriting their
+bytes.
+
+`P0-PB-10B` implements only the shared `EvidenceKind` literal; it does not
+implement or replace the discriminated union. It can close because no active
+consumer requires a more specific target or revision type. Promotion requires
+at least one real receipt of every kind, a caller that benefits from typed
+dispatch, round-trip tests for all four leaf variants, rejection tests for
+crossed kind/target/revision combinations, and proof that historical receipts
+translate without rewriting their bytes.
+
 ## 11. Sources
+
+<!-- generated:manifest-native-contract:start -->
+#### Manifest-native block P0-PB-10D
+
+**Status:** Drafting
+
+**Requirements:**
+
+- `P0-REQ-28`: Each lifecycle event accepts only the evidence category and verified evidence target assigned to that event.
+
+**Verifier conditions:**
+
+- `P0-VR-27`: The lifecycle policy assigns one evidence rule to every executable event.
+- `P0-VR-27`: The controller validates the evidence rule before it writes a receipt.
+
+**Dependencies:** `P0-PB-10A`
+
+**Implementation:** [profile.py](../../tools/pairblock_status/profile.py) · [pairblock_controller.py](../../tools/pairblock_status/pairblock_controller.py) · [test_lifecycle_evidence.py](../../tests/pairblock_status/test_lifecycle_evidence.py)
+
+**Current receipt:** None
+
+**Gate:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/RICO
+PYTHONPATH=. /bin/zsh -e -c 'python -m pyright tools/pairblock_status/profile.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_lifecycle_evidence.py && python -m pytest tests/pairblock_status/test_lifecycle_evidence.py -q && python -m ruff format --check tools/pairblock_status/profile.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_lifecycle_evidence.py && python -m ruff check tools/pairblock_status/profile.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_lifecycle_evidence.py'
+```
+
+**Next transition:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/RICO
+python -m tools.pairblock_status.pairblock_controller gate P0-PB-10D
+```
+
+#### Manifest-native block P0-PB-10E
+
+**Status:** Waiting for P0-PB-10D
+
+**Requirements:**
+
+- `P0-REQ-29`: A native receipt is authoritative only when its complete schema and recomputed command, output, declaration, repository, and predecessor identities agree with the declared operation.
+
+**Verifier conditions:**
+
+- `P0-VR-28`: Native receipts reject unknown fields and invalid nested values.
+- `P0-VR-28`: Gate receipts recompute the command, output, declaration, manifest, drift, and predecessor relationships.
+- `P0-VR-28`: Receipts name both the declaration repository and the implementation repository when they differ.
+
+**Dependencies:** `P0-PB-10D`
+
+**Implementation:** [execution_identity.py](../../tools/pairblock_status/execution_identity.py) · [receipt_validation.py](../../tools/pairblock_status/receipt_validation.py) · [pairblock_controller.py](../../tools/pairblock_status/pairblock_controller.py) · [test_receipt_integrity.py](../../tests/pairblock_status/test_receipt_integrity.py)
+
+**Current receipt:** None
+
+**Gate:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/RICO
+PYTHONPATH=. /bin/zsh -e -c 'python -m pyright tools/pairblock_status/execution_identity.py tools/pairblock_status/receipt_validation.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_receipt_integrity.py && python -m pytest tests/pairblock_status/test_receipt_integrity.py -q && python -m ruff format --check tools/pairblock_status/execution_identity.py tools/pairblock_status/receipt_validation.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_receipt_integrity.py && python -m ruff check tools/pairblock_status/execution_identity.py tools/pairblock_status/receipt_validation.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_receipt_integrity.py'
+```
+
+**Next transition:**
+
+```bash
+# Waiting for a declared dependency.
+```
+
+#### Manifest-native block P0-PB-10F
+
+**Status:** Drafting
+
+**Requirements:**
+
+- `P0-REQ-30`: Declaration acceptance binds the user's approval to one persisted revision plan and accepts only declaration schema version 1.
+
+**Verifier conditions:**
+
+- `P0-VR-29`: plan-revision persists the candidate declaration digest and computed change.
+- `P0-VR-29`: revise requires that exact plan and rejects a different candidate manifest.
+- `P0-VR-29`: Live manifests and accepted snapshots share one exact schema-version check.
+
+**Dependencies:** `P0-PB-10A`
+
+**Implementation:** [declaration_manifest.py](../../tools/pairblock_status/declaration_manifest.py) · [pairblock_controller.py](../../tools/pairblock_status/pairblock_controller.py) · [test_declaration_revision_integrity.py](../../tests/pairblock_status/test_declaration_revision_integrity.py)
+
+**Current receipt:** None
+
+**Gate:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/RICO
+PYTHONPATH=. /bin/zsh -e -c 'python -m pyright tools/pairblock_status/declaration_manifest.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_declaration_revision_integrity.py && python -m pytest tests/pairblock_status/test_declaration_revision_integrity.py -q && python -m ruff format --check tools/pairblock_status/declaration_manifest.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_declaration_revision_integrity.py && python -m ruff check tools/pairblock_status/declaration_manifest.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_declaration_revision_integrity.py'
+```
+
+**Next transition:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/RICO
+python -m tools.pairblock_status.pairblock_controller gate P0-PB-10F
+```
+
+#### Manifest-native block P0-PB-10G
+
+**Status:** Waiting for P0-PB-10E, P0-PB-10F
+
+**Requirements:**
+
+- `P0-REQ-31`: An interrupted state transition converges to one validated receipt-derived contract and checklist projection before another operation runs.
+
+**Verifier conditions:**
+
+- `P0-VR-30`: The controller writes a recoverable prepared record before changing receipt-derived projections.
+- `P0-VR-30`: A successful operation publishes its authoritative receipt after both projection files match the prepared bytes and the semantic validator accepts them.
+- `P0-VR-30`: The next controller invocation completes an interrupted prepared transition idempotently.
+
+**Dependencies:** `P0-PB-10E`, `P0-PB-10F`
+
+**Implementation:** [projection_transaction.py](../../tools/pairblock_status/projection_transaction.py) · [pairblock_controller.py](../../tools/pairblock_status/pairblock_controller.py) · [test_projection_recovery.py](../../tests/pairblock_status/test_projection_recovery.py)
+
+**Current receipt:** None
+
+**Gate:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/RICO
+PYTHONPATH=. /bin/zsh -e -c 'python -m pyright tools/pairblock_status/projection_transaction.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_projection_recovery.py && python -m pytest tests/pairblock_status/test_projection_recovery.py -q && python -m ruff format --check tools/pairblock_status/projection_transaction.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_projection_recovery.py && python -m ruff check tools/pairblock_status/projection_transaction.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_projection_recovery.py'
+```
+
+**Next transition:**
+
+```bash
+# Waiting for a declared dependency.
+```
+
+#### Manifest-native block P0-PB-10H
+
+**Status:** Drafting
+
+**Requirements:**
+
+- `P0-REQ-32`: Generated review links encode valid Markdown destinations and each displayed lifecycle command identifies the controlling repository.
+
+**Verifier conditions:**
+
+- `P0-VR-31`: Links escape Markdown control characters while preserving repository-relative targets and fragments.
+- `P0-VR-31`: Each generated transition command begins in the controlling repository.
+
+**Dependencies:** `P0-PB-10A`
+
+**Implementation:** [markdown_renderer.py](../../tools/pairblock_status/markdown_renderer.py) · [test_markdown_renderer.py](../../tests/pairblock_status/test_markdown_renderer.py)
+
+**Current receipt:** None
+
+**Gate:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/RICO
+PYTHONPATH=. /bin/zsh -e -c 'python -m pyright tools/pairblock_status/markdown_renderer.py tests/pairblock_status/test_markdown_renderer.py && python -m pytest tests/pairblock_status/test_markdown_renderer.py -q && python -m ruff format --check tools/pairblock_status/markdown_renderer.py tests/pairblock_status/test_markdown_renderer.py && python -m ruff check tools/pairblock_status/markdown_renderer.py tests/pairblock_status/test_markdown_renderer.py'
+```
+
+**Next transition:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/RICO
+python -m tools.pairblock_status.pairblock_controller gate P0-PB-10H
+```
+
+#### Manifest-native block P0-PB-10I
+
+**Status:** Waiting for P0-PB-10H
+
+**Requirements:**
+
+- `P0-REQ-33`: A manifest-native PairBlock derives its waiting state from every declared dependency, including a dependency retained in the legacy checklist.
+
+**Verifier conditions:**
+
+- `P0-VR-32`: Waiting-state derivation combines receipt-derived native statuses with parsed legacy statuses.
+- `P0-VR-32`: An unresolved dependency produces the same displayed state and gate rejection regardless of declaration origin.
+- `P0-VR-32`: The render command regenerates both human views from accepted declarations and receipts without changing lifecycle state.
+
+**Dependencies:** `P0-PB-10H`
+
+**Implementation:** [pairblock_controller.py](../../tools/pairblock_status/pairblock_controller.py) · [test_cross_origin_dependencies.py](../../tests/pairblock_status/test_cross_origin_dependencies.py)
+
+**Current receipt:** None
+
+**Gate:**
+
+```bash
+cd /Users/machina/Developer/ChatGPT/RICO
+PYTHONPATH=. /bin/zsh -e -c 'python -m pyright tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_cross_origin_dependencies.py && python -m pytest tests/pairblock_status/test_cross_origin_dependencies.py -q && python -m ruff format --check tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_cross_origin_dependencies.py && python -m ruff check tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_cross_origin_dependencies.py'
+```
+
+**Next transition:**
+
+```bash
+# Waiting for a declared dependency.
+```
+<!-- generated:manifest-native-contract:end -->
 
 - MANTRA: `reinstantiation/README.md`
 - MANTRA: `reinstantiation/REINSTANTIATION_ROOT_RELEASE.json`

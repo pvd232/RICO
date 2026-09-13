@@ -19,9 +19,7 @@ def test_proposal_module_overrides_active_module(tmp_path: Path) -> None:
     (proposal / "example").mkdir(parents=True)
     (active / "example/__init__.py").write_text("", encoding="utf-8")
     (active / "example/value.py").write_text("VALUE = 'active'\n", encoding="utf-8")
-    (proposal / "example/value.py").write_text(
-        "VALUE = 'proposal'\n", encoding="utf-8"
-    )
+    (proposal / "example/value.py").write_text("VALUE = 'proposal'\n", encoding="utf-8")
 
     result = run_overlay(
         active,

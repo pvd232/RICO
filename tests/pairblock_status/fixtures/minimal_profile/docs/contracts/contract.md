@@ -1,5 +1,9 @@
 # Contract
 
+<!-- generated:manifest-native-contract:start -->
+_No manifest-native PairBlocks._
+<!-- generated:manifest-native-contract:end -->
+
 ## Requirement map
 
 | ID | Contract boundary | Owning block declarations |

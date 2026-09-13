@@ -5,7 +5,7 @@ from __future__ import annotations
 import os
 import shutil
 import subprocess
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 
 import pytest
@@ -14,7 +14,11 @@ from tools.pairblock_status.checklist_profile import (
     MarkdownChecklistAdapter,
     MarkdownChecklistDialect,
 )
-from tools.pairblock_status.profile import ChecklistProfile, LifecyclePolicy
+from tools.pairblock_status.profile import (
+    ChecklistProfile,
+    LifecycleEvidenceRule,
+    LifecyclePolicy,
+)
 
 FIXTURE_ROOT = Path(__file__).parent / "fixtures/minimal_profile"
 REPOSITORY_ROOT = Path(__file__).parents[2]
@@ -65,6 +69,11 @@ TEST_PROFILE = ChecklistProfile(
         ),
         resolved_dependency_states=frozenset({"Applied", "Complete"}),
         legacy_certification_event="certify",
+        evidence_rules=(
+            LifecycleEvidenceRule("approve", "external"),
+            LifecycleEvidenceRule("accept", "artifact"),
+            LifecycleEvidenceRule("register", "artifact"),
+        ),
     ),
     legacy_certifiable_pair_blocks=frozenset({PAIR_BLOCK_ID}),
 )
@@ -89,9 +98,25 @@ TEST_ADAPTER = MarkdownChecklistAdapter(
 )
 
 
+@pytest.fixture
+def declaration_profile() -> ChecklistProfile:
+    """Return the fixture profile with typed declarations in its repository."""
+
+    return replace(
+        TEST_PROFILE,
+        declaration_path=Path("declarations.toml"),
+        repository_roots=(("test", Path(".")),),
+    )
+
+
 @dataclass(frozen=True, slots=True)
 class PairBlockFixture:
-    """Represent one PairBlock rendered into an isolated test repository."""
+    """Represent one PairBlock rendered into an isolated test repository.
+
+    Attributes:
+        pair_block_id: Stable identifier inserted into fixture records.
+        status: Initial lifecycle label rendered into the checklist.
+    """
 
     pair_block_id: str
     status: str
@@ -120,9 +145,7 @@ def _pair_block_row(
     """Render one PairBlock status row from structured values."""
 
     contract_link = _relative_link(CHECKLIST_PATH, CONTRACT_PATH)
-    declaration = (
-        f"[Block]({contract_link}#{block.pair_block_id.lower()})"
-    )
+    declaration = f"[Block]({contract_link}#{block.pair_block_id.lower()})"
     proposed_code = "Pending"
     if proposed:
         staging_root = Path("staging") / block.pair_block_id.lower()
@@ -168,7 +191,11 @@ def _checkbox(block: PairBlockFixture) -> str:
 
 @dataclass(frozen=True, slots=True)
 class RepositoryFactory:
-    """Create one Git repository containing a rendered checklist scenario."""
+    """Create one Git repository containing a rendered checklist scenario.
+
+    Attributes:
+        temporary_root: Pytest-owned directory that contains each repository.
+    """
 
     temporary_root: Path
 

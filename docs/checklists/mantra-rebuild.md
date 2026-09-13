@@ -108,7 +108,18 @@ controls. The completed set contains 27 Hopfield and MIL destinations in
 | `P0-PB-09A` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-09a/20260913T023141.344319Z-register.json)) | Complete | `P0-PB-07`, `P0-PB-08`, `P0-PB-09` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-09a) | [Source](../../tools/register_phase0.py) · [Loader](../../tools/artifact_loaders.py) · [Tests](../../tests/test_register_phase0.py) · [Terminal receipt](../../evidence/phase0/rico/phase0_registration_receipt.json) |
 | `P0-PB-10` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-10/20260913T023140.710312Z-register.json)) | Complete | None | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-10) | [Controller](../../tools/pairblock_status/pairblock_controller.py) · [Tests](../../tests/pairblock_status/test_pairblock_controller.py) |
 | `P0-PB-10A` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-10a/20260913T024518.399844Z-register.json)) | Complete | `P0-PB-10` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-10a) | [Profile](../../tools/pairblock_status/profile.py) · [Controller](../../tools/pairblock_status/pairblock_controller.py) · [Validator](../../tools/pairblock_status/checklist_profile.py) · [Fixtures](../../tests/pairblock_status/conftest.py) · [Tests](../../tests/pairblock_status/test_pairblock_controller.py) |
-| `P0-PB-10B` | Pending | Drafting | `P0-PB-10A` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-10b) | [Target paths and gate](../contracts/mantra-rebuild-phase-0.md#p0-pb-10b) |
+| `P0-PB-10B` | Passed: `90` tests ([receipt](../../evidence/pairblock-gates/p0-pb-10b/20260913T051841.974521Z.json)) | Review | `P0-PB-10A` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-10b) | [Source and tests](../contracts/mantra-rebuild-phase-0.md#p0-pb-10b-proposed-code) · [Dependencies](../../requirements.txt) · [Declarations](../contracts/mantra-rebuild.declarations.toml) · [Loader](../../tools/pairblock_status/declaration_manifest.py) · [Renderer](../../tools/pairblock_status/markdown_renderer.py) · [Controller](../../tools/pairblock_status/pairblock_controller.py) · [Declaration tests](../../tests/pairblock_status/test_declaration_manifest.py) · [Renderer tests](../../tests/pairblock_status/test_markdown_renderer.py) · [Controller tests](../../tests/pairblock_status/test_pairblock_controller.py) |
+
+<!-- generated:manifest-native-checklist:start -->
+| PairBlock | Status | Depends on | Contract | Source | Tests | Receipt |
+|---|---|---|---|---|---|---|
+| `P0-PB-10D` | Drafting | `P0-PB-10A` | [P0-PB-10D](../contracts/mantra-rebuild-phase-0.md#manifest-native-block-p0-pb-10d) | [profile.py](../../tools/pairblock_status/profile.py) · [pairblock_controller.py](../../tools/pairblock_status/pairblock_controller.py) | [test_lifecycle_evidence.py](../../tests/pairblock_status/test_lifecycle_evidence.py) | None |
+| `P0-PB-10E` | Waiting for P0-PB-10D | `P0-PB-10D` | [P0-PB-10E](../contracts/mantra-rebuild-phase-0.md#manifest-native-block-p0-pb-10e) | [execution_identity.py](../../tools/pairblock_status/execution_identity.py) · [receipt_validation.py](../../tools/pairblock_status/receipt_validation.py) · [pairblock_controller.py](../../tools/pairblock_status/pairblock_controller.py) | [test_receipt_integrity.py](../../tests/pairblock_status/test_receipt_integrity.py) | None |
+| `P0-PB-10F` | Drafting | `P0-PB-10A` | [P0-PB-10F](../contracts/mantra-rebuild-phase-0.md#manifest-native-block-p0-pb-10f) | [declaration_manifest.py](../../tools/pairblock_status/declaration_manifest.py) · [pairblock_controller.py](../../tools/pairblock_status/pairblock_controller.py) | [test_declaration_revision_integrity.py](../../tests/pairblock_status/test_declaration_revision_integrity.py) | None |
+| `P0-PB-10G` | Waiting for P0-PB-10E, P0-PB-10F | `P0-PB-10E`, `P0-PB-10F` | [P0-PB-10G](../contracts/mantra-rebuild-phase-0.md#manifest-native-block-p0-pb-10g) | [projection_transaction.py](../../tools/pairblock_status/projection_transaction.py) · [pairblock_controller.py](../../tools/pairblock_status/pairblock_controller.py) | [test_projection_recovery.py](../../tests/pairblock_status/test_projection_recovery.py) | None |
+| `P0-PB-10H` | Drafting | `P0-PB-10A` | [P0-PB-10H](../contracts/mantra-rebuild-phase-0.md#manifest-native-block-p0-pb-10h) | [markdown_renderer.py](../../tools/pairblock_status/markdown_renderer.py) | [test_markdown_renderer.py](../../tests/pairblock_status/test_markdown_renderer.py) | None |
+| `P0-PB-10I` | Waiting for P0-PB-10H | `P0-PB-10H` | [P0-PB-10I](../contracts/mantra-rebuild-phase-0.md#manifest-native-block-p0-pb-10i) | [pairblock_controller.py](../../tools/pairblock_status/pairblock_controller.py) | [test_cross_origin_dependencies.py](../../tests/pairblock_status/test_cross_origin_dependencies.py) | None |
+<!-- generated:manifest-native-checklist:end -->
 
 ## Terminal outcome
 
@@ -156,12 +167,15 @@ For each review cycle, Codex updates this file in the same RICO commit that
 records any changed contract status. MANTRA implementation commits remain in
 MANTRA. The RICO checklist cites their commit IDs and gate outputs.
 
-An approved review cycle closes before the next cycle begins. Codex runs the
-focused checks, commits and pushes only that cycle's owned paths, then reviews
-the exact published revision. The review receipt records the base and result
-commits, owned paths, canonical diff digest, checked invariants, findings,
-mechanical evidence, exclusions, and verdict. Every finding produces a repaired
-commit and a new review receipt before acceptance.
+Each completed review pass ends in a commit before the next pass or
+implementation block begins. Codex freezes the exact working-tree diff, records
+the verdict and findings, runs the applicable focused checks, rereads the diff,
+and commits only that pass's owned paths. A `Request changes` commit preserves
+the rejected checkpoint; its repair receives a later review-cycle commit.
+Codex verifies that each commit contains the reviewed diff. Publication follows
+the repository's synchronization schedule. The review receipt records the base
+and result commits, owned paths, canonical diff digest, checked invariants,
+findings, mechanical evidence, exclusions, and verdict.
 
 A task-created branch closes before its PairBlock closes. The owning
 repository's default branch must contain the accepted commit, the configured
@@ -437,8 +451,10 @@ RICO; record the closing RICO and MANTRA commit IDs in VIPER.
 **Gate:** `P0-VR-26` passes. The implementation accepts one manifest-native
 fixture through its full lifecycle, rejects every severed or duplicate
 connector before execution, reopens the exact affected closure after an
-approved declaration revision, preserves unaffected receipts, and leaves the
-completed legacy inventory on its current authority path.
+approved declaration revision, recomputes the revision receipt's derived
+evidence, preserves unaffected receipts, discovers every active Python module
+for semantic documentation coverage, and leaves the completed legacy inventory
+on its current authority path.
 
 **Commit boundary:** Commit the reviewed declaration protocol, renderer,
 controller routing, tests, contract, and checklist as one RICO increment. Record
@@ -615,6 +631,8 @@ specification passes.
 | Item | Scope basis |
 |---|---|
 | CPU-only MIL acceptance | The historical acceptance run used an L4-class CUDA environment. A CPU portability probe measures feasibility only. |
+| [Shared file identity](../contracts/mantra-rebuild-phase-0.md#future-work-shared-file-identity) | After `P0-PB-07A`, promote proposed `P0-PB-07B` to add `viper.references.FileIdentity`, derive VIPER's file-reference types from it, and remove MANTRA's duplicate byte-identity classes. |
+| [Discriminated lifecycle-evidence union](../contracts/mantra-rebuild-phase-0.md#future-work-discriminated-lifecycle-evidence-union) | Retain the shared `EvidenceKind` literal until a real caller needs kind-specific parsing; then charter a separate PairBlock for the discriminated union, schema revision, and historical-receipt reader. |
 | Relation-specific message passing | V2 begins after V1 passes. |
 | Learned edge weights | V3 begins after V2 establishes a comparison baseline. |
 | Perturbation-conditioned node selection | V4 begins after the earlier graph versions establish its necessity. |

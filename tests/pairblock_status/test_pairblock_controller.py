@@ -7,7 +7,7 @@ import json
 import shutil
 import sys
 from dataclasses import fields, replace
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import pytest
@@ -31,23 +31,33 @@ from conftest import (
 from tools.pairblock_status.checklist_profile import (
     MANTRA_PHASE0_ADAPTER,
     MarkdownChecklistAdapter,
+    NormalizedManifest,
+    PairBlockRow,
 )
 from tools.pairblock_status.execution_identity import sha256_file
 from tools.pairblock_status.pairblock_controller import (
     DEFAULT_MASTER_CHECKLIST_VALIDATOR,
     EvidenceRef,
     PairBlockGateError,
+    accept_declaration_revision,
     advance_pairblock,
+    plan_declaration_revision,
     run_gate,
+    write_declaration_revision_plan,
 )
-from tools.pairblock_status.profile import MANTRA_PHASE0_PROFILE, ChecklistProfile
+from tools.pairblock_status.profile import (
+    MANTRA_PHASE0_PROFILE,
+    ChecklistProfile,
+    EvidenceKind,
+)
 
 NOW = datetime(2026, 9, 11, 16, 0, tzinfo=timezone.utc)
+NATIVE_PAIR_BLOCK_ID = "PB-NATIVE"
 
 
 def validate_test_repository(
     repository: Path,
-) -> tuple[dict[str, object], dict[str, object]]:
+) -> tuple[dict[str, PairBlockRow], NormalizedManifest]:
     """Validate one generated repository with the generic test profile."""
 
     return TEST_ADAPTER.validate_traceability(repository)
@@ -74,7 +84,7 @@ def advance_test_block(
     repository: Path,
     event: str,
     *,
-    evidence_kind: str = "external",
+    evidence_kind: EvidenceKind = "external",
     certification_reason: str | None = None,
 ) -> Path:
     """Advance the test PairBlock with one compact evidence reference."""
@@ -111,12 +121,74 @@ def passing_command() -> str:
     )
 
 
+def native_artifact_evidence(repository: Path, name: str) -> EvidenceRef:
+    """Create one retained native lifecycle artifact and its exact identity."""
+
+    artifact = repository / "evidence" / "native" / f"{name}.json"
+    artifact.parent.mkdir(parents=True, exist_ok=True)
+    artifact.write_text(json.dumps({"event": name}) + "\n", encoding="utf-8")
+    return EvidenceRef(
+        "artifact",
+        artifact.relative_to(repository).as_posix(),
+        sha256_file(artifact),
+    )
+
+
 def failing_command() -> str:
     """Return a failing gate that still names both bounded files."""
 
     return (
         "python -c 'import sys; print(\"failed\"); sys.exit(1)' "
         f"{SOURCE_PATH.as_posix()} {TEST_PATH.as_posix()}"
+    )
+
+
+def accept_fixture_declarations(
+    repository: Path,
+    adapter: MarkdownChecklistAdapter,
+    *,
+    now: datetime = NOW,
+) -> Path:
+    """Accept the fixture manifest through an external review reference."""
+
+    plan = write_declaration_revision_plan(repository, now=now, adapter=adapter)
+    return accept_declaration_revision(
+        repository,
+        EvidenceRef("external", "user review", "review-message"),
+        plan_path=plan,
+        plan_sha256=sha256_file(plan),
+        now=now,
+        adapter=adapter,
+    )
+
+
+def add_dependent_native_block(repository: Path, profile: ChecklistProfile) -> None:
+    """Add one native block that shares the fixture requirement."""
+
+    manifest = repository / profile.require_declaration_path()
+    manifest.write_text(
+        manifest.read_text(encoding="utf-8").replace(
+            'pair_block_ids = ["PB-NATIVE"]',
+            'pair_block_ids = ["PB-NATIVE", "PB-DEPENDENT"]',
+        )
+        + """
+
+[[pair_blocks]]
+id = "PB-DEPENDENT"
+requirement_ids = ["REQ-NATIVE"]
+depends_on = ["PB-NATIVE"]
+section = "0B"
+repository = "test"
+source_paths = ["tools/pairblock_status/checklist_profile.py"]
+test_paths = ["tests/pairblock_status/test_pairblock_controller.py"]
+
+[pair_blocks.gate]
+repository = "test"
+working_directory = "."
+argv = ["python", "-c", "print('2 passed in 0.01s')"]
+environment = { PYTEST_DISABLE_PLUGIN_AUTOLOAD = "1" }
+""",
+        encoding="utf-8",
     )
 
 
@@ -199,8 +271,7 @@ def test_gate_controller_does_not_parse_or_render_markdown() -> None:
     """Keep Markdown row manipulation inside the checklist adapter."""
 
     controller = (
-        Path(__file__).parents[2]
-        / "tools/pairblock_status/pairblock_controller.py"
+        Path(__file__).parents[2] / "tools/pairblock_status/pairblock_controller.py"
     )
     tree = ast.parse(controller.read_text(encoding="utf-8"), filename=str(controller))
     function_names = {
@@ -330,7 +401,9 @@ def test_lifecycle_completion_updates_every_derived_status(
         if item["requirement_id"] == REQUIREMENT_ID
     )
 
-    assert json.loads(approval.read_text(encoding="utf-8"))["status_after"] == "Approved"
+    assert (
+        json.loads(approval.read_text(encoding="utf-8"))["status_after"] == "Approved"
+    )
     assert json.loads(accepted.read_text(encoding="utf-8"))["status_after"] == "Applied"
     assert json.loads(completed.read_text(encoding="utf-8"))["result"] == "applied"
     assert rows[PAIR_BLOCK_ID].status == "Complete"
@@ -426,7 +499,9 @@ def test_non_code_review_completion_updates_every_derived_status(
     checklist = (repository / CHECKLIST_PATH).read_text(encoding="utf-8")
 
     assert json.loads(submitted.read_text(encoding="utf-8"))["status_after"] == "Review"
-    assert json.loads(confirmed.read_text(encoding="utf-8"))["status_after"] == "Complete"
+    assert (
+        json.loads(confirmed.read_text(encoding="utf-8"))["status_after"] == "Complete"
+    )
     assert rows[PAIR_BLOCK_ID].status == "Complete"
     assert "- [x] Exercise `PB-GATE`." in checklist
     assert manifest["pair_blocks"][0]["state"] == "complete"
@@ -509,7 +584,7 @@ def test_legacy_certification_closes_one_named_applied_block(
 )
 def test_legacy_certification_requires_artifact_and_reason(
     repository_factory: RepositoryFactory,
-    evidence_kind: str,
+    evidence_kind: EvidenceKind,
     reason: str | None,
     message: str,
 ) -> None:
@@ -663,6 +738,392 @@ def test_failing_gate_retains_receipt_without_changing_checklist(
     )
 
 
+def test_earlier_command_failure_cannot_be_masked(
+    repository_factory: RepositoryFactory,
+) -> None:
+    """Stop a legacy gate when an earlier command exits unsuccessfully."""
+
+    paths = f"{SOURCE_PATH.as_posix()} {TEST_PATH.as_posix()}"
+    command = (
+        f"python -c 'raise SystemExit(7)' {paths}\n"
+        f"python -c 'print(\"2 passed in 0.01s\")' {paths}"
+    )
+    repository = repository_factory(command=command)
+
+    receipt_path = run_test_gate(repository)
+    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+
+    assert receipt["result"] == "failed"
+    assert receipt["exit_code"] == 7
+    assert "2 passed" not in receipt["stdout"]
+
+
+def test_revision_receipt_binds_manifest_and_record_digests(
+    repository_factory: RepositoryFactory,
+    declaration_profile: ChecklistProfile,
+) -> None:
+    """Retain the accepted declaration, changed records, and user approval."""
+
+    repository = repository_factory(command=passing_command())
+    adapter = replace(TEST_ADAPTER, profile=declaration_profile)
+
+    plan = plan_declaration_revision(repository, adapter=adapter)
+    receipt_path = accept_fixture_declarations(repository, adapter)
+    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+
+    assert plan.changed
+    assert plan.affected_pair_blocks == (NATIVE_PAIR_BLOCK_ID,)
+    assert receipt["before_sha256"] == plan.before_sha256
+    assert receipt["after_sha256"] == plan.after_sha256
+    assert receipt["approval"] == {
+        "kind": "external",
+        "revision": "review-message",
+        "target": "user review",
+    }
+    assert receipt["accepted_manifest"]["pair_blocks"][0]["id"] == NATIVE_PAIR_BLOCK_ID
+    assert {record["record"] for record in receipt["records"]} == {
+        "pair_block:PB-NATIVE",
+        "requirement:REQ-NATIVE",
+        "verifier:VR-NATIVE",
+    }
+
+
+def test_revision_receipt_digests_must_join(
+    repository_factory: RepositoryFactory,
+    declaration_profile: ChecklistProfile,
+) -> None:
+    """Reject a revision whose before digest differs from its predecessor."""
+
+    repository = repository_factory(command=passing_command())
+    adapter = replace(TEST_ADAPTER, profile=declaration_profile)
+    accept_fixture_declarations(repository, adapter)
+    manifest = repository / declaration_profile.require_declaration_path()
+    manifest.write_text(
+        manifest.read_text(encoding="utf-8").replace(
+            "The proposal gate retains its result.",
+            "The proposal gate retains its exact result.",
+        ),
+        encoding="utf-8",
+    )
+    receipt_path = accept_fixture_declarations(
+        repository, adapter, now=NOW + timedelta(seconds=1)
+    )
+    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    receipt["before_sha256"] = "0" * 64
+    receipt_path.write_text(json.dumps(receipt), encoding="utf-8")
+
+    with pytest.raises(PairBlockGateError, match="digests do not join"):
+        plan_declaration_revision(repository, adapter=adapter)
+
+
+@pytest.mark.parametrize(
+    ("field", "replacement", "message"),
+    [
+        ("records", [], "record changes differ"),
+        ("affected_pair_blocks", [], "affected blocks differ"),
+        (
+            "approval",
+            {"kind": "artifact", "target": "user review", "revision": "message"},
+            "approval is not external",
+        ),
+        (
+            "superseded_receipt_heads",
+            {NATIVE_PAIR_BLOCK_ID: "evidence/missing.json"},
+            "superseded receipt is missing",
+        ),
+    ],
+)
+def test_revision_receipt_recomputes_or_validates_each_evidence_claim(
+    repository_factory: RepositoryFactory,
+    declaration_profile: ChecklistProfile,
+    field: str,
+    replacement: object,
+    message: str,
+) -> None:
+    """Reject a stored revision claim that its source records cannot support."""
+
+    repository = repository_factory(command=passing_command())
+    adapter = replace(TEST_ADAPTER, profile=declaration_profile)
+    receipt_path = accept_fixture_declarations(repository, adapter)
+    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    receipt[field] = replacement
+    receipt_path.write_text(json.dumps(receipt), encoding="utf-8")
+
+    with pytest.raises(PairBlockGateError, match=message):
+        plan_declaration_revision(repository, adapter=adapter)
+
+
+def test_manifest_native_block_completes_through_receipt_derived_views(
+    repository_factory: RepositoryFactory,
+    declaration_profile: ChecklistProfile,
+) -> None:
+    """Run a native gate and all three later lifecycle transitions."""
+
+    repository = repository_factory(command=passing_command())
+    adapter = replace(TEST_ADAPTER, profile=declaration_profile)
+    accept_fixture_declarations(repository, adapter)
+
+    gate = run_gate(repository, NATIVE_PAIR_BLOCK_ID, now=NOW, adapter=adapter)
+    approval = advance_pairblock(
+        repository,
+        NATIVE_PAIR_BLOCK_ID,
+        "approve",
+        EvidenceRef("external", "code review", "review-message"),
+        now=NOW + timedelta(seconds=1),
+        adapter=adapter,
+    )
+    accepted = advance_pairblock(
+        repository,
+        NATIVE_PAIR_BLOCK_ID,
+        "accept",
+        native_artifact_evidence(repository, "implementation"),
+        now=NOW + timedelta(seconds=2),
+        adapter=adapter,
+    )
+    completed = advance_pairblock(
+        repository,
+        NATIVE_PAIR_BLOCK_ID,
+        "register",
+        native_artifact_evidence(repository, "viper"),
+        now=NOW + timedelta(seconds=3),
+        adapter=adapter,
+    )
+    contract = (repository / CONTRACT_PATH).read_text(encoding="utf-8")
+    checklist = (repository / CHECKLIST_PATH).read_text(encoding="utf-8")
+
+    assert json.loads(gate.read_text(encoding="utf-8"))["status_after"] == "Review"
+    assert (
+        json.loads(approval.read_text(encoding="utf-8"))["status_after"] == "Approved"
+    )
+    assert json.loads(accepted.read_text(encoding="utf-8"))["status_after"] == "Applied"
+    assert (
+        json.loads(completed.read_text(encoding="utf-8"))["status_after"] == "Complete"
+    )
+    assert "**Status:** Complete" in contract
+    assert "| `PB-NATIVE` | Complete |" in checklist
+
+
+def test_unapproved_declaration_change_blocks_execution(
+    repository_factory: RepositoryFactory,
+    declaration_profile: ChecklistProfile,
+) -> None:
+    """Stop before process launch when the working declaration changed."""
+
+    repository = repository_factory(command=passing_command())
+    adapter = replace(TEST_ADAPTER, profile=declaration_profile)
+    accept_fixture_declarations(repository, adapter)
+    manifest = repository / declaration_profile.require_declaration_path()
+    manifest.write_text(
+        manifest.read_text(encoding="utf-8").replace(
+            "The proposal gate retains its result.",
+            "The proposal gate retains its exact result.",
+        ),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(PairBlockGateError, match="record revise first"):
+        run_gate(repository, NATIVE_PAIR_BLOCK_ID, adapter=adapter)
+
+    assert not (repository / "evidence/pairblock-gates/pb-native").exists()
+
+
+def test_corrupt_native_receipt_reference_blocks_transition(
+    repository_factory: RepositoryFactory,
+    declaration_profile: ChecklistProfile,
+) -> None:
+    """Reject a native lifecycle chain whose predecessor receipt is absent."""
+
+    repository = repository_factory(command=passing_command())
+    adapter = replace(TEST_ADAPTER, profile=declaration_profile)
+    accept_fixture_declarations(repository, adapter)
+    run_gate(repository, NATIVE_PAIR_BLOCK_ID, now=NOW, adapter=adapter)
+    approval = advance_pairblock(
+        repository,
+        NATIVE_PAIR_BLOCK_ID,
+        "approve",
+        EvidenceRef("external", "code review", "review-message"),
+        now=NOW + timedelta(seconds=1),
+        adapter=adapter,
+    )
+    receipt = json.loads(approval.read_text(encoding="utf-8"))
+    receipt["previous_receipt"] = "evidence/missing.json"
+    approval.write_text(json.dumps(receipt), encoding="utf-8")
+
+    with pytest.raises(PairBlockGateError, match="missing receipts"):
+        advance_pairblock(
+            repository,
+            NATIVE_PAIR_BLOCK_ID,
+            "accept",
+            native_artifact_evidence(repository, "implementation"),
+            adapter=adapter,
+        )
+
+
+def test_duplicate_legacy_and_native_owner_blocks_revision(
+    repository_factory: RepositoryFactory,
+    declaration_profile: ChecklistProfile,
+) -> None:
+    """Reject a PairBlock ID declared by both authority paths."""
+
+    repository = repository_factory(command=passing_command())
+    adapter = replace(TEST_ADAPTER, profile=declaration_profile)
+    manifest = repository / declaration_profile.require_declaration_path()
+    manifest.write_text(
+        manifest.read_text(encoding="utf-8").replace("PB-NATIVE", "PB-GATE"),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(PairBlockGateError, match="legacy and typed owners"):
+        accept_fixture_declarations(repository, adapter)
+
+
+def test_changed_verifier_reopens_owner_and_dependents(
+    repository_factory: RepositoryFactory,
+    declaration_profile: ChecklistProfile,
+) -> None:
+    """Reopen dependents and retain the exact superseded receipt head."""
+
+    repository = repository_factory(command=passing_command())
+    adapter = replace(TEST_ADAPTER, profile=declaration_profile)
+    add_dependent_native_block(repository, declaration_profile)
+    accept_fixture_declarations(repository, adapter)
+    gate = run_gate(repository, NATIVE_PAIR_BLOCK_ID, now=NOW, adapter=adapter)
+    advance_pairblock(
+        repository,
+        NATIVE_PAIR_BLOCK_ID,
+        "approve",
+        EvidenceRef("external", "code review", "review-message"),
+        now=NOW + timedelta(seconds=1),
+        adapter=adapter,
+    )
+    advance_pairblock(
+        repository,
+        NATIVE_PAIR_BLOCK_ID,
+        "accept",
+        native_artifact_evidence(repository, "implementation"),
+        now=NOW + timedelta(seconds=2),
+        adapter=adapter,
+    )
+    completed = advance_pairblock(
+        repository,
+        NATIVE_PAIR_BLOCK_ID,
+        "register",
+        native_artifact_evidence(repository, "viper"),
+        now=NOW + timedelta(seconds=3),
+        adapter=adapter,
+    )
+    manifest = repository / declaration_profile.require_declaration_path()
+    manifest.write_text(
+        manifest.read_text(encoding="utf-8").replace(
+            "The declared test command passes.",
+            "The declared test command passes twice.",
+        ),
+        encoding="utf-8",
+    )
+
+    revision = accept_fixture_declarations(
+        repository, adapter, now=NOW + timedelta(seconds=4)
+    )
+    receipt = json.loads(revision.read_text(encoding="utf-8"))
+    contract = (repository / CONTRACT_PATH).read_text(encoding="utf-8")
+
+    assert receipt["affected_pair_blocks"] == ["PB-DEPENDENT", NATIVE_PAIR_BLOCK_ID]
+    assert receipt["superseded_receipt_heads"] == {
+        NATIVE_PAIR_BLOCK_ID: completed.relative_to(repository).as_posix()
+    }
+    assert "**Status:** Drafting" in contract
+    dependent_block = contract.split("#### Manifest-native block PB-DEPENDENT", 1)[1]
+    dependent_block = dependent_block.split("#### Manifest-native block PB-NATIVE", 1)[
+        0
+    ]
+    assert "**Status:** Waiting for PB-NATIVE" in dependent_block
+
+    receipt["superseded_receipt_heads"] = {
+        NATIVE_PAIR_BLOCK_ID: gate.relative_to(repository).as_posix()
+    }
+    revision.write_text(json.dumps(receipt), encoding="utf-8")
+    with pytest.raises(PairBlockGateError, match="superseded receipt heads differ"):
+        plan_declaration_revision(repository, adapter=adapter)
+
+
+def test_unrelated_declaration_change_preserves_receipts(
+    repository_factory: RepositoryFactory,
+    declaration_profile: ChecklistProfile,
+) -> None:
+    """Keep a completed block current when an independent block is added."""
+
+    repository = repository_factory(command=passing_command())
+    adapter = replace(TEST_ADAPTER, profile=declaration_profile)
+    accept_fixture_declarations(repository, adapter)
+    run_gate(repository, NATIVE_PAIR_BLOCK_ID, now=NOW, adapter=adapter)
+    for seconds, event in enumerate(("approve", "accept", "register"), start=1):
+        evidence = (
+            EvidenceRef("external", "approve evidence", "approve revision")
+            if event == "approve"
+            else native_artifact_evidence(repository, event)
+        )
+        advance_pairblock(
+            repository,
+            NATIVE_PAIR_BLOCK_ID,
+            event,
+            evidence,
+            now=NOW + timedelta(seconds=seconds),
+            adapter=adapter,
+        )
+    manifest = repository / declaration_profile.require_declaration_path()
+    manifest.write_text(
+        manifest.read_text(encoding="utf-8")
+        + """
+
+[[requirements]]
+id = "REQ-OTHER"
+claim = "An independent block retains its own result."
+phase = 0
+order = 2
+depends_on = []
+gate = { kind = "test", target = "VR-OTHER" }
+verifier_ids = ["VR-OTHER"]
+pair_block_ids = ["PB-OTHER"]
+
+[[verifiers]]
+id = "VR-OTHER"
+requirement_ids = ["REQ-OTHER"]
+conditions = ["The independent command passes."]
+success_case = "The independent receipt records the command."
+rejection_cases = ["The independent command fails."]
+
+[[pair_blocks]]
+id = "PB-OTHER"
+requirement_ids = ["REQ-OTHER"]
+depends_on = []
+section = "0B"
+repository = "test"
+source_paths = ["tools/pairblock_status/checklist_profile.py"]
+test_paths = ["tests/pairblock_status/test_pairblock_controller.py"]
+
+[pair_blocks.gate]
+repository = "test"
+working_directory = "."
+argv = ["python", "-c", "print('2 passed in 0.01s')"]
+environment = { PYTEST_DISABLE_PLUGIN_AUTOLOAD = "1" }
+""",
+        encoding="utf-8",
+    )
+
+    revision = accept_fixture_declarations(
+        repository, adapter, now=NOW + timedelta(seconds=4)
+    )
+    receipt = json.loads(revision.read_text(encoding="utf-8"))
+    contract = (repository / CONTRACT_PATH).read_text(encoding="utf-8")
+
+    assert receipt["affected_pair_blocks"] == ["PB-OTHER"]
+    assert receipt["superseded_receipt_heads"] == {}
+    native_block = contract.split("#### Manifest-native block PB-NATIVE", 1)[1]
+    native_block = native_block.split("#### Manifest-native block PB-OTHER", 1)[0]
+    assert "**Status:** Complete" in native_block
+    assert "register.json" in native_block
+
+
 def test_unknown_pair_block_is_rejected(
     repository_factory: RepositoryFactory,
 ) -> None:
@@ -682,9 +1143,7 @@ def test_duplicate_status_row_is_rejected(
     checklist = repository / CHECKLIST_PATH
     text = checklist.read_text(encoding="utf-8")
     row = next(
-        line
-        for line in text.splitlines()
-        if line.startswith(f"| `{PAIR_BLOCK_ID}` |")
+        line for line in text.splitlines() if line.startswith(f"| `{PAIR_BLOCK_ID}` |")
     )
     checklist.write_text(text.replace(row, row + "\n" + row), encoding="utf-8")
 
@@ -722,6 +1181,25 @@ def test_broken_document_fragment_is_rejected(
     )
 
     with pytest.raises(PairBlockGateError, match="does not name a native heading"):
+        validate_test_repository(repository)
+
+
+def test_linked_current_receipt_must_exist(
+    repository_factory: RepositoryFactory,
+) -> None:
+    """Reject a status row whose current receipt target is absent."""
+
+    repository = repository_factory(command=passing_command(), status="Review")
+    checklist = repository / CHECKLIST_PATH
+    checklist.write_text(
+        checklist.read_text(encoding="utf-8").replace(
+            "| Pending | Review |",
+            "| Passed: `2` tests ([receipt](../../evidence/missing.json)) | Review |",
+        ),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(PairBlockGateError, match="current receipt is missing"):
         validate_test_repository(repository)
 
 
@@ -1076,24 +1554,43 @@ def test_execution_identity_drift_invalidates_pass(
     assert TEST_PROFILE.lifecycle.review_status not in checklist
 
 
-def test_active_modules_and_definitions_have_docstrings() -> None:
-    """Keep every active module, class, function, and method documented."""
+def test_pairblock_modules_and_definitions_have_documentation() -> None:
+    """Document every active definition and persisted record field it owns."""
 
     root = Path(__file__).parents[2]
-    paths = [
-        root / "tools/pairblock_status/__init__.py",
-        root / "tools/pairblock_status/checklist_profile.py",
-        root / "tools/pairblock_status/execution_identity.py",
-        root / "tools/pairblock_status/profile.py",
-        root / "tools/pairblock_status/pairblock_controller.py",
-        root / "tests/pairblock_status/conftest.py",
-        Path(__file__),
-    ]
+    paths = sorted((root / "tools/pairblock_status").glob("*.py"))
+    paths.extend(sorted((root / "tests/pairblock_status").glob("*.py")))
     for path in paths:
         tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
         assert ast.get_docstring(tree), f"{path} lacks a module docstring"
         for node in ast.walk(tree):
             if isinstance(node, (ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef)):
-                assert ast.get_docstring(node), (
-                    f"{path}:{node.lineno} {node.name} lacks a docstring"
+                docstring = ast.get_docstring(node)
+                assert docstring, f"{path}:{node.lineno} {node.name} lacks a docstring"
+                is_dataclass = isinstance(node, ast.ClassDef) and any(
+                    (isinstance(decorator, ast.Name) and decorator.id == "dataclass")
+                    or (
+                        isinstance(decorator, ast.Call)
+                        and isinstance(decorator.func, ast.Name)
+                        and decorator.func.id == "dataclass"
+                    )
+                    for decorator in node.decorator_list
                 )
+                is_typed_dict = isinstance(node, ast.ClassDef) and any(
+                    isinstance(base, ast.Name) and base.id == "TypedDict"
+                    for base in node.bases
+                )
+                if is_dataclass or is_typed_dict:
+                    owned_fields = [
+                        statement.target.id
+                        for statement in node.body
+                        if isinstance(statement, ast.AnnAssign)
+                        and isinstance(statement.target, ast.Name)
+                    ]
+                    undocumented = [
+                        field for field in owned_fields if f"{field}:" not in docstring
+                    ]
+                    assert not undocumented, (
+                        f"{path}:{node.lineno} {node.name} lacks field descriptions: "
+                        f"{undocumented}"
+                    )

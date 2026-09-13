@@ -6,6 +6,10 @@
 |---|---|---|---|---|---|
 {{PAIR_BLOCK_ROWS}}
 
+<!-- generated:manifest-native-checklist:start -->
+_No manifest-native PairBlocks._
+<!-- generated:manifest-native-checklist:end -->
+
 ## Requirement assignments
 
 | Requirement | State | Phase | Depends on | Gate |

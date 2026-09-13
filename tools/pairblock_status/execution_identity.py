@@ -23,6 +23,12 @@ class ExecutionIdentity:
         contract_sha256: Digest of the governing contract bytes.
         source_sha256: Proposed repository paths mapped to their byte digests.
         master_validator_sha256: Digest of the inherited checklist validator.
+        implementation_repository: Absolute path of the repository that owns
+            the executed implementation.
+        implementation_git_head: Owner commit checked out at capture time.
+        implementation_git_status_sha256: Digest of the owner's porcelain
+            status, including untracked paths.
+        implementation_git_diff_sha256: Digest of the owner's binary diff.
     """
 
     git_head: str
@@ -32,6 +38,10 @@ class ExecutionIdentity:
     contract_sha256: str
     source_sha256: dict[str, str]
     master_validator_sha256: str
+    implementation_repository: str
+    implementation_git_head: str
+    implementation_git_status_sha256: str
+    implementation_git_diff_sha256: str
 
 
 def sha256_bytes(value: bytes) -> str:
@@ -65,8 +75,16 @@ def capture_execution_identity(
     contract_path: Path,
     source_paths: Sequence[Path],
     validator_path: Path,
+    implementation_repository: Path | None = None,
 ) -> ExecutionIdentity:
-    """Capture every identity that must remain stable while a gate executes."""
+    """Capture controller and implementation repository identities.
+
+    ``repository`` owns the declarations and rendered views.
+    ``implementation_repository`` owns the command and proposed source. The
+    two arguments may identify the same Git checkout.
+    """
+
+    owner = (implementation_repository or repository).resolve()
 
     return ExecutionIdentity(
         git_head=_git_output(repository, ["rev-parse", "HEAD"]).decode().strip(),
@@ -90,6 +108,19 @@ def capture_execution_identity(
             for path in source_paths
         },
         master_validator_sha256=sha256_file(validator_path),
+        implementation_repository=owner.as_posix(),
+        implementation_git_head=_git_output(owner, ["rev-parse", "HEAD"])
+        .decode()
+        .strip(),
+        implementation_git_status_sha256=sha256_bytes(
+            _git_output(
+                owner,
+                ["status", "--porcelain=v1", "-z", "--untracked-files=all"],
+            )
+        ),
+        implementation_git_diff_sha256=sha256_bytes(
+            _git_output(owner, ["diff", "--binary", "HEAD"])
+        ),
     )
 
 

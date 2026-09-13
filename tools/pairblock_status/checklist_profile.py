@@ -1,4 +1,10 @@
-"""Compile RICO's Markdown checklist into the established normalized manifest."""
+"""Bridge the legacy RICO Markdown checklist to the global typed manifest.
+
+This module parses the completed Phase 0 tables, validates their links and
+receipt chains, and compiles schema-version-2 records for the global checklist
+validator. New manifest-native PairBlocks bypass this parser; the controller
+merges both record sets while the historical rows remain on this adapter.
+"""
 
 from __future__ import annotations
 
@@ -9,10 +15,16 @@ import sys
 import tempfile
 from dataclasses import dataclass
 from pathlib import Path
+from typing import TypedDict
 from urllib.parse import urlsplit
 
 from .execution_identity import sha256_file
-from .profile import MANTRA_PHASE0_PROFILE, ChecklistProfile
+from .profile import (
+    MANTRA_PHASE0_PROFILE,
+    ChecklistProfile,
+    EvidenceKind,
+    PairBlockGateError,
+)
 
 DEFAULT_MASTER_CHECKLIST_VALIDATOR = (
     Path.home() / ".agents/scripts/validate-master-checklist.py"
@@ -26,13 +38,132 @@ _MARKDOWN_LINK = re.compile(r"\[([^]]+)\]\(([^)]+)\)")
 _CHECKBOX = re.compile(r"^\s*- \[([ xX])\] ")
 
 
-class PairBlockGateError(RuntimeError):
-    """Report a RICO profile, validation, or gate-transition violation."""
+class EvidenceRecord(TypedDict):
+    """Identify one completion observation in the normalized manifest.
+
+    Attributes:
+        kind: Global evidence category.
+        target: Observed artifact, command, test, or external result.
+        revision: Immutable identity of the observed target.
+    """
+
+    kind: EvidenceKind
+    target: str
+    revision: str
+
+
+class GateRecord(TypedDict):
+    """Identify one normalized requirement or PairBlock gate.
+
+    Attributes:
+        kind: Global gate category.
+        target: Exact verifier, command, artifact, or external result.
+    """
+
+    kind: EvidenceKind
+    target: str
+
+
+class NormalizedContractRecord(TypedDict):
+    """Represent one contract in the normalized checklist manifest.
+
+    Attributes:
+        contract_id: Stable contract identity.
+        path: Checklist-repository-relative contract path.
+        revision: Git revision or working-tree marker.
+        sha256: Digest of the contract bytes.
+        requirement_ids: Complete requirement set owned by the contract.
+        state: State derived from the contract's requirements and PairBlocks.
+    """
+
+    contract_id: str
+    path: str
+    revision: str
+    sha256: str
+    requirement_ids: list[str]
+    state: str
+
+
+class NormalizedRequirementRecord(TypedDict):
+    """Represent one requirement in the normalized checklist manifest.
+
+    Attributes:
+        requirement_id: Stable contract requirement identity.
+        contract_id: Contract that owns the requirement.
+        phase: Dependency-ordered execution phase.
+        order: Deterministic position within the phase.
+        depends_on: Requirements that must close first.
+        state: Current normalized lifecycle state.
+        gate: Observation that decides completion.
+        completion_evidence: Observations retained after completion.
+    """
+
+    requirement_id: str
+    contract_id: str
+    phase: int
+    order: int
+    depends_on: list[str]
+    state: str
+    gate: GateRecord
+    completion_evidence: list[EvidenceRecord]
+
+
+class NormalizedPairBlockRecord(TypedDict):
+    """Represent one PairBlock in the normalized checklist manifest.
+
+    Attributes:
+        pair_block_id: Stable implementation-block identity.
+        contract_id: Contract that owns the block.
+        section: Checklist section that schedules the block.
+        requirement_ids: Requirements implemented or verified by the block.
+        state: Current normalized lifecycle state.
+        gate: Observation that decides completion.
+        completion_evidence: Observations retained after completion.
+    """
+
+    pair_block_id: str
+    contract_id: str
+    section: str
+    requirement_ids: list[str]
+    state: str
+    gate: GateRecord
+    completion_evidence: list[EvidenceRecord]
+
+
+class NormalizedManifest(TypedDict):
+    """Represent the schema-version-2 input to the global validator.
+
+    Attributes:
+        schema_version: Global master-checklist schema version.
+        checklist_id: Stable checklist series identity.
+        project: Human-readable governed-work name.
+        revision: Git revision or working-tree marker.
+        contracts: Exact contract baselines coordinated by the checklist.
+        requirements: Complete requirement schedule.
+        pair_blocks: Complete content-changing implementation schedule.
+    """
+
+    schema_version: int
+    checklist_id: str
+    project: str
+    revision: str
+    contracts: list[NormalizedContractRecord]
+    requirements: list[NormalizedRequirementRecord]
+    pair_blocks: list[NormalizedPairBlockRecord]
 
 
 @dataclass(frozen=True, slots=True)
 class PairBlockRow:
-    """Represent one authoritative PairBlock lifecycle row in the checklist."""
+    """Represent one authoritative PairBlock lifecycle row in the checklist.
+
+    Attributes:
+        pair_block_id: Stable PairBlock identifier displayed in the row.
+        gate: Human gate summary and current receipt link.
+        status: Project lifecycle label derived from retained evidence.
+        dependencies: PairBlock IDs that must resolve before this block runs.
+        declaration: Link to the block's governing contract section.
+        proposed_code: Links to the block's implementation and tests.
+    """
 
     pair_block_id: str
     gate: str
@@ -44,7 +175,13 @@ class PairBlockRow:
 
 @dataclass(frozen=True, slots=True)
 class PairBlockPlacement:
-    """Locate one PairBlock checkbox and record whether it is checked."""
+    """Locate one PairBlock checkbox and record whether it is checked.
+
+    Attributes:
+        section: Checklist section that owns the PairBlock.
+        checkbox_line: Zero-based source line containing its checkbox.
+        checked: Whether retained completion evidence closed the checkbox.
+    """
 
     section: str
     checkbox_line: int
@@ -53,7 +190,13 @@ class PairBlockPlacement:
 
 @dataclass(frozen=True, slots=True)
 class ProposalContract:
-    """Represent one proposed code boundary and its contract-declared command."""
+    """Represent one proposed code boundary and its contract-declared command.
+
+    Attributes:
+        path: Contract file that owns the proposed implementation.
+        command: Exact focused gate parsed from the contract.
+        source_paths: Implementation and test files governed by the gate.
+    """
 
     path: Path
     command: str
@@ -125,6 +268,23 @@ class MarkdownChecklistAdapter:
             raise PairBlockGateError(f"{row.pair_block_id} gate links several receipts")
         return links[0] if links else None
 
+    def validate_current_receipt(
+        self,
+        repository: Path,
+        checklist_path: Path,
+        row: PairBlockRow,
+    ) -> None:
+        """Require a linked lifecycle receipt to exist inside the repository."""
+
+        receipt = self.current_receipt(row)
+        if receipt is None:
+            return
+        path = (checklist_path.parent / receipt).resolve()
+        if not path.is_relative_to(repository) or not path.is_file():
+            raise PairBlockGateError(
+                f"current receipt is missing for {row.pair_block_id}: {receipt}"
+            )
+
     def load_proposal_contract(
         self,
         repository: Path,
@@ -145,7 +305,7 @@ class MarkdownChecklistAdapter:
         repository: Path,
         checklist_text: str,
         rows: dict[str, PairBlockRow],
-    ) -> dict[str, object]:
+    ) -> NormalizedManifest:
         """Compile the Markdown records into the core manifest structure."""
 
         return compile_normalized_manifest(
@@ -208,7 +368,7 @@ class MarkdownChecklistAdapter:
         repository: Path,
         *,
         validator_path: Path = DEFAULT_MASTER_CHECKLIST_VALIDATOR,
-    ) -> tuple[dict[str, PairBlockRow], dict[str, object]]:
+    ) -> tuple[dict[str, PairBlockRow], NormalizedManifest]:
         """Validate Markdown links and the compiled core manifest."""
 
         return validate_traceability(
@@ -529,9 +689,7 @@ def _resolve_named_link(
         value,
     )
     if len(matches) != 1:
-        raise PairBlockGateError(
-            f"expected one {link_prefix} link, received: {value}"
-        )
+        raise PairBlockGateError(f"expected one {link_prefix} link, received: {value}")
     target, fragment = matches[0]
     return (base / target).resolve(), fragment or None
 
@@ -675,9 +833,7 @@ def validate_declaration(
         )
     expected_anchor = row.pair_block_id.lower()
     if anchor != expected_anchor:
-        raise PairBlockGateError(
-            f"declaration link differs for {row.pair_block_id}"
-        )
+        raise PairBlockGateError(f"declaration link differs for {row.pair_block_id}")
     contract_text = contract_path.read_text(encoding="utf-8")
     _declaration_heading(contract_text, row.pair_block_id)
     _ownership_row(contract_text, row.pair_block_id)
@@ -705,9 +861,7 @@ def load_proposal_contract(
         )
     expected_declaration = row.pair_block_id.lower()
     if declaration_anchor != expected_declaration:
-        raise PairBlockGateError(
-            f"declaration link differs for {row.pair_block_id}"
-        )
+        raise PairBlockGateError(f"declaration link differs for {row.pair_block_id}")
     _declaration_heading(contract_text, row.pair_block_id)
     _ownership_row(contract_text, row.pair_block_id)
 
@@ -777,9 +931,8 @@ def load_proposal_contract(
             for root in allowed_source_roots
             if source_path.is_relative_to(root)
         )
-        if (
-            source_path.name.startswith("test_")
-            and not any(name in command for name in command_names)
+        if source_path.name.startswith("test_") and not any(
+            name in command for name in command_names
         ):
             raise PairBlockGateError(
                 f"focused check does not name observing test {source_path}"
@@ -830,8 +983,8 @@ def _requirement_records(
     profile: ChecklistProfile,
     dialect: MarkdownChecklistDialect,
     states: dict[str, str],
-    evidence: dict[str, list[dict[str, str]]],
-) -> list[dict[str, object]]:
+    evidence: dict[str, list[EvidenceRecord]],
+) -> list[NormalizedRequirementRecord]:
     """Compile requirement rows and require their rendered states to agree."""
 
     rows = _table_rows(
@@ -839,7 +992,7 @@ def _requirement_records(
         dialect.requirement_table_header,
     )
     phase_orders: dict[int, int] = {}
-    records: list[dict[str, object]] = []
+    records: list[NormalizedRequirementRecord] = []
     for cells in rows:
         if len(cells) != 5:
             raise PairBlockGateError("requirement row must contain five cells")
@@ -924,7 +1077,7 @@ def _completion_evidence(
     row: PairBlockRow,
     state: str,
     profile: ChecklistProfile,
-) -> list[dict[str, str]]:
+) -> list[EvidenceRecord]:
     """Load the final lifecycle receipt for one completed PairBlock."""
 
     if state != "complete":
@@ -1097,7 +1250,9 @@ def _validate_completion_chain(
                 f"completion receipt has invalid evidence for {pair_block_id} at {event}"
             )
         previous = current.get("previous_receipt")
-        expects_previous = index < len(reverse_transitions) - 1 or requires_proposal_gate
+        expects_previous = (
+            index < len(reverse_transitions) - 1 or requires_proposal_gate
+        )
         if expects_previous:
             if not isinstance(previous, str) or not previous:
                 raise PairBlockGateError(
@@ -1122,11 +1277,11 @@ def _validate_completion_chain(
 def _derive_requirement_records(
     requirement_ids: list[str],
     requirements_by_block: dict[str, list[str]],
-    pair_blocks: list[dict[str, object]],
-) -> tuple[dict[str, str], dict[str, list[dict[str, str]]]]:
+    pair_blocks: list[NormalizedPairBlockRecord],
+) -> tuple[dict[str, str], dict[str, list[EvidenceRecord]]]:
     """Derive each requirement state and evidence from its mapped PairBlocks."""
 
-    blocks_by_requirement: dict[str, list[dict[str, object]]] = {
+    blocks_by_requirement: dict[str, list[NormalizedPairBlockRecord]] = {
         requirement_id: [] for requirement_id in requirement_ids
     }
     for block in pair_blocks:
@@ -1135,7 +1290,7 @@ def _derive_requirement_records(
             blocks_by_requirement[requirement_id].append(block)
 
     states: dict[str, str] = {}
-    evidence: dict[str, list[dict[str, str]]] = {}
+    evidence: dict[str, list[EvidenceRecord]] = {}
     for requirement_id, blocks in blocks_by_requirement.items():
         if not blocks:
             raise PairBlockGateError(
@@ -1151,10 +1306,10 @@ def _derive_requirement_records(
         else:
             state = "in_progress"
         states[requirement_id] = state
-        records: list[dict[str, str]] = []
+        records: list[EvidenceRecord] = []
         if state == "complete":
             for block in blocks:
-                records.extend(block["completion_evidence"])  # type: ignore[arg-type]
+                records.extend(block["completion_evidence"])
         evidence[requirement_id] = records
     return states, evidence
 
@@ -1343,11 +1498,11 @@ def _pair_block_records(
     rows: dict[str, PairBlockRow],
     requirements_by_block: dict[str, list[str]],
     profile: ChecklistProfile,
-) -> list[dict[str, object]]:
+) -> list[NormalizedPairBlockRecord]:
     """Compile PairBlock rows, checkboxes, placements, and final receipts."""
 
     checklist_path = repository / profile.checklist_path
-    records: list[dict[str, object]] = []
+    records: list[NormalizedPairBlockRecord] = []
     for row in rows.values():
         state = _normalized_state(row.status, profile)
         placement = _pair_block_placement(
@@ -1387,7 +1542,7 @@ def compile_normalized_manifest(
     rows: dict[str, PairBlockRow],
     profile: ChecklistProfile,
     dialect: MarkdownChecklistDialect,
-) -> dict[str, object]:
+) -> NormalizedManifest:
     """Compile RICO-owned fields into schema version 2 of the global manifest."""
 
     contract_path = repository / profile.contract_path
@@ -1443,7 +1598,7 @@ def compile_normalized_manifest(
 
 def validate_normalized_manifest(
     repository: Path,
-    manifest: dict[str, object],
+    manifest: NormalizedManifest,
     validator_path: Path,
 ) -> None:
     """Invoke the existing global validator on one compiled temporary manifest."""
@@ -1481,15 +1636,17 @@ def validate_traceability(
     validator_path: Path = DEFAULT_MASTER_CHECKLIST_VALIDATOR,
     profile: ChecklistProfile,
     dialect: MarkdownChecklistDialect,
-) -> tuple[dict[str, PairBlockRow], dict[str, object]]:
+) -> tuple[dict[str, PairBlockRow], NormalizedManifest]:
     """Validate RICO-owned links, then delegate normalized contract semantics."""
 
     repository = repository.resolve()
     checklist_path = repository / profile.checklist_path
     checklist_text = checklist_path.read_text(encoding="utf-8")
     rows = parse_pair_block_rows(checklist_text, profile, dialect)
+    adapter = MarkdownChecklistAdapter(profile=profile, dialect=dialect)
     for row in rows.values():
         validate_declaration(repository, checklist_path, row)
+        adapter.validate_current_receipt(repository, checklist_path, row)
         if (
             row.status in profile.lifecycle.proposal_gate_states
             and dialect.proposed_code_link_prefix in row.proposed_code
