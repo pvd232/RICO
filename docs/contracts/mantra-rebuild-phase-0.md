@@ -2419,7 +2419,7 @@ translate without rewriting their bytes.
 <!-- generated:manifest-native-contract:start -->
 #### Manifest-native block P0-PB-05P
 
-**Status:** Approved
+**Status:** Applied
 
 **Requirements:**
 
@@ -2436,7 +2436,7 @@ translate without rewriting their bytes.
 
 **Implementation:** [_restore.py](../../../viper/src/viper/execution/_restore.py) · [restoration.py](../../../viper/src/viper/restoration.py) · [retry-restore-compare.md](../../../viper/docs/how-to/retry-restore-compare.md) · [test_storage.py](../../../viper/tests/test_storage.py)
 
-**Current receipt:** [receipt](../../evidence/pairblock-lifecycle/p0-pb-05p/20260913T072409.500602Z-approve.json)
+**Current receipt:** [receipt](../../evidence/pairblock-lifecycle/p0-pb-05p/20260913T072533.800633Z-accept.json)
 
 **Gate:**
 
@@ -2449,12 +2449,12 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 /bin/zsh -e -c 'python -m pyright src/viper/exe
 
 ```bash
 cd /Users/machina/Developer/ChatGPT/RICO
-python -m tools.pairblock_status.pairblock_controller advance P0-PB-05P accept --evidence-kind KIND --evidence-target TARGET --evidence-revision REVISION
+python -m tools.pairblock_status.pairblock_controller advance P0-PB-05P register --evidence-kind KIND --evidence-target TARGET --evidence-revision REVISION
 ```
 
 #### Manifest-native block P0-PB-07A
 
-**Status:** Waiting for P0-PB-05P
+**Status:** Drafting
 
 **Requirements:**
 
@@ -2488,7 +2488,8 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONPATH=/Users/machina/Developer/ChatGPT/man
 **Next transition:**
 
 ```bash
-# Waiting for a declared dependency.
+cd /Users/machina/Developer/ChatGPT/RICO
+python -m tools.pairblock_status.pairblock_controller gate P0-PB-07A
 ```
 
 #### Manifest-native block P0-PB-10D
