@@ -2442,7 +2442,7 @@ translate without rewriting their bytes.
 
 ```bash
 cd /Users/machina/Developer/ChatGPT/mantra
-PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONPATH=/Users/machina/Developer/ChatGPT/mantra/src:/Users/machina/Developer/ChatGPT/mantra /bin/zsh -e -c 'python -m pyright src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_hopfield_replay.py && python -m pytest src/mantra/rebuild/tests/test_hopfield_replay.py -q && python -m ruff format --check src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_hopfield_replay.py && python -m ruff check src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_hopfield_replay.py'
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONPATH=/Users/machina/Developer/ChatGPT/mantra/src:/Users/machina/Developer/ChatGPT/mantra /bin/zsh -e -c 'python -m pyright src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_hopfield_replay.py && python -m pytest --rootdir=/Users/machina/Developer/ChatGPT/mantra/src --confcutdir=/Users/machina/Developer/ChatGPT/mantra/src src/mantra/rebuild/tests/test_hopfield_replay.py -q && python -m ruff format --check src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_hopfield_replay.py && python -m ruff check src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_hopfield_replay.py'
 ```
 
 **Next transition:**
