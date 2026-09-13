@@ -251,7 +251,7 @@ The environment receipt enters VIPER during Phase 0D. That registration closes
 
 **Gate:** Review the graph tables and source traces in the Phase 0 contract;
 then confirm that each required file and producer reaches its selected output.
-The Hopfield artifact table is approved. The MIL artifact table remains open.
+The Hopfield and MIL artifact tables are approved.
 
 **Commit boundary:** Commit the approved MIL artifact table and both graph
 definitions in RICO.
@@ -365,13 +365,13 @@ after the full Phase 0 artifact set is known.
 
 **Depends on:** Phase 0C
 
-- [ ] Verify the 27 approved files on the restored MANTRA disk, publish their
+- [x] Verify the 27 approved files on the restored MANTRA disk, publish their
       exact bytes as named VIPER outputs, and persist the disk-import receipt.
 - [x] Run restoration from the MANTRA root through the Conda environment named
       `mantra` and register the environment receipt in VIPER.
       <!-- pair-block: P0-PB-01 -->
       <!-- pair-block-contract: P0-PB-01 contract=docs/contracts/mantra-rebuild-phase-0.md -->
-- [ ] Register graph $B$, the environment receipt, the capacity receipt, and
+- [x] Register graph $B$, the environment receipt, the capacity receipt, and
       every restoration receipt in VIPER.
 - [x] Verify the complete graph and demonstrate failure after removing one
       required node or edge.
@@ -415,7 +415,7 @@ gate passes.
       <!-- pair-block: P0-PB-09A -->
       <!-- pair-block-contract: P0-PB-09A contract=docs/contracts/mantra-rebuild-phase-0.md -->
 
-**Gate:** `P0-VR-09` passes, the user approves the evidence set, and all twelve
+**Gate:** `P0-VR-09` passes, the user approves the evidence set, and all 25
 Phase 0 requirements are complete.
 
 **Commit boundary:** Update the Phase 0 contract status and this checklist in
@@ -582,8 +582,7 @@ specification passes.
 
 | Owner action | First consumer | Result unlocked |
 |---|---|---|
-| Review the [`P0-PB-05B`](../contracts/mantra-rebuild-phase-0.md#p0-pb-05b) archive-part plan and capacity receipt. | Phase 0C | First archive download. |
-| Provide or authorize the L4-class execution environment if local replay fails the historical gate. | Phase 0E | Acceptance-level MIL replay and later training runs. |
+| Provide or authorize L4-class compute when an approved reconstruction block requires training or exceeds the local execution threshold. | Phase 1C onward | Training, embeddings, large matrix operations, and repeated sweeps. |
 | Approve each reconstruction contract and its PairBlocks. | Phases 1A, 2A, and 3 | Implementation of each model generation. |
 
 ## Deferred scope
