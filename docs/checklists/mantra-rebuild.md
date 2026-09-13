@@ -89,7 +89,7 @@ controls. The completed set contains 27 Hopfield and MIL destinations in
 | `P0-PB-05F` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05f/20260913T001013.563488Z-register.json)) | Complete | `P0-PB-05C` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05f) | [Observer](../../../viper/src/viper/_workers/file_access.py) · [Tests](../../../viper/tests/test_stage_file_access.py) · [Test map](../../../viper/tests/declaration_observers.toml) |
 | `P0-PB-05G` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05g/20260913T001013.825215Z-register.json)) | Complete | `P0-PB-05C` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05g) | [Loader](../../../viper/src/viper/stages.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Tests](../../../viper/tests/test_stage_invocation.py) · [Test map](../../../viper/tests/declaration_observers.toml) |
 | `P0-PB-05H` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-05h/20260913T001014.084630Z-register.json)) | Complete | `P0-PB-05C` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-05h) | [Observer](../../../viper/src/viper/_workers/file_access.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Tests](../../../viper/tests/test_stage_file_access.py) · [Test map](../../../viper/tests/declaration_observers.toml) |
-| `P0-PB-06` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-06/20260912T203846.816608Z-accept.json)) | Applied | `P0-PB-04A`, `P0-PB-04B`, `P0-PB-05A`, `P0-PB-05B`, `P0-PB-05C`, `P0-PB-05D` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-06) | [Control helper](../../../mantra/cleanup/reinstantiation_archive.py) · [Bindings](../../../mantra/src/mantra/rebuild/restoration.py) · [Extraction](../../../mantra/src/mantra/rebuild/archive_restore.py) · [VIPER](../../../mantra/src/mantra/rebuild/viper_restore.py) · [Tests](../../../mantra/src/mantra/rebuild/tests) |
+| `P0-PB-06` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-06/20260912T203846.816608Z-accept.json)) | Applied | `P0-PB-04A`, `P0-PB-04B`, `P0-PB-05A`, `P0-PB-05B`, `P0-PB-05C`, `P0-PB-05D` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-06) | [Bindings](../../../mantra/src/mantra/rebuild/restoration.py) · [VIPER](../../../mantra/src/mantra/rebuild/viper_restore.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_viper_restore.py) |
 | `P0-PB-07` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-07/20260912T205719.212980Z-accept.json)) | Applied | `P0-PB-06` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-07) | [Source](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py) |
 | `P0-PB-08` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-08/20260912T210907.846992Z-accept.json)) | Applied | `P0-PB-06` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-08) | [Source](../../../mantra/src/mantra/rebuild/mil_replay.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py) |
 | `P0-PB-09` | Lifecycle ([receipt](../../evidence/pairblock-lifecycle/p0-pb-09/20260912T212259.707579Z-accept.json)) | Applied | `P0-PB-07`, `P0-PB-08`, `P0-PB-10` | [Block](../contracts/mantra-rebuild-phase-0.md#p0-pb-09) | [Source](../../tools/freeze_phase0.py) · [Tests](../../tests/test_freeze_phase0.py) |
@@ -314,8 +314,8 @@ after the full Phase 0 artifact set is known.
 
 **Depends on:** Phase 0C
 
-- [ ] Restore only the approved archive members to their canonical MANTRA
-      paths, verify their bytes, and persist restoration receipts.
+- [ ] Verify the 27 approved files on the restored MANTRA disk, publish their
+      exact bytes as named VIPER outputs, and persist the disk-import receipt.
 - [ ] Run restoration from the MANTRA root through the Conda environment named
       `mantra` and register the environment receipt in VIPER.
       <!-- pair-block: P0-PB-01 -->

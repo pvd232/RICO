@@ -33,7 +33,7 @@ The [Mantra rebuild master checklist](../checklists/mantra-rebuild.md) owns exec
 | `P0-REQ-01` | Define $B$ for the selected Hopfield and MIL outputs. | [`P0-PB-02`](#p0-pb-02), [`P0-PB-03`](#p0-pb-03) |
 | `P0-REQ-02` | Give every restored file node in $B$ one verified `RestorationBinding`. | [`P0-PB-04`](#p0-pb-04), [`P0-PB-04A`](#p0-pb-04a), [`P0-PB-04B`](#p0-pb-04b) |
 | `P0-REQ-03` | Calculate the maximum simultaneous local storage requirement before downloading an archive. | [`P0-PB-05`](#p0-pb-05), [`P0-PB-05A`](#p0-pb-05a), [`P0-PB-05B`](#p0-pb-05b) |
-| `P0-REQ-04` | Restore verified files to their canonical, Git-ignored paths inside the MANTRA checkout. | [`P0-PB-06`](#p0-pb-06) |
+| `P0-REQ-04` | Verify the 27 files on the restored MANTRA disk and publish their exact bytes as named VIPER outputs. | [`P0-PB-06`](#p0-pb-06) |
 | `P0-REQ-05` | Run restoration from the MANTRA workspace with `viper-provenance` installed in MANTRA's `venv`. | [`P0-PB-01`](#p0-pb-01), [`P0-PB-06`](#p0-pb-06) |
 | `P0-REQ-06` | Record and verify $B$ in the VIPER provenance graph. | [`P0-PB-06`](#p0-pb-06) |
 | `P0-REQ-07` | Replay the historical Hopfield raw-gene readout from its saved encoder and restored inputs. | [`P0-PB-07`](#p0-pb-07) |
@@ -157,11 +157,13 @@ Phase 0 uses three storage roles:
 
 | Role | Local path | Retention rule |
 |---|---|---|
-| Download cache | The `part_cache/` directory inside the restoration stage's evidence output | Holds one verified Hugging Face archive part while the tar reader consumes it. The reader removes the part before opening the next one; the stage receipt retains its signed identity. |
-| Canonical restored files | `/Users/machina/Developer/ChatGPT/mantra/` at each documented repository-relative destination | Holds the verified files consumed by MANTRA. Historical names and paths remain unchanged. |
+| Recovery download cache | The `part_cache/` directory inside an archive-restoration stage's evidence output | Holds one verified Hugging Face archive part when the preserved disk cannot supply an approved file. |
+| Restored disk files | `/home/machina/MANTRA/` at each documented repository-relative destination | Supplies the 27 identity-checked inputs imported by the GPU restoration run. |
 | VIPER evidence | `/Users/machina/Developer/ChatGPT/mantra/.viper/store/` and `/Users/machina/Developer/ChatGPT/mantra/.viper/catalog.sqlite3` | Holds the provenance objects and graph catalog produced by governed runs. |
 
-Phase 0 restores files only to the download cache, their canonical paths in the MANTRA checkout, and the declared VIPER evidence paths. Restoration scripts receive these roots explicitly. The RICO repositories, historical `/home/machina/MANTRA`, and `/dev/shm` are outside the local restoration boundary.
+Phase 0 reads the approved files from `/home/machina/MANTRA` and writes copies
+only to the declared VIPER attempt and store paths. The signed archive plan
+remains the recovery source when a preserved-disk identity differs.
 
 ### Capacity gate
 
@@ -193,7 +195,7 @@ flowchart TB
     binding["Bind missing files<br/>to archive sources"]
     parity["Build Q"]
     capacity["Check disk capacity"]
-    restore["Restore files into Mantra<br/>record with VIPER"]
+    restore["Import 27 restored disk files<br/>as VIPER outputs"]
     verify["Verify B in VIPER"]
     rejection_test["Remove one required edge<br/>confirm verification fails"]
     replay_ready["Verify replay inputs"]
@@ -266,7 +268,7 @@ The dependency graph, restoration bindings, environment receipt, capacity receip
 | `P0-VR-01` | Every member of $F \cup P$ lies on a path ending at a selected result, and every edge in $E$ has its required evidence. | [`P0-PB-02`](#p0-pb-02), [`P0-PB-03`](#p0-pb-03) |
 | `P0-VR-02` | Every absent restored file in $F$ has exactly one valid `RestorationBinding`. | [`P0-PB-04`](#p0-pb-04) |
 | `P0-VR-03` | The measured free space is greater than or equal to $R_{max}$ before download begins. | [`P0-PB-05`](#p0-pb-05) |
-| `P0-VR-04` | Every materialized file exists at its canonical path and matches its declared byte count and SHA-256. | [`P0-PB-06`](#p0-pb-06) |
+| `P0-VR-04` | Every disk file exists at its approved MANTRA path, matches its `RestorationBinding`, and has one same-identity VIPER output. | [`P0-PB-06`](#p0-pb-06) |
 | `P0-VR-05` | The active Conda environment is named `mantra`, uses Python 3.13, and imports its installed `viper-provenance` package. | [`P0-PB-01`](#p0-pb-01) |
 | `P0-VR-06` | The VIPER graph contains every member of $B$, and severing one required node or edge makes verification fail. | [`P0-PB-06`](#p0-pb-06) |
 | `P0-VR-07` | The Hopfield replay reproduces the selected raw-gene readout score `0.5861640938949398` within the approved tolerance and retains its produced predictions. | [`P0-PB-07`](#p0-pb-07) |
@@ -333,7 +335,7 @@ Resolution status lives in the [master checklist](../checklists/mantra-rebuild.m
 | [`P0-PB-05F`](../checklists/mantra-rebuild.md#pairblock-resolution) | Exclude the operating system's null device from governed data-access evidence. | Codex implements and independently reviews the VIPER change. | [Observer](../../../viper/src/viper/_workers/file_access.py) · [Tests](../../../viper/tests/test_stage_file_access.py) | `P0-VR-14` |
 | [`P0-PB-05G`](../checklists/mantra-rebuild.md#pairblock-resolution) | Preserve the frozen callable's workspace modules during invocation. | Codex implements and independently reviews the VIPER change. | [Loader](../../../viper/src/viper/stages.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Tests](../../../viper/tests/test_stage_invocation.py) | `P0-VR-15` |
 | [`P0-PB-05H`](../checklists/mantra-rebuild.md#pairblock-resolution) | Permit reads of Python source captured by the run's frozen Git commit. | Codex implements and independently reviews the VIPER change. | [Observer](../../../viper/src/viper/_workers/file_access.py) · [Worker](../../../viper/src/viper/_workers/stages.py) · [Tests](../../../viper/tests/test_stage_file_access.py) | `P0-VR-16` |
-| [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | Restore files and verify graph $B$. | Codex implements, runs, and independently reviews each bounded commit. | [Bindings](../../../mantra/src/mantra/rebuild/restoration.py) · [Extraction](../../../mantra/src/mantra/rebuild/archive_restore.py) · [VIPER workflow](../../../mantra/src/mantra/rebuild/viper_restore.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests) | `P0-VR-04`, `P0-VR-06`, and `P0-REQ-13` |
+| [`P0-PB-06`](../checklists/mantra-rebuild.md#pairblock-resolution) | Import the 27 restored disk files and verify graph $B$. | Codex implements, runs, and independently reviews each bounded commit. | [Bindings](../../../mantra/src/mantra/rebuild/restoration.py) · [VIPER workflow](../../../mantra/src/mantra/rebuild/viper_restore.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests) | `P0-VR-04`, `P0-VR-06`, and `P0-REQ-13` |
 | [`P0-PB-07`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay Hopfield. | Codex implemented and independently reviewed the final MANTRA source through `42e1f7b16ff6787e80bcdf71bca11674ba7a4b6e`. | [Source](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py) · [Review](../../evidence/pairblock-reviews/p0-pb-07/42e1f7b16ff6787e80bcdf71bca11674ba7a4b6e.json) | `P0-VR-07` |
 | [`P0-PB-08`](../checklists/mantra-rebuild.md#pairblock-resolution) | Replay standalone MIL application. | Codex implemented and independently reviewed the final MANTRA source through `0a3b62d8dc3a6ede768fff499ebc0a80f3cc2128`. | [Source](../../../mantra/src/mantra/rebuild/mil_replay.py) · [Artifact loaders](../../../mantra/src/mantra/rebuild/loaders.py) · [Tests](../../../mantra/src/mantra/rebuild/tests/test_mil_replay.py) · [Review](../../evidence/pairblock-reviews/p0-pb-08/0a3b62d8dc3a6ede768fff499ebc0a80f3cc2128.json) | `P0-VR-08` |
 | [`P0-PB-09`](../checklists/mantra-rebuild.md#pairblock-resolution) | Freeze evidence and assess VIPER. | Codex implemented and independently reviewed RICO commit `64964135`. | [Source](../../tools/freeze_phase0.py) · [Tests](../../tests/test_freeze_phase0.py) · [Review](../../evidence/pairblock-reviews/p0-pb-09/64964135b66a4706501d9e768527241941397566.json) | `P0-VR-09` |
@@ -462,28 +464,25 @@ declared data boundary for every untracked path and tracked non-Python file.
 
 #### P0-PB-06
 
-The first VIPER stage reads the repository's signed root release, signature,
-and public key. It downloads and authenticates the pinned project controls,
-resolves the 27 bindings, and writes a control receipt. The second stage
-reads that control bundle and the resolved bindings through MANTRA's existing
-`RemotePartReader`. It writes the 27 bound destinations and verifies each byte
-count and SHA-256. The reader removes each consumed part before opening the
-next one.
-The second stage produces the 27 restored files and an evidence bundle
-containing the archive plan, capacity receipt, and extraction receipt. After
-the verified run succeeds, `execution.restore()` materializes each file at its
-canonical MANTRA destination.
+The first VIPER stage authenticates the signed control package, resolves the 27
+`RestorationBinding` records, and writes the binding and control receipts. The
+second stage reads the 27 files at their approved MANTRA paths on the restored
+GPU disk. It checks each source byte count and SHA-256, copies the file to its
+named VIPER output, checks the output identity, and writes the archive plan,
+capacity receipt, and disk-import receipt.
 
-**Implementation:** review the active [extraction source](../../../mantra/src/mantra/rebuild/archive_restore.py),
-[binding resolver](../../../mantra/src/mantra/rebuild/restoration.py),
+The Hopfield and MIL stages select these outputs through `run_artifact()`.
+VIPER can therefore follow each model input to the signed binding records and
+the exact disk file imported by `P0-PB-06`.
+
+**Implementation:** review the active [binding resolver](../../../mantra/src/mantra/rebuild/restoration.py),
 [VIPER workflow](../../../mantra/src/mantra/rebuild/viper_restore.py),
-[extraction tests](../../../mantra/src/mantra/rebuild/tests/test_archive_restore.py),
 [resolver tests](../../../mantra/src/mantra/rebuild/tests/test_control_resolution.py),
 and [VIPER tests](../../../mantra/src/mantra/rebuild/tests/test_viper_restore.py).
 
-**Gate:** the focused tests authenticate selected payloads, reject a missing or
-changed target, prove the declared VIPER inputs and outputs, and prove that
-each canonical destination matches its binding. VIPER verification must pass
+**Gate:** the focused tests authenticate the control package, reject a changed
+disk file, prove the declared VIPER inputs and outputs, and prove that each
+source and output identity matches its binding. VIPER verification must pass
 for the real run and fail after removing either a required input edge or a
 restored-file output edge.
 
@@ -1372,10 +1371,9 @@ after the observer is active, or requires a new stage-author setting.
 
 **Resolution status:** [Master checklist](../checklists/mantra-rebuild.md#pairblock-resolution)
 
-**Requirement:** Download the signed archive parts with a one-part cache,
-authenticate and retain the 27 bound files as VIPER outputs, materialize
-them at their canonical MANTRA paths, and prove graph $B$ fails verification
-after one required edge is removed.
+**Requirement:** Authenticate the signed binding records, verify the 27 files
+on the restored MANTRA disk, retain the same bytes as named VIPER outputs, and
+prove graph $B$ fails verification after one required edge is removed.
 
 **Dependency:** applied `P0-PB-04A` and `P0-PB-04B` binding code, applied
 `P0-PB-05A` and `P0-PB-05B` capacity and archive-plan code, and applied
@@ -1399,11 +1397,10 @@ and the [rebuild tests](../../../mantra/src/mantra/rebuild/tests).
 **Implementation requirements:**
 
 - Download exactly the five signed control files named by this block.
-- Build the signed 36-part plan and call `measure_capacity()` before the first
-  archive-part download. Persist the capacity receipt and require `passed`.
-  Count one compressed part, the canonical files, the persistent VIPER store,
-  the VIPER attempt workspace, one largest-file temporary write, and the 10 MiB
-  reserve.
+- Build the signed 36-part recovery plan and call `measure_capacity()` before
+  copying a disk file. Persist the capacity receipt and require `passed`.
+  Count the persistent VIPER store, the VIPER attempt workspace, one
+  largest-file temporary write, and the 10 MiB reserve.
 - Declare a preparation stage that consumes the signed root release, detached
   signature, and public key. It authenticates the pinned project release and
   control package, resolves all 27 bindings from the filesystem and content
@@ -1414,22 +1411,17 @@ and the [rebuild tests](../../../mantra/src/mantra/rebuild/tests).
   usefulness ledger.
 - Require all 27 approved destination, byte-count, SHA-256, repository,
   control-revision, and archive identities before archive planning.
-- `RemotePartReader` downloads each selected part at its signed revision and
-  verifies its byte count and SHA-256 before the tar reader consumes it.
-- Extract every distinct bound member and verify all 27 restored identities.
-  Remove each consumed part before opening the next one.
 - The restoration stage consumes the authenticated control bundle, binding
-  file, and control receipt. It declares the 27 restored files as file
-  outputs and the archive plan, capacity receipt, extraction receipt, and
-  transient part cache as one evidence-bundle output.
-- Run restoration with `file_access="declared"`. Every local read and write
-  must resolve beneath those declared inputs and outputs.
-- Launch the worker with Hugging Face implicit-token lookup and Xet disabled.
-  The public download path then reads and writes only beneath the declared
-  evidence output; a pinned small-file probe must pass before archive download.
-- Materialize each verified output at its canonical MANTRA path, run VIPER
-  verification, then retain a severed-edge verification failure for one input
-  edge and one restored-file output edge.
+  file, control receipt, and 27 approved MANTRA disk paths. It declares one
+  named file output per binding and one evidence-bundle output.
+- For each binding, require the source byte count and SHA-256, copy the source
+  to the same-named output, and require the output byte count and SHA-256.
+- Run restoration with `file_access="declared"`. Every disk source is a
+  declared input; every copied file and receipt is a declared output.
+- Make the Hopfield and MIL studies require the resolved restoration run and
+  select its named outputs with `run_artifact()`.
+- Run VIPER verification, then retain a severed-edge verification failure for
+  one disk-file input edge and one named-output edge.
 - Load JSON and binary outputs through a self-contained source file that
   remains importable when VIPER materializes only that exact loader file.
 
@@ -1443,37 +1435,32 @@ python -m pytest --rootdir="$PWD/src" --confcutdir="$PWD/src" \
   src/mantra/rebuild/tests -q
 ```
 
-**Gate:** Ruff and the focused tests pass; the real restoration receipt identifies
-every downloaded part and all 27 restored identities; `verify_run()` passes;
+**Gate:** Ruff and the focused tests pass; the real disk-import receipt identifies
+all 27 source and output identities; `verify_run()` passes;
 and the retained severed-edge fixture fails verification.
 
-**Applied paths:** `cleanup/reinstantiation_archive.py`,
-`cleanup/tests/test_reinstantiation_archive.py`,
-`src/mantra/rebuild/archive_restore.py`, `src/mantra/rebuild/viper_restore.py`,
-and their two rebuild test files.
+**Applied paths:** `src/mantra/rebuild/viper_restore.py`,
+`src/mantra/rebuild/hopfield_replay.py`, `src/mantra/rebuild/mil_replay.py`, and
+their corresponding files under `src/mantra/rebuild/tests/`.
 
 **Applied check:**
 
 ```bash
 cd /Users/machina/Developer/ChatGPT/mantra
-python -m ruff check --ignore F841 \
-  cleanup/reinstantiation_archive.py \
-  cleanup/tests/test_reinstantiation_archive.py
 python -m ruff check \
-  src/mantra/rebuild/archive_restore.py \
   src/mantra/rebuild/viper_restore.py \
-  src/mantra/rebuild/tests/test_archive_restore.py \
-  src/mantra/rebuild/tests/test_viper_restore.py
-PYTHONPATH="$PWD" PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
-python -m pytest \
-  cleanup/tests/test_reinstantiation_archive.py::test_control_download_requires_independent_key_and_signatures \
-  cleanup/tests/test_reinstantiation_archive.py::test_control_download_fetches_only_selected_signed_files -q
+  src/mantra/rebuild/hopfield_replay.py \
+  src/mantra/rebuild/mil_replay.py \
+  src/mantra/rebuild/tests/test_viper_restore.py \
+  src/mantra/rebuild/tests/test_hopfield_replay.py \
+  src/mantra/rebuild/tests/test_mil_replay.py
 PYTHONPATH="$PWD/src" PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
 python -m pytest \
   --rootdir="$PWD/src" \
   --confcutdir="$PWD/src" \
-  src/mantra/rebuild/tests/test_archive_restore.py \
-  src/mantra/rebuild/tests/test_viper_restore.py -q
+  src/mantra/rebuild/tests/test_viper_restore.py \
+  src/mantra/rebuild/tests/test_hopfield_replay.py \
+  src/mantra/rebuild/tests/test_mil_replay.py -q
 ```
 
 **Stop condition:** stop before either replay when one canonical identity or
