@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-05P",
+  "requirement_ids": [
+    "P0-REQ-35"
+  ],
+  "repository": "https://github.com/pvd232/viper.git",
+  "base_commit": "3383713d7c6c90528b133df4b402d23bb86ddcee",
+  "result_commit": "2bc38d1983040ae0974ea97d9475b404bce16def",
+  "owned_paths": [
+    "src/viper/execution/_restore.py",
+    "src/viper/restoration.py",
+    "docs/how-to/retry-restore-compare.md",
+    "tests/test_storage.py"
+  ],
+  "diff_sha256": "a3ea8b482c78c5b0d5ff7508d2ed0b8b5a115b9e85ef43f534b5b0d752045734",
+  "invariants": [
+    "Several selected artifacts restore beneath one destination at their declared output paths.",
+    "Selected artifacts that resolve to the same destination are rejected before any file is written.",
+    "ArtifactRestoreSelector hashes the stage and artifact names that define its selection identity."
+  ],
+  "findings": [],
+  "mechanical_evidence": {
+    "focused_command": "python -m pyright src/viper/execution/_restore.py src/viper/restoration.py tests/test_storage.py && python -m pytest tests/test_storage.py -q && python -m ruff format --check src/viper/execution/_restore.py src/viper/restoration.py tests/test_storage.py && python -m ruff check src/viper/execution/_restore.py src/viper/restoration.py tests/test_storage.py",
+    "focused_result": "Pyright reported 0 errors; 19 tests passed in 1.74 seconds; Ruff formatting and lint checks passed.",
+    "git_diff_check": "passed",
+    "real_acceptance": "The restore planner test selects the Hopfield prediction archive and parity receipt together and observes both declared destination paths."
+  },
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-13T07:24:09Z"
+}
