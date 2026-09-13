@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-10B",
+  "requirement_ids": ["P0-REQ-27"],
+  "repository": "https://github.com/pvd232/RICO.git",
+  "base_commit": "f033bd07a07065685f4921e1095bc13a6185306d",
+  "result_commit": "95d65e66b3c1d2b4f49404d9ef1c57ec8b35a19b",
+  "owned_paths": [
+    "requirements.txt",
+    "docs/contracts/mantra-rebuild.declarations.toml",
+    "tools/pairblock_status/declaration_manifest.py",
+    "tools/pairblock_status/markdown_renderer.py",
+    "tools/pairblock_status/profile.py",
+    "tools/pairblock_status/checklist_profile.py",
+    "tools/pairblock_status/pairblock_controller.py",
+    "tests/pairblock_status/fixtures/minimal_profile/declarations.toml",
+    "tests/pairblock_status/conftest.py",
+    "tests/pairblock_status/test_declaration_manifest.py",
+    "tests/pairblock_status/test_markdown_renderer.py",
+    "tests/pairblock_status/test_pairblock_controller.py"
+  ],
+  "diff_sha256": "c208a7ca945d5c36ac860ed37b9b1e62e386aee47ad565cebf544e31700166f6",
+  "invariants": [
+    "The typed declaration manifest owns each manifest-native requirement, verifier, PairBlock, dependency, implementation path, test path, and gate.",
+    "Validated lifecycle receipts own every manifest-native state after Drafting.",
+    "The renderer deterministically derives the contract and checklist review surfaces from declarations and receipts.",
+    "The controller rejects duplicate ownership, declaration drift, invalid references, and manual edits inside generated regions before execution."
+  ],
+  "findings": [],
+  "mechanical_evidence": {
+    "gate_receipt": "evidence/pairblock-gates/p0-pb-10b/20260913T051841.974521Z.json",
+    "current_validation": "94 passed in 28.86s; Pyright, Ruff format check, and Ruff check passed",
+    "repair_blocks": "P0-PB-10D through P0-PB-10J retain the review findings and verified repairs discovered after the first P0-PB-10B gate",
+    "git_diff_check": "passed",
+    "upstream_match": "95d65e66b3c1d2b4f49404d9ef1c57ec8b35a19b equals origin/main"
+  },
+  "exclusions": [
+    "The historical Markdown records remain on the legacy adapter until the separately declared migration block.",
+    "Each post-review protocol repair is owned and verified by P0-PB-10D through P0-PB-10J."
+  ],
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-13T08:38:47Z"
+}

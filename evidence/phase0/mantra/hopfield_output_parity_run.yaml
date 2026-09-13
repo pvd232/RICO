@@ -1,0 +1,26 @@
+schema_version: 2
+spec:
+  sha256: 8cb64492074a756729cf933f6e5be31891a15690789836546be60a0b97a6c7ab
+  bytes: 18856
+  stored_at:
+    kind: local
+    workspace: /home/machina/MANTRA
+    store: .viper/store
+    store_id: 7d2ee3e555c62476dbfeac3c2a8ff1c0
+    commit: c97e291edad57924029b264a06cdc4ad3403525af116aade5e4cd7b6104733e4
+    path: experiments/mantra_hopfield_replay_8f0d705ac862_82a5072ebc68/runs/selected/01M2CVJRV91RP1D8TVK4RZ0JHB/spec.yaml
+  kind: run_spec
+status: succeeded
+attempts:
+- sha256: e0de90f6fa0812055780ef29f98b2e52516600526d01a63d51d3032735899a27
+  bytes: 4435
+  stored_at:
+    kind: local
+    workspace: /home/machina/MANTRA
+    store: .viper/store
+    store_id: 7d2ee3e555c62476dbfeac3c2a8ff1c0
+    commit: 44ec0175aece1f8f3cd4d2acb6a3c6ffbf44bd8cb2df55297ed83e59fc259d34
+    path: experiments/mantra_hopfield_replay_8f0d705ac862_82a5072ebc68/runs/selected/01M2CVJRV91RP1D8TVK4RZ0JHB/attempts/1/resolved.yaml
+  kind: resolved_attempt
+successful_attempt_id: 1
+completed_at: '2026-09-13T07:47:07.418604Z'

@@ -1,0 +1,18 @@
+{
+  "checklist_before_sha256": "21c63ec897d2a1f4f243cf23cd1ad3f72d25bd2c55d499a0b614440883dc3fc8",
+  "checklist_written_sha256": "5b87f19476cd56bbaef6beaa5f8b2c1cf9d6ddb8aa13d389ea9d8c441f61bc93",
+  "event": "approve",
+  "evidence": {
+    "kind": "external",
+    "revision": "msg_06a20323999b9433016aa615b4043487d1a0004bae700c0bf2",
+    "target": "User approval in the Codex task"
+  },
+  "pair_block_id": "P0-PB-10B",
+  "previous_receipt": "../../evidence/pairblock-gates/p0-pb-10b/20260913T051841.974521Z.json",
+  "recorded_at": "2026-09-13T08:39:12.707256+00:00",
+  "repository_head": "95d65e66b3c1d2b4f49404d9ef1c57ec8b35a19b",
+  "result": "applied",
+  "schema_version": 1,
+  "status_after": "Approved",
+  "status_before": "Review"
+}

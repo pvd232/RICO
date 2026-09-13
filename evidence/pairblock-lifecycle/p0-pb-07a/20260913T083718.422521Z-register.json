@@ -1,0 +1,22 @@
+{
+  "checklist_before_sha256": "cb3259407592ac89c3638a460b2f6147a29919130804b23846a4ed77836356ec",
+  "checklist_written_sha256": "21c63ec897d2a1f4f243cf23cd1ad3f72d25bd2c55d499a0b614440883dc3fc8",
+  "declaration_repository_head": "95d65e66b3c1d2b4f49404d9ef1c57ec8b35a19b",
+  "declaration_sha256": "02f3df4800f5d7cafc7e40808e86a1c4eebc117f4861b81d0d0ff5dfb2559d8d",
+  "event": "register",
+  "evidence": {
+    "kind": "artifact",
+    "revision": "2b26e9314d386daefc467fb9439fbeac710df814e78a964c863c69a059082de8",
+    "target": "evidence/phase0/mantra/hopfield_output_parity_receipt.json"
+  },
+  "implementation_repository_head": "8f0d705ac8622b8247e02143bbf7023c6b694e72",
+  "pair_block_fingerprint": "0845bbe3586ef8f149048ab1b9def60bd6a6fe5380f99914a20e6c073482ea32",
+  "pair_block_id": "P0-PB-07A",
+  "previous_receipt": "evidence/pairblock-lifecycle/p0-pb-07a/20260913T072734.321105Z-accept.json",
+  "recorded_at": "2026-09-13T08:37:18.422521+00:00",
+  "repository_head": "95d65e66b3c1d2b4f49404d9ef1c57ec8b35a19b",
+  "result": "applied",
+  "schema_version": 3,
+  "status_after": "Complete",
+  "status_before": "Applied"
+}

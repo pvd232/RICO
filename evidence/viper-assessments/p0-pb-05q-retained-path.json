@@ -1,0 +1,43 @@
+{
+  "schema_version": "rico.viper_retained_path_assessment.v1",
+  "pair_block_id": "P0-PB-05Q",
+  "viper_commit": "f47bea79f060aa66f76f220c80a3a28d1e969eab",
+  "run": {
+    "run_id": "01M2CYAZAVC9WRYH468BA9C457",
+    "status": "succeeded",
+    "successful_attempt_id": 1,
+    "stage_ids": [
+      "train"
+    ],
+    "measurement_count": 20,
+    "terminal_reference": {
+      "sha256": "7ca3da627d72b3c212d5be21cbccb3ef74958cacbc7ef72de747fa242e8d6c91",
+      "bytes": 994,
+      "stored_at": {
+        "kind": "local",
+        "workspace": "/Users/machina/Developer/ChatGPT/viper",
+        "store": ".viper/store",
+        "store_id": "f399fea1e5d99e58d58851e2cae42a70",
+        "commit": "19a72cc45c8be3ef514956c5a5c591cae225eb9607526957588174b37e833855",
+        "path": "experiments/cpu_quickstart/runs/baseline/01M2CYAZAVC9WRYH468BA9C457/resolved.yaml"
+      }
+    }
+  },
+  "restored_artifacts": [
+    {
+      "stage_id": "train",
+      "artifact_name": "model",
+      "declared_path": "model.json",
+      "restored_path": ".viper/validation/p0-pb-05q/model.json",
+      "sha256": "217e274340b920e4879f2dd5541614d592c97cd83b28c594fdfc66bc9c84d256"
+    },
+    {
+      "stage_id": "train",
+      "artifact_name": "resume_state",
+      "declared_path": "resume_state.pt",
+      "restored_path": ".viper/validation/p0-pb-05q/resume_state.pt",
+      "sha256": "34d466c83c65f891f5a826cf0a11481abae5036fe286a46cd7b9ebaf19fc78dc"
+    }
+  ],
+  "passed": true
+}

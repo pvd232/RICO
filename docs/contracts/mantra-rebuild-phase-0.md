@@ -2419,7 +2419,7 @@ translate without rewriting their bytes.
 <!-- generated:manifest-native-contract:start -->
 #### Manifest-native block P0-PB-05P
 
-**Status:** Applied
+**Status:** Complete
 
 **Requirements:**
 
@@ -2436,7 +2436,7 @@ translate without rewriting their bytes.
 
 **Implementation:** [_restore.py](../../../viper/src/viper/execution/_restore.py) · [restoration.py](../../../viper/src/viper/restoration.py) · [retry-restore-compare.md](../../../viper/docs/how-to/retry-restore-compare.md) · [test_storage.py](../../../viper/tests/test_storage.py)
 
-**Current receipt:** [receipt](../../evidence/pairblock-lifecycle/p0-pb-05p/20260913T072533.800633Z-accept.json)
+**Current receipt:** [receipt](../../evidence/pairblock-lifecycle/p0-pb-05p/20260913T083716.016151Z-register.json)
 
 **Gate:**
 
@@ -2448,13 +2448,12 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 /bin/zsh -e -c 'python -m pyright src/viper/exe
 **Next transition:**
 
 ```bash
-cd /Users/machina/Developer/ChatGPT/RICO
-python -m tools.pairblock_status.pairblock_controller advance P0-PB-05P register --evidence-kind KIND --evidence-target TARGET --evidence-revision REVISION
+# Lifecycle complete.
 ```
 
 #### Manifest-native block P0-PB-05Q
 
-**Status:** Drafting
+**Status:** Complete
 
 **Requirements:**
 
@@ -2471,7 +2470,7 @@ python -m tools.pairblock_status.pairblock_controller advance P0-PB-05P register
 
 **Implementation:** [outputs.py](../../../viper/src/viper/outputs.py) · [artifacts.py](../../../viper/src/viper/artifacts.py) · [authoring.py](../../../viper/src/viper/authoring.py) · [stages.py](../../../viper/src/viper/stages.py) · [_stage.py](../../../viper/src/viper/execution/_stage.py) · [_reuse.py](../../../viper/src/viper/execution/_reuse.py) · [_materialization.py](../../../viper/src/viper/execution/_materialization.py) · [_restore.py](../../../viper/src/viper/execution/_restore.py) · [storage.py](../../../viper/src/viper/_verification/storage.py) · [attempt.py](../../../viper/src/viper/_verification/attempt.py) · [retry-restore-compare.md](../../../viper/docs/how-to/retry-restore-compare.md) · [test_authoring.py](../../../viper/tests/test_authoring.py) · [test_config_validation.py](../../../viper/tests/test_config_validation.py) · [test_generated_project_acceptance.py](../../../viper/tests/test_generated_project_acceptance.py) · [test_metric_provenance.py](../../../viper/tests/test_metric_provenance.py) · [test_preflight.py](../../../viper/tests/test_preflight.py) · [test_protocol.py](../../../viper/tests/test_protocol.py) · [test_run_execution.py](../../../viper/tests/test_run_execution.py) · [test_storage.py](../../../viper/tests/test_storage.py) · [test_verification.py](../../../viper/tests/test_verification.py) · [test_verification_acceptance.py](../../../viper/tests/test_verification_acceptance.py)
 
-**Current receipt:** None
+**Current receipt:** [receipt](../../evidence/pairblock-lifecycle/p0-pb-05q/20260913T083313.978536Z-register.json)
 
 **Gate:**
 
@@ -2483,13 +2482,12 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 /bin/zsh -e -c 'python -m pyright src/viper/out
 **Next transition:**
 
 ```bash
-cd /Users/machina/Developer/ChatGPT/RICO
-python -m tools.pairblock_status.pairblock_controller gate P0-PB-05Q
+# Lifecycle complete.
 ```
 
 #### Manifest-native block P0-PB-07A
 
-**Status:** Applied
+**Status:** Complete
 
 **Requirements:**
 
@@ -2511,7 +2509,7 @@ python -m tools.pairblock_status.pairblock_controller gate P0-PB-05Q
 
 **Implementation:** [hopfield_replay.py](../../../mantra/src/mantra/rebuild/hopfield_replay.py) · [test_hopfield_replay.py](../../../mantra/src/mantra/rebuild/tests/test_hopfield_replay.py)
 
-**Current receipt:** [receipt](../../evidence/pairblock-lifecycle/p0-pb-07a/20260913T072734.321105Z-accept.json)
+**Current receipt:** [receipt](../../evidence/pairblock-lifecycle/p0-pb-07a/20260913T083718.422521Z-register.json)
 
 **Gate:**
 
@@ -2523,8 +2521,7 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONPATH=/Users/machina/Developer/ChatGPT/man
 **Next transition:**
 
 ```bash
-cd /Users/machina/Developer/ChatGPT/RICO
-python -m tools.pairblock_status.pairblock_controller advance P0-PB-07A register --evidence-kind KIND --evidence-target TARGET --evidence-revision REVISION
+# Lifecycle complete.
 ```
 
 #### Manifest-native block P0-PB-10D

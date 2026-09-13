@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-05Q",
+  "requirement_ids": [
+    "P0-REQ-36"
+  ],
+  "repository": "https://github.com/pvd232/viper.git",
+  "base_commit": "1de177d76567716949da000b5126dcc6574c461b",
+  "result_commit": "f47bea79f060aa66f76f220c80a3a28d1e969eab",
+  "owned_paths": [
+    "docs/how-to/retry-restore-compare.md",
+    "src/viper/_verification/attempt.py",
+    "src/viper/artifacts.py",
+    "src/viper/authoring.py",
+    "src/viper/execution/_materialization.py",
+    "src/viper/execution/_restore.py",
+    "src/viper/execution/_reuse.py",
+    "src/viper/execution/_stage.py",
+    "src/viper/outputs.py",
+    "src/viper/stages.py",
+    "tests/data/download_stage.yaml",
+    "tests/test_authoring.py",
+    "tests/test_config_validation.py",
+    "tests/test_generated_project_acceptance.py",
+    "tests/test_metric_provenance.py",
+    "tests/test_preflight.py",
+    "tests/test_protocol.py",
+    "tests/test_run_execution.py",
+    "tests/test_storage.py",
+    "tests/test_verification.py",
+    "tests/test_verification_acceptance.py"
+  ],
+  "diff_sha256": "15c9e3c803fdef606796c8577a84851ac3404fb779669fc036a1228abebace08",
+  "invariants": [
+    "OutputSpec retains the author-declared path separately from the run-owned storage path and binds the latter to the former.",
+    "Resolved single-file and bundle artifacts retain the declared materialization path beside their immutable SnapshotFileRef values.",
+    "Stage resolution, download materialization, and verified reuse preserve the retained path without reconstructing it from storage layout.",
+    "Restoration joins a destination directory to the retained path and never parses SnapshotFileRef.path to recover author intent.",
+    "A resolved artifact without a retained path, or with a path that differs from its output declaration, is rejected."
+  ],
+  "findings": [
+    {
+      "status": "repaired",
+      "finding": "The first fixture update reused the bundle-root parameter as the member-loop variable.",
+      "repair": "Use a distinct member_path variable and retain the declared bundle root unchanged."
+    },
+    {
+      "status": "repaired",
+      "finding": "The first schema draft did not bind OutputSpec.path to OutputSpec.relative_path.",
+      "repair": "Validate that the run-owned output path ends at the declared relative path and test the severed relationship."
+    },
+    {
+      "status": "repaired",
+      "finding": "The first expanded gate found protocol fixtures that still omitted the required path and two tests that changed only the run-owned path.",
+      "repair": "Migrate every serialized fixture and update both path fields when a test deliberately changes output identity."
+    }
+  ],
+  "mechanical_evidence": {
+    "focused_command": "python -m tools.pairblock_status.pairblock_controller gate P0-PB-05Q",
+    "focused_result": "Pyright reported 0 errors; 209 tests and 9 subtests passed in 216.84 seconds; Ruff formatting and lint checks passed.",
+    "git_diff_check": "passed",
+    "implementation_repository_head": "f47bea79f060aa66f76f220c80a3a28d1e969eab",
+    "real_acceptance": "The restore planner uses retained output paths even when the immutable storage filenames differ, and schema tests reject omitted or mismatched retained paths."
+  },
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-13T08:30:53Z"
+}

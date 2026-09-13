@@ -1,0 +1,22 @@
+{
+  "checklist_before_sha256": "f9f9bf5f0427bc00d93d4e63f26994fd90eacc442dbcf0024254a11aef689a9b",
+  "checklist_written_sha256": "cb3259407592ac89c3638a460b2f6147a29919130804b23846a4ed77836356ec",
+  "declaration_repository_head": "95d65e66b3c1d2b4f49404d9ef1c57ec8b35a19b",
+  "declaration_sha256": "02f3df4800f5d7cafc7e40808e86a1c4eebc117f4861b81d0d0ff5dfb2559d8d",
+  "event": "register",
+  "evidence": {
+    "kind": "artifact",
+    "revision": "8a516a9de69cc741d3829555d5557a2e005c8664a5bdadfbc15d796d04489ecc",
+    "target": "evidence/viper-assessments/p0-pb-05q-retained-path.json"
+  },
+  "implementation_repository_head": "f47bea79f060aa66f76f220c80a3a28d1e969eab",
+  "pair_block_fingerprint": "ceda366f53f424f0f92d4b842e35f27356492ce06d524fd9b3285a07c1d355fe",
+  "pair_block_id": "P0-PB-05P",
+  "previous_receipt": "evidence/pairblock-lifecycle/p0-pb-05p/20260913T072533.800633Z-accept.json",
+  "recorded_at": "2026-09-13T08:37:16.016151+00:00",
+  "repository_head": "95d65e66b3c1d2b4f49404d9ef1c57ec8b35a19b",
+  "result": "applied",
+  "schema_version": 3,
+  "status_after": "Complete",
+  "status_before": "Applied"
+}

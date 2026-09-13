@@ -1,0 +1,22 @@
+{
+  "checklist_before_sha256": "65a3a6b53b633c609a5799075000a1ec3785888f11a56ad82e4f156b812434b4",
+  "checklist_written_sha256": "56c348c5e1f7e60a1350fdfee7f9d0393d0962b0cb01f227469168487e6dca78",
+  "declaration_repository_head": "95d65e66b3c1d2b4f49404d9ef1c57ec8b35a19b",
+  "declaration_sha256": "02f3df4800f5d7cafc7e40808e86a1c4eebc117f4861b81d0d0ff5dfb2559d8d",
+  "event": "approve",
+  "evidence": {
+    "kind": "external",
+    "revision": "Approved retained-path repair and Phase 0 closure",
+    "target": "Codex task message msg_06a20323999b9433016aa657517db087d1bece556dc96f0310"
+  },
+  "implementation_repository_head": "f47bea79f060aa66f76f220c80a3a28d1e969eab",
+  "pair_block_fingerprint": "02d6d74777cf2ec1bd5c782af019d52765c8c65c5155242fba7bead2437efe02",
+  "pair_block_id": "P0-PB-05Q",
+  "previous_receipt": "evidence/pairblock-gates/p0-pb-05q/20260913T082654.957534Z.json",
+  "recorded_at": "2026-09-13T08:30:46.154417+00:00",
+  "repository_head": "95d65e66b3c1d2b4f49404d9ef1c57ec8b35a19b",
+  "result": "applied",
+  "schema_version": 3,
+  "status_after": "Approved",
+  "status_before": "Review"
+}
