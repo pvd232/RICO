@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-10F",
+  "requirement_ids": ["P0-REQ-30"],
+  "repository": "https://github.com/pvd232/RICO.git",
+  "base_commit": "f033bd07a07065685f4921e1095bc13a6185306d",
+  "result_commit": "1ea7403bb588aa220511dfae1c08414e307887b4",
+  "owned_paths": [
+    "tools/pairblock_status/declaration_manifest.py",
+    "tools/pairblock_status/pairblock_controller.py",
+    "tests/pairblock_status/test_declaration_revision_integrity.py"
+  ],
+  "diff_sha256": "965d8af6d0b5b250fa9e24679aba50c60f7c888a9c81d95fc39eb39545f8f3cd",
+  "invariants": [
+    "A declaration revision plan persists the exact candidate declaration digest and computed change.",
+    "Acceptance binds the supplied approval to that persisted plan and rejects a different candidate.",
+    "Live declarations and accepted snapshots accept only schema version 1."
+  ],
+  "findings": [],
+  "mechanical_evidence": {
+    "gate_receipt": "evidence/pairblock-gates/p0-pb-10f/20260913T061037.705018Z.json",
+    "result": "5 passed in 1.11s; Pyright, Ruff format check, and Ruff check passed",
+    "git_diff_check": "passed",
+    "upstream_match": "deferred until the reviewed session changes are pushed"
+  },
+  "exclusions": [],
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-13T06:11:17Z"
+}

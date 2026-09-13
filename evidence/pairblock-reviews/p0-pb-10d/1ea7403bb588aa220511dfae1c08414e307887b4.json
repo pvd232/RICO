@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-10D",
+  "requirement_ids": ["P0-REQ-28"],
+  "repository": "https://github.com/pvd232/RICO.git",
+  "base_commit": "f033bd07a07065685f4921e1095bc13a6185306d",
+  "result_commit": "1ea7403bb588aa220511dfae1c08414e307887b4",
+  "owned_paths": [
+    "tools/pairblock_status/profile.py",
+    "tools/pairblock_status/pairblock_controller.py",
+    "tests/pairblock_status/test_lifecycle_evidence.py"
+  ],
+  "diff_sha256": "0387e88922bb0efde8d03bd660a6e4429e4ef6a6c1c1fd1c4898f82e6864bc02",
+  "invariants": [
+    "Every executable lifecycle event has exactly one evidence rule.",
+    "The controller validates the event-specific evidence category before it writes a lifecycle receipt.",
+    "Artifact evidence names a repository-contained file whose SHA-256 equals the supplied revision."
+  ],
+  "findings": [],
+  "mechanical_evidence": {
+    "gate_receipt": "evidence/pairblock-gates/p0-pb-10d/20260913T061028.441391Z.json",
+    "result": "4 passed in 6.33s; Pyright, Ruff format check, and Ruff check passed",
+    "git_diff_check": "passed",
+    "upstream_match": "deferred until the reviewed session changes are pushed"
+  },
+  "exclusions": [
+    "External approval references remain identities supplied by the review system; the controller cannot inspect that external system."
+  ],
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-13T06:11:17Z"
+}

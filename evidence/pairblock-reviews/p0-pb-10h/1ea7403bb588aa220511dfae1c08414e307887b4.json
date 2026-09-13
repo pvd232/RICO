@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-10H",
+  "requirement_ids": ["P0-REQ-32"],
+  "repository": "https://github.com/pvd232/RICO.git",
+  "base_commit": "f033bd07a07065685f4921e1095bc13a6185306d",
+  "result_commit": "1ea7403bb588aa220511dfae1c08414e307887b4",
+  "owned_paths": [
+    "tools/pairblock_status/markdown_renderer.py",
+    "tests/pairblock_status/test_markdown_renderer.py"
+  ],
+  "diff_sha256": "8fc08575725416db71c9201ee7aee0e4a5e481b91e03bbed668f83e460ff3cba",
+  "invariants": [
+    "Generated links escape Markdown control characters without changing their repository-relative destinations.",
+    "Every generated lifecycle command begins by changing to the controlling repository.",
+    "Rendering the same declarations and receipts twice produces identical bytes."
+  ],
+  "findings": [],
+  "mechanical_evidence": {
+    "gate_receipt": "evidence/pairblock-gates/p0-pb-10h/20260913T061042.075279Z.json",
+    "result": "5 passed in 1.26s; Pyright, Ruff format check, and Ruff check passed",
+    "git_diff_check": "passed",
+    "upstream_match": "deferred until the reviewed session changes are pushed"
+  },
+  "exclusions": [],
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-13T06:11:17Z"
+}
