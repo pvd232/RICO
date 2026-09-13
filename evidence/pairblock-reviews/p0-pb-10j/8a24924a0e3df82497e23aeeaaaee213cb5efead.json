@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "P0-PB-10J",
+  "requirement_ids": ["P0-REQ-34"],
+  "repository": "https://github.com/pvd232/RICO.git",
+  "base_commit": "fe2f0cd85ab0796e5407b34caaa0dad2b15d9062",
+  "result_commit": "8a24924a0e3df82497e23aeeaaaee213cb5efead",
+  "owned_paths": [
+    "tools/pairblock_status/profile.py",
+    "tools/pairblock_status/pairblock_controller.py",
+    "tools/pairblock_status/checklist_profile.py",
+    "tests/pairblock_status/conftest.py",
+    "tests/pairblock_status/test_pairblock_controller.py"
+  ],
+  "diff_sha256": "e4888e8ee6d308dd1ca4c11f557a0eb7a3e67490261dec33124eabb9f8de8cd9",
+  "invariants": [
+    "A profile that names legacy-certifiable PairBlocks also names one repository-relative terminal artifact.",
+    "The certification transition accepts only that configured artifact and its exact SHA-256.",
+    "Completion validation rechecks the configured path and byte identity before deriving Complete."
+  ],
+  "findings": [],
+  "mechanical_evidence": {
+    "command": "python -m pyright <P0-PB-10J paths> && python -m pytest tests/pairblock_status/test_pairblock_controller.py -q && python -m ruff format --check <P0-PB-10J paths> && python -m ruff check <P0-PB-10J paths>",
+    "result": "78 passed in 26.60s; Pyright reported zero errors; Ruff format check and Ruff check passed",
+    "git_diff_check": "passed",
+    "upstream_match": "deferred until the reviewed session changes are pushed"
+  },
+  "exclusions": [
+    "The repair preserves the four named historical certification exceptions and changes only which artifact can certify them."
+  ],
+  "verdict": "Approve",
+  "reviewer": "Codex independent self-review",
+  "reviewed_at": "2026-09-13T06:19:00Z"
+}
