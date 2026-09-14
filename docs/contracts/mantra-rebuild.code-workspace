@@ -8,11 +8,15 @@
 		},
 		{
 			"path": "../../../viper"
+		},
+		{
+			"path": "../../../../../.agents/plans"
 		}
 	],
 	"settings": {
 		"git.ignoreLimitWarning": true,
 		"python.languageServer": "Pylance",
+		"ruff.configurationPreference": "filesystemFirst",
 		"codeQL.githubDatabase.download": "never",
 		"search.useIgnoreFiles": true,
 		"search.useGlobalIgnoreFiles": true,
