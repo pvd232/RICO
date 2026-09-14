@@ -1,0 +1,393 @@
+schema_version = 1
+
+[[requirements]]
+id = "P0-REQ-26"
+claim = "The selected Hopfield replay passes only when its prediction file bytes and hold PearsonDelta exactly match the approved historical result."
+phase = 6
+order = 36
+depends_on = ["P0-REQ-07", "P0-REQ-35"]
+gate = { kind = "test", target = "P0-VR-25" }
+verifier_ids = ["P0-VR-25"]
+pair_block_ids = ["P0-PB-07A"]
+
+[[requirements]]
+id = "P0-REQ-28"
+claim = "Each lifecycle event accepts only the evidence category and verified evidence target assigned to that event."
+phase = 6
+order = 28
+depends_on = ["P0-REQ-25"]
+gate = { kind = "test", target = "P0-VR-27" }
+verifier_ids = ["P0-VR-27"]
+pair_block_ids = ["P0-PB-10D"]
+
+[[requirements]]
+id = "P0-REQ-29"
+claim = "A native receipt is authoritative only when its complete schema and recomputed command, output, declaration, repository, and predecessor identities agree with the declared operation."
+phase = 6
+order = 29
+depends_on = ["P0-REQ-28"]
+gate = { kind = "test", target = "P0-VR-28" }
+verifier_ids = ["P0-VR-28"]
+pair_block_ids = ["P0-PB-10E"]
+
+[[requirements]]
+id = "P0-REQ-30"
+claim = "Declaration acceptance binds the user's approval to one persisted revision plan and accepts only declaration schema version 1."
+phase = 6
+order = 30
+depends_on = ["P0-REQ-25"]
+gate = { kind = "test", target = "P0-VR-29" }
+verifier_ids = ["P0-VR-29"]
+pair_block_ids = ["P0-PB-10F"]
+
+[[requirements]]
+id = "P0-REQ-31"
+claim = "An interrupted state transition converges to one validated receipt-derived contract and checklist projection before another operation runs."
+phase = 6
+order = 31
+depends_on = ["P0-REQ-29", "P0-REQ-30"]
+gate = { kind = "test", target = "P0-VR-30" }
+verifier_ids = ["P0-VR-30"]
+pair_block_ids = ["P0-PB-10G"]
+
+[[requirements]]
+id = "P0-REQ-32"
+claim = "Generated review links encode valid Markdown destinations and each displayed lifecycle command identifies the controlling repository."
+phase = 6
+order = 32
+depends_on = ["P0-REQ-25"]
+gate = { kind = "test", target = "P0-VR-31" }
+verifier_ids = ["P0-VR-31"]
+pair_block_ids = ["P0-PB-10H"]
+
+[[requirements]]
+id = "P0-REQ-33"
+claim = "A manifest-native PairBlock derives its waiting state from every declared dependency, including a dependency retained in the legacy checklist."
+phase = 6
+order = 33
+depends_on = ["P0-REQ-32"]
+gate = { kind = "test", target = "P0-VR-32" }
+verifier_ids = ["P0-VR-32"]
+pair_block_ids = ["P0-PB-10I"]
+
+[[requirements]]
+id = "P0-REQ-34"
+claim = "A legacy certification accepts only the profile-declared terminal Phase 0 registration artifact and its exact byte identity."
+phase = 6
+order = 34
+depends_on = ["P0-REQ-25"]
+gate = { kind = "test", target = "P0-VR-33" }
+verifier_ids = ["P0-VR-33"]
+pair_block_ids = ["P0-PB-10J"]
+
+[[requirements]]
+id = "P0-REQ-35"
+claim = "A replay declares role-specific typed outputs once, and VIPER restores several selected artifacts beneath one destination using their declared relative paths."
+phase = 6
+order = 35
+depends_on = ["P0-REQ-27"]
+gate = { kind = "test", target = "P0-VR-34" }
+verifier_ids = ["P0-VR-34"]
+pair_block_ids = ["P0-PB-05P", "P0-PB-07A"]
+
+[[requirements]]
+id = "P0-REQ-36"
+claim = "A frozen artifact preserves its author-declared relative path separately from its immutable storage reference, and restoration uses the declared path without parsing the storage path."
+phase = 6
+order = 37
+depends_on = ["P0-REQ-35"]
+gate = { kind = "test", target = "P0-VR-35" }
+verifier_ids = ["P0-VR-35"]
+pair_block_ids = ["P0-PB-05Q"]
+
+[[requirements]]
+id = "P0-REQ-37"
+claim = "VIPER defines one exact file-byte identity, and MANTRA uses that type without changing its historical restoration-record schema."
+phase = 6
+order = 38
+depends_on = ["P0-REQ-36"]
+gate = { kind = "test", target = "P0-VR-36" }
+verifier_ids = ["P0-VR-36"]
+pair_block_ids = ["P0-PB-05R", "P0-PB-07B"]
+
+[[verifiers]]
+id = "P0-VR-25"
+requirement_ids = ["P0-REQ-26"]
+conditions = [
+  "The evaluation stage consumes both the replayed and historical prediction archives.",
+  "The receipt records and compares the byte count and SHA-256 of both prediction archives.",
+  "The parity decision requires equal prediction-file identities and an exactly equal hold PearsonDelta.",
+  "The receipt retains exact array equality as diagnostic evidence.",
+]
+success_case = "Reproduce the historical prediction file and hold PearsonDelta exactly."
+rejection_cases = [
+  "Produce different prediction bytes while retaining the historical hold PearsonDelta.",
+  "Produce equal arrays in an archive with a different byte identity.",
+  "Produce a different hold PearsonDelta.",
+]
+
+[[verifiers]]
+id = "P0-VR-27"
+requirement_ids = ["P0-REQ-28"]
+conditions = [
+  "The lifecycle policy assigns one evidence rule to every executable event.",
+  "The controller validates the evidence rule before it writes a receipt.",
+]
+success_case = "Approve, accept, and register each advance with the evidence assigned to that event."
+rejection_cases = [
+  "Approve with test evidence.",
+  "Accept with unrelated external text.",
+  "Register with an arbitrary command.",
+]
+
+[[verifiers]]
+id = "P0-VR-28"
+requirement_ids = ["P0-REQ-29"]
+conditions = [
+  "Native receipts reject unknown fields and invalid nested values.",
+  "Gate receipts recompute the command, output, declaration, manifest, drift, and predecessor relationships.",
+  "Receipts name both the declaration repository and the implementation repository when they differ.",
+]
+success_case = "An unchanged receipt produced by the declared gate advances its PairBlock."
+rejection_cases = [
+  "Replace the executed command or its digest.",
+  "Remove the captured execution identities.",
+  "Record the controller repository as the implementation repository.",
+]
+
+[[verifiers]]
+id = "P0-VR-29"
+requirement_ids = ["P0-REQ-30"]
+conditions = [
+  "plan-revision persists the candidate declaration digest and computed change.",
+  "revise requires that exact plan and rejects a different candidate manifest.",
+  "Live manifests and accepted snapshots share one exact schema-version check.",
+]
+success_case = "Accept the unchanged candidate named by a persisted reviewed plan."
+rejection_cases = [
+  "Change the candidate after planning.",
+  "Load schema version 0, 2, or true from either declaration source.",
+]
+
+[[verifiers]]
+id = "P0-VR-30"
+requirement_ids = ["P0-REQ-31"]
+conditions = [
+  "The controller writes a recoverable prepared record before changing receipt-derived projections.",
+  "A successful operation publishes its authoritative receipt after both projection files match the prepared bytes and the semantic validator accepts them.",
+  "The next controller invocation completes an interrupted prepared transition idempotently.",
+]
+success_case = "Interrupt after each persistent write, retry, and obtain the same receipt, contract, and checklist bytes as an uninterrupted run."
+rejection_cases = [
+  "A receipt advances state while either rendered document still shows the predecessor.",
+  "A retry rejects its own partially written projection.",
+]
+
+[[verifiers]]
+id = "P0-VR-31"
+requirement_ids = ["P0-REQ-32"]
+conditions = [
+  "Links escape Markdown control characters while preserving repository-relative targets and fragments.",
+  "Each generated transition command begins in the controlling repository.",
+]
+success_case = "Render and resolve paths containing spaces, parentheses, a number sign, and a table delimiter."
+rejection_cases = [
+  "A rendered link resolves to a different file or fragment.",
+  "A copied transition command depends on the operator's current directory.",
+]
+
+[[verifiers]]
+id = "P0-VR-32"
+requirement_ids = ["P0-REQ-33"]
+conditions = [
+  "Waiting-state derivation combines receipt-derived native statuses with parsed legacy statuses.",
+  "An unresolved dependency produces the same displayed state and gate rejection regardless of declaration origin.",
+  "The render command regenerates both human views from accepted declarations and receipts without changing lifecycle state.",
+]
+success_case = "Render a native block as waiting while its legacy dependency remains unresolved."
+rejection_cases = [
+  "Display a native block as Drafting while its legacy dependency remains in Review.",
+  "Execute a native gate before its legacy dependency reaches Applied or Complete.",
+]
+
+[[verifiers]]
+id = "P0-VR-33"
+requirement_ids = ["P0-REQ-34"]
+conditions = [
+  "A profile that enables legacy certification declares one repository-relative terminal artifact path.",
+  "The certification transition rejects every other artifact even when that artifact's SHA-256 is valid.",
+  "Completion validation rechecks both the declared artifact path and its byte identity.",
+]
+success_case = "Certify a named legacy PairBlock with evidence/phase0/rico/phase0_registration_receipt.json and that file's SHA-256."
+rejection_cases = [
+  "Certify with a different repository artifact and its valid SHA-256.",
+  "Change the configured terminal artifact after certification.",
+]
+
+[[verifiers]]
+id = "P0-VR-34"
+requirement_ids = ["P0-REQ-35"]
+conditions = [
+  "A multi-artifact restore joins the destination directory to each frozen output path.",
+  "The restore planner rejects declared paths that overlap beneath the destination.",
+  "The Hopfield stages expose typed raw-gene prediction, attention-summary, and parity-receipt outputs.",
+  "The Hopfield runner restores its selected outputs with one execution.restore call and repeats no output filename.",
+]
+success_case = "Restore the raw-gene predictions and parity receipt to their declared filenames beneath the replay result directory."
+rejection_cases = [
+  "Derive a destination from VIPER's internal stored-at path.",
+  "Repeat either output filename in the Hopfield runner.",
+  "Issue one restore call per selected Hopfield artifact.",
+]
+
+[[verifiers]]
+id = "P0-VR-35"
+requirement_ids = ["P0-REQ-36"]
+conditions = [
+  "OutputSpec stores the author-declared output path separately from the run-owned output path.",
+  "Resolved single-file and bundle artifacts retain the declared path beside their immutable SnapshotFileRef values.",
+  "Resolved-stage validation recomputes each expected storage path from the declared path and rejects a mismatch.",
+  "Restoration joins the requested destination directory to the retained declared path without parsing SnapshotFileRef.path.",
+]
+success_case = "Freeze and execute two outputs, then restore both beneath one directory using their retained declared paths."
+rejection_cases = [
+  "Change a retained declared path without changing its run-owned SnapshotFileRef.path.",
+  "Change a run-owned SnapshotFileRef.path without changing its retained declared path.",
+  "Restore a record that omits the retained declared path.",
+]
+
+[[verifiers]]
+id = "P0-VR-36"
+requirement_ids = ["P0-REQ-37"]
+conditions = [
+  "FileIdentity owns SHA-256 and nonnegative byte-count validation.",
+  "ResolvedFileRef, SnapshotFileRef, and ReuseFileIdentity inherit that identity without dropping serialized fields.",
+  "MANTRA uses FileIdentity for restoration and Hopfield replay inputs.",
+  "MANTRA reads and writes historical restoration identities with the byte_count field unchanged.",
+]
+success_case = "Round-trip a historical MANTRA restoration binding through the shared VIPER identity and pass the affected restoration and replay tests."
+rejection_cases = [
+  "Accept an invalid digest or negative byte count through a derived VIPER reference.",
+  "Rename byte_count in a historical MANTRA restoration record.",
+  "Retain a second MANTRA byte-identity class.",
+]
+
+[[pair_blocks]]
+id = "P0-PB-07A"
+requirement_ids = ["P0-REQ-26", "P0-REQ-35"]
+depends_on = ["P0-PB-05P", "P0-PB-07", "P0-PB-10J"]
+section = "0E"
+repository = "mantra"
+source_paths = ["src/mantra/rebuild/hopfield_replay.py"]
+test_paths = ["src/mantra/rebuild/tests/test_hopfield_replay.py"]
+gate = { repository = "mantra", working_directory = ".", argv = ["/bin/zsh", "-e", "-c", "python -m pyright src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_hopfield_replay.py && python -m pytest --rootdir=/Users/machina/Developer/ChatGPT/mantra/src --confcutdir=/Users/machina/Developer/ChatGPT/mantra/src src/mantra/rebuild/tests/test_hopfield_replay.py -q && python -m ruff format --check src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_hopfield_replay.py && python -m ruff check src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_hopfield_replay.py"], environment = { PYTHONPATH = "/Users/machina/Developer/ChatGPT/mantra/src:/Users/machina/Developer/ChatGPT/mantra", PYTEST_DISABLE_PLUGIN_AUTOLOAD = "1" } }
+
+[[pair_blocks]]
+id = "P0-PB-05P"
+requirement_ids = ["P0-REQ-35"]
+depends_on = ["P0-PB-05K", "P0-PB-10J"]
+section = "0E"
+repository = "viper"
+source_paths = ["src/viper/execution/_restore.py", "src/viper/restoration.py", "docs/how-to/retry-restore-compare.md"]
+test_paths = ["tests/test_storage.py"]
+gate = { repository = "viper", working_directory = ".", argv = ["/bin/zsh", "-e", "-c", "python -m pyright src/viper/execution/_restore.py src/viper/restoration.py tests/test_storage.py && python -m pytest tests/test_storage.py -q && python -m ruff format --check src/viper/execution/_restore.py src/viper/restoration.py tests/test_storage.py && python -m ruff check src/viper/execution/_restore.py src/viper/restoration.py tests/test_storage.py"], environment = { PYTEST_DISABLE_PLUGIN_AUTOLOAD = "1" } }
+
+[[pair_blocks]]
+id = "P0-PB-05Q"
+requirement_ids = ["P0-REQ-36"]
+depends_on = ["P0-PB-05P", "P0-PB-10J"]
+section = "0E"
+repository = "viper"
+source_paths = ["src/viper/outputs.py", "src/viper/artifacts.py", "src/viper/authoring.py", "src/viper/stages.py", "src/viper/execution/_stage.py", "src/viper/execution/_reuse.py", "src/viper/execution/_materialization.py", "src/viper/execution/_restore.py", "src/viper/_verification/storage.py", "src/viper/_verification/attempt.py", "docs/how-to/retry-restore-compare.md"]
+test_paths = ["tests/test_authoring.py", "tests/test_config_validation.py", "tests/test_generated_project_acceptance.py", "tests/test_metric_provenance.py", "tests/test_preflight.py", "tests/test_protocol.py", "tests/test_run_execution.py", "tests/test_storage.py", "tests/test_verification.py", "tests/test_verification_acceptance.py"]
+gate = { repository = "viper", working_directory = ".", argv = ["/bin/zsh", "-e", "-c", "python -m pyright src/viper/outputs.py src/viper/artifacts.py src/viper/authoring.py src/viper/stages.py src/viper/execution/_stage.py src/viper/execution/_reuse.py src/viper/execution/_materialization.py src/viper/execution/_restore.py src/viper/_verification/storage.py src/viper/_verification/attempt.py tests/test_authoring.py tests/test_config_validation.py tests/test_generated_project_acceptance.py tests/test_metric_provenance.py tests/test_preflight.py tests/test_protocol.py tests/test_run_execution.py tests/test_storage.py tests/test_verification.py tests/test_verification_acceptance.py && python -m pytest tests/test_authoring.py tests/test_config_validation.py tests/test_generated_project_acceptance.py tests/test_metric_provenance.py tests/test_preflight.py tests/test_protocol.py tests/test_run_execution.py tests/test_storage.py tests/test_verification.py tests/test_verification_acceptance.py -q && python -m ruff format --check src/viper/outputs.py src/viper/artifacts.py src/viper/authoring.py src/viper/stages.py src/viper/execution/_stage.py src/viper/execution/_reuse.py src/viper/execution/_materialization.py src/viper/execution/_restore.py src/viper/_verification/storage.py src/viper/_verification/attempt.py tests/test_authoring.py tests/test_config_validation.py tests/test_generated_project_acceptance.py tests/test_metric_provenance.py tests/test_preflight.py tests/test_protocol.py tests/test_run_execution.py tests/test_storage.py tests/test_verification.py tests/test_verification_acceptance.py && python -m ruff check src/viper/outputs.py src/viper/artifacts.py src/viper/authoring.py src/viper/stages.py src/viper/execution/_stage.py src/viper/execution/_reuse.py src/viper/execution/_materialization.py src/viper/execution/_restore.py src/viper/_verification/storage.py src/viper/_verification/attempt.py tests/test_authoring.py tests/test_config_validation.py tests/test_generated_project_acceptance.py tests/test_metric_provenance.py tests/test_preflight.py tests/test_protocol.py tests/test_run_execution.py tests/test_storage.py tests/test_verification.py tests/test_verification_acceptance.py"], environment = { PYTEST_DISABLE_PLUGIN_AUTOLOAD = "1" } }
+
+[[pair_blocks]]
+id = "P0-PB-05R"
+requirement_ids = ["P0-REQ-37"]
+depends_on = ["P0-PB-05Q", "P0-PB-10J"]
+section = "0E"
+repository = "viper"
+source_paths = ["src/viper/references.py", "src/viper/reuse.py"]
+test_paths = ["tests/test_protocol.py", "tests/test_public_api.py"]
+gate = { repository = "viper", working_directory = ".", argv = ["/bin/zsh", "-e", "-c", "/Users/machina/Developer/ChatGPT/viper/.venv/bin/python -m pyright src/viper/references.py src/viper/reuse.py tests/test_protocol.py && PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 /Users/machina/Developer/ChatGPT/viper/.venv/bin/python -m pytest tests/test_protocol.py tests/test_public_api.py -q && /Users/machina/Developer/ChatGPT/viper/.venv/bin/python -m ruff format --check src/viper/references.py src/viper/reuse.py tests/test_protocol.py && /Users/machina/Developer/ChatGPT/viper/.venv/bin/python -m ruff check src/viper/references.py src/viper/reuse.py tests/test_protocol.py"], environment = {} }
+
+[[pair_blocks]]
+id = "P0-PB-07B"
+requirement_ids = ["P0-REQ-37"]
+depends_on = ["P0-PB-05R", "P0-PB-07A"]
+section = "0E"
+repository = "mantra"
+source_paths = ["src/mantra/rebuild/restoration.py", "src/mantra/rebuild/archive_plan.py", "src/mantra/rebuild/archive_restore.py", "src/mantra/rebuild/viper_restore.py", "src/mantra/rebuild/hopfield_replay.py"]
+test_paths = ["src/mantra/rebuild/tests/test_restoration.py", "src/mantra/rebuild/tests/test_control_resolution.py", "src/mantra/rebuild/tests/test_archive_plan.py", "src/mantra/rebuild/tests/test_archive_restore.py", "src/mantra/rebuild/tests/test_viper_restore.py", "src/mantra/rebuild/tests/test_hopfield_replay.py"]
+gate = { repository = "mantra", working_directory = ".", argv = ["/bin/zsh", "-e", "-c", "/Users/machina/miniconda3/envs/mantra/bin/python -m pyright src/mantra/rebuild/restoration.py src/mantra/rebuild/archive_plan.py src/mantra/rebuild/archive_restore.py src/mantra/rebuild/viper_restore.py src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_restoration.py src/mantra/rebuild/tests/test_control_resolution.py src/mantra/rebuild/tests/test_archive_plan.py src/mantra/rebuild/tests/test_archive_restore.py src/mantra/rebuild/tests/test_viper_restore.py src/mantra/rebuild/tests/test_hopfield_replay.py && PYTHONPATH=$PWD/src:$PWD PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 /Users/machina/miniconda3/envs/mantra/bin/python -m pytest --rootdir=$PWD/src --confcutdir=$PWD/src src/mantra/rebuild/tests/test_restoration.py src/mantra/rebuild/tests/test_control_resolution.py src/mantra/rebuild/tests/test_archive_plan.py src/mantra/rebuild/tests/test_archive_restore.py src/mantra/rebuild/tests/test_viper_restore.py src/mantra/rebuild/tests/test_hopfield_replay.py -q && /Users/machina/miniconda3/envs/mantra/bin/python -m ruff format --check src/mantra/rebuild/restoration.py src/mantra/rebuild/archive_plan.py src/mantra/rebuild/archive_restore.py src/mantra/rebuild/viper_restore.py src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_restoration.py src/mantra/rebuild/tests/test_control_resolution.py src/mantra/rebuild/tests/test_archive_plan.py src/mantra/rebuild/tests/test_archive_restore.py src/mantra/rebuild/tests/test_viper_restore.py src/mantra/rebuild/tests/test_hopfield_replay.py && /Users/machina/miniconda3/envs/mantra/bin/python -m ruff check src/mantra/rebuild/restoration.py src/mantra/rebuild/archive_plan.py src/mantra/rebuild/archive_restore.py src/mantra/rebuild/viper_restore.py src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_restoration.py src/mantra/rebuild/tests/test_control_resolution.py src/mantra/rebuild/tests/test_archive_plan.py src/mantra/rebuild/tests/test_archive_restore.py src/mantra/rebuild/tests/test_viper_restore.py src/mantra/rebuild/tests/test_hopfield_replay.py"], environment = { PYTHONPATH = "/Users/machina/Developer/ChatGPT/mantra/src:/Users/machina/Developer/ChatGPT/mantra", PYTEST_DISABLE_PLUGIN_AUTOLOAD = "1" } }
+
+[[pair_blocks]]
+id = "P0-PB-10D"
+requirement_ids = ["P0-REQ-28"]
+depends_on = ["P0-PB-10A"]
+section = "0G"
+repository = "rico"
+source_paths = ["tools/pairblock_status/profile.py", "tools/pairblock_status/pairblock_controller.py"]
+test_paths = ["tests/pairblock_status/test_lifecycle_evidence.py"]
+gate = { repository = "rico", working_directory = ".", argv = ["/bin/zsh", "-e", "-c", "python -m pyright tools/pairblock_status/profile.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_lifecycle_evidence.py && python -m pytest tests/pairblock_status/test_lifecycle_evidence.py -q && python -m ruff format --check tools/pairblock_status/profile.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_lifecycle_evidence.py && python -m ruff check tools/pairblock_status/profile.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_lifecycle_evidence.py"], environment = { PYTHONPATH = "." } }
+
+[[pair_blocks]]
+id = "P0-PB-10E"
+requirement_ids = ["P0-REQ-29"]
+depends_on = ["P0-PB-10D"]
+section = "0G"
+repository = "rico"
+source_paths = ["tools/pairblock_status/execution_identity.py", "tools/pairblock_status/receipt_validation.py", "tools/pairblock_status/pairblock_controller.py"]
+test_paths = ["tests/pairblock_status/test_receipt_integrity.py"]
+gate = { repository = "rico", working_directory = ".", argv = ["/bin/zsh", "-e", "-c", "python -m pyright tools/pairblock_status/execution_identity.py tools/pairblock_status/receipt_validation.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_receipt_integrity.py && python -m pytest tests/pairblock_status/test_receipt_integrity.py -q && python -m ruff format --check tools/pairblock_status/execution_identity.py tools/pairblock_status/receipt_validation.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_receipt_integrity.py && python -m ruff check tools/pairblock_status/execution_identity.py tools/pairblock_status/receipt_validation.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_receipt_integrity.py"], environment = { PYTHONPATH = "." } }
+
+[[pair_blocks]]
+id = "P0-PB-10F"
+requirement_ids = ["P0-REQ-30"]
+depends_on = ["P0-PB-10A"]
+section = "0G"
+repository = "rico"
+source_paths = ["tools/pairblock_status/declaration_manifest.py", "tools/pairblock_status/pairblock_controller.py"]
+test_paths = ["tests/pairblock_status/test_declaration_revision_integrity.py"]
+gate = { repository = "rico", working_directory = ".", argv = ["/bin/zsh", "-e", "-c", "python -m pyright tools/pairblock_status/declaration_manifest.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_declaration_revision_integrity.py && python -m pytest tests/pairblock_status/test_declaration_revision_integrity.py -q && python -m ruff format --check tools/pairblock_status/declaration_manifest.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_declaration_revision_integrity.py && python -m ruff check tools/pairblock_status/declaration_manifest.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_declaration_revision_integrity.py"], environment = { PYTHONPATH = "." } }
+
+[[pair_blocks]]
+id = "P0-PB-10G"
+requirement_ids = ["P0-REQ-31"]
+depends_on = ["P0-PB-10E", "P0-PB-10F"]
+section = "0G"
+repository = "rico"
+source_paths = ["tools/pairblock_status/projection_transaction.py", "tools/pairblock_status/pairblock_controller.py"]
+test_paths = ["tests/pairblock_status/test_projection_recovery.py"]
+gate = { repository = "rico", working_directory = ".", argv = ["/bin/zsh", "-e", "-c", "python -m pyright tools/pairblock_status/projection_transaction.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_projection_recovery.py && python -m pytest tests/pairblock_status/test_projection_recovery.py -q && python -m ruff format --check tools/pairblock_status/projection_transaction.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_projection_recovery.py && python -m ruff check tools/pairblock_status/projection_transaction.py tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_projection_recovery.py"], environment = { PYTHONPATH = "." } }
+
+[[pair_blocks]]
+id = "P0-PB-10H"
+requirement_ids = ["P0-REQ-32"]
+depends_on = ["P0-PB-10A"]
+section = "0G"
+repository = "rico"
+source_paths = ["tools/pairblock_status/markdown_renderer.py"]
+test_paths = ["tests/pairblock_status/test_markdown_renderer.py"]
+gate = { repository = "rico", working_directory = ".", argv = ["/bin/zsh", "-e", "-c", "python -m pyright tools/pairblock_status/markdown_renderer.py tests/pairblock_status/test_markdown_renderer.py && python -m pytest tests/pairblock_status/test_markdown_renderer.py -q && python -m ruff format --check tools/pairblock_status/markdown_renderer.py tests/pairblock_status/test_markdown_renderer.py && python -m ruff check tools/pairblock_status/markdown_renderer.py tests/pairblock_status/test_markdown_renderer.py"], environment = { PYTHONPATH = "." } }
+
+[[pair_blocks]]
+id = "P0-PB-10I"
+requirement_ids = ["P0-REQ-33"]
+depends_on = ["P0-PB-10H"]
+section = "0G"
+repository = "rico"
+source_paths = ["tools/pairblock_status/pairblock_controller.py"]
+test_paths = ["tests/pairblock_status/test_cross_origin_dependencies.py"]
+gate = { repository = "rico", working_directory = ".", argv = ["/bin/zsh", "-e", "-c", "python -m pyright tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_cross_origin_dependencies.py && python -m pytest tests/pairblock_status/test_cross_origin_dependencies.py -q && python -m ruff format --check tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_cross_origin_dependencies.py && python -m ruff check tools/pairblock_status/pairblock_controller.py tests/pairblock_status/test_cross_origin_dependencies.py"], environment = { PYTHONPATH = "." } }
+
+[[pair_blocks]]
+id = "P0-PB-10J"
+requirement_ids = ["P0-REQ-34"]
+depends_on = ["P0-PB-10G", "P0-PB-10I"]
+section = "0G"
+repository = "rico"
+source_paths = ["tools/pairblock_status/profile.py", "tools/pairblock_status/pairblock_controller.py", "tools/pairblock_status/checklist_profile.py"]
+test_paths = ["tests/pairblock_status/conftest.py", "tests/pairblock_status/test_pairblock_controller.py"]
+gate = { repository = "rico", working_directory = ".", argv = ["/bin/zsh", "-e", "-c", "python -m pyright tools/pairblock_status/profile.py tools/pairblock_status/pairblock_controller.py tools/pairblock_status/checklist_profile.py tests/pairblock_status/conftest.py tests/pairblock_status/test_pairblock_controller.py && python -m pytest tests/pairblock_status/test_pairblock_controller.py -q && python -m ruff format --check tools/pairblock_status/profile.py tools/pairblock_status/pairblock_controller.py tools/pairblock_status/checklist_profile.py tests/pairblock_status/conftest.py tests/pairblock_status/test_pairblock_controller.py && python -m ruff check tools/pairblock_status/profile.py tools/pairblock_status/pairblock_controller.py tools/pairblock_status/checklist_profile.py tests/pairblock_status/conftest.py tests/pairblock_status/test_pairblock_controller.py"], environment = { PYTHONPATH = "." } }
