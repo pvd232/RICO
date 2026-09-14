@@ -1,0 +1,129 @@
+schema_version = 1
+contract_id = "mantra-hopfield-reconstruction"
+title = "MANTRA Hopfield Reconstruction"
+
+[[requirements]]
+id = "H1-REQ-01"
+claim = "Phase 1 must begin from the selected Phase 0 Hopfield encoder SHA-256 2433527c3b23b66a16cedc0f7bc43867e4298af4d7a0733b202a8018ba876610, prediction SHA-256 d7180c4669a11b0b2fb184814aafb48ebafe75b02e4bd07998c337aa64dc59b7, and hold PearsonDelta 0.5861640938949398."
+depends_on = []
+verifier_ids = ["H1-VR-01"]
+pair_block_ids = ["H1-PB-01"]
+
+[[requirements]]
+id = "H1-REQ-02"
+claim = "Every reconstructed array must retain its row identities, gene axis, fitting population, shape, dtype, and normalization population."
+depends_on = ["H1-REQ-01"]
+verifier_ids = ["H1-VR-02"]
+pair_block_ids = ["H1-PB-02"]
+
+[[requirements]]
+id = "H1-REQ-03"
+claim = "Matched controls, control programs, response representations, biological descriptors, coefficient targets, and reference shifts must be rebuilt in dependency order and compared with their historical artifacts."
+depends_on = ["H1-REQ-02"]
+verifier_ids = ["H1-VR-03"]
+pair_block_ids = ["H1-PB-03"]
+
+[[requirements]]
+id = "H1-REQ-04"
+claim = "The 187 to 384 to 384 to 128 Hopfield encoder must be trained under the selected historical objectives and retain its checkpoints, logs, selection decision, and VIPER run."
+depends_on = ["H1-REQ-03"]
+verifier_ids = ["H1-VR-04"]
+pair_block_ids = ["H1-PB-04"]
+
+[[requirements]]
+id = "H1-REQ-05"
+claim = "Raw-gene retrieval at temperature 0.055 and reference correction must reproduce the selected prediction file byte for byte and the hold PearsonDelta exactly."
+depends_on = ["H1-REQ-04"]
+verifier_ids = ["H1-VR-05"]
+pair_block_ids = ["H1-PB-05"]
+
+[[requirements]]
+id = "H1-REQ-06"
+claim = "Every accepted Phase 1 producer, input, output, comparison, and implementation commit must remain reachable through retained VIPER and contract-protocol evidence."
+depends_on = ["H1-REQ-05"]
+verifier_ids = ["H1-VR-06"]
+pair_block_ids = ["H1-PB-06"]
+
+[[verifiers]]
+id = "H1-VR-01"
+requirement_ids = ["H1-REQ-01"]
+acceptance_conditions = ["The typed Phase 1 contract names the selected score and exact prediction digest, and the retained Phase 0 index resolves the replay receipt."]
+success_case = { repository_id = "rico", path = "tests/phase1/test_hopfield_contract.py", symbol = "HopfieldContractTests.test_names_selected_phase0_baseline" }
+rejection_cases = [{ repository_id = "rico", path = "tests/phase1/test_hopfield_contract.py", symbol = "HopfieldContractTests.test_rejects_changed_prediction_identity" }]
+
+[[verifiers]]
+id = "H1-VR-02"
+requirement_ids = ["H1-REQ-02"]
+acceptance_conditions = ["A changed row order, gene order, fitting population, shape, dtype, or normalization population fails before numerical comparison."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_reconstruction_identity.py", symbol = "test_accepts_exact_reconstruction_identities" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_reconstruction_identity.py", symbol = "test_rejects_changed_reconstruction_identity" }]
+
+[[verifiers]]
+id = "H1-VR-03"
+requirement_ids = ["H1-REQ-03"]
+acceptance_conditions = ["Each preprocessing producer records its ordered inputs and emits an identity-bearing artifact whose arrays meet the approved comparison rule."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_preprocessing.py", symbol = "test_rebuilds_selected_preprocessing_chain" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_preprocessing.py", symbol = "test_rejects_changed_preprocessing_array" }]
+
+[[verifiers]]
+id = "H1-VR-04"
+requirement_ids = ["H1-REQ-04"]
+acceptance_conditions = ["The training run uses the approved architecture, objective, seed, data identities, and selection rule and retains the selected checkpoint and logs."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_training.py", symbol = "test_trains_selected_hopfield_encoder" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_training.py", symbol = "test_rejects_changed_training_contract" }]
+
+[[verifiers]]
+id = "H1-VR-05"
+requirement_ids = ["H1-REQ-05"]
+acceptance_conditions = ["The final gate requires equal prediction bytes and an exactly equal hold PearsonDelta of 0.5861640938949398."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_reconstruction.py", symbol = "test_reproduces_selected_hopfield_output" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_reconstruction.py", symbol = "test_rejects_equal_score_with_changed_prediction_bytes" }]
+
+[[verifiers]]
+id = "H1-VR-06"
+requirement_ids = ["H1-REQ-06"]
+acceptance_conditions = ["The terminal registration resolves every accepted Phase 1 receipt, artifact, source commit, and producer edge from retained records."]
+success_case = { repository_id = "rico", path = "tests/phase1/test_hopfield_registration.py", symbol = "test_resolves_complete_phase1_provenance" }
+rejection_cases = [{ repository_id = "rico", path = "tests/phase1/test_hopfield_registration.py", symbol = "test_rejects_severed_phase1_provenance" }]
+
+[[pair_blocks]]
+id = "H1-PB-01"
+requirement_ids = ["H1-REQ-01"]
+depends_on = []
+repository_id = "rico"
+objective = "Install the typed Phase 1 contract and checklist workspace and bind them to the trusted Phase 0 Hopfield result."
+
+[[pair_blocks]]
+id = "H1-PB-02"
+requirement_ids = ["H1-REQ-02"]
+depends_on = ["H1-PB-01"]
+repository_id = "mantra"
+objective = "Implement the row, gene, fitting-population, shape, dtype, and normalization identity boundary."
+
+[[pair_blocks]]
+id = "H1-PB-03"
+requirement_ids = ["H1-REQ-03"]
+depends_on = ["H1-PB-02"]
+repository_id = "mantra"
+objective = "Rebuild and compare the selected preprocessing artifacts in producer order."
+
+[[pair_blocks]]
+id = "H1-PB-04"
+requirement_ids = ["H1-REQ-04"]
+depends_on = ["H1-PB-03"]
+repository_id = "mantra"
+objective = "Train and select the historical Hopfield encoder through an identity-bound VIPER run."
+
+[[pair_blocks]]
+id = "H1-PB-05"
+requirement_ids = ["H1-REQ-05"]
+depends_on = ["H1-PB-04"]
+repository_id = "mantra"
+objective = "Rebuild raw-gene retrieval and reference correction and prove exact final output parity."
+
+[[pair_blocks]]
+id = "H1-PB-06"
+requirement_ids = ["H1-REQ-06"]
+depends_on = ["H1-PB-05"]
+repository_id = "rico"
+objective = "Register the complete Phase 1 provenance graph and close the reconstruction checklist."

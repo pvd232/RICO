@@ -1,0 +1,69 @@
+schema_version = 1
+contract_id = "mantra-hopfield-reconstruction"
+package_sha256 = "d76392935b1d975d423c3088acf7a6305e5fd98b709ffd1f1488fac796d27503"
+pair_block_id = "H1-PB-01"
+baseline_commit = "b7f336ef8406686402e32c64610b659fc84a2f3a"
+
+[[actions]]
+operation = "add"
+source_path = "add/contracts/mantra-hopfield-reconstruction.toml"
+target_path = "contracts/mantra-hopfield-reconstruction.toml"
+
+[[actions]]
+operation = "add"
+source_path = "add/contracts/mantra-hopfield-reconstruction.md"
+target_path = "contracts/mantra-hopfield-reconstruction.md"
+
+[[actions]]
+operation = "add"
+source_path = "add/checklists/mantra-rebuild-phase-1.toml"
+target_path = "checklists/mantra-rebuild-phase-1.toml"
+
+[[actions]]
+operation = "add"
+source_path = "add/checklists/mantra-rebuild-phase-1.md"
+target_path = "checklists/mantra-rebuild-phase-1.md"
+
+[[actions]]
+operation = "add"
+source_path = "add/tests/phase1/__init__.py"
+target_path = "tests/phase1/__init__.py"
+
+[[actions]]
+operation = "add"
+source_path = "add/tests/phase1/test_hopfield_contract.py"
+target_path = "tests/phase1/test_hopfield_contract.py"
+
+[[actions]]
+operation = "replace"
+source_path = "replace/docs/checklists/mantra-rebuild.md"
+target_path = "docs/checklists/mantra-rebuild.md"
+
+[gate]
+source_roots = ["contracts", "checklists", "docs/checklists"]
+test_roots = ["tests/phase1"]
+
+[[gate.steps]]
+role = "typecheck"
+working_directory = "."
+argv = ["pyright", "tests/phase1"]
+
+[[gate.steps]]
+role = "test"
+working_directory = "."
+argv = ["python3", "-m", "unittest", "tests.phase1.test_hopfield_contract", "-q"]
+
+[[gate.steps]]
+role = "documentation"
+working_directory = "."
+argv = ["python3", "/Users/machina/.agents/skills/code-documentation/scripts/check-schema-descriptions.py", "tests/phase1"]
+
+[[gate.steps]]
+role = "lint"
+working_directory = "."
+argv = ["ruff", "format", "--check", "tests/phase1"]
+
+[[gate.steps]]
+role = "lint"
+working_directory = "."
+argv = ["ruff", "check", "tests/phase1"]

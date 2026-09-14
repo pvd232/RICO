@@ -1,0 +1,88 @@
+schema_version = 1
+checklist_id = "mantra-rebuild-phase-1"
+title = "MANTRA rebuild Phase 1"
+coordination_repository_id = "rico"
+checklist_path = "checklists/mantra-rebuild-phase-1.md"
+contract_paths = ["contracts/mantra-hopfield-reconstruction.toml"]
+
+[[pair_block_placements]]
+pair_block_id = "H1-PB-01"
+phase = 1
+position = 0
+section_title = "Phase 1 contract"
+deferred = false
+
+[[pair_block_placements]]
+pair_block_id = "H1-PB-02"
+phase = 2
+position = 0
+section_title = "Array identities"
+deferred = false
+
+[[pair_block_placements]]
+pair_block_id = "H1-PB-03"
+phase = 3
+position = 0
+section_title = "Preprocessing reconstruction"
+deferred = false
+
+[[pair_block_placements]]
+pair_block_id = "H1-PB-04"
+phase = 4
+position = 0
+section_title = "Encoder training"
+deferred = false
+
+[[pair_block_placements]]
+pair_block_id = "H1-PB-05"
+phase = 5
+position = 0
+section_title = "Retrieval and output parity"
+deferred = false
+
+[[pair_block_placements]]
+pair_block_id = "H1-PB-06"
+phase = 6
+position = 0
+section_title = "Terminal provenance"
+deferred = false
+
+[[repository_bindings]]
+repository_id = "rico"
+checkout = "/Users/machina/Developer/ChatGPT/RICO"
+
+[[repository_bindings.executables]]
+command = "python3"
+path = "/Users/machina/miniconda3/bin/python3"
+
+[[repository_bindings.executables]]
+command = "pyright"
+path = "/Users/machina/miniconda3/bin/pyright"
+
+[[repository_bindings.executables]]
+command = "ruff"
+path = "/Users/machina/miniconda3/bin/ruff"
+
+[[repository_bindings.executables]]
+command = "git"
+path = "/usr/bin/git"
+
+[[repository_bindings]]
+repository_id = "mantra"
+checkout = "/Users/machina/Developer/ChatGPT/mantra"
+
+[[repository_bindings.executables]]
+command = "python3"
+path = "/Users/machina/miniconda3/envs/mantra/bin/python3"
+
+[[repository_bindings.executables]]
+command = "pyright"
+path = "/Users/machina/miniconda3/envs/mantra/bin/pyright"
+
+[[repository_bindings.executables]]
+command = "ruff"
+path = "/Users/machina/miniconda3/envs/mantra/bin/ruff"
+
+[[repository_bindings.executables]]
+command = "git"
+path = "/usr/bin/git"
