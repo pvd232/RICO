@@ -10,7 +10,7 @@
 			"path": "../../../viper"
 		},
 		{
-			"path": "../../../../../.agents/plans"
+			"path": "../../../../../.agents"
 		}
 	],
 	"settings": {
