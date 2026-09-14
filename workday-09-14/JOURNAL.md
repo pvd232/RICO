@@ -1,85 +1,89 @@
 # Workday 09-14
 
-## Day charter
+## Twenty-hour charter
 
-Start Phase 1 by converting the trusted Hopfield replay into a reconstruction
-contract and reproducing the first preprocessing intermediates. Preserve enough
-time for review, evidence capture, and one controlled replan.
-
-## Capacity
-
-The workday spans 16 hours from 08:00 to midnight. The plan assigns 12 hours and
-45 minutes to focused work, 1 hour and 45 minutes to meals and short breaks, and
-1 hour and 30 minutes to debugging slack. If the start time moves, preserve the
-durations and order.
+Run one sustained Phase 1 reconstruction day from 08:00 to 04:00. The plan
+assigns 16 hours and 45 minutes to focused work, 2 hours and 15 minutes to
+meals and breaks, and the final hour to integration slack and shutdown. Preserve
+the order and durations if the start time moves.
 
 ## Primary outcome
 
-By shutdown, Phase 1 has an approved artifact-and-source DAG, complete structured
-declarations for the first reconstruction tranche, and at least one independently
-recomputed preprocessing artifact compared with its historical counterpart by
-identity and array structure.
+By shutdown, the Hopfield reconstruction has an approved identity boundary,
+the earliest preprocessing producers have run through VIPER, and the encoder
+training block is either executing on the L4 or has a retained blocker that
+names the failed input, operation, and evidence.
+
+## Hard stop
+
+Stop at 04:00. Do not spend the final hour opening another implementation
+surface. Use it to finish the active gate, retain evidence, synchronize Git, and
+write the next command.
 
 ## Execution plan
 
 | Time | Budget | Work block | Deliverable | Done condition |
 |---|---:|---|---|---|
-| 08:00–08:45 | 45 min | Protocol maintenance | Typed review-receipt schema and generator block | One declared command produces review evidence from validated inputs and becomes the normal authoring path. |
-| 08:45–09:30 | 45 min | Phase 0 handoff review | Confirm the closed checklist, parity receipts, and Phase 1 boundary | Every carried Phase 0 artifact and protocol obligation appears explicitly in the reconstruction boundary. |
-| 09:30–11:30 | 2 hr | Hopfield reconstruction DAG | Exact producers and artifacts for matched controls, control programs, response representations, biological descriptors, predicted control state, response summaries, and reference shifts | Every required intermediate has one producer, identity, consumer, historical reference, and observing comparison. |
-| 11:30–12:45 | 1 hr 15 min | Structured Phase 1 contract | Requirements, verifiers, PairBlocks, dependencies, source paths, tests, and gate commands | Generated Markdown gives the human reviewer direct links and the next legal command for each block. |
-| 12:45–13:30 | 45 min | Lunch | Step away | Return with the Phase 1 contract frozen for implementation. |
-| 13:30–15:30 | 2 hr | Row and gene identity layer | Load and persist row membership, gene ordering, fitting populations, and normalization inputs | A shuffled row, missing gene, or changed fitting population fails before numerical comparison. |
-| 15:30–15:45 | 15 min | Break | Step away | Resume with the first identity gate green. |
-| 15:45–18:00 | 2 hr 15 min | Matched controls and control programs | Recompute the first historical preprocessing arrays | Keys, shapes, dtypes, identities, and exact or explicitly justified numerical comparisons are retained. |
-| 18:00–18:45 | 45 min | Dinner | Step away | Return with the first implementation diff frozen. |
-| 18:45–21:15 | 2 hr 30 min | Response and biological representations | Rebuild response representations and biological descriptors, or finish the earliest unresolved predecessor | Each accepted array traces to its source rows, gene axis, fitted parameters, and comparison receipt. |
-| 21:15–21:30 | 15 min | Break | Step away | Prepare for the integration gate. |
-| 21:30–22:45 | 1 hr 15 min | Focused integration | Run Pyright, the change-aware test boundary, and Ruff last | The declared boundary passes; verified impact controls any expansion to training or a broader repository suite. |
-| 22:45–23:30 | 45 min | Review and acceptance | Self-review the frozen diff and preserve the review-cycle commit | Intent, invariant, smallest counterexample, repair, observing test, and Git identity agree. |
-| 23:30–00:00 | 30 min | Shutdown handoff | Update the checklist and journal | The next block, unresolved evidence, exact commands, receipts, and commits are recorded. |
-
-## Slack allocation
-
-Ninety minutes remain unassigned. Use it for schema migration, historical loader
-behavior, numerical divergence, remote transfer, or VIPER verification overhead.
-Reserve Phase 2 MIL reconstruction and the next-generation graph encoder for
-their later phases.
+| 08:00–09:00 | 1 hr | Review and admit `H1-PB-01` | User-reviewed contract, checklist, gate receipt, and lifecycle decision | The reviewed candidate and current Git commit match; any requested repair receives its own validated review-cycle commit. |
+| 09:00–12:00 | 3 hr | `H1-PB-02`: historical identity map | Exact historical producers, row and gene axes, fitting populations, shapes, dtypes, and normalization populations | Every identity has one source, consumer, comparison rule, observing test, and retained reference. |
+| 12:00–12:45 | 45 min | Lunch | Step away | Return with the identity boundary frozen. |
+| 12:45–16:15 | 3 hr 30 min | `H1-PB-03`: first preprocessing producers | Reconstructed matched-control and coefficient-target artifacts | A changed row, gene, fitting population, shape, dtype, or value fails before downstream execution. |
+| 16:15–17:00 | 45 min | Break and midpoint replan | Compare actual results with the replan rule | Continue downstream only if `H1-PB-02` is accepted and one preprocessing producer passes. |
+| 17:00–20:30 | 3 hr 30 min | `H1-PB-03`: remaining preprocessing chain | Control programs, response representations, biological descriptors, and reference shifts | Each accepted artifact records its producer, ordered inputs, file identity, array comparison, and VIPER run. |
+| 20:30–21:15 | 45 min | Dinner | Step away | Return with the preprocessing diff frozen. |
+| 21:15–01:15 | 4 hr | `H1-PB-04`: encoder training boundary | Approved training plan and launched L4 run, or completed short run if runtime permits | Architecture, objective, seed, inputs, checkpoint rule, logs, and GPU environment are declared before compute begins. |
+| 01:15–03:00 | 1 hr 45 min | Review and integration | Self-review, focused gates, review-cycle commits, pushes, and current generated views | Every changed claim has an observing check; every repository equals its upstream after the cycle. |
+| 03:00–04:00 | 1 hr | Slack and shutdown | Resolve the earliest active failure or prepare the exact restart handoff | No unexplained dirty files, idle paid compute, unlinked receipts, or undocumented next step remain. |
 
 ## Midpoint replan
 
-At 16:00, compare actual progress with two required results:
+At 16:15, continue to downstream preprocessing only if both conditions hold:
 
-1. the Phase 1 artifact-and-source DAG is approved; and
-2. the row and gene identity gate passes.
+1. `H1-PB-02` has an accepted identity boundary; and
+2. at least one historical preprocessing artifact has been independently
+   rebuilt and compared.
 
-If either result is missing, stop adding downstream preprocessing blocks. Spend
-the remaining implementation time closing the earliest missing result and retain
-the exact counterexample that prevented progress. If both exist, continue through
-matched controls and response representations.
+If either condition is missing, stop adding producers. Spend the remaining
+preprocessing time on the earliest unresolved identity or source edge. Launch
+encoder training only after every input it consumes has an accepted identity
+and producer.
 
-## Validation policy
+## Compute policy
 
-Each implementation block follows one repeatable path:
+Use the local machine for contract compilation, hashing, focused unit tests,
+Pyright, Ruff, and small array checks. Use the L4 for training, embeddings,
+large matrix operations, repeated sweeps, or an inference estimate above 10–15
+minutes. Validate the plan before starting paid compute. Disposable instances
+use `autoDelete=True`; retained evidence belongs in Git or VIPER, not on the
+instance disk.
 
-1. declare the requirement, verifier, owner, dependencies, source, tests, and
-   command in the structured manifest;
-2. generate the human contract and checklist views;
-3. implement in the owning repository;
-4. run Pyright, the smallest change-aware test boundary, and Ruff last;
-5. perform a self-review against the frozen diff;
-6. commit the review cycle, even when further repair remains;
-7. accept the implementation only after the reviewed diff and Git identity match;
-   and
-8. register completion through VIPER and retain the receipt.
+## Review and Git policy
 
-The dedicated review-evidence generator is the first maintenance block because
-future evidence files must come from a validated schema through one declared
-generation command.
+Each coherent implementation cycle ends with:
 
-## Shutdown target
+1. Ruff import and format fixes;
+2. Pyright over the changed Python boundary;
+3. the smallest tests that observe the changed claims;
+4. final non-mutating Ruff format and lint checks;
+5. a frozen-diff self-review for correctness, duplication, stateful coupling,
+   source documentation, and unsupported guarantees;
+6. a task-scoped commit and normal push; and
+7. a fetch and equality check between `HEAD` and its upstream.
 
-End the day with the earliest Hopfield reconstruction intermediates independently
-recomputed and compared. Training the 187 → 384 → 384 → 128 encoder begins only
-after the preprocessing boundary is trusted. MIL reconstruction remains a
-separate Phase 2 model, and the graph encoder remains Phase 3.
+Candidate files remain duplicated under the active PairBlock plan because that
+copy is the reviewed, replayable input. Do not create plans for later blocks
+until their dependencies reveal the required implementation.
+
+## Pace rule
+
+At every design fork, reuse an existing proven primitive first, extend it only
+to close a named invariant, and add a new abstraction only when it owns a
+distinct guarantee or removes more machinery than it adds. Stop protocol work
+when the active vertical slice passes. Record non-blocking framework ideas for
+later instead of interrupting Hopfield reconstruction.
+
+## Shutdown handoff
+
+Record the current PairBlock, exact next command, gate and lifecycle receipts,
+implementation commits, GPU state, observed runtime, and any failed comparison.
+The next session must be able to resume without reconstructing intent from chat.
