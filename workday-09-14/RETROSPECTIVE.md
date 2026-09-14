@@ -125,11 +125,15 @@ opaque final rewrite. The major boundaries are:
 - `9a1dfc3`: production evidence creation and verification boundary;
 - `f3bf902`: minimal-sufficient-design skill;
 - `57e5e54`: cross-contract revision closure; and
-- `c2d1a15`: skill evaluation index alignment.
+- `c2d1a15`: skill evaluation index alignment;
+- `579221c`: bootstrap declaration-binding repair; and
+- `8860737`: formal bootstrap history and current generated state.
 
 Each listed global review cycle was pushed, followed by an upstream equality
 check. Superseded uncommitted CP-PB-07 gate attempts were removed; the retained
-directory contains the final passing receipt.
+directory contains the final passing receipt. The bootstrap receipt now marks
+CP-PB-01 through CP-PB-06 complete against their retained historical plans and
+implementation commits. CP-PB-07 remains in Review pending user approval.
 
 ## Phase 1 handoff
 
