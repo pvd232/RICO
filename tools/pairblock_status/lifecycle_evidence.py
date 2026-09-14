@@ -23,7 +23,7 @@ Sha256 = NewType("Sha256", str)
 CodexTaskId = NewType("CodexTaskId", str)
 CodexMessageId = NewType("CodexMessageId", str)
 
-_Sha256Field = Annotated[
+_Sha256 = Annotated[
     Sha256,
     StringConstraints(pattern=r"^[0-9a-f]{64}$"),
 ]
@@ -41,9 +41,7 @@ class RepositoryRecordRef(EvidenceModel):
     path: PurePosixPath = Field(
         description="POSIX path from the RICO repository root to the record."
     )
-    sha256: _Sha256Field = Field(
-        description="Lowercase SHA-256 digest of the record bytes."
-    )
+    sha256: _Sha256 = Field(description="Lowercase SHA-256 digest of the record bytes.")
 
     @field_validator("path", mode="before")
     @classmethod
