@@ -1,1 +1,1 @@
-"""RICO execution-control tools proposed for review."""
+"""RICO-specific execution utilities."""
