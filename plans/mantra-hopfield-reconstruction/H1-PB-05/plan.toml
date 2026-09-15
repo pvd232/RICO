@@ -1,0 +1,67 @@
+schema_version = 1
+contract_id = "mantra-hopfield-reconstruction"
+package_sha256 = "07b42936670fbe8790344c18296454c7b9d50fa480504067e6a18a2857a2f45b"
+pair_block_id = "H1-PB-05"
+baseline_commit = "5d0faf4cf49308195c8fdd91a0849f5ba9a02743"
+change_summary = [
+  "Thirteen accepted Build stages now feed the Hopfield Embed stage through FutureInputRefs in one VIPER run.",
+  "Embed feeds Predict and Predict feeds Evaluate; retained predictions remain evaluation oracles and never enter model computation.",
+  "Two independent L4 runs reproduced the pinned modern encoder, predictions, and PearsonDelta score and restored the accepted artifacts from GCS.",
+]
+deviation_summary = "Self-review removed the redundant encoder-report input. The first live run then exposed an unreachable historical-run reference and a VIPER package-metadata classification bug; the parity oracle now comes from its versioned source file, and VIPER permits only installed package metadata as runtime state."
+
+[[actions]]
+operation = "patch"
+patch_path = "patches/rebuilt-input-replay.patch"
+target_paths = [
+  "src/mantra/rebuild/hopfield_replay.py",
+  "src/mantra/rebuild/tests/test_hopfield_replay.py",
+]
+
+[[handoff_targets]]
+label = "Complete rebuilt-input replay diff"
+source = "plan"
+path = "patches/rebuilt-input-replay.patch"
+line = 1
+
+[[handoff_targets]]
+label = "Unified FutureInputRef graph"
+source = "repository"
+path = "src/mantra/rebuild/hopfield_replay.py"
+line = 915
+
+[gate]
+source_roots = [
+  "src/mantra/rebuild",
+  "src/mantra/__init__.py",
+  "cleanup",
+  "experiments/v1938_sota_clean_repro",
+  "pyrightconfig.json",
+  "pyproject.toml",
+]
+test_roots = ["src/mantra/rebuild/tests", "conftest.py"]
+
+[[gate.steps]]
+role = "typecheck"
+working_directory = "."
+argv = ["pyright", "src/mantra/rebuild/hopfield_replay.py", "src/mantra/rebuild/tests/test_hopfield_replay.py"]
+
+[[gate.steps]]
+role = "test"
+working_directory = "."
+argv = ["python3", "-m", "pytest", "-q", "-p", "no:cacheprovider", "src/mantra/rebuild/tests/test_hopfield_replay.py", "src/mantra/rebuild/tests/test_hopfield_source_reconstruction.py"]
+
+[[gate.steps]]
+role = "documentation"
+working_directory = "."
+argv = ["python3", "/Users/machina/.agents/skills/code-documentation/scripts/check-schema-descriptions.py", "src/mantra/rebuild/hopfield_replay.py", "src/mantra/rebuild/tests/test_hopfield_replay.py"]
+
+[[gate.steps]]
+role = "lint"
+working_directory = "."
+argv = ["ruff", "format", "--check", "src/mantra/rebuild/hopfield_replay.py", "src/mantra/rebuild/tests/test_hopfield_replay.py"]
+
+[[gate.steps]]
+role = "lint"
+working_directory = "."
+argv = ["ruff", "check", "src/mantra/rebuild/hopfield_replay.py", "src/mantra/rebuild/tests/test_hopfield_replay.py"]

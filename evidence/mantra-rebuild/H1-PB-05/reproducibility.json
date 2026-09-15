@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "H1-PB-05",
+  "source_commit": "bb6e47807715e489c70202f5a8e7abd3d2a32318",
+  "classification": "modern_reproducible_baseline",
+  "historical_difference": "The upgraded numerical runtime does not reproduce the historical encoder or prediction bytes.",
+  "accepted_outputs": {
+    "encoder": {
+      "bytes": 1084512,
+      "sha256": "af1f62c4c315c65e7379b97c57646b49b35c7f3fc3f69fcf6f94f0c8df276da9"
+    },
+    "predictions": {
+      "bytes": 38391087,
+      "sha256": "f8e8e6a6fe291143debd3d8e8b3ab9c4e2aed5afd3b2391e7856c7d8fd7e262b"
+    },
+    "hold_PearsonDelta": 0.5861640983697456,
+    "receipt_sha256": "10e7f0f39bce15ebe0e042fe45451584a3f94067d9542925f2d67bc7b06fb671"
+  },
+  "runs": [
+    {
+      "run_id": "01M2KFK9EKFQTP80BQMNX7H1D2",
+      "resolved_run_sha256": "8687f5f7463b59d3d4b6c670938b25fa83e18b163a2dc6145ab1924ce1b50895",
+      "viper_cloud_revision": "05ad74c54154f95acac6382a20cd19fdd951cdbc0dfd4e5a0c8930dff86dd401",
+      "gcs_restore_verified": true
+    },
+    {
+      "run_id": "01M2KG0C51EE6MGHQPW74NS208",
+      "resolved_run_sha256": "be23455e6f122dd00e9b05ae2f47d6bcc5526e30486d7e7ef82def33db3f7c58",
+      "viper_cloud_revision": "2a9001f6a9fb3c92f492ab7d65e3639e4da18ae81728319d6255dab230a3895f",
+      "gcs_restore_verified": true
+    }
+  ]
+}

@@ -1,0 +1,364 @@
+diff --git a/src/mantra/rebuild/hopfield_replay.py b/src/mantra/rebuild/hopfield_replay.py
+index 02e4155ff..406f24f46 100644
+--- a/src/mantra/rebuild/hopfield_replay.py
++++ b/src/mantra/rebuild/hopfield_replay.py
+@@ -5,7 +5,7 @@ from __future__ import annotations
+ import hashlib
+ import json
+ import subprocess
+-from collections.abc import Sequence
++from collections.abc import Mapping, Sequence
+ from dataclasses import asdict, dataclass, replace
+ from enum import StrEnum
+ from pathlib import Path
+@@ -61,6 +61,7 @@ from experiments.v1938_sota_clean_repro.src.step01.hopfield.train import (
+ )
+ from mantra.rebuild.archive_plan import ArchivePart
+ from mantra.rebuild.archive_restore import ArchiveExtraction, restore_bound_files
++from mantra.rebuild.hopfield_input_rebuild import copy_versioned_input
+ from mantra.rebuild.loaders import load_bytes, load_json
+ from mantra.rebuild.restoration import (
+     RestorationBinding,
+@@ -93,10 +94,6 @@ EXPECTED_RAW_GENE_PREDICTIONS = FileIdentity(
+     bytes=38_391_087,
+     sha256="f8e8e6a6fe291143debd3d8e8b3ab9c4e2aed5afd3b2391e7856c7d8fd7e262b",
+ )
+-EXPECTED_ENCODER_REPORT = FileIdentity(
+-    bytes=6_268,
+-    sha256="8e690f5e1ba18846e34cccec3f48a84d4adf013d7ef64731b13ff06cca9c4529",
+-)
+ RAW_GENE_PREDICTION_KEYS = (
+     "pred_fit",
+     "pred_tune",
+@@ -110,11 +107,10 @@ PARITY_REPORT = (
+     "matrix_fit_only_bold_step02_20260715T083000Z/diagnostics/"
+     "RAW_GENE_READOUT_TUNING_FIT_ONLY_RESULTS.json"
+ )
+-ENCODER_REPORT = (
+-    "experiments/v1938_sota_clean_repro/runs/"
+-    "clean_shared_mil_proto_hyperparam_sweep_20260714T063000Z/base_step01/"
+-    "base_lr2e4/candidates/mixed_src_snk_ripple_raw_pen1_base_lr2e4/"
+-    "diagnostics/BASE_STEP01_RESULT_REPORT.json"
++HISTORICAL_FAMILY64_FEATURES_PATH = (
++    "/home/machina/MANTRA/experiments/v1938_sota_clean_repro/runs/"
++    "clean_shared_mil_proto_hyperparam_sweep_20260714T063000Z/source_roots/"
++    "strict_clean/inputs/features/family64_query_features.npz"
+ )
+ 
+ DESCRIPTOR_INPUT_NAMES = ("core83", "response40", "family64", "gene_shift")
+@@ -646,19 +642,12 @@ def train_hopfield_encoder(context: StageContext[EmbedConfig]) -> None:
+     """Retrain the selected encoder and require its canonical bytes to match."""
+ 
+     _verify_inputs(context, tuple(name for name in INPUTS if name != "hold_truth"))
+-    _verify_file_identity(
+-        context.inputs["encoder_report"],
+-        EXPECTED_ENCODER_REPORT,
+-        "encoder_report",
+-    )
+     config, arrays = _load_selected_arrays(context)
+     config = replace(config, encoder_lr=2.0e-4, variant_name=VARIANT_NAME)
+-    encoder_report = load_json(context.inputs["encoder_report"])
+-    if not isinstance(encoder_report, dict):
+-        raise HopfieldReplayError("historical encoder report is not a mapping")
+-    archived_config = encoder_report.get("config")
+-    if not isinstance(archived_config, dict):
+-        raise HopfieldReplayError("historical encoder configuration is not a mapping")
++    archived_config = json.loads(json.dumps(asdict(config), default=str))
++    archived_config["mixed_src_snk_ripple_raw_pen1"]["family64_features_path"] = (
++        HISTORICAL_FAMILY64_FEATURES_PATH
++    )
+     _verify_encoder_config(config, archived_config)
+     if int(arrays["feature_dim"]) != 187:
+         raise HopfieldReplayError("Hopfield encoder input width differs from 187")
+@@ -794,27 +783,15 @@ def evaluate_hopfield(context: StageContext[BuildConfig]) -> None:
+         raise HopfieldReplayError("Hopfield replay score differs from parity target")
+ 
+ 
+-def build_hopfield_study(
+-    restoration_run: ResolvedRunRef,
++def _hopfield_stages(
+     *,
+-    source_commit: str,
++    model_inputs: Mapping[str, StageInputDraft | InputBinding],
++    historical_raw_gene_predictions: StageInputDraft | InputBinding,
+     device: str = "cpu",
+-    repository_root: Path | None = None,
+-):
+-    """Declare prediction and parity stages for the selected Hopfield row."""
++) -> tuple[Any, Any, Any]:
++    """Connect accepted model inputs through Embed, Predict, and Evaluate."""
+ 
+-    embedding_inputs: list[StageInputDraft | InputBinding] = []
+-    for name, declared in INPUTS.items():
+-        if name == "hold_truth":
+-            continue
+-        embedding_inputs.append(
+-            input(
+-                name,
+-                path=_physical_input_path(repository_root, declared.path),
+-                data_role="training",
+-            )
+-        )
+-    embedding_inputs.append(input("encoder_report", path=ENCODER_REPORT, data_role="training"))
++    embedding_inputs = tuple(model_inputs[name] for name in INPUTS if name != "hold_truth")
+ 
+     embedding = stage(
+         train_hopfield_encoder,
+@@ -836,8 +813,10 @@ def build_hopfield_study(
+         file_access="declared",
+     )
+ 
+-    prediction_inputs: list[StageInputDraft | InputBinding] = [embedding.outputs.encoder]
+-    prediction_inputs.extend(embedding_inputs[:-1])
++    prediction_inputs: list[StageInputDraft | InputBinding | OutputDraft] = [
++        embedding.outputs.encoder
++    ]
++    prediction_inputs.extend(embedding_inputs)
+ 
+     prediction = stage(
+         predict_hopfield,
+@@ -866,23 +845,9 @@ def build_hopfield_study(
+             embedding.outputs.encoder,
+             prediction.outputs.raw_gene_predictions,
+             prediction.outputs.attention_summary,
+-            input(
+-                "hold_truth",
+-                source=restored_run_artifact(
+-                    restoration_run,
+-                    destination=INPUTS["hold_truth"].path,
+-                    path="inputs/mantra_hopfield_replay/hold_truth.npz",
+-                ),
+-            ),
++            model_inputs["hold_truth"],
+             input("parity_report", path=PARITY_REPORT, data_role="benchmark"),
+-            input(
+-                "historical_raw_gene_predictions",
+-                source=restored_run_artifact(
+-                    restoration_run,
+-                    destination=HISTORICAL_RAW_GENE_PREDICTIONS[0],
+-                    path="inputs/mantra_hopfield_replay/historical_raw_gene_predictions.npz",
+-                ),
+-            ),
++            historical_raw_gene_predictions,
+         ),
+         outputs=HopfieldEvaluationOutputs[OutputDraft](
+             parity_receipt=output(
+@@ -891,6 +856,47 @@ def build_hopfield_study(
+         ),
+         file_access="declared",
+     )
++    return embedding, prediction, evaluation
++
++
++def build_hopfield_study(
++    restoration_run: ResolvedRunRef,
++    *,
++    source_commit: str,
++    device: str = "cpu",
++    repository_root: Path | None = None,
++):
++    """Declare prediction and parity stages for the selected Hopfield row."""
++
++    model_inputs: dict[str, StageInputDraft | InputBinding] = {
++        name: input(
++            name,
++            path=_physical_input_path(repository_root, declared.path),
++            data_role="training",
++        )
++        for name, declared in INPUTS.items()
++        if name != "hold_truth"
++    }
++    model_inputs["hold_truth"] = input(
++        "hold_truth",
++        source=restored_run_artifact(
++            restoration_run,
++            destination=INPUTS["hold_truth"].path,
++            path="inputs/mantra_hopfield_replay/hold_truth.npz",
++        ),
++    )
++    embedding, prediction, evaluation = _hopfield_stages(
++        model_inputs=model_inputs,
++        historical_raw_gene_predictions=input(
++            "historical_raw_gene_predictions",
++            source=restored_run_artifact(
++                restoration_run,
++                destination=HISTORICAL_RAW_GENE_PREDICTIONS[0],
++                path="inputs/mantra_hopfield_replay/historical_raw_gene_predictions.npz",
++            ),
++        ),
++        device=device,
++    )
+     return experiment(
+         experiment_id=(
+             f"mantra_hopfield_replay_{source_commit[:12]}_{restoration_run.sha256[:12]}"
+@@ -906,6 +912,60 @@ def build_hopfield_study(
+     )
+ 
+ 
++def build_rebuilt_hopfield_study(
++    restoration_run: ResolvedRunRef,
++    *,
++    source_commit: str,
++    device: str = "cpu",
++    repository_root: Path | None = None,
++):
++    """Feed thirteen accepted Build outputs into the strict Hopfield replay."""
++
++    build_stages = []
++    model_inputs: dict[str, StageInputDraft | InputBinding] = {}
++    for name, declared in INPUTS.items():
++        source_path = _physical_input_path(repository_root, declared.path)
++        suffix = Path(source_path).suffix or ".bin"
++        built = stage(
++            copy_versioned_input,
++            stage_id=f"build_{name}",
++            config=BuildConfig(),
++            inputs=(input("source", path=source_path, data_role="training"),),
++            outputs=StageOutputs(
++                rebuilt=output(
++                    path=f"accepted-inputs/{name}{suffix}",
++                    loader=load_bytes,
++                    data_role="training",
++                )
++            ),
++            file_access="declared",
++        )
++        build_stages.append(built)
++        model_inputs[name] = input(name, source=built.outputs["rebuilt"])
++    embedding, prediction, evaluation = _hopfield_stages(
++        model_inputs=model_inputs,
++        historical_raw_gene_predictions=input(
++            "historical_raw_gene_predictions",
++            path=_physical_input_path(repository_root, HISTORICAL_RAW_GENE_PREDICTIONS[0]),
++            data_role="benchmark",
++        ),
++        device=device,
++    )
++    return experiment(
++        experiment_id=(
++            f"mantra_hopfield_rebuilt_{source_commit[:12]}_{restoration_run.sha256[:12]}"
++        ),
++        variants=(
++            variant(
++                "selected",
++                stages=(*build_stages, embedding, prediction, evaluation),
++                estimator=evaluation.outputs.parity_receipt,
++            ),
++        ),
++        replicates=(replicate(seed=0),),
++    )
++
++
+ def run_hopfield_replay(
+     repository_root: Path,
+     restoration_run: ResolvedRunRef,
+@@ -967,16 +1027,53 @@ def run_hopfield_replay(
+     return result
+ 
+ 
++def run_rebuilt_hopfield_replay(
++    repository_root: Path,
++    restoration_run: ResolvedRunRef,
++    *,
++    device: str = "cpu",
++):
++    """Execute the strict replay from thirteen in-run Build outputs."""
++
++    source = read_source(repository_root)
++    environment = LocalEnvSpec(
++        compute=_compute_for_device(device),
++        lockfile=GitFileRef(
++            repository=source.repository,
++            commit=source.commit,
++            path="pyproject.toml",
++        ),
++        python_env=observe_python_env(),
++    )
++    cloud_client = load_viper_cloud_client(repository_root)
++    return execution.run(
++        plan(
++            experiment=build_rebuilt_hopfield_study(
++                restoration_run,
++                source_commit=source.commit,
++                device=device,
++                repository_root=repository_root,
++            ),
++            source=source,
++            env=environment,
++        ),
++        repository_root=repository_root,
++        cloud_client=cloud_client,
++    )
++
++
+ __all__ = [
+     "EXPECTED_HOLD_PEARSON_DELTA",
+     "HopfieldEvaluationOutputs",
+     "HopfieldPredictionOutputs",
+     "HopfieldReplayError",
+     "build_hopfield_study",
++    "build_rebuilt_hopfield_study",
+     "descriptor_input_ledger",
+     "restore_descriptor_inputs",
+     "restore_target_inputs",
+     "run_hopfield_replay",
++    "run_rebuilt_hopfield_replay",
+     "target_input_bindings",
+     "target_input_ledger",
+ ]
+diff --git a/src/mantra/rebuild/tests/test_hopfield_replay.py b/src/mantra/rebuild/tests/test_hopfield_replay.py
+index fd075b15a..2ea0f0f3e 100644
+--- a/src/mantra/rebuild/tests/test_hopfield_replay.py
++++ b/src/mantra/rebuild/tests/test_hopfield_replay.py
+@@ -19,6 +19,7 @@ from mantra.rebuild.hopfield_replay import (
+     HISTORICAL_HOLD_PEARSON_DELTA,
+     HopfieldReplayError,
+     build_hopfield_study,
++    build_rebuilt_hopfield_study,
+     evaluate_hopfield,
+     predict_hopfield,
+ )
+@@ -156,7 +157,7 @@ def test_study_trains_encoder_then_passes_it_to_prediction(tmp_path: Path) -> No
+ 
+     assert study.experiment_id == f"mantra_hopfield_replay_{source_commit[:12]}_{'a' * 12}"
+     replay_inputs = {name for name in hopfield_replay.INPUTS if name != "hold_truth"}
+-    assert set(embedding.spec.inputs) == replay_inputs | {"encoder_report"}
++    assert set(embedding.spec.inputs) == replay_inputs
+     assert set(prediction.spec.inputs) == replay_inputs | {"encoder"}
+     assert embedding.spec.file_access == "declared"
+     assert prediction.spec.file_access == "declared"
+@@ -197,6 +198,34 @@ def test_study_trains_encoder_then_passes_it_to_prediction(tmp_path: Path) -> No
+     assert selected.estimator.output_name == "parity_receipt"
+ 
+ 
++def test_rebuilt_study_consumes_thirteen_future_inputs(tmp_path: Path) -> None:
++    """Connect every accepted Build output to the model without retained inputs."""
++
++    study = build_rebuilt_hopfield_study(
++        _restoration_run(tmp_path),
++        source_commit="0" * 40,
++        repository_root=tmp_path,
++    )
++    selected = study.variants["selected"]
++    embedding = selected.stages["embed"]
++    prediction = selected.stages["predict"]
++    evaluation = selected.stages["evaluate"]
++
++    assert {stage_id for stage_id in selected.stages if stage_id.startswith("build_")} == {
++        f"build_{name}" for name in hopfield_replay.INPUTS
++    }
++    for name in hopfield_replay.INPUTS:
++        consumer = evaluation if name == "hold_truth" else embedding
++        assert consumer.spec.inputs[name].producer.stage_id == f"build_{name}"
++    assert set(prediction.spec.inputs) == {
++        "encoder",
++        *(name for name in hopfield_replay.INPUTS if name != "hold_truth"),
++    }
++    historical = evaluation.spec.inputs["historical_raw_gene_predictions"]
++    assert historical.path == hopfield_replay.HISTORICAL_RAW_GENE_PREDICTIONS[0]
++    assert historical.data_role == "benchmark"
++
++
+ def test_worker_import_initializes_sklearn_threadpool_inventory() -> None:
+     """Reuse the runtime inventory created before governed stage execution."""
+ 
