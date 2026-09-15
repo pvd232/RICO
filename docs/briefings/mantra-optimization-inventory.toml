@@ -1,0 +1,125 @@
+schema_version = 1
+
+# Every record names the legacy implementation to preserve and the PairBlock
+# that will replace it. Numerical and throughput acceptance remain owned by the
+# referenced contract verifier rather than being duplicated here.
+
+[[operations]]
+id = "cnmf_nmf"
+historical_owners = ["src/mantra/sota/programs/discovery/cnmf.py:run_cnmf", "src/mantra/sota/programs/discovery/nmf_torch_batched.py:nmf_torch_batched"]
+modular_owner = "src/mantra/rebuild/response/cnmf.py:run_cnmf"
+cpu_reference = "sklearn.decomposition.NMF"
+requirement_id = "E0-REQ-04"
+pair_block_id = "E0-PB-04"
+verifier_id = "E0-VR-04"
+device_policy = "Preload dense float32 tensors on one CUDA device; sparse batches stay sparse until the declared kernel consumes them."
+determinism_policy = "Use fixed initialization and seeded CPU Lloyd KMeans for parity; GPU KMeans belongs only to a throughput run."
+consumers = ["R5-PB-03", "R5-PB-05"]
+
+[[operations]]
+id = "response_nnls"
+historical_owners = ["src/mantra/sota/programs/discovery/nmf_torch_batched.py:batched_nnls", "src/mantra/sota/programs/discovery/ghost_solver.py:ghost_nnls"]
+modular_owner = "src/mantra/rebuild/response/nnls.py:solve_nnls"
+cpu_reference = "scipy.optimize.nnls"
+requirement_id = "E0-REQ-05"
+pair_block_id = "E0-PB-05"
+verifier_id = "E0-VR-05"
+device_policy = "Run dense and sparse coefficient solves on CUDA in the declared float32 policy."
+determinism_policy = "Fix inputs, iteration limit, backend, and initialization; compare coefficients and reconstructions with the CPU solve."
+consumers = ["R5-PB-04", "R5-PB-05"]
+
+[[operations]]
+id = "sinkhorn_controls"
+historical_owners = ["src/mantra/sota/control/ot_sinkhorn_gpu.py:unbalanced_sinkhorn_plan", "src/mantra/sota/control/ot_sinkhorn_gpu.py:ot_barycentric_controls_and_residual_mean"]
+modular_owner = "src/mantra/rebuild/response/sinkhorn.py:matched_control_residuals"
+cpu_reference = "src/mantra/rebuild/response/sinkhorn_reference.py:matched_control_residuals"
+requirement_id = "E0-REQ-06"
+pair_block_id = "E0-PB-06"
+verifier_id = "E0-VR-06"
+device_policy = "Keep distances, transport plans, barycenters, and residuals as vectorized float32 CUDA tensors."
+determinism_policy = "Fix row order, regularization, iteration count, convergence rule, device, and dtype."
+consumers = ["R5-PB-04"]
+
+[[operations]]
+id = "ridge_regression"
+historical_owners = ["src/mantra/utils/ridge_gpu.py:ridge_fit_predict_torch", "src/mantra/utils/ridge_gpu.py:ridge_predict_fixed_design_torch"]
+modular_owner = "src/mantra/rebuild/features/ridge.py:fit_predict"
+cpu_reference = "numpy.linalg.solve"
+requirement_id = "E0-REQ-07"
+pair_block_id = "E0-PB-07"
+verifier_id = "E0-VR-07"
+device_policy = "Use one float32 CUDA solve and record whether the primal or dual system was selected."
+determinism_policy = "Fix ordered design rows, targets, penalty, solver form, device, and dtype."
+consumers = ["S6-PB-04", "S6-PB-06", "R5-PB-06"]
+
+[[operations]]
+id = "consensus_kmeans"
+historical_owners = ["src/mantra/sota/programs/discovery/cnmf.py:_stability_kmeans_labels_centers", "src/mantra/programs/v6/kmeans_gpu.py:KMeansSingularity"]
+modular_owner = "src/mantra/rebuild/execution_profiles.py:cluster"
+cpu_reference = "sklearn.cluster.KMeans"
+requirement_id = "E0-REQ-08"
+pair_block_id = "E0-PB-08"
+verifier_id = "E0-VR-08"
+device_policy = "Run parity clustering on CPU; permit the Triton CUDA implementation only in a separately named throughput profile."
+determinism_policy = "Use seeded scikit-learn Lloyd KMeans for every replay, bridge, and substitution run."
+consumers = ["R5-PB-03"]
+
+[[operations]]
+id = "hopfield_training_retrieval"
+historical_owners = ["experiments/v1938_sota_clean_repro/src/step01/hopfield/model.py", "experiments/v1938_sota_clean_repro/src/step01/hopfield/train.py"]
+modular_owner = "src/mantra/rebuild/hopfield/train.py:train_hopfield"
+cpu_reference = "retained Hopfield checkpoint, predictions, and PearsonDelta"
+requirement_id = "E0-REQ-09"
+pair_block_id = "E0-PB-09"
+verifier_id = "E0-VR-09"
+device_policy = "Copy every numeric tensor to CUDA once and keep the complete fit and tune sets resident through training and inference."
+determinism_policy = "Fix CUDA determinism, precision, seed, normalization, objectives, selection, and top-k order."
+consumers = ["H1-PB-06", "H1-PB-07", "H1-PB-09"]
+
+[[operations]]
+id = "mil_proposal_routing"
+historical_owners = ["experiments/v1938_sota_clean_repro/src/step02/proposal.py", "experiments/v1938_sota_clean_repro/src/step02/mil_proto/routing_readout.py", "experiments/v1938_sota_clean_repro/src/step02/mil_proto/objective.py"]
+modular_owner = "src/mantra/rebuild/mil/routing.py:route_proposals"
+cpu_reference = "retained MIL proposal, routing, and coefficient arrays"
+requirement_id = "E0-REQ-10"
+pair_block_id = "E0-PB-10"
+verifier_id = "E0-VR-10"
+device_policy = "Keep proposal, donor, slot, and coefficient tensors resident and use vectorized top-k, matmul, and einsum operations."
+determinism_policy = "Fix proposal order, ties, routing dimensions, device, dtype, and seed."
+consumers = ["M2-PB-04", "M2-PB-05"]
+
+[[operations]]
+id = "mil_training"
+historical_owners = ["experiments/v1938_sota_clean_repro/src/step02/mil_proto/train.py"]
+modular_owner = "src/mantra/rebuild/mil/train.py:train_mil"
+cpu_reference = "retained MIL teacher and student checkpoints, predictions, and PearsonDelta"
+requirement_id = "E0-REQ-10"
+pair_block_id = "E0-PB-10"
+verifier_id = "E0-VR-10"
+device_policy = "Copy numeric tensors to CUDA once; select historical 128-row optimizer batches using device-side indices only."
+determinism_policy = "Fix CUDA determinism, precision, seed, optimizer, batch index order, checkpoint selection, and evaluation order."
+consumers = ["M2-PB-04", "M2-PB-05", "M2-PB-06"]
+
+[[operations]]
+id = "low_rank_reduction"
+historical_owners = ["experiments/v1938_sota_clean_repro/src/step00/family64/transforms.py:fit_pca_project_splits"]
+modular_owner = "src/mantra/rebuild/features/reduction.py:fit_project"
+cpu_reference = "sklearn.decomposition.PCA"
+requirement_id = "E0-REQ-11"
+pair_block_id = "E0-PB-11"
+verifier_id = "E0-VR-11"
+device_policy = "Fit and project float32 tensors on CUDA while retaining fitted rows, rank, centering, and sign convention."
+determinism_policy = "Fix seed, fitted rows, rank, solver, component order, sign rule, device, and dtype."
+consumers = ["P4-PB-06", "R5-PB-06", "S6-PB-02"]
+
+[[operations]]
+id = "fast_h5ad_read"
+historical_owners = ["src/mantra/utils/fast_h5_loader.py"]
+modular_owner = "src/mantra/rebuild/data/fast_h5ad.py:read_selected"
+cpu_reference = "anndata.read_h5ad"
+requirement_id = "D3-REQ-06"
+pair_block_id = "D3-PB-06"
+verifier_id = "D3-VR-06"
+device_policy = "Read only selected arrays on CPU and transfer each downstream numeric tensor once at its owning GPU stage."
+determinism_policy = "Preserve requested row and gene order, repeated selections, values, shapes, and dtypes exactly."
+consumers = ["D3-PB-07", "R5-PB-02", "H7-PB-01", "M8-PB-01"]
