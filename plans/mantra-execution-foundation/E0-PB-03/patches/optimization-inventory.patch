@@ -1,0 +1,305 @@
+diff --git a/docs/briefings/mantra-optimization-inventory.toml b/docs/briefings/mantra-optimization-inventory.toml
+new file mode 100644
+index 0000000..e389a51
+--- /dev/null
++++ b/docs/briefings/mantra-optimization-inventory.toml
+@@ -0,0 +1,125 @@
++schema_version = 1
++
++# Every record names the legacy implementation to preserve and the PairBlock
++# that will replace it. Numerical and throughput acceptance remain owned by the
++# referenced contract verifier rather than being duplicated here.
++
++[[operations]]
++id = "cnmf_nmf"
++historical_owners = ["src/mantra/sota/programs/discovery/cnmf.py:run_cnmf", "src/mantra/sota/programs/discovery/nmf_torch_batched.py:nmf_torch_batched"]
++modular_owner = "src/mantra/rebuild/response/cnmf.py:run_cnmf"
++cpu_reference = "sklearn.decomposition.NMF"
++requirement_id = "E0-REQ-04"
++pair_block_id = "E0-PB-04"
++verifier_id = "E0-VR-04"
++device_policy = "Preload dense float32 tensors on one CUDA device; sparse batches stay sparse until the declared kernel consumes them."
++determinism_policy = "Use fixed initialization and seeded CPU Lloyd KMeans for parity; GPU KMeans belongs only to a throughput run."
++consumers = ["R5-PB-03", "R5-PB-05"]
++
++[[operations]]
++id = "response_nnls"
++historical_owners = ["src/mantra/sota/programs/discovery/nmf_torch_batched.py:batched_nnls", "src/mantra/sota/programs/discovery/ghost_solver.py:ghost_nnls"]
++modular_owner = "src/mantra/rebuild/response/nnls.py:solve_nnls"
++cpu_reference = "scipy.optimize.nnls"
++requirement_id = "E0-REQ-05"
++pair_block_id = "E0-PB-05"
++verifier_id = "E0-VR-05"
++device_policy = "Run dense and sparse coefficient solves on CUDA in the declared float32 policy."
++determinism_policy = "Fix inputs, iteration limit, backend, and initialization; compare coefficients and reconstructions with the CPU solve."
++consumers = ["R5-PB-04", "R5-PB-05"]
++
++[[operations]]
++id = "sinkhorn_controls"
++historical_owners = ["src/mantra/sota/control/ot_sinkhorn_gpu.py:unbalanced_sinkhorn_plan", "src/mantra/sota/control/ot_sinkhorn_gpu.py:ot_barycentric_controls_and_residual_mean"]
++modular_owner = "src/mantra/rebuild/response/sinkhorn.py:matched_control_residuals"
++cpu_reference = "src/mantra/rebuild/response/sinkhorn_reference.py:matched_control_residuals"
++requirement_id = "E0-REQ-06"
++pair_block_id = "E0-PB-06"
++verifier_id = "E0-VR-06"
++device_policy = "Keep distances, transport plans, barycenters, and residuals as vectorized float32 CUDA tensors."
++determinism_policy = "Fix row order, regularization, iteration count, convergence rule, device, and dtype."
++consumers = ["R5-PB-04"]
++
++[[operations]]
++id = "ridge_regression"
++historical_owners = ["src/mantra/utils/ridge_gpu.py:ridge_fit_predict_torch", "src/mantra/utils/ridge_gpu.py:ridge_predict_fixed_design_torch"]
++modular_owner = "src/mantra/rebuild/features/ridge.py:fit_predict"
++cpu_reference = "numpy.linalg.solve"
++requirement_id = "E0-REQ-07"
++pair_block_id = "E0-PB-07"
++verifier_id = "E0-VR-07"
++device_policy = "Use one float32 CUDA solve and record whether the primal or dual system was selected."
++determinism_policy = "Fix ordered design rows, targets, penalty, solver form, device, and dtype."
++consumers = ["S6-PB-04", "S6-PB-06", "R5-PB-06"]
++
++[[operations]]
++id = "consensus_kmeans"
++historical_owners = ["src/mantra/sota/programs/discovery/cnmf.py:_stability_kmeans_labels_centers", "src/mantra/programs/v6/kmeans_gpu.py:KMeansSingularity"]
++modular_owner = "src/mantra/rebuild/execution_profiles.py:cluster"
++cpu_reference = "sklearn.cluster.KMeans"
++requirement_id = "E0-REQ-08"
++pair_block_id = "E0-PB-08"
++verifier_id = "E0-VR-08"
++device_policy = "Run parity clustering on CPU; permit the Triton CUDA implementation only in a separately named throughput profile."
++determinism_policy = "Use seeded scikit-learn Lloyd KMeans for every replay, bridge, and substitution run."
++consumers = ["R5-PB-03"]
++
++[[operations]]
++id = "hopfield_training_retrieval"
++historical_owners = ["experiments/v1938_sota_clean_repro/src/step01/hopfield/model.py", "experiments/v1938_sota_clean_repro/src/step01/hopfield/train.py"]
++modular_owner = "src/mantra/rebuild/hopfield/train.py:train_hopfield"
++cpu_reference = "retained Hopfield checkpoint, predictions, and PearsonDelta"
++requirement_id = "E0-REQ-09"
++pair_block_id = "E0-PB-09"
++verifier_id = "E0-VR-09"
++device_policy = "Copy every numeric tensor to CUDA once and keep the complete fit and tune sets resident through training and inference."
++determinism_policy = "Fix CUDA determinism, precision, seed, normalization, objectives, selection, and top-k order."
++consumers = ["H1-PB-06", "H1-PB-07", "H1-PB-09"]
++
++[[operations]]
++id = "mil_proposal_routing"
++historical_owners = ["experiments/v1938_sota_clean_repro/src/step02/proposal.py", "experiments/v1938_sota_clean_repro/src/step02/mil_proto/routing_readout.py", "experiments/v1938_sota_clean_repro/src/step02/mil_proto/objective.py"]
++modular_owner = "src/mantra/rebuild/mil/routing.py:route_proposals"
++cpu_reference = "retained MIL proposal, routing, and coefficient arrays"
++requirement_id = "E0-REQ-10"
++pair_block_id = "E0-PB-10"
++verifier_id = "E0-VR-10"
++device_policy = "Keep proposal, donor, slot, and coefficient tensors resident and use vectorized top-k, matmul, and einsum operations."
++determinism_policy = "Fix proposal order, ties, routing dimensions, device, dtype, and seed."
++consumers = ["M2-PB-04", "M2-PB-05"]
++
++[[operations]]
++id = "mil_training"
++historical_owners = ["experiments/v1938_sota_clean_repro/src/step02/mil_proto/train.py"]
++modular_owner = "src/mantra/rebuild/mil/train.py:train_mil"
++cpu_reference = "retained MIL teacher and student checkpoints, predictions, and PearsonDelta"
++requirement_id = "E0-REQ-10"
++pair_block_id = "E0-PB-10"
++verifier_id = "E0-VR-10"
++device_policy = "Copy numeric tensors to CUDA once; select historical 128-row optimizer batches using device-side indices only."
++determinism_policy = "Fix CUDA determinism, precision, seed, optimizer, batch index order, checkpoint selection, and evaluation order."
++consumers = ["M2-PB-04", "M2-PB-05", "M2-PB-06"]
++
++[[operations]]
++id = "low_rank_reduction"
++historical_owners = ["experiments/v1938_sota_clean_repro/src/step00/family64/transforms.py:fit_pca_project_splits"]
++modular_owner = "src/mantra/rebuild/features/reduction.py:fit_project"
++cpu_reference = "sklearn.decomposition.PCA"
++requirement_id = "E0-REQ-11"
++pair_block_id = "E0-PB-11"
++verifier_id = "E0-VR-11"
++device_policy = "Fit and project float32 tensors on CUDA while retaining fitted rows, rank, centering, and sign convention."
++determinism_policy = "Fix seed, fitted rows, rank, solver, component order, sign rule, device, and dtype."
++consumers = ["P4-PB-06", "R5-PB-06", "S6-PB-02"]
++
++[[operations]]
++id = "fast_h5ad_read"
++historical_owners = ["src/mantra/utils/fast_h5_loader.py"]
++modular_owner = "src/mantra/rebuild/data/fast_h5ad.py:read_selected"
++cpu_reference = "anndata.read_h5ad"
++requirement_id = "D3-REQ-06"
++pair_block_id = "D3-PB-06"
++verifier_id = "D3-VR-06"
++device_policy = "Read only selected arrays on CPU and transfer each downstream numeric tensor once at its owning GPU stage."
++determinism_policy = "Preserve requested row and gene order, repeated selections, values, shapes, and dtypes exactly."
++consumers = ["D3-PB-07", "R5-PB-02", "H7-PB-01", "M8-PB-01"]
+diff --git a/tests/roadmap/test_mantra_optimization_inventory.py b/tests/roadmap/test_mantra_optimization_inventory.py
+new file mode 100644
+index 0000000..d78e693
+--- /dev/null
++++ b/tests/roadmap/test_mantra_optimization_inventory.py
+@@ -0,0 +1,41 @@
++"""Verify the complete MANTRA optimization migration inventory."""
++
++from __future__ import annotations
++
++from copy import deepcopy
++from pathlib import Path
++
++import pytest
++import tomllib
++
++from tools.validate_mantra_optimization_inventory import (
++    EXPECTED_OPERATIONS,
++    load_and_validate,
++    validate_inventory,
++)
++
++ROOT = Path(__file__).parents[2]
++INVENTORY = ROOT / "docs/briefings/mantra-optimization-inventory.toml"
++MANTRA = Path("/Users/machina/Developer/ChatGPT/mantra")
++
++
++def test_inventory_covers_every_accelerated_operation() -> None:
++    """Require every approved operation and every migration decision."""
++    load_and_validate(INVENTORY, MANTRA, ROOT / "contracts")
++    payload = tomllib.loads(INVENTORY.read_text(encoding="utf-8"))
++    assert {operation["id"] for operation in payload["operations"]} == set(
++        EXPECTED_OPERATIONS
++    )
++
++
++@pytest.mark.parametrize(
++    "missing",
++    ["historical_owners", "modular_owner", "verifier_id", "consumers"],
++)
++def test_rejects_missing_owner_gate_or_consumer(missing: str) -> None:
++    """Reject omission of each ownership, gate, and consumer boundary."""
++    payload = tomllib.loads(INVENTORY.read_text(encoding="utf-8"))
++    candidate = deepcopy(payload)
++    candidate["operations"][0].pop(missing)
++    with pytest.raises(ValueError, match="fields are incomplete"):
++        validate_inventory(candidate, MANTRA, ROOT / "contracts")
+diff --git a/tools/validate_mantra_optimization_inventory.py b/tools/validate_mantra_optimization_inventory.py
+new file mode 100644
+index 0000000..91433d7
+--- /dev/null
++++ b/tools/validate_mantra_optimization_inventory.py
+@@ -0,0 +1,121 @@
++"""Validate the versioned MANTRA optimization migration inventory."""
++
++from __future__ import annotations
++
++import argparse
++from collections.abc import Mapping, Sequence
++from pathlib import Path
++
++import tomllib
++
++EXPECTED_OPERATIONS = frozenset(
++    {
++        "cnmf_nmf",
++        "consensus_kmeans",
++        "fast_h5ad_read",
++        "hopfield_training_retrieval",
++        "low_rank_reduction",
++        "mil_proposal_routing",
++        "mil_training",
++        "response_nnls",
++        "ridge_regression",
++        "sinkhorn_controls",
++    }
++)
++REQUIRED_FIELDS = frozenset(
++    {
++        "id",
++        "historical_owners",
++        "modular_owner",
++        "cpu_reference",
++        "requirement_id",
++        "pair_block_id",
++        "verifier_id",
++        "device_policy",
++        "determinism_policy",
++        "consumers",
++    }
++)
++
++
++def _contract_ids(contracts: Path) -> tuple[set[str], set[str], set[str]]:
++    """Collect requirement, PairBlock, and verifier IDs from contract packages."""
++    requirements: set[str] = set()
++    pair_blocks: set[str] = set()
++    verifiers: set[str] = set()
++    for path in contracts.glob("*.toml"):
++        package = tomllib.loads(path.read_text(encoding="utf-8"))
++        requirements.update(item["id"] for item in package.get("requirements", ()))
++        pair_blocks.update(item["id"] for item in package.get("pair_blocks", ()))
++        verifiers.update(item["id"] for item in package.get("verifiers", ()))
++    return requirements, pair_blocks, verifiers
++
++
++def validate_inventory(
++    payload: Mapping[str, object], mantra_root: Path, contracts: Path
++) -> None:
++    """Reject incomplete operations and historical owners that cannot be opened."""
++    if payload.get("schema_version") != 1:
++        raise ValueError("inventory schema_version must equal 1")
++    operations = payload.get("operations")
++    if not isinstance(operations, list):
++        raise TypeError("inventory operations must be an array")
++    identifiers = tuple(
++        operation.get("id") if isinstance(operation, dict) else None
++        for operation in operations
++    )
++    if set(identifiers) != EXPECTED_OPERATIONS or len(identifiers) != len(
++        EXPECTED_OPERATIONS
++    ):
++        raise ValueError("inventory operation set is incomplete or duplicated")
++    requirement_ids, pair_block_ids, verifier_ids = _contract_ids(contracts)
++    for operation in operations:
++        if not isinstance(operation, dict) or set(operation) != REQUIRED_FIELDS:
++            raise ValueError("inventory operation fields are incomplete")
++        if any(not operation[field] for field in REQUIRED_FIELDS):
++            raise ValueError("inventory operation fields must be nonempty")
++        owners = operation["historical_owners"]
++        if not isinstance(owners, list) or not all(
++            isinstance(owner, str) and owner for owner in owners
++        ):
++            raise ValueError("historical owners must be nonempty strings")
++        for owner in owners:
++            path = mantra_root / owner.split(":", 1)[0]
++            if not path.is_file():
++                raise ValueError(f"historical owner is missing: {owner}")
++        modular_owner = operation["modular_owner"]
++        if not isinstance(modular_owner, str) or not modular_owner.startswith(
++            "src/mantra/rebuild/"
++        ):
++            raise ValueError("modular owner must be a MANTRA rebuild path")
++        if operation["requirement_id"] not in requirement_ids:
++            raise ValueError("inventory requirement is not declared")
++        if operation["pair_block_id"] not in pair_block_ids:
++            raise ValueError("inventory PairBlock is not declared")
++        if operation["verifier_id"] not in verifier_ids:
++            raise ValueError("inventory verifier is not declared")
++        consumers = operation["consumers"]
++        if not isinstance(consumers, list) or not set(consumers) <= pair_block_ids:
++            raise ValueError("inventory consumer is not a declared PairBlock")
++
++
++def load_and_validate(inventory: Path, mantra_root: Path, contracts: Path) -> None:
++    """Load one TOML inventory and validate it against the MANTRA checkout."""
++    validate_inventory(
++        tomllib.loads(inventory.read_text(encoding="utf-8")), mantra_root, contracts
++    )
++
++
++def main(argv: Sequence[str] | None = None) -> int:
++    """Return success only when the command-line inventory is complete."""
++    parser = argparse.ArgumentParser()
++    parser.add_argument("inventory", type=Path)
++    parser.add_argument("--mantra-root", type=Path, required=True)
++    parser.add_argument("--contracts", type=Path, required=True)
++    arguments = parser.parse_args(argv)
++    load_and_validate(arguments.inventory, arguments.mantra_root, arguments.contracts)
++    return 0
++
++
++if __name__ == "__main__":
++    raise SystemExit(main())

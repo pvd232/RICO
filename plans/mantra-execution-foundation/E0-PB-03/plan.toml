@@ -1,0 +1,73 @@
+schema_version = 1
+contract_id = "mantra-execution-foundation"
+package_sha256 = "042038108f925616987f834dc35bfa7c3f92426dc6ddce4b3ad93b9004fab146"
+pair_block_id = "E0-PB-03"
+baseline_commit = "22084295769d3f3d71f9f9e4eca2be7554419aae"
+change_summary = [
+  "A versioned inventory now names every accelerated operation that the MANTRA rebuild must preserve.",
+  "Each operation maps its historical implementation to one planned modular owner, CPU reference, governing requirement, implementation PairBlock, verifier, device policy, determinism policy, and downstream consumers.",
+  "The checker rejects omitted operations or fields, missing historical files, undeclared contract IDs, undeclared consumers, and modular owners outside the MANTRA rebuild namespace.",
+]
+deviation_summary = "The existing Markdown inventory supplied the operation list but bundled several required mappings into prose. The implementation retained it as the readable overview and added one machine-readable sidecar plus one validator. Self-review replaced a dictionary-key assertion with mutations observed by the production validator."
+
+[[actions]]
+operation = "patch"
+patch_path = "patches/optimization-inventory.patch"
+target_paths = [
+  "docs/briefings/mantra-optimization-inventory.toml",
+  "tests/roadmap/test_mantra_optimization_inventory.py",
+  "tools/validate_mantra_optimization_inventory.py",
+]
+
+[[handoff_targets]]
+label = "Complete E0-PB-03 diff"
+source = "plan"
+path = "patches/optimization-inventory.patch"
+line = 1
+
+[[handoff_targets]]
+label = "Versioned optimization inventory"
+source = "plan"
+path = "patches/optimization-inventory.patch"
+line = 7
+
+[[handoff_targets]]
+label = "Inventory validation boundary"
+source = "plan"
+path = "patches/optimization-inventory.patch"
+line = 238
+
+[[handoff_targets]]
+label = "Missing-field rejection cases"
+source = "plan"
+path = "patches/optimization-inventory.patch"
+line = 159
+
+[gate]
+source_roots = ["tools/validate_mantra_optimization_inventory.py", "docs/briefings/mantra-optimization-inventory.toml"]
+test_roots = ["tests/roadmap/test_mantra_optimization_inventory.py"]
+
+[[gate.steps]]
+role = "typecheck"
+working_directory = "."
+argv = ["pyright", "tools/validate_mantra_optimization_inventory.py", "tests/roadmap/test_mantra_optimization_inventory.py"]
+
+[[gate.steps]]
+role = "test"
+working_directory = "."
+argv = ["python3", "-m", "pytest", "-q", "-p", "no:cacheprovider", "tests/roadmap/test_mantra_optimization_inventory.py"]
+
+[[gate.steps]]
+role = "documentation"
+working_directory = "."
+argv = ["python3", "/Users/machina/.agents/skills/code-documentation/scripts/check-schema-descriptions.py", "tools/validate_mantra_optimization_inventory.py", "tests/roadmap/test_mantra_optimization_inventory.py"]
+
+[[gate.steps]]
+role = "lint"
+working_directory = "."
+argv = ["ruff", "format", "--check", "tools/validate_mantra_optimization_inventory.py", "tests/roadmap/test_mantra_optimization_inventory.py"]
+
+[[gate.steps]]
+role = "lint"
+working_directory = "."
+argv = ["ruff", "check", "tools/validate_mantra_optimization_inventory.py", "tests/roadmap/test_mantra_optimization_inventory.py"]
