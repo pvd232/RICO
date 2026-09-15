@@ -220,17 +220,60 @@ The original 64-value Hopfield result remains the historical replay baseline.
 
 #### <nobr><code>H1-PB-04</code></nobr>
 
-**Status:** drafting
+**Status:** review
 
 **Requirement contribution:** Freeze the target-input ledger and restore every exact historical target and response-transform file.
 
-**Plan:** None
+**Review handoff**
 
-**Current receipt:** None
+**What changed**
+
+- One retained ledger now names the five historical coefficient-target, truth-surface, response-contract, response-rotation, and response-similarity files by exact digest and signed Hugging Face archive member.
+- The Hopfield replay checks that every ledger identity matches the file identity consumed by training, then delegates restoration to MANTRA's existing authenticated archive reader.
+- The focused observers prove exact target selection and reject a changed historical identity before any archive download begins.
+
+**Plan deviations:** Matrix built the isolated candidate before persisting this plan. The candidate remained uncommitted, and this plan freezes its exact diff before the protocol gate. CodeQL used a sparse src-only Git snapshot to exclude archived experiments from graph construction.
+
+**Start review:** [Open tested GitHub comparison](https://github.com/pvd232/MANTRA/compare/9638a876893493ef1955b01204158108c7ba068d...17f3a09bd1055c432e61ee03c196bb4819845195)
+
+**Review these files**
+
+- [Complete H1-PB-04 diff](../plans/mantra-hopfield-reconstruction/H1-PB-04/patches/target-input-ledger.patch#L1)
+- [Target ledger and verified archive restoration](../../mantra/src/mantra/rebuild/hopfield_replay.py#L87)
+
+**Evidence:** [Passing gate receipt](../evidence/mantra-rebuild/H1-PB-04/gate-review-03.json)
+
+**Decision:** Approve <nobr><code>H1-PB-04</code></nobr>, or return it with findings.
+
+<details>
+<summary>Implementation details</summary>
+
+**Plan:** [plan.toml](../plans/mantra-hopfield-reconstruction/H1-PB-04/plan.toml)
+
+**Retained patch:** [patches/target-input-ledger.patch](../plans/mantra-hopfield-reconstruction/H1-PB-04/patches/target-input-ledger.patch)
+
+**Implementation roots:** [src/mantra/rebuild](../../mantra/src/mantra/rebuild) · [cleanup](../../mantra/cleanup) · [experiments/v1938_sota_clean_repro/src](../../mantra/experiments/v1938_sota_clean_repro/src) · [experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/scripts](../../mantra/experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/scripts) · [pyproject.toml](../../mantra/pyproject.toml) · [pyrightconfig.json](../../mantra/pyrightconfig.json)
+
+**Test roots:** [src/mantra/rebuild/tests](../../mantra/src/mantra/rebuild/tests) · [conftest.py](../../mantra/conftest.py)
 
 **Dependencies:** <nobr><code>H1-PB-03</code></nobr>
 
-**Next action:** Run the current PairBlock plan.
+**Gate steps:**
+
+```bash
+# typecheck
+(cd . && pyright src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_hopfield_preprocessing.py)
+# test
+(cd . && python3 -m pytest -q -p no:cacheprovider src/mantra/rebuild/tests/test_hopfield_preprocessing.py::test_restores_selected_target_inputs src/mantra/rebuild/tests/test_hopfield_preprocessing.py::test_rejects_changed_target_input)
+# documentation
+(cd . && python3 /Users/machina/.agents/skills/code-documentation/scripts/check-schema-descriptions.py src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_hopfield_preprocessing.py)
+# lint
+(cd . && ruff format --check src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_hopfield_preprocessing.py)
+# lint
+(cd . && ruff check src/mantra/rebuild/hopfield_replay.py src/mantra/rebuild/tests/test_hopfield_preprocessing.py)
+```
+
+</details>
 
 <a id="h1-pb-05"></a>
 

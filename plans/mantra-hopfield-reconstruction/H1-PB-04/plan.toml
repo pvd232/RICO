@@ -1,0 +1,97 @@
+schema_version = 1
+contract_id = "mantra-hopfield-reconstruction"
+package_sha256 = "61d435968fe82c4419a9a33d9871f0efa139aa08d96b57d773efab45e2d29aa8"
+pair_block_id = "H1-PB-04"
+baseline_commit = "9638a876893493ef1955b01204158108c7ba068d"
+change_summary = [
+  "One retained ledger now names the five historical coefficient-target, truth-surface, response-contract, response-rotation, and response-similarity files by exact digest and signed Hugging Face archive member.",
+  "The Hopfield replay checks that every ledger identity matches the file identity consumed by training, then delegates restoration to MANTRA's existing authenticated archive reader.",
+  "The focused observers prove exact target selection and reject a changed historical identity before any archive download begins.",
+]
+deviation_summary = "Matrix built the isolated candidate before persisting this plan. The candidate remained uncommitted, and this plan freezes its exact diff before the protocol gate. CodeQL used a sparse src-only Git snapshot to exclude archived experiments from graph construction."
+
+[[actions]]
+operation = "patch"
+patch_path = "patches/target-input-ledger.patch"
+target_paths = [
+  "src/mantra/rebuild/hopfield_replay.py",
+  "src/mantra/rebuild/records/hopfield_target_input_bindings.json",
+  "src/mantra/rebuild/tests/test_hopfield_preprocessing.py",
+]
+
+[[handoff_targets]]
+label = "Complete H1-PB-04 diff"
+source = "plan"
+path = "patches/target-input-ledger.patch"
+line = 1
+
+[[handoff_targets]]
+label = "Target ledger and verified archive restoration"
+source = "repository"
+path = "src/mantra/rebuild/hopfield_replay.py"
+line = 87
+
+[gate]
+source_roots = [
+  "src/mantra/rebuild",
+  "cleanup",
+  "experiments/v1938_sota_clean_repro/src",
+  "experiments/v1938_sota_clean_repro/runs/matrix_fit_only_bold_step02_20260715T083000Z/scripts",
+  "pyproject.toml",
+  "pyrightconfig.json",
+]
+test_roots = ["src/mantra/rebuild/tests", "conftest.py"]
+
+[[gate.steps]]
+role = "typecheck"
+working_directory = "."
+argv = [
+  "pyright",
+  "src/mantra/rebuild/hopfield_replay.py",
+  "src/mantra/rebuild/tests/test_hopfield_preprocessing.py",
+]
+
+[[gate.steps]]
+role = "test"
+working_directory = "."
+argv = [
+  "python3",
+  "-m",
+  "pytest",
+  "-q",
+  "-p",
+  "no:cacheprovider",
+  "src/mantra/rebuild/tests/test_hopfield_preprocessing.py::test_restores_selected_target_inputs",
+  "src/mantra/rebuild/tests/test_hopfield_preprocessing.py::test_rejects_changed_target_input",
+]
+
+[[gate.steps]]
+role = "documentation"
+working_directory = "."
+argv = [
+  "python3",
+  "/Users/machina/.agents/skills/code-documentation/scripts/check-schema-descriptions.py",
+  "src/mantra/rebuild/hopfield_replay.py",
+  "src/mantra/rebuild/tests/test_hopfield_preprocessing.py",
+]
+
+[[gate.steps]]
+role = "lint"
+working_directory = "."
+argv = [
+  "ruff",
+  "format",
+  "--check",
+  "src/mantra/rebuild/hopfield_replay.py",
+  "src/mantra/rebuild/tests/test_hopfield_preprocessing.py",
+]
+
+[[gate.steps]]
+role = "lint"
+working_directory = "."
+argv = [
+  "ruff",
+  "check",
+  "src/mantra/rebuild/hopfield_replay.py",
+  "src/mantra/rebuild/tests/test_hopfield_preprocessing.py",
+]

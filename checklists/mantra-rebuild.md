@@ -12,7 +12,7 @@ conditions, and result required from each PairBlock through Phase 9. Phase 0
 remains an immutable comparison source and never runs again.
 
 <!-- contract-protocol:generated:start -->
-**Resume here:** [Resume at E0-PB-04](../contracts/mantra-execution-foundation.md#e0-pb-04)
+**Resume here:** [Resume at H1-PB-04](../contracts/mantra-hopfield-reconstruction.md#h1-pb-04)
 
 
 ### Phase 1: GPU foundation and Hopfield reconstruction

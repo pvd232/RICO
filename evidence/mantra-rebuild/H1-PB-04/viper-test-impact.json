@@ -1,0 +1,16 @@
+{
+  "analyzed_root": "src",
+  "changed_declarations": [
+    "src/mantra/rebuild/hopfield_replay.py:target_input_bindings",
+    "src/mantra/rebuild/hopfield_replay.py:target_input_ledger",
+    "src/mantra/rebuild/hopfield_replay.py:restore_target_inputs"
+  ],
+  "explicit_observer": "H1-VR-04",
+  "graph": "CodeQL SourceGraph v3",
+  "schema_version": 1,
+  "selected_tests": [
+    "src/mantra/rebuild/tests/test_hopfield_preprocessing.py::test_rejects_changed_target_input",
+    "src/mantra/rebuild/tests/test_hopfield_preprocessing.py::test_restores_selected_target_inputs"
+  ],
+  "unresolved": []
+}
