@@ -168,7 +168,6 @@ depends_on = [
   "H1-PB-05K",
   "H1-PB-05L",
   "H1-PB-05M",
-  "H1-PB-05N",
 ]
 repository_id = "mantra"
 requirement_contribution = "Assemble the restored Hopfield replay bundle and prove array and fitted-population parity."
@@ -276,14 +275,6 @@ requirement_ids = ["H1-REQ-05"]
 depends_on = ["H1-PB-04"]
 repository_id = "mantra"
 requirement_contribution = "Download, restore, and verify the response-similarity graph through VIPER."
-completion_evidence = ["implementation_review", "viper_registration"]
-
-[[pair_blocks]]
-id = "H1-PB-05N"
-requirement_ids = ["H1-REQ-05"]
-depends_on = ["H1-PB-04"]
-repository_id = "mantra"
-requirement_contribution = "Download, restore, and verify the historical Hopfield encoder through VIPER."
 completion_evidence = ["implementation_review", "viper_registration"]
 
 [[pair_blocks]]
