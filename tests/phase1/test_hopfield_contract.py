@@ -10,6 +10,7 @@ import tomllib
 
 ROOT = Path(__file__).parents[2]
 CONTRACT = ROOT / "contracts/mantra-hopfield-reconstruction.toml"
+CHECKLIST = ROOT / "checklists/mantra-rebuild-phase-1.toml"
 PHASE0_EVIDENCE = ROOT / "archive/mantra-rebuild-phase-0/evidence"
 PHASE0_INDEX = PHASE0_EVIDENCE / "phase0/index.json"
 EXPECTED_ENCODER_SHA256 = (
@@ -106,6 +107,24 @@ class HopfieldContractTests(unittest.TestCase):
                 receipt,
                 EXPECTED_ENCODER_SHA256,
             )
+
+    def test_places_hopfield_work_in_roadmap_phase_one(self) -> None:
+        """Keep the six implementation blocks ordered within roadmap Phase 1."""
+        checklist = tomllib.loads(CHECKLIST.read_text(encoding="utf-8"))
+        placements = checklist["pair_block_placements"]
+
+        self.assertEqual(
+            [placement["pair_block_id"] for placement in placements],
+            [f"H1-PB-{index:02d}" for index in range(1, 7)],
+        )
+        self.assertEqual(
+            [(placement["phase"], placement["position"]) for placement in placements],
+            [(1, position) for position in range(6)],
+        )
+        self.assertEqual(
+            {placement["section_title"] for placement in placements},
+            {"Hopfield reconstruction"},
+        )
 
 
 if __name__ == "__main__":

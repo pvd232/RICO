@@ -9,39 +9,14 @@ PairBlock plans, and verified receipts.
 **Resume here:** [Resume at H1-PB-02](../contracts/mantra-hopfield-reconstruction.md#h1-pb-02)
 
 
-### Phase 1: Phase 1 contract
+### Phase 1: Hopfield reconstruction
 
 | PairBlock | Status | Contract | Dependencies | Receipt |
 |---|---|---|---|---|
 | <nobr><code>H1-PB-01</code></nobr> | bootstrap-complete | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-pb-01) | None | [receipt](../evidence/mantra-rebuild-phase-1/bootstrap.json) |
-
-### Phase 2: Hopfield input alignment
-
-| PairBlock | Status | Contract | Dependencies | Receipt |
-|---|---|---|---|---|
 | <nobr><code>H1-PB-02</code></nobr> | drafting | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-pb-02) | <nobr><code>H1-PB-01</code></nobr> | None |
-
-### Phase 3: Preprocessing reconstruction
-
-| PairBlock | Status | Contract | Dependencies | Receipt |
-|---|---|---|---|---|
 | <nobr><code>H1-PB-03</code></nobr> | waiting | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-pb-03) | <nobr><code>H1-PB-02</code></nobr> | None |
-
-### Phase 4: Encoder training
-
-| PairBlock | Status | Contract | Dependencies | Receipt |
-|---|---|---|---|---|
 | <nobr><code>H1-PB-04</code></nobr> | waiting | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-pb-04) | <nobr><code>H1-PB-03</code></nobr> | None |
-
-### Phase 5: Retrieval and output parity
-
-| PairBlock | Status | Contract | Dependencies | Receipt |
-|---|---|---|---|---|
 | <nobr><code>H1-PB-05</code></nobr> | waiting | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-pb-05) | <nobr><code>H1-PB-04</code></nobr> | None |
-
-### Phase 6: Terminal provenance
-
-| PairBlock | Status | Contract | Dependencies | Receipt |
-|---|---|---|---|---|
 | <nobr><code>H1-PB-06</code></nobr> | waiting | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-pb-06) | <nobr><code>H1-PB-05</code></nobr> | None |
 <!-- contract-protocol:generated:end -->
