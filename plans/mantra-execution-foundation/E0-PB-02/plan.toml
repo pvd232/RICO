@@ -1,0 +1,79 @@
+schema_version = 1
+contract_id = "mantra-execution-foundation"
+package_sha256 = "687579fa95a792fac273c9dc5c3e57f35b3716b64b500db88a241fb335b23135"
+pair_block_id = "E0-PB-02"
+baseline_commit = "b59e6f712af462dc50b532d17e62d7df4c7c6643"
+change_summary = [
+  "The Spot launcher searches lower-demand regions in order and continues after either capacity or quota rejection.",
+  "Every launch requires a successful cloud publish-and-restore probe, forces boot-disk deletion, and records the exact resources it created.",
+  "The same launcher provides a teardown action that runs only after an artifact restore probe and verifies that the worker and boot disk are gone.",
+  "Failed launches clean their worker, disk, and newly created network resources while preserving network resources that existed before the attempt.",
+]
+deviation_summary = "Self-review separated live worker execution identity into E0-PB-12 because CUDA, driver, RNG, and runtime facts can only be measured after boot. Everything else went according to plan."
+
+[[actions]]
+operation = "patch"
+patch_path = "patches/gpu-lifecycle.patch"
+target_paths = [
+  "mantra-deploy-spot.sh",
+  "tests/infrastructure/test_mantra_gpu_lifecycle.py",
+]
+
+[[handoff_targets]]
+label = "Complete E0-PB-02 diff"
+source = "plan"
+path = "patches/gpu-lifecycle.patch"
+line = 1
+
+[[handoff_targets]]
+label = "Launch and teardown entrypoint"
+source = "repository"
+path = "mantra-deploy-spot.sh"
+line = 39
+
+[[handoff_targets]]
+label = "Regional fallback and cleanup acceptance cases"
+source = "repository"
+path = "tests/infrastructure/test_mantra_gpu_lifecycle.py"
+line = 190
+
+[gate]
+source_roots = ["mantra-deploy-spot.sh"]
+test_roots = ["tests/infrastructure"]
+
+[[gate.steps]]
+role = "typecheck"
+working_directory = "."
+argv = ["pyright", "tests/infrastructure/test_mantra_gpu_lifecycle.py"]
+
+[[gate.steps]]
+role = "test"
+working_directory = "."
+argv = [
+  "python3",
+  "-m",
+  "pytest",
+  "-q",
+  "-p",
+  "no:cacheprovider",
+  "tests/infrastructure/test_mantra_gpu_lifecycle.py",
+]
+
+[[gate.steps]]
+role = "documentation"
+working_directory = "."
+argv = [
+  "python3",
+  "/Users/machina/.agents/skills/code-documentation/scripts/check-schema-descriptions.py",
+  "tests/infrastructure/test_mantra_gpu_lifecycle.py",
+]
+
+[[gate.steps]]
+role = "lint"
+working_directory = "."
+argv = ["ruff", "format", "--check", "tests/infrastructure/test_mantra_gpu_lifecycle.py"]
+
+[[gate.steps]]
+role = "lint"
+working_directory = "."
+argv = ["ruff", "check", "tests/infrastructure/test_mantra_gpu_lifecycle.py"]

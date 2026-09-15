@@ -10,7 +10,7 @@ Sinkhorn, ridge, low-rank PCA and SVD, Hopfield, MIL, and the deterministic CPU
 KMeans exception used for byte-parity replay.
 
 <!-- contract-protocol:generated:start -->
-**In progress.** [Jump to current PairBlock](#e0-pb-02)
+**In progress.** [Jump to current PairBlock](#e0-pb-01)
 
 **Checklist:** [MANTRA rebuild](../checklists/mantra-rebuild.md)
 
@@ -20,7 +20,7 @@ KMeans exception used for byte-parity replay.
 
 #### <nobr><code>E0-PB-01</code></nobr>
 
-**Status:** waiting
+**Status:** drafting
 
 **Requirement contribution:** Implement and verify durable GCS publication and restoration through VIPER's existing cloud-client boundary.
 
@@ -30,29 +30,74 @@ KMeans exception used for byte-parity replay.
 
 **Dependencies:** <nobr><code>E0-PB-02</code></nobr>
 
-**Next action:** Wait for the declared dependencies.
+**Next action:** Run the current PairBlock plan.
 
 <a id="e0-pb-02"></a>
 
 #### <nobr><code>E0-PB-02</code></nobr>
 
-**Status:** drafting
+**Status:** complete
 
 **Requirement contribution:** Harden lower-demand-region launch, partial-failure cleanup, and deterministic worker-plus-disk teardown before any GPU is created.
 
-**Plan:** None
+**Review handoff**
 
-**Current receipt:** None
+**What changed**
+
+- The Spot launcher searches lower-demand regions in order and continues after either capacity or quota rejection.
+- Every launch requires a successful cloud publish-and-restore probe, forces boot-disk deletion, and records the exact resources it created.
+- The same launcher provides a teardown action that runs only after an artifact restore probe and verifies that the worker and boot disk are gone.
+- Failed launches clean their worker, disk, and newly created network resources while preserving network resources that existed before the attempt.
+
+**Plan deviations:** Self-review separated live worker execution identity into E0-PB-12 because CUDA, driver, RNG, and runtime facts can only be measured after boot. Everything else went according to plan.
+
+**Start review:** [Open tested GitHub comparison](https://github.com/pvd232/RICO/compare/b59e6f712af462dc50b532d17e62d7df4c7c6643...13a46dcae18bcf3f9cf1d4bf7af85d2e47c185b4)
+
+**Review these files**
+
+- [Complete E0-PB-02 diff](../plans/mantra-execution-foundation/E0-PB-02/patches/gpu-lifecycle.patch#L1)
+- [Launch and teardown entrypoint](../mantra-deploy-spot.sh#L39)
+- [Regional fallback and cleanup acceptance cases](../tests/infrastructure/test_mantra_gpu_lifecycle.py#L190)
+
+**Evidence:** [Passing gate receipt](../evidence/mantra-rebuild/E0-PB-02/gate-review-04.json)
+
+**Decision:** <nobr><code>E0-PB-02</code></nobr> is complete; no further decision is required.
+
+<details>
+<summary>Implementation details</summary>
+
+**Plan:** [plan.toml](../plans/mantra-execution-foundation/E0-PB-02/plan.toml)
+
+**Retained patch:** [patches/gpu-lifecycle.patch](../plans/mantra-execution-foundation/E0-PB-02/patches/gpu-lifecycle.patch)
+
+**Implementation roots:** [mantra-deploy-spot.sh](../mantra-deploy-spot.sh)
+
+**Test roots:** [tests/infrastructure](../tests/infrastructure)
 
 **Dependencies:** None
 
-**Next action:** Run the current PairBlock plan.
+**Gate steps:**
+
+```bash
+# typecheck
+(cd . && pyright tests/infrastructure/test_mantra_gpu_lifecycle.py)
+# test
+(cd . && python3 -m pytest -q -p no:cacheprovider tests/infrastructure/test_mantra_gpu_lifecycle.py)
+# documentation
+(cd . && python3 /Users/machina/.agents/skills/code-documentation/scripts/check-schema-descriptions.py tests/infrastructure/test_mantra_gpu_lifecycle.py)
+# lint
+(cd . && ruff format --check tests/infrastructure/test_mantra_gpu_lifecycle.py)
+# lint
+(cd . && ruff check tests/infrastructure/test_mantra_gpu_lifecycle.py)
+```
+
+</details>
 
 <a id="e0-pb-03"></a>
 
 #### <nobr><code>E0-PB-03</code></nobr>
 
-**Status:** waiting
+**Status:** drafting
 
 **Requirement contribution:** Freeze the complete optimization inventory and its owners, consumers, and gates.
 
@@ -62,7 +107,7 @@ KMeans exception used for byte-parity replay.
 
 **Dependencies:** <nobr><code>E0-PB-02</code></nobr>
 
-**Next action:** Wait for the declared dependencies.
+**Next action:** Run the current PairBlock plan.
 
 <a id="e0-pb-04"></a>
 
@@ -213,9 +258,9 @@ KMeans exception used for byte-parity replay.
 
 | Requirement | Claim | Progress | Verifiers | PairBlocks |
 |---|---|---|---|---|
-| <nobr><code>E0-REQ-01</code></nobr> | Before an ephemeral GPU run starts, VIPER must publish and restore one probe artifact through a production GCS-backed ViperCloudClient, verify its digest after restoration, and retain the durable reference in the run record. Each GCS object key must prefix the owner, workspace, and source revision while preserving the exact repository-relative path produced by VIPER's canonical initialized workspace layout. | planned | <nobr><code>E0-VR-01</code></nobr> | <nobr><code>E0-PB-01</code></nobr> |
-| <nobr><code>E0-REQ-02</code></nobr> | The governed GPU launcher must search declared lower-demand regions before us-central1, continue after regional capacity or quota rejection, force boot-disk auto-delete after machine-image overrides, and clean up every worker, boot disk, NAT, and router created by a failed launch. A live launch must require a verified durable-storage probe, record every resource it created, select Spot deletion on preemption, and provide one deterministic teardown action that deletes the worker and boot disk after accepted records and artifacts restore while preserving reused network resources. | in_progress | <nobr><code>E0-VR-02</code></nobr> | <nobr><code>E0-PB-02</code></nobr> |
-| <nobr><code>E0-REQ-03</code></nobr> | One versioned optimization inventory must map every accelerated MANTRA operation to its historical owner, modular owner, CPU reference, numerical parity gate, throughput gate, device and precision policy, determinism policy, and consuming reconstruction stage. | planned | <nobr><code>E0-VR-03</code></nobr> | <nobr><code>E0-PB-03</code></nobr> |
+| <nobr><code>E0-REQ-01</code></nobr> | Before an ephemeral GPU run starts, VIPER must publish and restore one probe artifact through a production GCS-backed ViperCloudClient, verify its digest after restoration, and retain the durable reference in the run record. Each GCS object key must prefix the owner, workspace, and source revision while preserving the exact repository-relative path produced by VIPER's canonical initialized workspace layout. | in_progress | <nobr><code>E0-VR-01</code></nobr> | <nobr><code>E0-PB-01</code></nobr> |
+| <nobr><code>E0-REQ-02</code></nobr> | The governed GPU launcher must search declared lower-demand regions before us-central1, continue after regional capacity or quota rejection, force boot-disk auto-delete after machine-image overrides, and clean up every worker, boot disk, NAT, and router created by a failed launch. A live launch must require a verified durable-storage probe, record every resource it created, select Spot deletion on preemption, and provide one deterministic teardown action that deletes the worker and boot disk after accepted records and artifacts restore while preserving reused network resources. | complete | <nobr><code>E0-VR-02</code></nobr> | <nobr><code>E0-PB-02</code></nobr> |
+| <nobr><code>E0-REQ-03</code></nobr> | One versioned optimization inventory must map every accelerated MANTRA operation to its historical owner, modular owner, CPU reference, numerical parity gate, throughput gate, device and precision policy, determinism policy, and consuming reconstruction stage. | in_progress | <nobr><code>E0-VR-03</code></nobr> | <nobr><code>E0-PB-03</code></nobr> |
 | <nobr><code>E0-REQ-04</code></nobr> | The modular response pipeline must preserve batched GPU cNMF and NMF execution, including parallel restarts, mini-batching, sparse-input handling, lazy split-sign expansion, stable float32 factors, and preloaded dense device tensors. | planned | <nobr><code>E0-VR-04</code></nobr> | <nobr><code>E0-PB-04</code></nobr> |
 | <nobr><code>E0-REQ-05</code></nobr> | The modular response pipeline must preserve the GPU NNLS implementations used to score and project response programs, including batched dense and sparse Ghost paths, and must compare their coefficients and reconstructions with the declared CPU reference within a named tolerance. | planned | <nobr><code>E0-VR-05</code></nobr> | <nobr><code>E0-PB-05</code></nobr> |
 | <nobr><code>E0-REQ-06</code></nobr> | The modular response pipeline must preserve vectorized GPU Sinkhorn transport and barycentric matched-control residuals and must retain convergence, marginal error, transport mass, device, precision, batch shape, and CPU-reference diagnostics. | planned | <nobr><code>E0-VR-06</code></nobr> | <nobr><code>E0-PB-06</code></nobr> |
