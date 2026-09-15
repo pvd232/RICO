@@ -1,0 +1,912 @@
+{
+  "accepted_package": {
+    "contract_id": "mantra-hopfield-reconstruction",
+    "pair_blocks": [
+      {
+        "completion_evidence": [
+          "implementation_review"
+        ],
+        "depends_on": [],
+        "id": "H1-PB-01",
+        "repository_id": "rico",
+        "requirement_contribution": "Install the typed Phase 1 contract and checklist workspace and bind them to the trusted Phase 0 Hopfield result.",
+        "requirement_ids": [
+          "H1-REQ-01"
+        ]
+      },
+      {
+        "completion_evidence": [
+          "implementation_review",
+          "viper_registration"
+        ],
+        "depends_on": [
+          "H1-PB-01"
+        ],
+        "id": "H1-PB-02",
+        "repository_id": "mantra",
+        "requirement_contribution": "Make the existing Hopfield loader reject disagreement among feature, coefficient-target, and truth perturbation order before training or prediction.",
+        "requirement_ids": [
+          "H1-REQ-02"
+        ]
+      },
+      {
+        "completion_evidence": [
+          "implementation_review",
+          "viper_registration"
+        ],
+        "depends_on": [
+          "H1-PB-02"
+        ],
+        "id": "H1-PB-03",
+        "repository_id": "mantra",
+        "requirement_contribution": "Freeze the descriptor-input ledger and restore every exact historical file without rebuilding upstream producers.",
+        "requirement_ids": [
+          "H1-REQ-03"
+        ]
+      },
+      {
+        "completion_evidence": [
+          "implementation_review",
+          "viper_registration"
+        ],
+        "depends_on": [
+          "H1-PB-03"
+        ],
+        "id": "H1-PB-04",
+        "repository_id": "mantra",
+        "requirement_contribution": "Freeze the target-input ledger and restore every exact historical target and response-transform file.",
+        "requirement_ids": [
+          "H1-REQ-04"
+        ]
+      },
+      {
+        "completion_evidence": [
+          "implementation_review",
+          "viper_registration"
+        ],
+        "depends_on": [
+          "H1-PB-05M"
+        ],
+        "id": "H1-PB-05",
+        "repository_id": "mantra",
+        "requirement_contribution": "Assemble only the thirteen accepted Build outputs, connect them to Embed, Predict, and Evaluate as FutureInputRefs, and prove the final strict replay baseline.",
+        "requirement_ids": [
+          "H1-REQ-05",
+          "H1-REQ-11"
+        ]
+      },
+      {
+        "completion_evidence": [
+          "implementation_review",
+          "viper_registration"
+        ],
+        "depends_on": [
+          "H1-PB-07"
+        ],
+        "id": "H1-PB-05A",
+        "repository_id": "mantra",
+        "requirement_contribution": "Resolve the versioned source, build the Hopfield input contract, compare it with the retained file, apply the declared mismatch ladder, and retain the VIPER receipt.",
+        "requirement_ids": [
+          "H1-REQ-10"
+        ]
+      },
+      {
+        "completion_evidence": [
+          "implementation_review",
+          "viper_registration"
+        ],
+        "depends_on": [
+          "H1-PB-05A"
+        ],
+        "id": "H1-PB-05B",
+        "repository_id": "mantra",
+        "requirement_contribution": "Resolve the versioned source, build the complete Hopfield stage configuration, compare it with the retained configuration, apply the declared mismatch ladder, and retain the VIPER receipt.",
+        "requirement_ids": [
+          "H1-REQ-10"
+        ]
+      },
+      {
+        "completion_evidence": [
+          "implementation_review",
+          "viper_registration"
+        ],
+        "depends_on": [
+          "H1-PB-05B"
+        ],
+        "id": "H1-PB-05C",
+        "repository_id": "mantra",
+        "requirement_contribution": "Download the true sources, build core83, compare it with the retained input, apply the declared mismatch ladder, and retain the VIPER receipt.",
+        "requirement_ids": [
+          "H1-REQ-10"
+        ]
+      },
+      {
+        "completion_evidence": [
+          "implementation_review",
+          "viper_registration"
+        ],
+        "depends_on": [
+          "H1-PB-05C"
+        ],
+        "id": "H1-PB-05D",
+        "repository_id": "mantra",
+        "requirement_contribution": "Download the true sources, build response40, compare it with the retained input, apply the declared mismatch ladder, and retain the VIPER receipt.",
+        "requirement_ids": [
+          "H1-REQ-10"
+        ]
+      },
+      {
+        "completion_evidence": [
+          "implementation_review",
+          "viper_registration"
+        ],
+        "depends_on": [
+          "H1-PB-05D"
+        ],
+        "id": "H1-PB-05E",
+        "repository_id": "mantra",
+        "requirement_contribution": "Download the true sources, build family64, compare it with the retained input, apply the declared mismatch ladder, and retain the VIPER receipt.",
+        "requirement_ids": [
+          "H1-REQ-10"
+        ]
+      },
+      {
+        "completion_evidence": [
+          "implementation_review",
+          "viper_registration"
+        ],
+        "depends_on": [
+          "H1-PB-05E"
+        ],
+        "id": "H1-PB-05F",
+        "repository_id": "mantra",
+        "requirement_contribution": "Download the true sources, build the gene-shift input, compare it with the retained input, apply the declared mismatch ladder, and retain the VIPER receipt.",
+        "requirement_ids": [
+          "H1-REQ-10"
+        ]
+      },
+      {
+        "completion_evidence": [
+          "implementation_review",
+          "viper_registration"
+        ],
+        "depends_on": [
+          "H1-PB-05F"
+        ],
+        "id": "H1-PB-05G",
+        "repository_id": "mantra",
+        "requirement_contribution": "Download the true sources, build the response-block definition, compare it with the retained input, apply the declared mismatch ladder, and retain the VIPER receipt.",
+        "requirement_ids": [
+          "H1-REQ-10"
+        ]
+      },
+      {
+        "completion_evidence": [
+          "implementation_review",
+          "viper_registration"
+        ],
+        "depends_on": [
+          "H1-PB-05G"
+        ],
+        "id": "H1-PB-05H",
+        "repository_id": "mantra",
+        "requirement_contribution": "Download the true sources, build the coefficient targets, compare them with the retained input, apply the declared mismatch ladder, and retain the VIPER receipt.",
+        "requirement_ids": [
+          "H1-REQ-10"
+        ]
+      },
+      {
+        "completion_evidence": [
+          "implementation_review",
+          "viper_registration"
+        ],
+        "depends_on": [
+          "H1-PB-05H"
+        ],
+        "id": "H1-PB-05I",
+        "repository_id": "mantra",
+        "requirement_contribution": "Download the true sources, build the fit and tune truth surface, compare it with the retained input, apply the declared mismatch ladder, and retain the VIPER receipt.",
+        "requirement_ids": [
+          "H1-REQ-10"
+        ]
+      },
+      {
+        "completion_evidence": [
+          "implementation_review",
+          "viper_registration"
+        ],
+        "depends_on": [
+          "H1-PB-05I"
+        ],
+        "id": "H1-PB-05J",
+        "repository_id": "mantra",
+        "requirement_contribution": "Download the true sources, build the hold truth surface, compare it with the retained input, apply the declared mismatch ladder, and retain the VIPER receipt.",
+        "requirement_ids": [
+          "H1-REQ-10"
+        ]
+      },
+      {
+        "completion_evidence": [
+          "implementation_review",
+          "viper_registration"
+        ],
+        "depends_on": [
+          "H1-PB-05J"
+        ],
+        "id": "H1-PB-05K",
+        "repository_id": "mantra",
+        "requirement_contribution": "Download the true sources, build the response-program contract, compare it with the retained input, apply the declared mismatch ladder, and retain the VIPER receipt.",
+        "requirement_ids": [
+          "H1-REQ-10"
+        ]
+      },
+      {
+        "completion_evidence": [
+          "implementation_review",
+          "viper_registration"
+        ],
+        "depends_on": [
+          "H1-PB-05K"
+        ],
+        "id": "H1-PB-05L",
+        "repository_id": "mantra",
+        "requirement_contribution": "Download the true sources, build the response-program rotation, compare it with the retained input, apply the declared mismatch ladder, and retain the VIPER receipt.",
+        "requirement_ids": [
+          "H1-REQ-10"
+        ]
+      },
+      {
+        "completion_evidence": [
+          "implementation_review",
+          "viper_registration"
+        ],
+        "depends_on": [
+          "H1-PB-05L"
+        ],
+        "id": "H1-PB-05M",
+        "repository_id": "mantra",
+        "requirement_contribution": "Download the true sources, build the response-similarity graph, compare it with the retained input, apply the declared mismatch ladder, and retain the VIPER receipt.",
+        "requirement_ids": [
+          "H1-REQ-10"
+        ]
+      },
+      {
+        "completion_evidence": [
+          "implementation_review",
+          "viper_registration"
+        ],
+        "depends_on": [
+          "H1-PB-04",
+          "E0-PB-09",
+          "E0-PB-12"
+        ],
+        "id": "H1-PB-06",
+        "repository_id": "mantra",
+        "requirement_contribution": "Train the selected Hopfield encoder and reproduce its retained weights and selection record.",
+        "requirement_ids": [
+          "H1-REQ-06"
+        ]
+      },
+      {
+        "completion_evidence": [
+          "implementation_review",
+          "viper_registration"
+        ],
+        "depends_on": [
+          "H1-PB-06"
+        ],
+        "id": "H1-PB-07",
+        "repository_id": "mantra",
+        "requirement_contribution": "Run raw-gene retrieval and reference correction and prove exact final output parity.",
+        "requirement_ids": [
+          "H1-REQ-07"
+        ]
+      },
+      {
+        "completion_evidence": [
+          "implementation_review",
+          "viper_registration"
+        ],
+        "depends_on": [
+          "H1-PB-05"
+        ],
+        "id": "H1-PB-08",
+        "repository_id": "rico",
+        "requirement_contribution": "Resolve the complete Phase 1 producer and evidence graph and close Hopfield reconstruction.",
+        "requirement_ids": [
+          "H1-REQ-08"
+        ]
+      },
+      {
+        "completion_evidence": [
+          "implementation_review",
+          "viper_registration"
+        ],
+        "depends_on": [
+          "H1-PB-08",
+          "M2-PB-06",
+          "E0-PB-08",
+          "E0-PB-09"
+        ],
+        "id": "H1-PB-09",
+        "repository_id": "mantra",
+        "requirement_contribution": "Run the unchanged legacy Hopfield model on the exact retained MIL input stack and freeze the resulting bridge baseline before modular reconstruction.",
+        "requirement_ids": [
+          "H1-REQ-09"
+        ]
+      }
+    ],
+    "requirements": [
+      {
+        "claim": "Phase 1 must begin from the selected Phase 0 Hopfield encoder SHA-256 2433527c3b23b66a16cedc0f7bc43867e4298af4d7a0733b202a8018ba876610, prediction SHA-256 d7180c4669a11b0b2fb184814aafb48ebafe75b02e4bd07998c337aa64dc59b7, and hold PearsonDelta 0.5861640938949398.",
+        "depends_on": [],
+        "id": "H1-REQ-01",
+        "verifier_ids": [
+          "H1-VR-01"
+        ]
+      },
+      {
+        "claim": "Before any numerical comparison, training, or prediction, the selected Hopfield path must reject disagreement among the ordered perturbation labels for descriptor features, coefficient targets, and fit or tune truth rows.",
+        "depends_on": [
+          "H1-REQ-01"
+        ],
+        "id": "H1-REQ-02",
+        "verifier_ids": [
+          "H1-VR-02"
+        ]
+      },
+      {
+        "claim": "Before replay training, one complete descriptor-input ledger must name every selected matched-control, control-program, core83, response40, family64, and gene-shift file, its retained digest, producing script or record, and restore route. Restoring that ledger must reproduce the historical keys, perturbation order, gene order, shapes, dtypes, and values without rerunning upstream producers.",
+        "depends_on": [
+          "H1-REQ-02"
+        ],
+        "id": "H1-REQ-03",
+        "verifier_ids": [
+          "H1-VR-03"
+        ]
+      },
+      {
+        "claim": "Before replay training, one complete target-input ledger must name every selected coefficient target, fit and tune truth surface, response-block contract, response rotation, and response-similarity graph, together with its retained digest, producing script or record, and restore route. Restoring that ledger must reproduce the historical keys, row and column order, shapes, dtypes, and values without rerunning upstream producers.",
+        "depends_on": [
+          "H1-REQ-03"
+        ],
+        "id": "H1-REQ-04",
+        "verifier_ids": [
+          "H1-VR-04"
+        ]
+      },
+      {
+        "claim": "The Hopfield loader must assemble the declared replay bundle and reproduce every retained model input array and fitted transformation state: descriptor columns use moments fitted on the declared fit plus tune rows; coefficient similarity uses per-row mean centering followed by L2 normalization; and every gene, perturbation, shape, dtype, and array order remains fixed.",
+        "depends_on": [
+          "H1-REQ-04"
+        ],
+        "id": "H1-REQ-05",
+        "verifier_ids": [
+          "H1-VR-05"
+        ]
+      },
+      {
+        "claim": "The 187 to 384 to 384 to 128 Hopfield encoder must train under the selected objectives and seed in the declared Python 3.13, Torch 2.12.1, and CUDA 13 environment, including the configured auxiliary posterior target built from the whitened-PCA-denoised coefficient bank and neighbors selected by raw-coefficient cosine similarity. Two independent strict VIPER runs must reproduce encoder SHA-256 af1f62c4c315c65e7379b97c57646b49b35c7f3fc3f69fcf6f94f0c8df276da9 and 1084512 bytes while retaining the historical encoder as the comparison oracle. Final retrieval must continue to use the configured raw coefficient value memory.",
+        "depends_on": [
+          "H1-REQ-05",
+          "E0-REQ-09",
+          "E0-REQ-12"
+        ],
+        "id": "H1-REQ-06",
+        "verifier_ids": [
+          "H1-VR-06"
+        ]
+      },
+      {
+        "claim": "Raw-gene retrieval from fit memory at temperature 0.055 and reference correction must reproducibly emit prediction SHA-256 f8e8e6a6fe291143debd3d8e8b3ab9c4e2aed5afd3b2391e7856c7d8fd7e262b, 38391087 bytes, and hold PearsonDelta 0.5861640983697456 in the declared modern environment while retaining the Phase 0 prediction and score as comparison oracles.",
+        "depends_on": [
+          "H1-REQ-06"
+        ],
+        "id": "H1-REQ-07",
+        "verifier_ids": [
+          "H1-VR-07"
+        ]
+      },
+      {
+        "claim": "Every accepted Phase 1 producer, input, output, comparison, and implementation commit must remain reachable through retained VIPER and contract-protocol evidence.",
+        "depends_on": [
+          "H1-REQ-11"
+        ],
+        "id": "H1-REQ-08",
+        "verifier_ids": [
+          "H1-VR-08"
+        ]
+      },
+      {
+        "claim": "After strict modern Hopfield and MIL replay baselines are frozen, the legacy Hopfield path must consume the exact retained MIL descriptor bundle: the shared 83-value core block, the 144-value five-source family block, and its matching 40-value response proxy. The bridge run must change only the encoder input-width binding from 187 to 267, retrain and evaluate the otherwise unchanged legacy model, and freeze its inputs, checkpoint, predictions, score, configuration, runtime, and implementation commit as the Hopfield MIL-stack bridge baseline.",
+        "depends_on": [
+          "H1-REQ-08",
+          "M2-REQ-06",
+          "E0-REQ-08",
+          "E0-REQ-09"
+        ],
+        "id": "H1-REQ-09",
+        "verifier_ids": [
+          "H1-VR-09"
+        ]
+      },
+      {
+        "claim": "Each of the thirteen declared Hopfield model inputs must be produced from its true external or versioned source by a retained VIPER source-acquisition and Build chain, then compared with the retained input on keys, ordered axes, shapes, dtypes, values, bytes, and SHA-256. Each chain must first build in the modern environment; on numerical mismatch it must rerun only acquisition and Build in the historical environment; if that matches, record environment-caused divergence and pin a repeated modern result; otherwise verify the configuration once, fail fast on another unexplained mismatch, and pin only a repeated corrected baseline.",
+        "depends_on": [
+          "H1-REQ-07"
+        ],
+        "id": "H1-REQ-10",
+        "verifier_ids": [
+          "H1-VR-10"
+        ]
+      },
+      {
+        "claim": "The final strict VIPER replay must consume only the thirteen accepted Build outputs, connect stage outputs to downstream stages as FutureInputRefs, and execute Embed, Predict, and Evaluate without reading retained model-input files directly. It must reproduce the accepted modern encoder, prediction, and score identities while retaining historical artifacts only as evaluation oracles.",
+        "depends_on": [
+          "H1-REQ-10"
+        ],
+        "id": "H1-REQ-11",
+        "verifier_ids": [
+          "H1-VR-11"
+        ]
+      }
+    ],
+    "schema_version": 1,
+    "title": "MANTRA Hopfield Reconstruction",
+    "verifiers": [
+      {
+        "acceptance_conditions": [
+          "The typed Phase 1 contract names the selected score and exact prediction digest, and the retained Phase 0 index resolves the replay receipt."
+        ],
+        "id": "H1-VR-01",
+        "rejection_cases": [
+          {
+            "path": "tests/phase1/test_hopfield_contract.py",
+            "repository_id": "rico",
+            "symbol": "HopfieldContractTests.test_rejects_changed_prediction_identity"
+          }
+        ],
+        "requirement_ids": [
+          "H1-REQ-01"
+        ],
+        "success_case": {
+          "path": "tests/phase1/test_hopfield_contract.py",
+          "repository_id": "rico",
+          "symbol": "HopfieldContractTests.test_names_selected_phase0_baseline"
+        }
+      },
+      {
+        "acceptance_conditions": [
+          "The existing Hopfield loader accepts equal feature, coefficient-target, and truth perturbation labels and rejects a truth surface whose fit or tune labels are reordered."
+        ],
+        "id": "H1-VR-02",
+        "rejection_cases": [
+          {
+            "path": "experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py",
+            "repository_id": "mantra",
+            "symbol": "test_rejects_truth_perturbation_order_mismatch"
+          }
+        ],
+        "requirement_ids": [
+          "H1-REQ-02"
+        ],
+        "success_case": {
+          "path": "experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py",
+          "repository_id": "mantra",
+          "symbol": "test_accepts_matching_truth_perturbation_order"
+        }
+      },
+      {
+        "acceptance_conditions": [
+          "The descriptor-input ledger resolves every retained file to its exact digest, producing script or record, and restore route; restoring it reproduces the historical NPZ keys, ordered perturbations and genes, shapes, dtypes, and arrays without running an upstream producer."
+        ],
+        "id": "H1-VR-03",
+        "rejection_cases": [
+          {
+            "path": "src/mantra/rebuild/tests/test_hopfield_preprocessing.py",
+            "repository_id": "mantra",
+            "symbol": "test_rejects_changed_descriptor_input"
+          }
+        ],
+        "requirement_ids": [
+          "H1-REQ-03"
+        ],
+        "success_case": {
+          "path": "src/mantra/rebuild/tests/test_hopfield_preprocessing.py",
+          "repository_id": "mantra",
+          "symbol": "test_restores_selected_descriptor_inputs"
+        }
+      },
+      {
+        "acceptance_conditions": [
+          "The target-input ledger resolves every retained file to its exact digest, producing script or record, and restore route; restoring it reproduces the historical NPZ or JSON keys, ordered rows and columns, shapes, dtypes, and values without running an upstream producer."
+        ],
+        "id": "H1-VR-04",
+        "rejection_cases": [
+          {
+            "path": "src/mantra/rebuild/tests/test_hopfield_preprocessing.py",
+            "repository_id": "mantra",
+            "symbol": "test_rejects_changed_target_input"
+          }
+        ],
+        "requirement_ids": [
+          "H1-REQ-04"
+        ],
+        "success_case": {
+          "path": "src/mantra/rebuild/tests/test_hopfield_preprocessing.py",
+          "repository_id": "mantra",
+          "symbol": "test_restores_selected_target_inputs"
+        }
+      },
+      {
+        "acceptance_conditions": [
+          "The loader assembles only ledger-restored inputs and reproduces every retained array and fitted normalization state; descriptor columns use fit plus tune moments, and coefficient similarities use row-mean centering followed by L2 normalization."
+        ],
+        "id": "H1-VR-05",
+        "rejection_cases": [
+          {
+            "path": "src/mantra/rebuild/tests/test_hopfield_preprocessing.py",
+            "repository_id": "mantra",
+            "symbol": "test_rejects_changed_model_input_or_population"
+          }
+        ],
+        "requirement_ids": [
+          "H1-REQ-05"
+        ],
+        "success_case": {
+          "path": "src/mantra/rebuild/tests/test_hopfield_preprocessing.py",
+          "repository_id": "mantra",
+          "symbol": "test_assembles_selected_replay_inputs"
+        }
+      },
+      {
+        "acceptance_conditions": [
+          "Two independent strict VIPER runs under the declared modern environment use the same source, configuration, seed, inputs, architecture, objectives, and raw value memory and emit the declared encoder bytes and SHA-256 with complete logs and checkpoints."
+        ],
+        "id": "H1-VR-06",
+        "rejection_cases": [
+          {
+            "path": "src/mantra/rebuild/tests/test_hopfield_replay.py",
+            "repository_id": "mantra",
+            "symbol": "test_rejects_changed_modern_encoder_identity"
+          }
+        ],
+        "requirement_ids": [
+          "H1-REQ-06"
+        ],
+        "success_case": {
+          "path": "src/mantra/rebuild/tests/test_hopfield_replay.py",
+          "repository_id": "mantra",
+          "symbol": "test_accepts_repeated_modern_encoder_identity"
+        }
+      },
+      {
+        "acceptance_conditions": [
+          "Two independent strict VIPER runs under the declared modern environment emit the declared prediction bytes, SHA-256, and hold PearsonDelta; equal score with changed arrays or file bytes fails."
+        ],
+        "id": "H1-VR-07",
+        "rejection_cases": [
+          {
+            "path": "src/mantra/rebuild/tests/test_hopfield_replay.py",
+            "repository_id": "mantra",
+            "symbol": "test_rejects_equal_score_with_changed_prediction_bytes"
+          }
+        ],
+        "requirement_ids": [
+          "H1-REQ-07"
+        ],
+        "success_case": {
+          "path": "src/mantra/rebuild/tests/test_hopfield_replay.py",
+          "repository_id": "mantra",
+          "symbol": "test_accepts_repeated_modern_prediction_identity"
+        }
+      },
+      {
+        "acceptance_conditions": [
+          "The terminal registration resolves every accepted Phase 1 receipt, artifact, source commit, and producer edge from retained records."
+        ],
+        "id": "H1-VR-08",
+        "rejection_cases": [
+          {
+            "path": "tests/phase1/test_hopfield_registration.py",
+            "repository_id": "rico",
+            "symbol": "test_rejects_severed_phase1_provenance"
+          }
+        ],
+        "requirement_ids": [
+          "H1-REQ-08"
+        ],
+        "success_case": {
+          "path": "tests/phase1/test_hopfield_registration.py",
+          "repository_id": "rico",
+          "symbol": "test_resolves_complete_phase1_provenance"
+        }
+      },
+      {
+        "acceptance_conditions": [
+          "The bridge run starts from the parity-proven legacy Hopfield source and configuration; resolves the exact retained 83-value core, 144-value family, and 40-value response artifact digests with their canonical row and split identities; changes only the encoder input width from 187 to 267; keeps the complete numeric training set GPU-resident; and reproduces its frozen bridge result from the retained checkpoint and inputs."
+        ],
+        "id": "H1-VR-09",
+        "rejection_cases": [
+          {
+            "path": "src/mantra/rebuild/tests/test_hopfield_mil_input_bridge.py",
+            "repository_id": "mantra",
+            "symbol": "test_rejects_mixed_input_stack_or_unrelated_model_change"
+          }
+        ],
+        "requirement_ids": [
+          "H1-REQ-09"
+        ],
+        "success_case": {
+          "path": "src/mantra/rebuild/tests/test_hopfield_mil_input_bridge.py",
+          "repository_id": "mantra",
+          "symbol": "test_freezes_legacy_hopfield_on_exact_mil_input_stack"
+        }
+      },
+      {
+        "acceptance_conditions": [
+          "One parameterized observer resolves all thirteen accepted inputs through their versioned source, Build owner and configuration, comparison receipt, mismatch classification, and repeatable accepted identity; missing source edges, missing comparisons, unexplained mismatches, and nonrepeatable replacements fail."
+        ],
+        "id": "H1-VR-10",
+        "rejection_cases": [
+          {
+            "path": "src/mantra/rebuild/tests/test_hopfield_source_reconstruction.py",
+            "repository_id": "mantra",
+            "symbol": "test_rejects_incomplete_or_unexplained_input_reconstruction"
+          }
+        ],
+        "requirement_ids": [
+          "H1-REQ-10"
+        ],
+        "success_case": {
+          "path": "src/mantra/rebuild/tests/test_hopfield_source_reconstruction.py",
+          "repository_id": "mantra",
+          "symbol": "test_reconstructs_every_hopfield_input_from_its_true_source"
+        }
+      },
+      {
+        "acceptance_conditions": [
+          "The frozen stage graph connects each accepted Build artifact to Embed by FutureInputRef, connects Embed to Predict and Predict to Evaluate, rejects direct retained model-input paths, and the resulting strict replay emits the accepted modern encoder, prediction, and score identities."
+        ],
+        "id": "H1-VR-11",
+        "rejection_cases": [
+          {
+            "path": "src/mantra/rebuild/tests/test_hopfield_source_reconstruction.py",
+            "repository_id": "mantra",
+            "symbol": "test_rejects_retained_input_in_rebuilt_replay"
+          }
+        ],
+        "requirement_ids": [
+          "H1-REQ-11"
+        ],
+        "success_case": {
+          "path": "src/mantra/rebuild/tests/test_hopfield_source_reconstruction.py",
+          "repository_id": "mantra",
+          "symbol": "test_replays_hopfield_from_rebuilt_outputs_only"
+        }
+      }
+    ]
+  },
+  "accepted_package_sha256": "2370ba70da1585533b26ea00a873e2fb8e95f6db010b8b642b120c36905ce8a4",
+  "affected_pair_block_ids": [
+    "B9-PB-01",
+    "B9-PB-02",
+    "D3-PB-01",
+    "D3-PB-02",
+    "D3-PB-03",
+    "D3-PB-04",
+    "D3-PB-05",
+    "D3-PB-06",
+    "D3-PB-07",
+    "GE-PB-01",
+    "GE-PB-02",
+    "GE-PB-03",
+    "GE-PB-04",
+    "GE-PB-05",
+    "GE-PB-06",
+    "H1-PB-05",
+    "H1-PB-05A",
+    "H1-PB-05B",
+    "H1-PB-05C",
+    "H1-PB-05D",
+    "H1-PB-05E",
+    "H1-PB-05F",
+    "H1-PB-05G",
+    "H1-PB-05H",
+    "H1-PB-05I",
+    "H1-PB-05J",
+    "H1-PB-05K",
+    "H1-PB-05L",
+    "H1-PB-05M",
+    "H1-PB-06",
+    "H1-PB-07",
+    "H1-PB-08",
+    "H1-PB-09",
+    "H7-PB-01",
+    "H7-PB-02",
+    "H7-PB-03",
+    "H7-PB-04",
+    "H7-PB-05",
+    "M8-PB-01",
+    "M8-PB-02",
+    "M8-PB-03",
+    "M8-PB-04",
+    "M8-PB-05",
+    "M8-PB-06",
+    "P4-PB-01",
+    "P4-PB-02",
+    "P4-PB-03",
+    "P4-PB-04",
+    "P4-PB-05",
+    "P4-PB-06",
+    "R5-PB-01",
+    "R5-PB-02",
+    "R5-PB-03",
+    "R5-PB-04",
+    "R5-PB-05",
+    "R5-PB-06",
+    "R5-PB-07",
+    "S6-PB-01",
+    "S6-PB-02",
+    "S6-PB-03",
+    "S6-PB-04",
+    "S6-PB-05",
+    "S6-PB-06",
+    "S6-PB-07",
+    "S6-PB-08",
+    "S6-PB-09"
+  ],
+  "approval_ref": {
+    "kind": "user_approval",
+    "message_id": "msg_019e93fda5cadbc4016aa997d7ccdc87d18bff71428920c62a",
+    "task_id": "01a091c5-44b8-7c53-9daf-bb2853b522ba"
+  },
+  "candidate_package_sha256": "d381b4090b7f6c2616289d86709ad5df9547183189b95d82d066593a1bceb1ed",
+  "event": "revise",
+  "previous_receipt_ref": {
+    "path": "evidence/mantra-rebuild/revisions/hopfield-encoder-output.json",
+    "sha256": "5467bdd03438eaba07d31bb1123347bd19377eccc423b747ec407fd9b954a2e3"
+  },
+  "record_changes": [
+    {
+      "accepted_sha256": "e809e96b16c63576596c9d4de3c17f1f6facf6a65b265033136c57453bf2b78f",
+      "candidate_sha256": "ea13a3592fb3d8b89470f32f0e49de627818fe51f2488b9192e516c65d0e5428",
+      "record_key": "pair_block:H1-PB-05"
+    },
+    {
+      "accepted_sha256": "cf748917e0a4b93f0cc8323f57e2d5b70acfc63e177636f22eaa4fd84a3756d3",
+      "candidate_sha256": "fad18a56a76397f98c400597768c3762fdfa311062e2384943d25dec2f8ea8b2",
+      "record_key": "pair_block:H1-PB-05A"
+    },
+    {
+      "accepted_sha256": "b26c430b548ffd1b293cf4d8b376bf730d38f1204ee9fb3a0b47fbfac7b0239a",
+      "candidate_sha256": "e1a687e7c7f24284c3e298ca09135c3df96259d4d777f024a25096f35681c79e",
+      "record_key": "pair_block:H1-PB-05B"
+    },
+    {
+      "accepted_sha256": "652dab2f9a90278fd1c2a69312aae028b5c99e2892b7f1f64d1d77211ba0903e",
+      "candidate_sha256": "221e9323efe67ab6a53e01fad8c0b061beb6fc7a588605230b2a8b8c0b1a94c9",
+      "record_key": "pair_block:H1-PB-05C"
+    },
+    {
+      "accepted_sha256": "90be71692013957e5d40371badc0b1f635a32407d4212a11f5fcdd8f0efe0365",
+      "candidate_sha256": "3231735404e8e64d2afab0ef86e1ea12d57fb5a81784041d723752700b4abe96",
+      "record_key": "pair_block:H1-PB-05D"
+    },
+    {
+      "accepted_sha256": "69bc1a150c0158cf83cd5b1dc9481fc7b069437760c3e35598ec8004255a51d0",
+      "candidate_sha256": "ab8f4a716bd765737f538c657b672fed40ab5fc5045f38c445d9e84ab45c4c28",
+      "record_key": "pair_block:H1-PB-05E"
+    },
+    {
+      "accepted_sha256": "04f68c69ae9b29cdb50ef0ff199cfe89ea44fbde004374bb44f6e1fc60ff5496",
+      "candidate_sha256": "090cc91fdf96793be903cb5fff3dc349e73e51837d2ba5125dcd8553772503c5",
+      "record_key": "pair_block:H1-PB-05F"
+    },
+    {
+      "accepted_sha256": "d1a4ddb57d8e871f865e7562e1cbcf383802c30026c6826e329abc574ceba917",
+      "candidate_sha256": "eddcce454e24ca79236966b01d7566be3f7b18dbf9a7dfed00d28fdd10362d12",
+      "record_key": "pair_block:H1-PB-05G"
+    },
+    {
+      "accepted_sha256": "8d7e78cc3864bcdb8dbf4a8fe5308aeda8abc6f21d7a0855eb0ea3d4b7f829d9",
+      "candidate_sha256": "82d7c204043ce3fdbe70d8a6b8ea1e8b0289db2e94a76123c8f81cf45269ebaf",
+      "record_key": "pair_block:H1-PB-05H"
+    },
+    {
+      "accepted_sha256": "3831b9234828d7c6a0cddfd0f933e4adb8c07339019557d222f304cff92cde18",
+      "candidate_sha256": "bf26669da9f61f16251cd579fa047ee0557e440fd7f1e208a54eb4c04c74c41b",
+      "record_key": "pair_block:H1-PB-05I"
+    },
+    {
+      "accepted_sha256": "9179ba6feb150f383392388409e6492fbe91b8e23672b2eda46a07e1e07c915d",
+      "candidate_sha256": "9b979fff7b635b1f7c7518ad7a81c6227f0c0eada32b7260f185d0f19efde177",
+      "record_key": "pair_block:H1-PB-05J"
+    },
+    {
+      "accepted_sha256": "b3217d952eede7bb5807b17fed38d45301a6f020cf839007386e42883d77505c",
+      "candidate_sha256": "d2d6b4266a6cffb323f18535d99b6371bae2bbd67aaaf11865ef5ac1fd3eeeb1",
+      "record_key": "pair_block:H1-PB-05K"
+    },
+    {
+      "accepted_sha256": "ac772b84427400a58e87cb2fb26a2f7b33d2dab7dfac0f8c30e30216ea6ba212",
+      "candidate_sha256": "808c9e8c0c31f8e723bc9b881bf35b660786dd85817b4327cdd2a6b95159bd93",
+      "record_key": "pair_block:H1-PB-05L"
+    },
+    {
+      "accepted_sha256": "a5a39d578a9e8d27d14eae8c5a93ec3b715aecace9f9edf216ff1d6982574e3c",
+      "candidate_sha256": "8cb957b794519f4be767bec4b48a6fd8cfb7524d36ee3bed8773e99cfa550530",
+      "record_key": "pair_block:H1-PB-05M"
+    },
+    {
+      "accepted_sha256": "12688507b4fdaa4061a06a0c0498c50ebc0d9a3f73ad8fe7c006f0fc5d9c665a",
+      "candidate_sha256": "22685eb56a08fd18fc88459b2e48acb6915e73c31ad82a5231568bffa9bb52ca",
+      "record_key": "pair_block:H1-PB-06"
+    },
+    {
+      "accepted_sha256": "24e44b0cf4fa37e55cf875d2ea4aef540a79be9aea8cad3370cd0bedfcb4cb71",
+      "candidate_sha256": "604a3d17bb039fcb38c8ebe3191c647281b31c411f746a6f2ce4c5ec15ed9866",
+      "record_key": "pair_block:H1-PB-08"
+    },
+    {
+      "accepted_sha256": "2782ed3758dc13e009c66b76d7ea5be5ec21c882d0e11e92cac079ff4c49f7b1",
+      "candidate_sha256": "26b0b18895d68f4dc662cf357fd9ace20ba55a0f210368001792898b387f48c4",
+      "record_key": "requirement:H1-REQ-05"
+    },
+    {
+      "accepted_sha256": "b14fa8741efa4986427f88e0b015649a8231d51b3875f09cafbf4932fefe2784",
+      "candidate_sha256": "50d6d879a0c2dc628619903e8d70fe32325bc09f6da06bd5d6c04183808ef216",
+      "record_key": "requirement:H1-REQ-06"
+    },
+    {
+      "accepted_sha256": "45f8c7d2b1c22b0f7b5cc10485032e8e11e57ea00d982a71c51ed97221df9e55",
+      "candidate_sha256": "d7f4c84bce266489a981705bfa603f0478e3d04633b61dcc2b9bd0a3d7a7e964",
+      "record_key": "requirement:H1-REQ-07"
+    },
+    {
+      "accepted_sha256": "522e81ca61210f36c4c63891f7b45e7a43019614590367f0671e82935cad1136",
+      "candidate_sha256": "ed331d861b710d67fb49798c417301d15b9200564e6023ecc77e46774c6940a5",
+      "record_key": "requirement:H1-REQ-08"
+    },
+    {
+      "accepted_sha256": "c008b8e66d7491b3764d01e47894cf661e7e8eed049621bd7cc3a645f9ecd323",
+      "candidate_sha256": "a633a89d5d6cbea360cf69b05d994575cc332ba9621e3cddfcb9e232b79d544f",
+      "record_key": "requirement:H1-REQ-09"
+    },
+    {
+      "accepted_sha256": null,
+      "candidate_sha256": "3e0cd76d051f6661b6f9c9eda8ad527eb98400e45c79e686a3929644cb552367",
+      "record_key": "requirement:H1-REQ-10"
+    },
+    {
+      "accepted_sha256": null,
+      "candidate_sha256": "558ee60f790b04875438f19575927991d445cc9ecb029006cd90a7e9e239b4c5",
+      "record_key": "requirement:H1-REQ-11"
+    },
+    {
+      "accepted_sha256": "3ef7d55c91f2100ceb7d8db1dd6754faf494b019d7e9fe8d82d020127e993be9",
+      "candidate_sha256": "f53fd7b1519381d10fd96d276f1827e20e8431d768198f946e58c650a545b7e3",
+      "record_key": "verifier:H1-VR-06"
+    },
+    {
+      "accepted_sha256": "e7f7db6ae5bfba9893b43cccff486315fcbcd3112a32c38d48a42f9345802210",
+      "candidate_sha256": "7258fcf07d2794b4735552710c2403c859452731b3a441a3c75fb772d9e580d6",
+      "record_key": "verifier:H1-VR-07"
+    },
+    {
+      "accepted_sha256": null,
+      "candidate_sha256": "9467702b7aee0b8a6769eedb19d27b75f701dfb2658121623335aebeaaca1afb",
+      "record_key": "verifier:H1-VR-10"
+    },
+    {
+      "accepted_sha256": null,
+      "candidate_sha256": "e89a70b8d027b55dbf424a3aedf6136ec9709d6587d21d937250842b5ebdb7b2",
+      "record_key": "verifier:H1-VR-11"
+    }
+  ],
+  "recorded_at": "2026-09-15T19:25:00.957610Z",
+  "reviewed_plan_path": "evidence/mantra-rebuild/revisions/hopfield-source-rebuild-plan-v2.json",
+  "reviewed_plan_sha256": "27bdd5706ec7814373fa4dada7c3f170c4dfd399f4ebe500435156ac8405bb76",
+  "schema_version": 1,
+  "superseded_receipt_heads": {}
+}

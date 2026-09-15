@@ -38,6 +38,228 @@ claim = "One corrected prior bundle must preserve the canonical perturbation ord
 depends_on = ["P4-REQ-05"]
 verifier_ids = ["P4-VR-06"]
 
+[[requirements]]
+id = "P4-REQ-10A"
+claim = "The alphagenome package must resolve its raw sources, run its declared build through VIPER, and freeze a repeated modern baseline when historical neural coordinates do not reproduce."
+depends_on = ["P4-REQ-03"]
+verifier_ids = ["P4-VR-10"]
+
+[[requirements]]
+id = "P4-REQ-10B"
+claim = "The alphagenome_regulatory_tracks source collection must be acquired and verified through VIPER."
+depends_on = ["P4-REQ-03"]
+verifier_ids = ["P4-VR-10"]
+
+[[requirements]]
+id = "P4-REQ-10C"
+claim = "The chromatin_accessibility package must rebuild from its pinned sources and reproduce its historical output exactly."
+depends_on = ["P4-REQ-03"]
+verifier_ids = ["P4-VR-10"]
+
+[[requirements]]
+id = "P4-REQ-10D"
+claim = "The depmap_essentiality package must recover or deliberately replace the missing historical DepMap gene-effect source and retain the resulting mismatch classification."
+depends_on = ["P4-REQ-03"]
+verifier_ids = ["P4-VR-10"]
+
+[[requirements]]
+id = "P4-REQ-10E"
+claim = "The dna_motif package must rebuild from its pinned sources and reproduce its historical output exactly."
+depends_on = ["P4-REQ-03"]
+verifier_ids = ["P4-VR-10"]
+
+[[requirements]]
+id = "P4-REQ-10F"
+claim = "The esmc package must rebuild from its pinned sources and reproduce its historical output exactly."
+depends_on = ["P4-REQ-03"]
+verifier_ids = ["P4-VR-10"]
+
+[[requirements]]
+id = "P4-REQ-10G"
+claim = "The fitness_regime package must rebuild from the resolved DepMap gene-effect source and retain its comparison result."
+depends_on = ["P4-REQ-10D"]
+verifier_ids = ["P4-VR-10"]
+
+[[requirements]]
+id = "P4-REQ-10H"
+claim = "The gencode_annotation source package must be acquired and verified through VIPER."
+depends_on = ["P4-REQ-03"]
+verifier_ids = ["P4-VR-10"]
+
+[[requirements]]
+id = "P4-REQ-10I"
+claim = "The gene_family package must rebuild from its pinned sources and reproduce its historical output exactly."
+depends_on = ["P4-REQ-03"]
+verifier_ids = ["P4-VR-10"]
+
+[[requirements]]
+id = "P4-REQ-10J"
+claim = "The go_localized_string package must rebuild through VIPER and either reproduce historical coordinates or freeze a repeated modern coordinate baseline under the mismatch ladder."
+depends_on = ["P4-REQ-03"]
+verifier_ids = ["P4-VR-10"]
+
+[[requirements]]
+id = "P4-REQ-10K"
+claim = "The gocam_mechanistic package must rebuild from its pinned sources and reproduce its historical output exactly."
+depends_on = ["P4-REQ-03"]
+verifier_ids = ["P4-VR-10"]
+
+[[requirements]]
+id = "P4-REQ-10L"
+claim = "The hgnc source package must be acquired and verified through VIPER."
+depends_on = ["P4-REQ-03"]
+verifier_ids = ["P4-VR-10"]
+
+[[requirements]]
+id = "P4-REQ-10M"
+claim = "The histone_chromatin package must rebuild from its pinned sources and reproduce its historical output exactly."
+depends_on = ["P4-REQ-03"]
+verifier_ids = ["P4-VR-10"]
+
+[[requirements]]
+id = "P4-REQ-10N"
+claim = "The joung_tfatlas source package must be acquired and verified through VIPER."
+depends_on = ["P4-REQ-03"]
+verifier_ids = ["P4-VR-10"]
+
+[[requirements]]
+id = "P4-REQ-10O"
+claim = "The metabolomics package must rebuild from its pinned sources and reproduce its historical output exactly."
+depends_on = ["P4-REQ-03"]
+verifier_ids = ["P4-VR-10"]
+
+[[requirements]]
+id = "P4-REQ-10P"
+claim = "The pathway_hallmark package must rebuild through VIPER and either reproduce historical coordinates or freeze a repeated modern coordinate baseline under the mismatch ladder."
+depends_on = ["P4-REQ-03"]
+verifier_ids = ["P4-VR-10"]
+
+[[requirements]]
+id = "P4-REQ-10Q"
+claim = "The pathways_highres package must rebuild from its pinned sources and reproduce its historical output exactly."
+depends_on = ["P4-REQ-03"]
+verifier_ids = ["P4-VR-10"]
+
+[[requirements]]
+id = "P4-REQ-10R"
+claim = "The ppi_union package must rebuild from complete pinned interaction sources, preserve edge attribution, and reject the truncated historical IntAct input."
+depends_on = ["P4-REQ-03"]
+verifier_ids = ["P4-VR-04"]
+
+[[requirements]]
+id = "P4-REQ-10S"
+claim = "The protein_domains package must rebuild from its pinned sources and reproduce its historical output exactly."
+depends_on = ["P4-REQ-03"]
+verifier_ids = ["P4-VR-10"]
+
+[[requirements]]
+id = "P4-REQ-10T"
+claim = "The ptm_uniprot package must rebuild from its pinned sources and reproduce its historical output exactly."
+depends_on = ["P4-REQ-03"]
+verifier_ids = ["P4-VR-10"]
+
+[[requirements]]
+id = "P4-REQ-10U"
+claim = "The regulatory_hocomoco_union package must rebuild from its pinned sources and reproduce its historical output exactly."
+depends_on = ["P4-REQ-03"]
+verifier_ids = ["P4-VR-10"]
+
+[[requirements]]
+id = "P4-REQ-10V"
+claim = "The rna_biology package must rebuild from its pinned sources and reproduce its historical output exactly."
+depends_on = ["P4-REQ-03"]
+verifier_ids = ["P4-VR-10"]
+
+[[requirements]]
+id = "P4-REQ-10W"
+claim = "The subcellular package must rebuild from its pinned sources and reproduce its historical output exactly."
+depends_on = ["P4-REQ-03"]
+verifier_ids = ["P4-VR-10"]
+
+[[requirements]]
+id = "P4-REQ-10X"
+claim = "The tf_motif_binding package must rebuild from its pinned sources and reproduce its historical output exactly."
+depends_on = ["P4-REQ-03"]
+verifier_ids = ["P4-VR-10"]
+
+[[requirements]]
+id = "P4-REQ-10Y"
+claim = "The tissue_expression package must rebuild from its pinned sources and reproduce its historical output exactly."
+depends_on = ["P4-REQ-03"]
+verifier_ids = ["P4-VR-10"]
+
+[[requirements]]
+id = "P4-REQ-10Z"
+claim = "The uniprot_pfam_interpro source package must be acquired and verified through VIPER."
+depends_on = ["P4-REQ-03"]
+verifier_ids = ["P4-VR-10"]
+
+[[requirements]]
+id = "P4-REQ-20A"
+claim = "The depmap_essentiality compressed array must rebuild from its accepted package output and retain an exact comparison."
+depends_on = ["P4-REQ-10D"]
+verifier_ids = ["P4-VR-20"]
+
+[[requirements]]
+id = "P4-REQ-20B"
+claim = "The subcellular compressed array must rebuild from its accepted package output and retain an exact comparison."
+depends_on = ["P4-REQ-10W"]
+verifier_ids = ["P4-VR-20"]
+
+[[requirements]]
+id = "P4-REQ-20C"
+claim = "The corum compressed array must resolve raw CORUM and HGNC identities and apply the declared environment-mismatch ladder."
+depends_on = ["P4-REQ-10L", "P4-REQ-10R"]
+verifier_ids = ["P4-VR-20"]
+
+[[requirements]]
+id = "P4-REQ-20D"
+claim = "The dorothea_grn compressed array must reproduce its historical intermediate before deterministic compression."
+depends_on = ["P4-REQ-10U"]
+verifier_ids = ["P4-VR-20"]
+
+[[requirements]]
+id = "P4-REQ-20E"
+claim = "The gene_family compressed array must reproduce its historical intermediate before deterministic compression."
+depends_on = ["P4-REQ-10I"]
+verifier_ids = ["P4-VR-20"]
+
+[[requirements]]
+id = "P4-REQ-20F"
+claim = "The motif compressed array must reproduce its historical intermediate before deterministic compression."
+depends_on = ["P4-REQ-10E"]
+verifier_ids = ["P4-VR-20"]
+
+[[requirements]]
+id = "P4-REQ-20G"
+claim = "The pathway_hallmark compressed array must reproduce its historical intermediate before deterministic compression."
+depends_on = ["P4-REQ-10P"]
+verifier_ids = ["P4-VR-20"]
+
+[[requirements]]
+id = "P4-REQ-20H"
+claim = "The ppi_spectral compressed array must rebuild from the complete interaction sources and apply the declared environment-mismatch ladder."
+depends_on = ["P4-REQ-10R"]
+verifier_ids = ["P4-VR-20"]
+
+[[requirements]]
+id = "P4-REQ-20I"
+claim = "The ptm compressed array must reproduce its historical intermediate before deterministic compression."
+depends_on = ["P4-REQ-10T"]
+verifier_ids = ["P4-VR-20"]
+
+[[requirements]]
+id = "P4-REQ-20J"
+claim = "The mechanistic256 compressed array must bind its five completion-model inputs and execute its declared build."
+depends_on = ["P4-REQ-05"]
+verifier_ids = ["P4-VR-20"]
+
+[[requirements]]
+id = "P4-REQ-20K"
+claim = "The regulatory256 compressed array must bind its five source matrices and execute its declared build."
+depends_on = ["P4-REQ-05"]
+verifier_ids = ["P4-VR-20"]
+
 [[verifiers]]
 id = "P4-VR-01"
 requirement_ids = ["P4-REQ-01"]
@@ -61,7 +283,7 @@ rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/
 
 [[verifiers]]
 id = "P4-VR-04"
-requirement_ids = ["P4-REQ-04"]
+requirement_ids = ["P4-REQ-04", "P4-REQ-10R"]
 acceptance_conditions = ["The parser consumes the complete pinned IntAct bytes, reports accepted pairs and covered perturbations, and rejects the known 1,170,222,081-byte historical prefix as incomplete."]
 success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_interaction_prior.py", symbol = "test_rebuilds_interactions_from_complete_sources" }
 rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_interaction_prior.py", symbol = "test_rejects_historical_intact_prefix" }]
@@ -79,6 +301,58 @@ requirement_ids = ["P4-REQ-06"]
 acceptance_conditions = ["The frozen bundle contains one ordered row per perturbation, one observation mask per modality, and a verified provenance path from every array to its raw source and builder."]
 success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_bundle.py", symbol = "test_freezes_corrected_prior_bundle" }
 rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_bundle.py", symbol = "test_rejects_unattributed_or_implicit_missing_values" }]
+
+[[verifiers]]
+id = "P4-VR-10"
+requirement_ids = [
+  "P4-REQ-10A",
+  "P4-REQ-10B",
+  "P4-REQ-10C",
+  "P4-REQ-10D",
+  "P4-REQ-10E",
+  "P4-REQ-10F",
+  "P4-REQ-10G",
+  "P4-REQ-10H",
+  "P4-REQ-10I",
+  "P4-REQ-10J",
+  "P4-REQ-10K",
+  "P4-REQ-10L",
+  "P4-REQ-10M",
+  "P4-REQ-10N",
+  "P4-REQ-10O",
+  "P4-REQ-10P",
+  "P4-REQ-10Q",
+  "P4-REQ-10S",
+  "P4-REQ-10T",
+  "P4-REQ-10U",
+  "P4-REQ-10V",
+  "P4-REQ-10W",
+  "P4-REQ-10X",
+  "P4-REQ-10Y",
+  "P4-REQ-10Z",
+]
+acceptance_conditions = ["Each package-specific observer resolves the raw or versioned source, executes the declared VIPER acquisition and build path, compares the accepted output with its historical counterpart or repeated modern baseline, restores it from GCS, and rejects a missing source, unexplained mismatch, or changed restored digest."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_reconstruction.py", symbol = "test_rebuilds_each_declared_prior_package" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_reconstruction.py", symbol = "test_rejects_incomplete_package_provenance_or_unexplained_mismatch" }]
+
+[[verifiers]]
+id = "P4-VR-20"
+requirement_ids = [
+  "P4-REQ-20A",
+  "P4-REQ-20B",
+  "P4-REQ-20C",
+  "P4-REQ-20D",
+  "P4-REQ-20E",
+  "P4-REQ-20F",
+  "P4-REQ-20G",
+  "P4-REQ-20H",
+  "P4-REQ-20I",
+  "P4-REQ-20J",
+  "P4-REQ-20K",
+]
+acceptance_conditions = ["Each compressed-array observer consumes only accepted package outputs, records its deterministic transform and environment, compares the result with the retained array or repeated modern baseline, restores it from GCS, and rejects an unresolved input, unexplained mismatch, or changed restored digest."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_bundle.py", symbol = "test_rebuilds_each_declared_compressed_array" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_bundle.py", symbol = "test_rejects_incomplete_compressed_array_provenance" }]
 
 [[pair_blocks]]
 id = "P4-PB-01"
@@ -106,24 +380,351 @@ completion_evidence = ["implementation_review", "viper_registration"]
 
 [[pair_blocks]]
 id = "P4-PB-04"
-requirement_ids = ["P4-REQ-04"]
+requirement_ids = ["P4-REQ-04", "P4-REQ-10R"]
 depends_on = ["P4-PB-03"]
 repository_id = "mantra"
-requirement_contribution = "Rebuild the interaction prior from complete pinned sources and reject the historical truncated IntAct input."
+requirement_contribution = "Acquire and rebuild ppi_union from the complete IntAct and interaction source family, reject the truncated historical input, and retain its VIPER source, build, comparison, and restore evidence."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-05A"
+requirement_ids = ["P4-REQ-10A"]
+depends_on = ["P4-PB-03"]
+repository_id = "mantra"
+requirement_contribution = "Acquire and rebuild alphagenome, then freeze a repeated modern source-native baseline because the historical neural coordinates did not reproduce."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-05B"
+requirement_ids = ["P4-REQ-10B"]
+depends_on = ["P4-PB-03"]
+repository_id = "mantra"
+requirement_contribution = "Acquire and verify the alphagenome_regulatory_tracks source collection through VIPER."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-05C"
+requirement_ids = ["P4-REQ-10C"]
+depends_on = ["P4-PB-03"]
+repository_id = "mantra"
+requirement_contribution = "Acquire and rebuild chromatin_accessibility and reproduce its historical output exactly."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-05D"
+requirement_ids = ["P4-REQ-10D"]
+depends_on = ["P4-PB-03"]
+repository_id = "mantra"
+requirement_contribution = "Recover or deliberately replace the missing historical DepMap gene-effect source, then rebuild depmap_essentiality with a retained mismatch classification."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-05E"
+requirement_ids = ["P4-REQ-10E"]
+depends_on = ["P4-PB-03"]
+repository_id = "mantra"
+requirement_contribution = "Acquire and rebuild dna_motif and reproduce its historical output exactly."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-05F"
+requirement_ids = ["P4-REQ-10F"]
+depends_on = ["P4-PB-03"]
+repository_id = "mantra"
+requirement_contribution = "Acquire and rebuild esmc and reproduce its historical output exactly."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-05G"
+requirement_ids = ["P4-REQ-10G"]
+depends_on = ["P4-PB-05D"]
+repository_id = "mantra"
+requirement_contribution = "Use the resolved DepMap gene-effect source to rebuild fitness_regime and retain its comparison result."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-05H"
+requirement_ids = ["P4-REQ-10H"]
+depends_on = ["P4-PB-03"]
+repository_id = "mantra"
+requirement_contribution = "Acquire and verify the pinned gencode_annotation source package through VIPER."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-05I"
+requirement_ids = ["P4-REQ-10I"]
+depends_on = ["P4-PB-03"]
+repository_id = "mantra"
+requirement_contribution = "Acquire and rebuild gene_family and reproduce its historical output exactly."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-05J"
+requirement_ids = ["P4-REQ-10J"]
+depends_on = ["P4-PB-03"]
+repository_id = "mantra"
+requirement_contribution = "Acquire and rebuild go_localized_string, then apply the historical-environment ladder or freeze a repeated modern coordinate baseline."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-05K"
+requirement_ids = ["P4-REQ-10K"]
+depends_on = ["P4-PB-03"]
+repository_id = "mantra"
+requirement_contribution = "Acquire and rebuild gocam_mechanistic and reproduce its historical output exactly."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-05L"
+requirement_ids = ["P4-REQ-10L"]
+depends_on = ["P4-PB-03"]
+repository_id = "mantra"
+requirement_contribution = "Acquire and verify the pinned hgnc source package through VIPER."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-05M"
+requirement_ids = ["P4-REQ-10M"]
+depends_on = ["P4-PB-03"]
+repository_id = "mantra"
+requirement_contribution = "Acquire and rebuild histone_chromatin and reproduce its historical output exactly."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-05N"
+requirement_ids = ["P4-REQ-10N"]
+depends_on = ["P4-PB-03"]
+repository_id = "mantra"
+requirement_contribution = "Acquire and verify the pinned joung_tfatlas source package through VIPER."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-05O"
+requirement_ids = ["P4-REQ-10O"]
+depends_on = ["P4-PB-03"]
+repository_id = "mantra"
+requirement_contribution = "Acquire and rebuild metabolomics and reproduce its historical output exactly."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-05P"
+requirement_ids = ["P4-REQ-10P"]
+depends_on = ["P4-PB-03"]
+repository_id = "mantra"
+requirement_contribution = "Acquire and rebuild pathway_hallmark, then apply the historical-environment ladder or freeze a repeated modern coordinate baseline."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-05Q"
+requirement_ids = ["P4-REQ-10Q"]
+depends_on = ["P4-PB-03"]
+repository_id = "mantra"
+requirement_contribution = "Acquire and rebuild pathways_highres and reproduce its historical output exactly."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-05S"
+requirement_ids = ["P4-REQ-10S"]
+depends_on = ["P4-PB-03"]
+repository_id = "mantra"
+requirement_contribution = "Acquire and rebuild protein_domains and reproduce its historical output exactly."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-05T"
+requirement_ids = ["P4-REQ-10T"]
+depends_on = ["P4-PB-03"]
+repository_id = "mantra"
+requirement_contribution = "Acquire and rebuild ptm_uniprot and reproduce its historical output exactly."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-05U"
+requirement_ids = ["P4-REQ-10U"]
+depends_on = ["P4-PB-03"]
+repository_id = "mantra"
+requirement_contribution = "Acquire and rebuild regulatory_hocomoco_union and reproduce its historical output exactly."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-05V"
+requirement_ids = ["P4-REQ-10V"]
+depends_on = ["P4-PB-03"]
+repository_id = "mantra"
+requirement_contribution = "Acquire and rebuild rna_biology and reproduce its historical output exactly."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-05W"
+requirement_ids = ["P4-REQ-10W"]
+depends_on = ["P4-PB-03"]
+repository_id = "mantra"
+requirement_contribution = "Acquire and rebuild subcellular and reproduce its historical output exactly."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-05X"
+requirement_ids = ["P4-REQ-10X"]
+depends_on = ["P4-PB-03"]
+repository_id = "mantra"
+requirement_contribution = "Acquire and rebuild tf_motif_binding and reproduce its historical output exactly."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-05Y"
+requirement_ids = ["P4-REQ-10Y"]
+depends_on = ["P4-PB-03"]
+repository_id = "mantra"
+requirement_contribution = "Acquire and rebuild tissue_expression and reproduce its historical output exactly."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-05Z"
+requirement_ids = ["P4-REQ-10Z"]
+depends_on = ["P4-PB-03"]
+repository_id = "mantra"
+requirement_contribution = "Acquire and verify the pinned uniprot_pfam_interpro source package through VIPER."
 completion_evidence = ["implementation_review", "viper_registration"]
 
 [[pair_blocks]]
 id = "P4-PB-05"
 requirement_ids = ["P4-REQ-05"]
+depends_on = [
+  "P4-PB-04",
+  "P4-PB-05A",
+  "P4-PB-05B",
+  "P4-PB-05C",
+  "P4-PB-05D",
+  "P4-PB-05E",
+  "P4-PB-05F",
+  "P4-PB-05G",
+  "P4-PB-05H",
+  "P4-PB-05I",
+  "P4-PB-05J",
+  "P4-PB-05K",
+  "P4-PB-05L",
+  "P4-PB-05M",
+  "P4-PB-05N",
+  "P4-PB-05O",
+  "P4-PB-05P",
+  "P4-PB-05Q",
+  "P4-PB-05S",
+  "P4-PB-05T",
+  "P4-PB-05U",
+  "P4-PB-05V",
+  "P4-PB-05W",
+  "P4-PB-05X",
+  "P4-PB-05Y",
+  "P4-PB-05Z",
+]
+repository_id = "mantra"
+requirement_contribution = "Verify that the 26 package receipts cover every selected source and prior without an unresolved or unattributed package."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-06A"
+requirement_ids = ["P4-REQ-20A"]
+depends_on = ["P4-PB-05D"]
+repository_id = "mantra"
+requirement_contribution = "Rebuild and verify the depmap_essentiality compressed array from its accepted package output."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-06B"
+requirement_ids = ["P4-REQ-20B"]
+depends_on = ["P4-PB-05W"]
+repository_id = "mantra"
+requirement_contribution = "Rebuild and verify the subcellular compressed array from its accepted package output."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-06C"
+requirement_ids = ["P4-REQ-20C"]
+depends_on = ["P4-PB-05L", "P4-PB-04"]
+repository_id = "mantra"
+requirement_contribution = "Recover the raw CORUM and HGNC identities, rebuild corum, and apply the declared environment-mismatch ladder."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-06D"
+requirement_ids = ["P4-REQ-20D"]
+depends_on = ["P4-PB-05U"]
+repository_id = "mantra"
+requirement_contribution = "Rebuild dorothea_grn and reproduce its historical intermediate before applying deterministic compression."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-06E"
+requirement_ids = ["P4-REQ-20E"]
+depends_on = ["P4-PB-05I"]
+repository_id = "mantra"
+requirement_contribution = "Rebuild gene_family and reproduce its historical intermediate before applying deterministic compression."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-06F"
+requirement_ids = ["P4-REQ-20F"]
+depends_on = ["P4-PB-05E"]
+repository_id = "mantra"
+requirement_contribution = "Rebuild motif and reproduce its historical intermediate before applying deterministic compression."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-06G"
+requirement_ids = ["P4-REQ-20G"]
+depends_on = ["P4-PB-05P"]
+repository_id = "mantra"
+requirement_contribution = "Rebuild pathway_hallmark and reproduce its historical intermediate before applying deterministic compression."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-06H"
+requirement_ids = ["P4-REQ-20H"]
 depends_on = ["P4-PB-04"]
 repository_id = "mantra"
-requirement_contribution = "Rebuild and audit every other selected prior against the canonical perturbation identities."
+requirement_contribution = "Rebuild ppi_spectral from the complete interaction source family and apply the declared environment-mismatch ladder."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-06I"
+requirement_ids = ["P4-REQ-20I"]
+depends_on = ["P4-PB-05T"]
+repository_id = "mantra"
+requirement_contribution = "Rebuild ptm and reproduce its historical intermediate before applying deterministic compression."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-06J"
+requirement_ids = ["P4-REQ-20J"]
+depends_on = ["P4-PB-05"]
+repository_id = "mantra"
+requirement_contribution = "Bind the five completion-model inputs and execute the mechanistic256 compressed-array build."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-06K"
+requirement_ids = ["P4-REQ-20K"]
+depends_on = ["P4-PB-05"]
+repository_id = "mantra"
+requirement_contribution = "Bind the five regulatory source matrices and execute the regulatory256 compressed-array build."
 completion_evidence = ["implementation_review", "viper_registration"]
 
 [[pair_blocks]]
 id = "P4-PB-06"
 requirement_ids = ["P4-REQ-06"]
-depends_on = ["P4-PB-05"]
+depends_on = [
+  "P4-PB-06A",
+  "P4-PB-06B",
+  "P4-PB-06C",
+  "P4-PB-06D",
+  "P4-PB-06E",
+  "P4-PB-06F",
+  "P4-PB-06G",
+  "P4-PB-06H",
+  "P4-PB-06I",
+  "P4-PB-06J",
+  "P4-PB-06K",
+]
 repository_id = "mantra"
-requirement_contribution = "Freeze one corrected, provenance-complete prior bundle for both model rebuilds."
+requirement_contribution = "Freeze one corrected, provenance-complete prior bundle, restore it from GCS, and make it the only prior input for both model rebuilds."
 completion_evidence = ["implementation_review", "viper_registration"]

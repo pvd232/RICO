@@ -35,6 +35,11 @@ MODERN_PREDICTION_SHA256 = (
     "f8e8e6a6fe291143debd3d8e8b3ab9c4e2aed5afd3b2391e7856c7d8fd7e262b"
 )
 MODERN_HOLD_PEARSON_DELTA = "0.5861640983697456"
+PRIOR_PACKAGE_BLOCK_IDS = [
+    "P4-PB-04",
+    *[f"P4-PB-05{suffix}" for suffix in "ABCDEFGHIJKLMNOPQSTUVWXYZ"],
+]
+COMPRESSED_PRIOR_BLOCK_IDS = [f"P4-PB-06{suffix}" for suffix in "ABCDEFGHIJK"]
 
 
 def verify_selected_baseline(
@@ -203,7 +208,12 @@ class HopfieldContractTests(unittest.TestCase):
                     "H1-REQ-09",
                 ],
                 3: [f"D3-REQ-{index:02d}" for index in range(1, 8)],
-                4: ["E0-REQ-11", *[f"P4-REQ-{index:02d}" for index in range(1, 7)]],
+                4: [
+                    "E0-REQ-11",
+                    *[f"P4-REQ-{index:02d}" for index in range(1, 7)],
+                    *[f"P4-REQ-10{suffix}" for suffix in "ABCDEFGHIJKLMNOPQRSTUVWXYZ"],
+                    *[f"P4-REQ-20{suffix}" for suffix in "ABCDEFGHIJK"],
+                ],
                 5: [
                     "E0-REQ-04",
                     "E0-REQ-05",
@@ -256,7 +266,11 @@ class HopfieldContractTests(unittest.TestCase):
         )
         self.assertEqual(
             [requirement["id"] for requirement in prior["requirements"]],
-            [f"P4-REQ-{index:02d}" for index in range(1, 7)],
+            [
+                *[f"P4-REQ-{index:02d}" for index in range(1, 7)],
+                *[f"P4-REQ-10{suffix}" for suffix in "ABCDEFGHIJKLMNOPQRSTUVWXYZ"],
+                *[f"P4-REQ-20{suffix}" for suffix in "ABCDEFGHIJK"],
+            ],
         )
         self.assertEqual(
             [requirement["id"] for requirement in response["requirements"]],
@@ -374,6 +388,24 @@ class HopfieldContractTests(unittest.TestCase):
             ["H1-REQ-05", "H1-REQ-11"],
         )
         self.assertEqual(blocks["H1-PB-08"]["depends_on"], ["H1-PB-05"])
+
+    def test_decomposes_prior_reconstruction_into_monitorable_blocks(self) -> None:
+        """Give every source package and compressed array its own lifecycle row."""
+        contract = tomllib.loads(PRIOR_CONTRACT.read_text(encoding="utf-8"))
+        blocks = {block["id"]: block for block in contract["pair_blocks"]}
+
+        self.assertEqual(len(PRIOR_PACKAGE_BLOCK_IDS), 26)
+        self.assertEqual(len(COMPRESSED_PRIOR_BLOCK_IDS), 11)
+        self.assertEqual(set(PRIOR_PACKAGE_BLOCK_IDS) - blocks.keys(), set())
+        self.assertEqual(set(COMPRESSED_PRIOR_BLOCK_IDS) - blocks.keys(), set())
+        self.assertEqual(
+            set(blocks["P4-PB-05"]["depends_on"]),
+            set(PRIOR_PACKAGE_BLOCK_IDS),
+        )
+        self.assertEqual(
+            set(blocks["P4-PB-06"]["depends_on"]),
+            set(COMPRESSED_PRIOR_BLOCK_IDS),
+        )
 
 
 if __name__ == "__main__":
