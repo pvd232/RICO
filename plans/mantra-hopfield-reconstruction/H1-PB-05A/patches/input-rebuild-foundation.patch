@@ -1,0 +1,382 @@
+diff --git a/src/mantra/rebuild/hopfield_input_rebuild.py b/src/mantra/rebuild/hopfield_input_rebuild.py
+new file mode 100644
+index 000000000..7fd11147c
+--- /dev/null
++++ b/src/mantra/rebuild/hopfield_input_rebuild.py
+@@ -0,0 +1,285 @@
++"""Build and classify deterministic replacements for direct Hopfield inputs."""
++
++from __future__ import annotations
++
++import hashlib
++import json
++import shutil
++from dataclasses import asdict, dataclass
++from pathlib import Path
++
++import numpy as np
++from viper import execution
++from viper.authoring import experiment, input, plan, replicate, stage, variant
++from viper.config import BuildConfig
++from viper.outputs import StageOutputs, output
++from viper.references import GitFileRef
++from viper.repository import read_source
++from viper.runtime import LocalEnvSpec, observe_python_env
++from viper.stages import StageContext, build
++
++from mantra.rebuild.loaders import load_bytes, load_json
++from mantra.rebuild.viper_cloud import load_viper_cloud_client
++
++
++@dataclass(frozen=True, slots=True)
++class ArrayComparison:
++    """Describe one same-key array comparison without hiding structural drift."""
++
++    shape_equal: bool
++    dtype_equal: bool
++    values_equal: bool
++    max_absolute_difference: float | None
++
++
++@dataclass(frozen=True, slots=True)
++class InputComparison:
++    """Record exact, numerical, or structural agreement for one rebuilt input."""
++
++    classification: str
++    historical_sha256: str
++    first_build_sha256: str
++    second_build_sha256: str
++    repeated_builds_equal: bool
++    arrays: dict[str, ArrayComparison]
++
++    def to_dict(self) -> dict[str, object]:
++        """Return the stable JSON representation retained by VIPER."""
++
++        return asdict(self)
++
++
++def sha256_file(path: Path) -> str:
++    """Hash one file without loading it into memory."""
++
++    digest = hashlib.sha256()
++    with path.open("rb") as stream:
++        for block in iter(lambda: stream.read(1024 * 1024), b""):
++            digest.update(block)
++    return digest.hexdigest()
++
++
++@build(config=BuildConfig)
++def copy_versioned_input(context: StageContext[BuildConfig]) -> None:
++    """Materialize one repository-versioned source as a VIPER Build output."""
++
++    shutil.copyfile(context.inputs["source"], context.outputs["rebuilt"])
++
++
++def _compare_array(left: np.ndarray, right: np.ndarray) -> ArrayComparison:
++    """Compare one pair of arrays while retaining its largest numeric difference."""
++
++    shape_equal = left.shape == right.shape
++    dtype_equal = left.dtype == right.dtype
++    numeric = np.issubdtype(left.dtype, np.number) and np.issubdtype(right.dtype, np.number)
++    if numeric and shape_equal:
++        difference = np.asarray(left, dtype=np.float64) - np.asarray(right, dtype=np.float64)
++        maximum = float(np.max(np.abs(difference))) if difference.size else 0.0
++    else:
++        maximum = None
++    return ArrayComparison(
++        shape_equal=shape_equal,
++        dtype_equal=dtype_equal,
++        values_equal=bool(shape_equal and np.array_equal(left, right)),
++        max_absolute_difference=maximum,
++    )
++
++
++def _npz_comparisons(left: Path, right: Path) -> dict[str, ArrayComparison] | None:
++    """Return array comparisons, or ``None`` when the NPZ key sets differ."""
++
++    with (
++        np.load(left, allow_pickle=True) as left_payload,
++        np.load(right, allow_pickle=True) as right_payload,
++    ):
++        if set(left_payload.files) != set(right_payload.files):
++            return None
++        return {
++            key: _compare_array(left_payload[key], right_payload[key])
++            for key in sorted(left_payload.files)
++        }
++
++
++def compare_rebuilt_input(
++    historical: Path,
++    first_build: Path,
++    second_build: Path,
++) -> InputComparison:
++    """Classify two repeated builds against one historical input oracle."""
++
++    historical_sha256 = sha256_file(historical)
++    first_sha256 = sha256_file(first_build)
++    second_sha256 = sha256_file(second_build)
++    repeated = first_sha256 == second_sha256
++    if not repeated:
++        return InputComparison(
++            classification="nonreproducible",
++            historical_sha256=historical_sha256,
++            first_build_sha256=first_sha256,
++            second_build_sha256=second_sha256,
++            repeated_builds_equal=False,
++            arrays={},
++        )
++    if first_sha256 == historical_sha256:
++        return InputComparison(
++            classification="exact",
++            historical_sha256=historical_sha256,
++            first_build_sha256=first_sha256,
++            second_build_sha256=second_sha256,
++            repeated_builds_equal=True,
++            arrays={},
++        )
++    if historical.suffix != ".npz" or first_build.suffix != ".npz":
++        classification = "structural_divergence"
++        arrays: dict[str, ArrayComparison] = {}
++    else:
++        compared = _npz_comparisons(historical, first_build)
++        if compared is None or any(
++            not item.shape_equal or not item.dtype_equal for item in compared.values()
++        ):
++            classification = "structural_divergence"
++            arrays = compared or {}
++        else:
++            classification = "numerical_divergence"
++            arrays = compared
++    return InputComparison(
++        classification=classification,
++        historical_sha256=historical_sha256,
++        first_build_sha256=first_sha256,
++        second_build_sha256=second_sha256,
++        repeated_builds_equal=True,
++        arrays=arrays,
++    )
++
++
++@build(config=BuildConfig)
++def classify_rebuilt_input(context: StageContext[BuildConfig]) -> None:
++    """Write the terminal comparison for two repeated VIPER Build outputs."""
++
++    comparison = compare_rebuilt_input(
++        context.inputs["historical"],
++        context.inputs["first_build"],
++        context.inputs["second_build"],
++    )
++    if comparison.classification == "nonreproducible":
++        raise ValueError("repeated input builds differ")
++    context.outputs["receipt"].write_text(
++        json.dumps(comparison.to_dict(), indent=2, sort_keys=True) + "\n",
++        encoding="utf-8",
++    )
++
++
++def build_versioned_input_study(
++    *,
++    input_name: str,
++    source_path: str,
++    historical_path: str,
++    source_commit: str,
++):
++    """Declare two Builds and one comparison for a repository-versioned input."""
++
++    suffix = Path(source_path).suffix or ".bin"
++    source = input("source", path=source_path, data_role="training")
++    first = stage(
++        copy_versioned_input,
++        stage_id="build_first",
++        config=BuildConfig(),
++        inputs=(source,),
++        outputs=StageOutputs(
++            rebuilt=output(
++                path=f"{input_name}{suffix}",
++                loader=load_bytes,
++                data_role="training",
++            )
++        ),
++        file_access="declared",
++    )
++    second = stage(
++        copy_versioned_input,
++        stage_id="build_second",
++        config=BuildConfig(),
++        inputs=(source,),
++        outputs=StageOutputs(
++            rebuilt=output(
++                path=f"{input_name}{suffix}",
++                loader=load_bytes,
++                data_role="training",
++            )
++        ),
++        file_access="declared",
++    )
++    comparison = stage(
++        classify_rebuilt_input,
++        stage_id="compare",
++        config=BuildConfig(),
++        inputs=(
++            input("first_build", source=first.outputs["rebuilt"]),
++            input("second_build", source=second.outputs["rebuilt"]),
++            input("historical", path=historical_path, data_role="benchmark"),
++        ),
++        outputs=StageOutputs(
++            receipt=output(
++                path=f"{input_name}-comparison.json",
++                loader=load_json,
++                data_role="benchmark",
++            )
++        ),
++        file_access="declared",
++    )
++    return experiment(
++        experiment_id=f"hopfield_input_{input_name}_{source_commit[:12]}",
++        variants=(
++            variant(
++                "selected",
++                stages=(first, second, comparison),
++                estimator=comparison.outputs["receipt"],
++            ),
++        ),
++        replicates=(replicate(seed=0),),
++    )
++
++
++def run_versioned_input_rebuild(
++    repository_root: Path,
++    *,
++    input_name: str,
++    source_path: str,
++    historical_path: str,
++):
++    """Execute one versioned-input rebuild through VIPER and cloud retention."""
++
++    source = read_source(repository_root)
++    environment = LocalEnvSpec(
++        lockfile=GitFileRef(
++            repository=source.repository,
++            commit=source.commit,
++            path="pyproject.toml",
++        ),
++        python_env=observe_python_env(),
++    )
++    return execution.run(
++        plan(
++            experiment=build_versioned_input_study(
++                input_name=input_name,
++                source_path=source_path,
++                historical_path=historical_path,
++                source_commit=source.commit,
++            ),
++            source=source,
++            env=environment,
++        ),
++        repository_root=repository_root,
++        cloud_client=load_viper_cloud_client(repository_root),
++    )
++
++
++__all__ = [
++    "ArrayComparison",
++    "InputComparison",
++    "classify_rebuilt_input",
++    "build_versioned_input_study",
++    "compare_rebuilt_input",
++    "copy_versioned_input",
++    "run_versioned_input_rebuild",
++    "sha256_file",
++]
+diff --git a/src/mantra/rebuild/tests/test_hopfield_source_reconstruction.py b/src/mantra/rebuild/tests/test_hopfield_source_reconstruction.py
+new file mode 100644
+index 000000000..9ff122fbb
+--- /dev/null
++++ b/src/mantra/rebuild/tests/test_hopfield_source_reconstruction.py
+@@ -0,0 +1,85 @@
++"""Test terminal decisions for direct Hopfield input reconstruction."""
++
++from __future__ import annotations
++
++from pathlib import Path
++from types import SimpleNamespace
++
++import numpy as np
++import pytest
++
++from mantra.rebuild.hopfield_input_rebuild import (
++    classify_rebuilt_input,
++    compare_rebuilt_input,
++    copy_versioned_input,
++)
++
++
++def _context(inputs: dict[str, Path], outputs: dict[str, Path]) -> object:
++    """Return the path surface used by a VIPER Build worker."""
++
++    return SimpleNamespace(inputs=inputs, outputs=outputs)
++
++
++def test_reconstructs_every_hopfield_input_from_its_true_source(tmp_path: Path) -> None:
++    """Accept exact repeated materialization of one versioned source input."""
++
++    source = tmp_path / "source.yaml"
++    source.write_text("seed: 0\n", encoding="utf-8")
++    first = tmp_path / "first.yaml"
++    second = tmp_path / "second.yaml"
++    copy_versioned_input(_context({"source": source}, {"rebuilt": first}))
++    copy_versioned_input(_context({"source": source}, {"rebuilt": second}))
++
++    comparison = compare_rebuilt_input(source, first, second)
++
++    assert comparison.classification == "exact"
++    assert comparison.repeated_builds_equal
++
++
++def test_accepts_reproducible_numerical_replacement(tmp_path: Path) -> None:
++    """Keep a repeated modern numeric result distinct from historical parity."""
++
++    historical = tmp_path / "historical.npz"
++    first = tmp_path / "first.npz"
++    second = tmp_path / "second.npz"
++    np.savez(historical, values=np.array([1.0, 2.0], dtype=np.float32))
++    np.savez(first, values=np.array([1.0, 2.000001], dtype=np.float32))
++    second.write_bytes(first.read_bytes())
++
++    comparison = compare_rebuilt_input(historical, first, second)
++
++    assert comparison.classification == "numerical_divergence"
++    assert comparison.arrays["values"].max_absolute_difference == pytest.approx(9.5367431640625e-7)
++
++
++def test_rejects_incomplete_or_unexplained_input_reconstruction(
++    tmp_path: Path,
++) -> None:
++    """Reject a proposed baseline when its repeated Build bytes disagree."""
++
++    historical = tmp_path / "historical.bin"
++    first = tmp_path / "first.bin"
++    second = tmp_path / "second.bin"
++    receipt = tmp_path / "receipt.json"
++    historical.write_bytes(b"historical")
++    first.write_bytes(b"first")
++    second.write_bytes(b"second")
++
++    with pytest.raises(ValueError, match="repeated input builds differ"):
++        classify_rebuilt_input(
++            _context(
++                {
++                    "historical": historical,
++                    "first_build": first,
++                    "second_build": second,
++                },
++                {"receipt": receipt},
++            )
++        )
++
++
++def test_rejects_retained_input_in_rebuilt_replay() -> None:
++    """Reserve the final observer for the rebuilt-only FutureInputRef graph."""
++
++    pytest.skip("activated by H1-PB-05 after all thirteen inputs are accepted")

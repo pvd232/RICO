@@ -1,0 +1,8 @@
+{
+  "lineage_sha256": "255f3239c2b405da213079f8da8eb74f2f8ecf634505d1c52a449411ddc47e12",
+  "run_id": "01M2KAYNT0SBMBMNJZV1KG19YT",
+  "schema_version": 1,
+  "source_commit": "583d976e164c10c1b9f18b8c15af0170f2331f14",
+  "source_repository": "https://github.com/pvd232/MANTRA.git",
+  "verified_at": "2026-09-15T20:11:00Z"
+}

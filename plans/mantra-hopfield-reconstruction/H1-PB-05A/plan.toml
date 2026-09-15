@@ -1,0 +1,65 @@
+schema_version = 1
+contract_id = "mantra-hopfield-reconstruction"
+package_sha256 = "07b42936670fbe8790344c18296454c7b9d50fa480504067e6a18a2857a2f45b"
+pair_block_id = "H1-PB-05A"
+baseline_commit = "0a12592c784bcb95c48b22da6b459b3c090f6d6f"
+change_summary = [
+  "One reusable VIPER boundary now runs two independent Build stages for a direct Hopfield input and retains their selected output and comparison receipt.",
+  "The comparison distinguishes exact historical bytes, repeatable numerical divergence, structural divergence, and nonreproducible output without calling a new baseline historical parity.",
+  "The first use rebuilds the repository-versioned Hopfield input contract; later input PairBlocks reuse the same terminal-decision boundary with their numerical producers.",
+]
+deviation_summary = "Everything went according to plan."
+
+[[actions]]
+operation = "patch"
+patch_path = "patches/input-rebuild-foundation.patch"
+target_paths = [
+  "src/mantra/rebuild/hopfield_input_rebuild.py",
+  "src/mantra/rebuild/tests/test_hopfield_source_reconstruction.py",
+]
+
+[[handoff_targets]]
+label = "Complete H1-PB-05A diff"
+source = "plan"
+path = "patches/input-rebuild-foundation.patch"
+line = 1
+
+[[handoff_targets]]
+label = "Repeated Build comparison and terminal classification"
+source = "repository"
+path = "src/mantra/rebuild/hopfield_input_rebuild.py"
+line = 93
+
+[gate]
+source_roots = [
+  "src/mantra/rebuild",
+  "src/mantra/__init__.py",
+  "pyrightconfig.json",
+  "pyproject.toml",
+]
+test_roots = ["src/mantra/rebuild/tests", "conftest.py"]
+
+[[gate.steps]]
+role = "typecheck"
+working_directory = "."
+argv = ["pyright", "src/mantra/rebuild/hopfield_input_rebuild.py", "src/mantra/rebuild/tests/test_hopfield_source_reconstruction.py"]
+
+[[gate.steps]]
+role = "test"
+working_directory = "."
+argv = ["python3", "-m", "pytest", "-q", "-p", "no:cacheprovider", "src/mantra/rebuild/tests/test_hopfield_source_reconstruction.py"]
+
+[[gate.steps]]
+role = "documentation"
+working_directory = "."
+argv = ["python3", "/Users/machina/.agents/skills/code-documentation/scripts/check-schema-descriptions.py", "src/mantra/rebuild/hopfield_input_rebuild.py", "src/mantra/rebuild/tests/test_hopfield_source_reconstruction.py"]
+
+[[gate.steps]]
+role = "lint"
+working_directory = "."
+argv = ["ruff", "format", "--check", "src/mantra/rebuild/hopfield_input_rebuild.py", "src/mantra/rebuild/tests/test_hopfield_source_reconstruction.py"]
+
+[[gate.steps]]
+role = "lint"
+working_directory = "."
+argv = ["ruff", "check", "src/mantra/rebuild/hopfield_input_rebuild.py", "src/mantra/rebuild/tests/test_hopfield_source_reconstruction.py"]

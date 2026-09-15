@@ -28,7 +28,7 @@ The bridge result becomes the baseline for later one-at-a-time substitutions.
 The original 64-value Hopfield result remains the historical replay baseline.
 
 <!-- contract-protocol:generated:start -->
-**In progress.** [Jump to current PairBlock](#h1-pb-05a)
+**In progress.** [Jump to current PairBlock](#h1-pb-05b)
 
 **Checklist:** [MANTRA rebuild](../checklists/mantra-rebuild.md)
 
@@ -295,23 +295,66 @@ The original 64-value Hopfield result remains the historical replay baseline.
 
 #### <nobr><code>H1-PB-05A</code></nobr>
 
-**Status:** drafting
+**Status:** complete
 
 **Requirement contribution:** Resolve the versioned source, build the Hopfield input contract, compare it with the retained file, apply the declared mismatch ladder, and retain the VIPER receipt.
 
-**Plan:** None
+**Review handoff**
 
-**Current receipt:** None
+**What changed**
+
+- One reusable VIPER boundary now runs two independent Build stages for a direct Hopfield input and retains their selected output and comparison receipt.
+- The comparison distinguishes exact historical bytes, repeatable numerical divergence, structural divergence, and nonreproducible output without calling a new baseline historical parity.
+- The first use rebuilds the repository-versioned Hopfield input contract; later input PairBlocks reuse the same terminal-decision boundary with their numerical producers.
+
+**Plan deviations:** Everything went according to plan.
+
+**Start review:** [Open tested GitHub comparison](https://github.com/pvd232/MANTRA/compare/0a12592c784bcb95c48b22da6b459b3c090f6d6f...276e3f4dad33efa293b88fb6cb3a3d1ae9b7c7da)
+
+**Review these files**
+
+- [Complete H1-PB-05A diff](../plans/mantra-hopfield-reconstruction/H1-PB-05A/patches/input-rebuild-foundation.patch#L1)
+- [Repeated Build comparison and terminal classification](../../mantra/src/mantra/rebuild/hopfield_input_rebuild.py#L93)
+
+**Evidence:** [Passing gate receipt](../evidence/mantra-rebuild/H1-PB-05A/gate-review-01.json)
+
+**Decision:** <nobr><code>H1-PB-05A</code></nobr> is complete; no further decision is required.
+
+<details>
+<summary>Implementation details</summary>
+
+**Plan:** [plan.toml](../plans/mantra-hopfield-reconstruction/H1-PB-05A/plan.toml)
+
+**Retained patch:** [patches/input-rebuild-foundation.patch](../plans/mantra-hopfield-reconstruction/H1-PB-05A/patches/input-rebuild-foundation.patch)
+
+**Implementation roots:** [src/mantra/rebuild](../../mantra/src/mantra/rebuild) · [src/mantra/__init__.py](../../mantra/src/mantra/__init__.py) · [pyrightconfig.json](../../mantra/pyrightconfig.json) · [pyproject.toml](../../mantra/pyproject.toml)
+
+**Test roots:** [src/mantra/rebuild/tests](../../mantra/src/mantra/rebuild/tests) · [conftest.py](../../mantra/conftest.py)
 
 **Dependencies:** <nobr><code>H1-PB-07</code></nobr>
 
-**Next action:** Run the current PairBlock plan.
+**Gate steps:**
+
+```bash
+# typecheck
+(cd . && pyright src/mantra/rebuild/hopfield_input_rebuild.py src/mantra/rebuild/tests/test_hopfield_source_reconstruction.py)
+# test
+(cd . && python3 -m pytest -q -p no:cacheprovider src/mantra/rebuild/tests/test_hopfield_source_reconstruction.py)
+# documentation
+(cd . && python3 /Users/machina/.agents/skills/code-documentation/scripts/check-schema-descriptions.py src/mantra/rebuild/hopfield_input_rebuild.py src/mantra/rebuild/tests/test_hopfield_source_reconstruction.py)
+# lint
+(cd . && ruff format --check src/mantra/rebuild/hopfield_input_rebuild.py src/mantra/rebuild/tests/test_hopfield_source_reconstruction.py)
+# lint
+(cd . && ruff check src/mantra/rebuild/hopfield_input_rebuild.py src/mantra/rebuild/tests/test_hopfield_source_reconstruction.py)
+```
+
+</details>
 
 <a id="h1-pb-05b"></a>
 
 #### <nobr><code>H1-PB-05B</code></nobr>
 
-**Status:** waiting
+**Status:** drafting
 
 **Requirement contribution:** Resolve the versioned source, build the complete Hopfield stage configuration, compare it with the retained configuration, apply the declared mismatch ladder, and retain the VIPER receipt.
 
@@ -321,7 +364,7 @@ The original 64-value Hopfield result remains the historical replay baseline.
 
 **Dependencies:** <nobr><code>H1-PB-05A</code></nobr>
 
-**Next action:** Wait for the declared dependencies.
+**Next action:** Run the current PairBlock plan.
 
 <a id="h1-pb-05c"></a>
 
