@@ -16,7 +16,7 @@ deferred = false
 pair_block_id = "H1-PB-02"
 phase = 2
 position = 0
-section_title = "Array identities"
+section_title = "Hopfield input alignment"
 deferred = false
 
 [[pair_block_placements]]

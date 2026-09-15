@@ -15,7 +15,7 @@ PairBlock plans, and verified receipts.
 |---|---|---|---|---|
 | <nobr><code>H1-PB-01</code></nobr> | bootstrap-complete | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-pb-01) | None | [receipt](../evidence/mantra-rebuild-phase-1/bootstrap.json) |
 
-### Phase 2: Array identities
+### Phase 2: Hopfield input alignment
 
 | PairBlock | Status | Contract | Dependencies | Receipt |
 |---|---|---|---|---|
