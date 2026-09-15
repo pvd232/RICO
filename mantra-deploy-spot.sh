@@ -6,6 +6,11 @@ PROJECT="${PROJECT:-mantra-477901}"
 MACHINE_TYPE="${MACHINE_TYPE:-g2-standard-12}"
 INSTANCE_NAME="${INSTANCE_NAME:-mantra-g2-spot}"
 EXPECTED_ACCELERATOR_PROFILE="nvidia-l4,1"
+PROVISIONING_MODEL="${PROVISIONING_MODEL:-SPOT}"
+if [[ "$PROVISIONING_MODEL" != "SPOT" && "$PROVISIONING_MODEL" != "STANDARD" ]]; then
+  echo "[!] Error: PROVISIONING_MODEL must be SPOT or STANDARD."
+  exit 1
+fi
 
 # Global VPC/IAP resources and per-region Cloud NAT resource names
 NETWORK="${NETWORK:-default}"
@@ -150,7 +155,8 @@ write_launch_receipt() {
   "$PYTHON" - \
     "$LAUNCH_RECEIPT_PATH" "$PROJECT" "$INSTANCE_NAME" "$CREATED_ZONE" \
     "$REGION" "$BOOT_DISK_NAME" "$NAT_ROUTER_NAME" "$NAT_GATEWAY_NAME" \
-    "$NAT_ROUTER_CREATED" "$NAT_GATEWAY_CREATED" "$cloud_probe_sha256" <<'PY'
+    "$NAT_ROUTER_CREATED" "$NAT_GATEWAY_CREATED" "$cloud_probe_sha256" \
+    "$PROVISIONING_MODEL" <<'PY'
 import json
 import sys
 from pathlib import Path
@@ -167,6 +173,7 @@ from pathlib import Path
     router_created,
     nat_created,
     cloud_probe_sha256,
+    provisioning_model,
 ) = sys.argv[1:]
 record = {
     "schema_version": 1,
@@ -180,6 +187,7 @@ record = {
     "router_created": router_created == "true",
     "nat_created": nat_created == "true",
     "cloud_probe_sha256": cloud_probe_sha256,
+    "provisioning_model": provisioning_model,
 }
 destination = Path(path)
 temporary = destination.with_suffix(destination.suffix + ".tmp")
@@ -582,12 +590,15 @@ fi
 if [[ -n "$BOOT_DISK_TYPE" ]]; then
   BOOT_DISK_ARGS+=(--boot-disk-type="$BOOT_DISK_TYPE")
 fi
+PROVISIONING_ARGS=(--provisioning-model="$PROVISIONING_MODEL")
+if [[ "$PROVISIONING_MODEL" == "SPOT" ]]; then
+  PROVISIONING_ARGS+=(--instance-termination-action=DELETE)
+fi
 INSTANCE_CREATE_ARGS=(
   --machine-type="$MACHINE_TYPE"
   "${SOURCE_ARGS[@]}"
   "${BOOT_DISK_ARGS[@]}"
-  --provisioning-model=SPOT
-  --instance-termination-action=DELETE
+  "${PROVISIONING_ARGS[@]}"
   --maintenance-policy=TERMINATE
   --network="$NETWORK"
   --no-address
@@ -615,9 +626,9 @@ fi
 echo "[*] Validated source image and G2/L4 target zones."
 echo
 
-# === ORDERED DIRECT SPOT PROVISIONING LOOP ===
+# === ORDERED DIRECT GPU PROVISIONING LOOP ===
 for ZONE in "${VALID_ZONES[@]}"; do
-  echo "=== Querying Spot Resource Pool Availability: $ZONE ==="
+  echo "=== Querying $PROVISIONING_MODEL Resource Pool Availability: $ZONE ==="
 
   set +e
   # The global VPC selects its auto-mode subnet in the zone's parent region.
@@ -669,7 +680,7 @@ for ZONE in "${VALID_ZONES[@]}"; do
     fi
 
     echo
-    echo "[*] Spot capacity selected $ZONE; configuring outbound access in $REGION..."
+    echo "[*] $PROVISIONING_MODEL capacity selected $ZONE; configuring outbound access in $REGION..."
     if ! ensure_regional_cloud_nat "$REGION"; then
       echo
       echo "[!] Error: The VM was created, but regional Cloud NAT setup failed."
@@ -691,7 +702,7 @@ for ZONE in "${VALID_ZONES[@]}"; do
     trap - EXIT
 
     echo
-    echo "[🚀] SUCCESS: Spot VM '$INSTANCE_NAME' was created in zone: $ZONE"
+    echo "[🚀] SUCCESS: $PROVISIONING_MODEL VM '$INSTANCE_NAME' was created in zone: $ZONE"
     echo "[*] Inbound SSH: IAP -> private VM address (the VM has no external IP)."
     echo "[*] Outbound internet: private VM address -> Cloud NAT '$NAT_GATEWAY_NAME' in $REGION."
     echo "--------------------------------------------------------------------------------"
@@ -720,5 +731,5 @@ for ZONE in "${VALID_ZONES[@]}"; do
   echo
 done
 
-echo "[!] Script Failure: No Spot L4 capacity was available in the configured zones."
+echo "[!] Script Failure: No $PROVISIONING_MODEL L4 capacity was available in the configured zones."
 exit 1

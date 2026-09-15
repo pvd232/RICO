@@ -205,10 +205,28 @@ def test_probes_launch_and_deletes_worker_and_disk(tmp_path: Path) -> None:
     assert launched.returncode == 0, launched.stderr + launched.stdout
     launch = json.loads(Path(env["LAUNCH_RECEIPT_PATH"]).read_text())
     assert launch["zone"] == "us-west4-c"
+    assert launch["provisioning_model"] == "SPOT"
     assert launch["router_created"] is True
     assert launch["nat_created"] is True
     calls = Path(env["FAKE_GCLOUD_LOG"]).read_text(encoding="utf-8")
     assert calls.index("us-west4-a") < calls.index("us-west4-c")
+
+
+def test_standard_worker_omits_spot_termination_policy(tmp_path: Path) -> None:
+    """Create a non-preemptible worker while retaining governed teardown."""
+
+    env = _environment(tmp_path)
+    env["PROVISIONING_MODEL"] = "STANDARD"
+
+    launched = _run(env)
+
+    assert launched.returncode == 0, launched.stderr + launched.stdout
+    launch = json.loads(Path(env["LAUNCH_RECEIPT_PATH"]).read_text())
+    assert launch["provisioning_model"] == "STANDARD"
+    calls = [json.loads(line) for line in Path(env["FAKE_GCLOUD_LOG"]).read_text().splitlines()]
+    create = next(call for call in calls if call[:3] == ["compute", "instances", "create"])
+    assert "--provisioning-model=STANDARD" in create
+    assert "--instance-termination-action=DELETE" not in create
 
     restore = tmp_path / "restore.json"
     _probe(restore)
