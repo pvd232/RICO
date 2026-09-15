@@ -110,32 +110,24 @@ class HopfieldContractTests(unittest.TestCase):
                 EXPECTED_ENCODER_SHA256,
             )
 
-    def test_places_hopfield_work_in_roadmap_phase_one(self) -> None:
-        """Keep the six implementation blocks ordered within roadmap Phase 1."""
+    def test_places_hopfield_requirements_in_roadmap_phase_one(self) -> None:
+        """Keep every Hopfield requirement in roadmap Phase 1."""
         checklist = tomllib.loads(CHECKLIST.read_text(encoding="utf-8"))
-        placements = [
-            placement
-            for placement in checklist["pair_block_placements"]
-            if placement["phase"] == 1
-        ]
+        phase = next(phase for phase in checklist["phases"] if phase["number"] == 1)
 
         self.assertEqual(
-            [placement["pair_block_id"] for placement in placements],
-            [f"H1-PB-{index:02d}" for index in range(1, 7)],
-        )
-        self.assertEqual(
-            [(placement["phase"], placement["position"]) for placement in placements],
-            [(1, position) for position in range(6)],
-        )
-        self.assertEqual(
-            {placement["section_title"] for placement in placements},
-            {"Hopfield reconstruction"},
+            phase,
+            {
+                "number": 1,
+                "title": "Hopfield reconstruction",
+                "requirement_ids": [f"H1-REQ-{index:02d}" for index in range(1, 9)],
+            },
         )
 
     def test_registers_every_roadmap_contract_and_phase(self) -> None:
         """Require the master workspace to encode the complete Phase 1-5 map."""
         checklist = tomllib.loads(CHECKLIST.read_text(encoding="utf-8"))
-        placements = checklist["pair_block_placements"]
+        phases = checklist["phases"]
 
         self.assertEqual(checklist["checklist_id"], "mantra-rebuild")
         self.assertEqual(
@@ -147,20 +139,13 @@ class HopfieldContractTests(unittest.TestCase):
             ],
         )
         self.assertEqual(
+            {phase["number"]: phase["requirement_ids"] for phase in phases},
             {
-                phase: [
-                    placement["pair_block_id"]
-                    for placement in placements
-                    if placement["phase"] == phase
-                ]
-                for phase in range(1, 6)
-            },
-            {
-                1: [f"H1-PB-{index:02d}" for index in range(1, 7)],
-                2: [f"M2-PB-{index:02d}" for index in range(1, 5)],
-                3: ["GE-PB-01"],
-                4: ["GE-PB-02", "GE-PB-03"],
-                5: ["GE-PB-04", "GE-PB-05", "GE-PB-06"],
+                1: [f"H1-REQ-{index:02d}" for index in range(1, 9)],
+                2: [f"M2-REQ-{index:02d}" for index in range(1, 7)],
+                3: ["GE-REQ-01", "GE-REQ-02"],
+                4: ["GE-REQ-03", "GE-REQ-04"],
+                5: ["GE-REQ-05", "GE-REQ-06", "GE-REQ-07"],
             },
         )
 
@@ -168,7 +153,7 @@ class HopfieldContractTests(unittest.TestCase):
         graph = tomllib.loads(GRAPH_CONTRACT.read_text(encoding="utf-8"))
         self.assertEqual(
             [requirement["id"] for requirement in mil["requirements"]],
-            [f"M2-REQ-{index:02d}" for index in range(1, 5)],
+            [f"M2-REQ-{index:02d}" for index in range(1, 7)],
         )
         self.assertEqual(
             [requirement["id"] for requirement in graph["requirements"]],

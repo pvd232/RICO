@@ -9,117 +9,46 @@ contract_paths = [
   "contracts/mantra-graph-encoder-v1.toml",
 ]
 
-[[pair_block_placements]]
-pair_block_id = "H1-PB-01"
-phase = 1
-position = 0
-section_title = "Hopfield reconstruction"
-deferred = false
+[[phases]]
+number = 1
+title = "Hopfield reconstruction"
+requirement_ids = [
+  "H1-REQ-01",
+  "H1-REQ-02",
+  "H1-REQ-03",
+  "H1-REQ-04",
+  "H1-REQ-05",
+  "H1-REQ-06",
+  "H1-REQ-07",
+  "H1-REQ-08",
+]
 
-[[pair_block_placements]]
-pair_block_id = "H1-PB-02"
-phase = 1
-position = 1
-section_title = "Hopfield reconstruction"
-deferred = false
+[[phases]]
+number = 2
+title = "MIL reconstruction"
+requirement_ids = [
+  "M2-REQ-01",
+  "M2-REQ-02",
+  "M2-REQ-03",
+  "M2-REQ-04",
+  "M2-REQ-05",
+  "M2-REQ-06",
+]
 
-[[pair_block_placements]]
-pair_block_id = "H1-PB-03"
-phase = 1
-position = 2
-section_title = "Hopfield reconstruction"
-deferred = false
+[[phases]]
+number = 3
+title = "Graph identities and baselines"
+requirement_ids = ["GE-REQ-01", "GE-REQ-02"]
 
-[[pair_block_placements]]
-pair_block_id = "H1-PB-04"
-phase = 1
-position = 3
-section_title = "Hopfield reconstruction"
-deferred = false
+[[phases]]
+number = 4
+title = "Topology and V1 features"
+requirement_ids = ["GE-REQ-03", "GE-REQ-04"]
 
-[[pair_block_placements]]
-pair_block_id = "H1-PB-05"
-phase = 1
-position = 4
-section_title = "Hopfield reconstruction"
-deferred = false
-
-[[pair_block_placements]]
-pair_block_id = "H1-PB-06"
-phase = 1
-position = 5
-section_title = "Hopfield reconstruction"
-deferred = false
-
-[[pair_block_placements]]
-pair_block_id = "M2-PB-01"
-phase = 2
-position = 0
-section_title = "MIL reconstruction"
-deferred = false
-
-[[pair_block_placements]]
-pair_block_id = "M2-PB-02"
-phase = 2
-position = 1
-section_title = "MIL reconstruction"
-deferred = false
-
-[[pair_block_placements]]
-pair_block_id = "M2-PB-03"
-phase = 2
-position = 2
-section_title = "MIL reconstruction"
-deferred = false
-
-[[pair_block_placements]]
-pair_block_id = "M2-PB-04"
-phase = 2
-position = 3
-section_title = "MIL reconstruction"
-deferred = false
-
-[[pair_block_placements]]
-pair_block_id = "GE-PB-01"
-phase = 3
-position = 0
-section_title = "Graph identities and baselines"
-deferred = false
-
-[[pair_block_placements]]
-pair_block_id = "GE-PB-02"
-phase = 4
-position = 0
-section_title = "Topology and V1 features"
-deferred = false
-
-[[pair_block_placements]]
-pair_block_id = "GE-PB-03"
-phase = 4
-position = 1
-section_title = "Topology and V1 features"
-deferred = false
-
-[[pair_block_placements]]
-pair_block_id = "GE-PB-04"
-phase = 5
-position = 0
-section_title = "V1 graph encoder"
-deferred = false
-
-[[pair_block_placements]]
-pair_block_id = "GE-PB-05"
-phase = 5
-position = 1
-section_title = "V1 graph encoder"
-deferred = false
-
-[[pair_block_placements]]
-pair_block_id = "GE-PB-06"
-phase = 5
-position = 2
-section_title = "V1 graph encoder"
-deferred = false
+[[phases]]
+number = 5
+title = "V1 graph encoder"
+requirement_ids = ["GE-REQ-05", "GE-REQ-06", "GE-REQ-07"]
 
 [[repository_bindings]]
 repository_id = "rico"

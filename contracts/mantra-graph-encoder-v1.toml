@@ -5,51 +5,44 @@ title = "MANTRA Graph Encoder V1"
 [[requirements]]
 id = "GE-REQ-01"
 claim = "The graph-encoder path must preserve the ordered identities and source releases for all 2,057 perturbation rows, all 5,000 resolved response-gene columns, train, tune, and hold memberships, response-target computation, and held-out-data exclusion."
-depends_on = ["M2-REQ-04"]
+depends_on = ["M2-REQ-06"]
 verifier_ids = ["GE-VR-01"]
-pair_block_ids = ["GE-PB-01"]
 
 [[requirements]]
 id = "GE-REQ-02"
 claim = "The corrected ridge and fusion-only baselines must reproduce on the same frozen evaluation surface used to assess the graph encoder, and VIPER must retain the identity records, manifests, producer commands, splits, baselines, and checks."
 depends_on = ["GE-REQ-01"]
 verifier_ids = ["GE-VR-02"]
-pair_block_ids = ["GE-PB-01"]
 
 [[requirements]]
 id = "GE-REQ-03"
 claim = "PPI, regulatory, and signaling graph candidates must retain edge provenance and report perturbation coverage, response coverage, response mass by message-passing depth, top-K differentially expressed gene recall, graph density, and per-perturbation failure modes."
 depends_on = ["GE-REQ-02"]
 verifier_ids = ["GE-VR-03"]
-pair_block_ids = ["GE-PB-02"]
 
 [[requirements]]
 id = "GE-REQ-04"
 claim = "Every graph node must receive a validated, modality-normalized AlphaGenome feature row; the feature pipeline must reject missing nodes, invalid rows, and collapsed fused embeddings and must reproduce the frozen fusion-only baseline."
 depends_on = ["GE-REQ-03"]
 verifier_ids = ["GE-VR-04"]
-pair_block_ids = ["GE-PB-03"]
 
 [[requirements]]
 id = "GE-REQ-05"
 claim = "The V1 encoder must build the binary PPI graph, apply one-hop mean aggregation, gather perturbation rows, replace the legacy student identity at every inference consumer, train under the unchanged downstream objective, and produce valid non-collapsed embeddings for all 2,057 perturbations without using hold responses in graph construction or node features."
 depends_on = ["GE-REQ-04"]
 verifier_ids = ["GE-VR-05"]
-pair_block_ids = ["GE-PB-04"]
 
 [[requirements]]
 id = "GE-REQ-06"
 claim = "The graph-construction study must union approved prior edges with provenance, rank unique neighbors by AlphaGenome cosine similarity, sweep top-K under fixed topology and evaluation gates, and select graph construction and message depth using tune data only."
 depends_on = ["GE-REQ-05"]
 verifier_ids = ["GE-VR-06"]
-pair_block_ids = ["GE-PB-05"]
 
 [[requirements]]
 id = "GE-REQ-07"
 claim = "The selected V1 graph encoder must beat fusion-only on at least one primary unseen-perturbation metric, remain competitive with or exceed the corrected ridge baseline, and reproduce the accepted result from retained VIPER records."
 depends_on = ["GE-REQ-06"]
 verifier_ids = ["GE-VR-07"]
-pair_block_ids = ["GE-PB-06"]
 
 [[verifiers]]
 id = "GE-VR-01"
@@ -103,7 +96,7 @@ rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/
 [[pair_blocks]]
 id = "GE-PB-01"
 requirement_ids = ["GE-REQ-01", "GE-REQ-02"]
-depends_on = ["M2-PB-04"]
+depends_on = ["M2-PB-06"]
 repository_id = "mantra"
 requirement_contribution = "Freeze graph-encoder row, column, split, and source identities and reproduce the corrected ridge and fusion-only baselines on that surface."
 completion_evidence = ["implementation_review", "viper_registration"]

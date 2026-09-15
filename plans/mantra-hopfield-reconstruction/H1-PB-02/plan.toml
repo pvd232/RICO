@@ -1,0 +1,104 @@
+schema_version = 1
+contract_id = "mantra-hopfield-reconstruction"
+package_sha256 = "b4cd6852de4b931e9fb6f83f045fc06f0b025063c8e5e5d6b032d3658447baa3"
+pair_block_id = "H1-PB-02"
+baseline_commit = "181e29768320a0d8f809428655972431e957d1c5"
+change_summary = [
+  "The Hopfield loader now reads perturbation labels beside fit and tune truth rows and compares them with the feature order before using the numeric rows.",
+  "The observing test reuses one complete fixture to prove matching labels succeed and either fit or tune disagreement fails.",
+]
+deviation_summary = "Everything went according to plan."
+
+[[actions]]
+operation = "patch"
+patch_path = "patches/truth-perturbation-order.patch"
+target_paths = [
+  "experiments/v1938_sota_clean_repro/src/step01/hopfield/loader.py",
+  "experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py",
+]
+
+[[handoff_targets]]
+label = "Complete H1-PB-02 diff"
+source = "plan"
+path = "patches/truth-perturbation-order.patch"
+line = 1
+
+[[handoff_targets]]
+label = "Truth-surface loading and row-order join"
+source = "repository"
+path = "experiments/v1938_sota_clean_repro/src/step01/hopfield/loader.py"
+line = 265
+
+[[handoff_targets]]
+label = "Existing projected-feature acceptance fixture"
+source = "repository"
+path = "experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py"
+line = 451
+
+[gate]
+source_roots = ["experiments/v1938_sota_clean_repro/src/step01/hopfield"]
+test_roots = ["experiments/v1938_sota_clean_repro/tests/step01"]
+
+[[gate.steps]]
+role = "typecheck"
+working_directory = "."
+argv = [
+  "pyright",
+  "experiments/v1938_sota_clean_repro/src/step01/hopfield/loader.py",
+  "experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py",
+]
+
+[[gate.steps]]
+role = "test"
+working_directory = "."
+argv = [
+  "python3",
+  "-m",
+  "pytest",
+  "-q",
+  "experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py",
+  "-k",
+  "truth_perturbation_order",
+]
+
+[[gate.steps]]
+role = "documentation"
+working_directory = "."
+argv = [
+  "python3",
+  "/Users/machina/.agents/skills/code-documentation/scripts/check-schema-descriptions.py",
+  "experiments/v1938_sota_clean_repro/src/step01/hopfield/loader.py",
+  "experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py",
+]
+
+[[gate.steps]]
+role = "lint"
+working_directory = "."
+argv = [
+  "ruff",
+  "check",
+  "experiments/v1938_sota_clean_repro/src/step01/hopfield/loader.py",
+  "experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py",
+]
+
+[[gate.steps]]
+role = "lint"
+working_directory = "."
+argv = [
+  "ruff",
+  "format",
+  "--check",
+  "--range=263-335",
+  "experiments/v1938_sota_clean_repro/src/step01/hopfield/loader.py",
+]
+
+[[gate.steps]]
+role = "lint"
+working_directory = "."
+argv = [
+  "ruff",
+  "format",
+  "--check",
+  "--range=457-690",
+  "experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py",
+]

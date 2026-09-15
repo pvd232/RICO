@@ -6,6 +6,11 @@ registered contracts own requirements and verification. This checklist owns
 their phase and execution order; the compiler derives current status from
 retained evidence.
 
+The [Phase 1-2 Matrix charter](../docs/briefings/2026-09-15-mantra-phase-1-2-matrix-charter.md)
+fixes the autonomous execution rules, stop conditions, and result required from
+each PairBlock. Phase 0 remains an immutable comparison source and never runs
+again.
+
 <!-- contract-protocol:generated:start -->
 **Resume here:** [Resume at H1-PB-02](../contracts/mantra-hopfield-reconstruction.md#h1-pb-02)
 

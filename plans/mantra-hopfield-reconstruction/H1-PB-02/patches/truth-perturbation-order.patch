@@ -1,0 +1,169 @@
+diff --git a/experiments/v1938_sota_clean_repro/src/step01/hopfield/loader.py b/experiments/v1938_sota_clean_repro/src/step01/hopfield/loader.py
+index 560505bab..bac7992c8 100644
+--- a/experiments/v1938_sota_clean_repro/src/step01/hopfield/loader.py
++++ b/experiments/v1938_sota_clean_repro/src/step01/hopfield/loader.py
+@@ -29,7 +29,7 @@ from sklearn.cluster import SpectralClustering
+ from ...runtime.config import Step01SplitFeatureFileConfig
+ from ...runtime.layout import repo_root
+ from .config import HopfieldConfig, Step01FeatureContract
+-from .contract import Split, SPLITS, split_feature_key
++from .contract import SPLITS, Split, split_feature_key
+ from .inputs import DescriptorInputs, TransportHopfieldInputs
+ from .transforms import (
+     FIT_TUNE_SPLITS,
+@@ -45,6 +45,7 @@ from .transforms import (
+     standardize_splitwise,
+ )
+ 
++
+ def _resolve_repo_path(value: str | Path) -> Path:
+     """Resolve one repository-relative or absolute file path."""
+     path = Path(value)
+@@ -262,14 +263,18 @@ def _build_selected8_mapper(graph: np.ndarray, *, random_state: int) -> np.ndarr
+     return mapper
+ 
+ 
+-def _read_truth_surface(path: Path) -> dict[str, np.ndarray]:
+-    """Read fit and tune truth rows from the declared truth-surface NPZ."""
++def _read_truth_surface(
++    path: Path,
++) -> tuple[dict[str, np.ndarray], dict[str, np.ndarray]]:
++    """Read fit and tune truth rows and their perturbation labels."""
+     truth: dict[str, np.ndarray] = {}
++    perts: dict[str, np.ndarray] = {}
+     with np.load(path, allow_pickle=True) as z:
+         for split in FIT_TUNE_SPLITS:
+             key = f"delta_all_{split}" if f"delta_all_{split}" in z.files else f"truth_{split}"
+             truth[split] = np.asarray(z[key], dtype=np.float32)
+-    return truth
++            perts[split] = np.asarray(z[f"perts_{split}"], dtype=object).astype(str)
++    return truth, perts
+ 
+ 
+ def _read_transport_hopfield_inputs(
+@@ -320,7 +325,10 @@ def _read_transport_hopfield_inputs(
+     for split in FIT_TUNE_SPLITS:
+         if not np.array_equal(perts[split], coeff_perts[split]):
+             raise ValueError(f"query and coefficient perturbation order mismatch for split={split}")
+-    truth = _read_truth_surface(truth_surface)
++    truth, truth_perts = _read_truth_surface(truth_surface)
++    for split in FIT_TUNE_SPLITS:
++        if not np.array_equal(perts[split], truth_perts[split]):
++            raise ValueError(f"query and truth perturbation order mismatch for split={split}")
+     with np.load(selected_semantic, allow_pickle=True) as z:
+         selected_mapper = np.asarray(z["semantic_default"], dtype=np.float32)
+     with np.load(selected_axis, allow_pickle=True) as z:
+diff --git a/experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py b/experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py
+index 1092be750..4f4d3c2cb 100644
+--- a/experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py
++++ b/experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py
+@@ -18,16 +18,22 @@ Example:
+ 
+ from __future__ import annotations
+ 
+-from dataclasses import replace
+ import json
++from dataclasses import replace
+ from pathlib import Path
++from typing import Any
+ 
+ import numpy as np
++import pytest
+ 
+-from experiments.v1938_sota_clean_repro.src.runtime.config import DescriptorBlockWeights, Step01SplitFeatureFileConfig, default_config
+-from experiments.v1938_sota_clean_repro.src.runtime.config import Step01DecompositionConfig
++from experiments.v1938_sota_clean_repro.src.runtime.config import (
++    DescriptorBlockWeights,
++    Step01DecompositionConfig,
++    Step01SplitFeatureFileConfig,
++    default_config,
++)
+ from experiments.v1938_sota_clean_repro.src.shared.normalization import standardize_split_dict
+-from experiments.v1938_sota_clean_repro.src.step01.hopfield.config import HopfieldConfig, Step01FeatureContract
++from experiments.v1938_sota_clean_repro.src.step01.hopfield.config import Step01FeatureContract
+ from experiments.v1938_sota_clean_repro.src.step01.hopfield.loader import (
+     load_mixed_src_snk_ripple_raw_pen1_step01_inputs,
+     read_step01_feature_spec_descriptors,
+@@ -451,8 +457,13 @@ def test_load_mixed_src_snk_ripple_raw_pen1_step01_inputs_appends_student_z_when
+     assert "student_z_feature" in arrays
+ 
+ 
+-def test_projected_feature_spec_matches_projected_feature_bundle(tmp_path: Path) -> None:
+-    """The projected `feature_spec` path should read core83, family64, and response40 split files."""
++def _load_projected_feature_bundle(
++    tmp_path: Path,
++    *,
++    truth_perts_fit: tuple[str, ...],
++    truth_perts_tune: tuple[str, ...],
++) -> dict[str, Any]:
++    """Build and load the smallest complete projected-feature fixture."""
+     input_root = tmp_path / "inputs"
+     (input_root / "core83").mkdir(parents=True)
+     (input_root / "family64").mkdir(parents=True)
+@@ -524,8 +535,8 @@ def test_projected_feature_spec_matches_projected_feature_bundle(tmp_path: Path)
+     )
+     np.savez_compressed(
+         truth_surface,
+-        perts_fit=np.asarray(["p1", "p2"], dtype=object),
+-        perts_tune=np.asarray(["p3"], dtype=object),
++        perts_fit=np.asarray(truth_perts_fit, dtype=object),
++        perts_tune=np.asarray(truth_perts_tune, dtype=object),
+         delta_all_fit=np.ones((2, 210), dtype=np.float32),
+         delta_all_tune=np.ones((1, 210), dtype=np.float32),
+     )
+@@ -607,17 +618,51 @@ def test_projected_feature_spec_matches_projected_feature_bundle(tmp_path: Path)
+         },
+     )
+ 
+-    modern_arrays = load_mixed_src_snk_ripple_raw_pen1_step01_inputs(
++    return load_mixed_src_snk_ripple_raw_pen1_step01_inputs(
+         input_root=input_root,
+         paths_spec=paths_spec,
+         feature_spec=feature_spec,
+     )
+ 
++
++def test_accepts_matching_truth_perturbation_order(tmp_path: Path) -> None:
++    """The projected loader should accept truth rows in feature-row order."""
++    modern_arrays = _load_projected_feature_bundle(
++        tmp_path,
++        truth_perts_fit=("p1", "p2"),
++        truth_perts_tune=("p3",),
++    )
++
+     assert modern_arrays["feature_mode"] == "core83_family_response40"
+     assert modern_arrays["feature_dim"] == 5
+     assert modern_arrays["feature"]["fit"].shape == (2, 5)
+     assert modern_arrays["feature"]["tune"].shape == (1, 5)
+     assert modern_arrays["feature"]["hold_proxy"].shape == (1, 5)
+-    assert np.array_equal(modern_arrays["perts"]["fit"], perts_fit.astype(str))
+-    assert np.array_equal(modern_arrays["perts"]["tune"], perts_tune.astype(str))
+-    assert np.array_equal(modern_arrays["perts"]["hold_proxy"], perts_hold.astype(str))
++    assert modern_arrays["perts"]["fit"].tolist() == ["p1", "p2"]
++    assert modern_arrays["perts"]["tune"].tolist() == ["p3"]
++    assert modern_arrays["perts"]["hold_proxy"].tolist() == ["p4"]
++
++
++@pytest.mark.parametrize(
++    ("truth_perts_fit", "truth_perts_tune", "split"),
++    [
++        (("p2", "p1"), ("p3",), "fit"),
++        (("p1", "p2"), ("other",), "tune"),
++    ],
++)
++def test_rejects_truth_perturbation_order_mismatch(
++    tmp_path: Path,
++    truth_perts_fit: tuple[str, ...],
++    truth_perts_tune: tuple[str, ...],
++    split: str,
++) -> None:
++    """The projected loader should reject reordered truth rows before use."""
++    with pytest.raises(
++        ValueError,
++        match=f"query and truth perturbation order mismatch for split={split}",
++    ):
++        _load_projected_feature_bundle(
++            tmp_path,
++            truth_perts_fit=truth_perts_fit,
++            truth_perts_tune=truth_perts_tune,
++        )
