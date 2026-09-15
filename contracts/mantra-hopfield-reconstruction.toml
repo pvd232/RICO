@@ -91,39 +91,45 @@ id = "H1-PB-01"
 requirement_ids = ["H1-REQ-01"]
 depends_on = []
 repository_id = "rico"
-objective = "Install the typed Phase 1 contract and checklist workspace and bind them to the trusted Phase 0 Hopfield result."
+requirement_contribution = "Install the typed Phase 1 contract and checklist workspace and bind them to the trusted Phase 0 Hopfield result."
+completion_evidence = ["implementation_review"]
 
 [[pair_blocks]]
 id = "H1-PB-02"
 requirement_ids = ["H1-REQ-02"]
 depends_on = ["H1-PB-01"]
 repository_id = "mantra"
-objective = "Implement the row, gene, fitting-population, shape, dtype, and normalization identity boundary."
+requirement_contribution = "Implement the row, gene, fitting-population, shape, dtype, and normalization identity boundary."
+completion_evidence = ["implementation_review"]
 
 [[pair_blocks]]
 id = "H1-PB-03"
 requirement_ids = ["H1-REQ-03"]
 depends_on = ["H1-PB-02"]
 repository_id = "mantra"
-objective = "Rebuild and compare the selected preprocessing artifacts in producer order."
+requirement_contribution = "Rebuild and compare the selected preprocessing artifacts in producer order."
+completion_evidence = ["implementation_review", "viper_registration"]
 
 [[pair_blocks]]
 id = "H1-PB-04"
 requirement_ids = ["H1-REQ-04"]
 depends_on = ["H1-PB-03"]
 repository_id = "mantra"
-objective = "Train and select the historical Hopfield encoder through an identity-bound VIPER run."
+requirement_contribution = "Train and select the historical Hopfield encoder through an identity-bound VIPER run."
+completion_evidence = ["implementation_review", "viper_registration"]
 
 [[pair_blocks]]
 id = "H1-PB-05"
 requirement_ids = ["H1-REQ-05"]
 depends_on = ["H1-PB-04"]
 repository_id = "mantra"
-objective = "Rebuild raw-gene retrieval and reference correction and prove exact final output parity."
+requirement_contribution = "Rebuild raw-gene retrieval and reference correction and prove exact final output parity."
+completion_evidence = ["implementation_review", "viper_registration"]
 
 [[pair_blocks]]
 id = "H1-PB-06"
 requirement_ids = ["H1-REQ-06"]
 depends_on = ["H1-PB-05"]
 repository_id = "rico"
-objective = "Register the complete Phase 1 provenance graph and close the reconstruction checklist."
+requirement_contribution = "Register the complete Phase 1 provenance graph and close the reconstruction checklist."
+completion_evidence = ["implementation_review", "viper_registration"]

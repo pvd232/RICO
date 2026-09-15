@@ -60,6 +60,10 @@ command = "pyright"
 path = "/Users/machina/miniconda3/bin/pyright"
 
 [[repository_bindings.executables]]
+command = "node"
+path = "/usr/local/bin/node"
+
+[[repository_bindings.executables]]
 command = "ruff"
 path = "/Users/machina/miniconda3/bin/ruff"
 
@@ -78,6 +82,10 @@ path = "/Users/machina/miniconda3/envs/mantra/bin/python3"
 [[repository_bindings.executables]]
 command = "pyright"
 path = "/Users/machina/miniconda3/envs/mantra/bin/pyright"
+
+[[repository_bindings.executables]]
+command = "node"
+path = "/usr/local/bin/node"
 
 [[repository_bindings.executables]]
 command = "ruff"

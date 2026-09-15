@@ -6,17 +6,20 @@ terminal provenance registration. Status is derived from the current contract,
 PairBlock plans, and verified receipts.
 
 <!-- contract-protocol:generated:start -->
+**Resume here:** [Resume at H1-PB-02](../contracts/mantra-hopfield-reconstruction.md#h1-pb-02)
+
+
 ### Phase 1: Phase 1 contract
 
 | PairBlock | Status | Contract | Dependencies | Receipt |
 |---|---|---|---|---|
-| <nobr><code>H1-PB-01</code></nobr> | review | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-pb-01) | None | [receipt](../evidence/mantra-hopfield-reconstruction/H1-PB-01/gate-review-06.json) |
+| <nobr><code>H1-PB-01</code></nobr> | bootstrap-complete | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-pb-01) | None | [receipt](../evidence/mantra-rebuild-phase-1/bootstrap.json) |
 
 ### Phase 2: Array identities
 
 | PairBlock | Status | Contract | Dependencies | Receipt |
 |---|---|---|---|---|
-| <nobr><code>H1-PB-02</code></nobr> | waiting | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-pb-02) | <nobr><code>H1-PB-01</code></nobr> | None |
+| <nobr><code>H1-PB-02</code></nobr> | drafting | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-pb-02) | <nobr><code>H1-PB-01</code></nobr> | None |
 
 ### Phase 3: Preprocessing reconstruction
 
