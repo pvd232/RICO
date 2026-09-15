@@ -1,0 +1,35 @@
+schema_version = 1
+contract_id = "mantra-hopfield-reconstruction"
+package_sha256 = "07b42936670fbe8790344c18296454c7b9d50fa480504067e6a18a2857a2f45b"
+pair_block_id = "H1-PB-05J"
+baseline_commit = "3f778cc4bcc10230c5ab43cbf518828b009c28d5"
+change_summary = [
+  "VIPER materialized hold truth twice from its exact versioned source and both builds matched the retained historical bytes.",
+  "The selected output and comparison receipt were published to GCS, restored independently, and verified by SHA-256.",
+  "A machine-readable decision record pins the accepted input identity and its owning PairBlock.",
+]
+deviation_summary = "Everything went according to plan."
+
+[[actions]]
+operation = "add"
+source_path = "add/hold-truth.json"
+target_path = "src/mantra/rebuild/records/hopfield_inputs/hold-truth.json"
+
+[[handoff_targets]]
+label = "Pinned hold truth decision"
+source = "plan"
+path = "add/hold-truth.json"
+line = 1
+
+[gate]
+source_roots = ["src/mantra/rebuild/records/hopfield_inputs/hold-truth.json"]
+test_roots = [
+  "src/mantra/rebuild/records/hopfield_inputs/hold-truth.json",
+  "src/mantra/rebuild/tests",
+]
+
+[[gate.steps]]
+role = "test"
+working_directory = "."
+argv = ["python3", "-m", "json.tool", "src/mantra/rebuild/records/hopfield_inputs/hold-truth.json"]
+

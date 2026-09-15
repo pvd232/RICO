@@ -1,0 +1,11 @@
+{
+  "gate_receipt_ref": {
+    "path": "evidence/mantra-rebuild/H1-PB-05H/gate-review-01.json",
+    "sha256": "39f1027e0c9dcba0f799483f46f37a33053f78d17c70379cffd7ed1d32d9889e"
+  },
+  "implementation_repository_commit": "5d0faf4cf49308195c8fdd91a0849f5ba9a02743",
+  "pair_block_id": "H1-PB-05H",
+  "reviewed_at": "2026-09-15T21:02:03.889095Z",
+  "reviewer": "Codex",
+  "schema_version": 1
+}

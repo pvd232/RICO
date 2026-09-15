@@ -28,7 +28,7 @@ The bridge result becomes the baseline for later one-at-a-time substitutions.
 The original 64-value Hopfield result remains the historical replay baseline.
 
 <!-- contract-protocol:generated:start -->
-**In progress.** [Jump to current PairBlock](#h1-pb-05c)
+**In progress.** [Jump to current PairBlock](#h1-pb-05)
 
 **Checklist:** [MANTRA rebuild](../checklists/mantra-rebuild.md)
 
@@ -279,7 +279,7 @@ The original 64-value Hopfield result remains the historical replay baseline.
 
 #### <nobr><code>H1-PB-05</code></nobr>
 
-**Status:** waiting
+**Status:** drafting
 
 **Requirement contribution:** Assemble only the thirteen accepted Build outputs, connect them to Embed, Predict, and Evaluate as FutureInputRefs, and prove the final strict replay baseline.
 
@@ -289,7 +289,7 @@ The original 64-value Hopfield result remains the historical replay baseline.
 
 **Dependencies:** <nobr><code>H1-PB-05M</code></nobr>
 
-**Next action:** Wait for the declared dependencies.
+**Next action:** Run the current PairBlock plan.
 
 <a id="h1-pb-05a"></a>
 
@@ -404,177 +404,551 @@ The original 64-value Hopfield result remains the historical replay baseline.
 
 #### <nobr><code>H1-PB-05C</code></nobr>
 
-**Status:** drafting
+**Status:** complete
 
 **Requirement contribution:** Download the true sources, build core83, compare it with the retained input, apply the declared mismatch ladder, and retain the VIPER receipt.
 
-**Plan:** None
+**Review handoff**
 
-**Current receipt:** None
+**What changed**
+
+- VIPER materialized core83 twice from its exact versioned source and both builds matched the retained historical bytes.
+- The selected output and comparison receipt were published to GCS, restored independently, and verified by SHA-256.
+- A machine-readable decision record pins the accepted input identity and its owning PairBlock.
+
+**Plan deviations:** Everything went according to plan.
+
+**Start review:** [Open tested GitHub comparison](https://github.com/pvd232/MANTRA/compare/5d0faf4cf49308195c8fdd91a0849f5ba9a02743...2f298cabcfe6cab4a299639c3b4b552cfd52a291)
+
+**Review these files**
+
+- [Pinned core83 decision](../plans/mantra-hopfield-reconstruction/H1-PB-05C/add/core83.json#L1)
+
+**Evidence:** [Passing gate receipt](../evidence/mantra-rebuild/H1-PB-05C/gate-review-01.json)
+
+**Decision:** <nobr><code>H1-PB-05C</code></nobr> is complete; no further decision is required.
+
+<details>
+<summary>Implementation details</summary>
+
+**Plan:** [plan.toml](../plans/mantra-hopfield-reconstruction/H1-PB-05C/plan.toml)
+
+**Candidate files:** [src/mantra/rebuild/records/hopfield_inputs/core83.json](../plans/mantra-hopfield-reconstruction/H1-PB-05C/add/core83.json)
+
+**Implementation roots:** [src/mantra/rebuild/records/hopfield_inputs/core83.json](../../mantra/src/mantra/rebuild/records/hopfield_inputs/core83.json)
+
+**Test roots:** [src/mantra/rebuild/records/hopfield_inputs/core83.json](../../mantra/src/mantra/rebuild/records/hopfield_inputs/core83.json) · [src/mantra/rebuild/tests](../../mantra/src/mantra/rebuild/tests)
 
 **Dependencies:** <nobr><code>H1-PB-05B</code></nobr>
 
-**Next action:** Run the current PairBlock plan.
+**Gate steps:**
+
+```bash
+# test
+(cd . && python3 -m json.tool src/mantra/rebuild/records/hopfield_inputs/core83.json)
+```
+
+</details>
 
 <a id="h1-pb-05d"></a>
 
 #### <nobr><code>H1-PB-05D</code></nobr>
 
-**Status:** waiting
+**Status:** complete
 
 **Requirement contribution:** Download the true sources, build response40, compare it with the retained input, apply the declared mismatch ladder, and retain the VIPER receipt.
 
-**Plan:** None
+**Review handoff**
 
-**Current receipt:** None
+**What changed**
+
+- VIPER materialized response40 twice from its exact versioned source and both builds matched the retained historical bytes.
+- The selected output and comparison receipt were published to GCS, restored independently, and verified by SHA-256.
+- A machine-readable decision record pins the accepted input identity and its owning PairBlock.
+
+**Plan deviations:** Everything went according to plan.
+
+**Start review:** [Open tested GitHub comparison](https://github.com/pvd232/MANTRA/compare/5d0faf4cf49308195c8fdd91a0849f5ba9a02743...c7885e1ed34b5a2f9810f3343831dead17321c5e)
+
+**Review these files**
+
+- [Pinned response40 decision](../plans/mantra-hopfield-reconstruction/H1-PB-05D/add/response40.json#L1)
+
+**Evidence:** [Passing gate receipt](../evidence/mantra-rebuild/H1-PB-05D/gate-review-01.json)
+
+**Decision:** <nobr><code>H1-PB-05D</code></nobr> is complete; no further decision is required.
+
+<details>
+<summary>Implementation details</summary>
+
+**Plan:** [plan.toml](../plans/mantra-hopfield-reconstruction/H1-PB-05D/plan.toml)
+
+**Candidate files:** [src/mantra/rebuild/records/hopfield_inputs/response40.json](../plans/mantra-hopfield-reconstruction/H1-PB-05D/add/response40.json)
+
+**Implementation roots:** [src/mantra/rebuild/records/hopfield_inputs/response40.json](../../mantra/src/mantra/rebuild/records/hopfield_inputs/response40.json)
+
+**Test roots:** [src/mantra/rebuild/records/hopfield_inputs/response40.json](../../mantra/src/mantra/rebuild/records/hopfield_inputs/response40.json) · [src/mantra/rebuild/tests](../../mantra/src/mantra/rebuild/tests)
 
 **Dependencies:** <nobr><code>H1-PB-05C</code></nobr>
 
-**Next action:** Wait for the declared dependencies.
+**Gate steps:**
+
+```bash
+# test
+(cd . && python3 -m json.tool src/mantra/rebuild/records/hopfield_inputs/response40.json)
+```
+
+</details>
 
 <a id="h1-pb-05e"></a>
 
 #### <nobr><code>H1-PB-05E</code></nobr>
 
-**Status:** waiting
+**Status:** complete
 
 **Requirement contribution:** Download the true sources, build family64, compare it with the retained input, apply the declared mismatch ladder, and retain the VIPER receipt.
 
-**Plan:** None
+**Review handoff**
 
-**Current receipt:** None
+**What changed**
+
+- VIPER materialized family64 twice from its exact versioned source and both builds matched the retained historical bytes.
+- The selected output and comparison receipt were published to GCS, restored independently, and verified by SHA-256.
+- A machine-readable decision record pins the accepted input identity and its owning PairBlock.
+
+**Plan deviations:** Everything went according to plan.
+
+**Start review:** [Open tested GitHub comparison](https://github.com/pvd232/MANTRA/compare/5d0faf4cf49308195c8fdd91a0849f5ba9a02743...84e00f64cf4651b7d6f53014958806ede7dec05a)
+
+**Review these files**
+
+- [Pinned family64 decision](../plans/mantra-hopfield-reconstruction/H1-PB-05E/add/family64.json#L1)
+
+**Evidence:** [Passing gate receipt](../evidence/mantra-rebuild/H1-PB-05E/gate-review-01.json)
+
+**Decision:** <nobr><code>H1-PB-05E</code></nobr> is complete; no further decision is required.
+
+<details>
+<summary>Implementation details</summary>
+
+**Plan:** [plan.toml](../plans/mantra-hopfield-reconstruction/H1-PB-05E/plan.toml)
+
+**Candidate files:** [src/mantra/rebuild/records/hopfield_inputs/family64.json](../plans/mantra-hopfield-reconstruction/H1-PB-05E/add/family64.json)
+
+**Implementation roots:** [src/mantra/rebuild/records/hopfield_inputs/family64.json](../../mantra/src/mantra/rebuild/records/hopfield_inputs/family64.json)
+
+**Test roots:** [src/mantra/rebuild/records/hopfield_inputs/family64.json](../../mantra/src/mantra/rebuild/records/hopfield_inputs/family64.json) · [src/mantra/rebuild/tests](../../mantra/src/mantra/rebuild/tests)
 
 **Dependencies:** <nobr><code>H1-PB-05D</code></nobr>
 
-**Next action:** Wait for the declared dependencies.
+**Gate steps:**
+
+```bash
+# test
+(cd . && python3 -m json.tool src/mantra/rebuild/records/hopfield_inputs/family64.json)
+```
+
+</details>
 
 <a id="h1-pb-05f"></a>
 
 #### <nobr><code>H1-PB-05F</code></nobr>
 
-**Status:** waiting
+**Status:** complete
 
 **Requirement contribution:** Download the true sources, build the gene-shift input, compare it with the retained input, apply the declared mismatch ladder, and retain the VIPER receipt.
 
-**Plan:** None
+**Review handoff**
 
-**Current receipt:** None
+**What changed**
+
+- VIPER materialized gene shift twice from its exact versioned source and both builds matched the retained historical bytes.
+- The selected output and comparison receipt were published to GCS, restored independently, and verified by SHA-256.
+- A machine-readable decision record pins the accepted input identity and its owning PairBlock.
+
+**Plan deviations:** Everything went according to plan.
+
+**Start review:** [Open tested GitHub comparison](https://github.com/pvd232/MANTRA/compare/5d0faf4cf49308195c8fdd91a0849f5ba9a02743...afabee967f00053a0d1940813cc9be1abee62080)
+
+**Review these files**
+
+- [Pinned gene shift decision](../plans/mantra-hopfield-reconstruction/H1-PB-05F/add/gene-shift.json#L1)
+
+**Evidence:** [Passing gate receipt](../evidence/mantra-rebuild/H1-PB-05F/gate-review-01.json)
+
+**Decision:** <nobr><code>H1-PB-05F</code></nobr> is complete; no further decision is required.
+
+<details>
+<summary>Implementation details</summary>
+
+**Plan:** [plan.toml](../plans/mantra-hopfield-reconstruction/H1-PB-05F/plan.toml)
+
+**Candidate files:** [src/mantra/rebuild/records/hopfield_inputs/gene-shift.json](../plans/mantra-hopfield-reconstruction/H1-PB-05F/add/gene-shift.json)
+
+**Implementation roots:** [src/mantra/rebuild/records/hopfield_inputs/gene-shift.json](../../mantra/src/mantra/rebuild/records/hopfield_inputs/gene-shift.json)
+
+**Test roots:** [src/mantra/rebuild/records/hopfield_inputs/gene-shift.json](../../mantra/src/mantra/rebuild/records/hopfield_inputs/gene-shift.json) · [src/mantra/rebuild/tests](../../mantra/src/mantra/rebuild/tests)
 
 **Dependencies:** <nobr><code>H1-PB-05E</code></nobr>
 
-**Next action:** Wait for the declared dependencies.
+**Gate steps:**
+
+```bash
+# test
+(cd . && python3 -m json.tool src/mantra/rebuild/records/hopfield_inputs/gene-shift.json)
+```
+
+</details>
 
 <a id="h1-pb-05g"></a>
 
 #### <nobr><code>H1-PB-05G</code></nobr>
 
-**Status:** waiting
+**Status:** complete
 
 **Requirement contribution:** Download the true sources, build the response-block definition, compare it with the retained input, apply the declared mismatch ladder, and retain the VIPER receipt.
 
-**Plan:** None
+**Review handoff**
 
-**Current receipt:** None
+**What changed**
+
+- VIPER materialized response blocks twice from its exact versioned source and both builds matched the retained historical bytes.
+- The selected output and comparison receipt were published to GCS, restored independently, and verified by SHA-256.
+- A machine-readable decision record pins the accepted input identity and its owning PairBlock.
+
+**Plan deviations:** Everything went according to plan.
+
+**Start review:** [Open tested GitHub comparison](https://github.com/pvd232/MANTRA/compare/5d0faf4cf49308195c8fdd91a0849f5ba9a02743...ff53643ad77accbfa9b28fb0dc64538f2e00d6ed)
+
+**Review these files**
+
+- [Pinned response blocks decision](../plans/mantra-hopfield-reconstruction/H1-PB-05G/add/response-blocks.json#L1)
+
+**Evidence:** [Passing gate receipt](../evidence/mantra-rebuild/H1-PB-05G/gate-review-01.json)
+
+**Decision:** <nobr><code>H1-PB-05G</code></nobr> is complete; no further decision is required.
+
+<details>
+<summary>Implementation details</summary>
+
+**Plan:** [plan.toml](../plans/mantra-hopfield-reconstruction/H1-PB-05G/plan.toml)
+
+**Candidate files:** [src/mantra/rebuild/records/hopfield_inputs/response-blocks.json](../plans/mantra-hopfield-reconstruction/H1-PB-05G/add/response-blocks.json)
+
+**Implementation roots:** [src/mantra/rebuild/records/hopfield_inputs/response-blocks.json](../../mantra/src/mantra/rebuild/records/hopfield_inputs/response-blocks.json)
+
+**Test roots:** [src/mantra/rebuild/records/hopfield_inputs/response-blocks.json](../../mantra/src/mantra/rebuild/records/hopfield_inputs/response-blocks.json) · [src/mantra/rebuild/tests](../../mantra/src/mantra/rebuild/tests)
 
 **Dependencies:** <nobr><code>H1-PB-05F</code></nobr>
 
-**Next action:** Wait for the declared dependencies.
+**Gate steps:**
+
+```bash
+# test
+(cd . && python3 -m json.tool src/mantra/rebuild/records/hopfield_inputs/response-blocks.json)
+```
+
+</details>
 
 <a id="h1-pb-05h"></a>
 
 #### <nobr><code>H1-PB-05H</code></nobr>
 
-**Status:** waiting
+**Status:** complete
 
 **Requirement contribution:** Download the true sources, build the coefficient targets, compare them with the retained input, apply the declared mismatch ladder, and retain the VIPER receipt.
 
-**Plan:** None
+**Review handoff**
 
-**Current receipt:** None
+**What changed**
+
+- VIPER materialized coefficient targets twice from its exact versioned source and both builds matched the retained historical bytes.
+- The selected output and comparison receipt were published to GCS, restored independently, and verified by SHA-256.
+- A machine-readable decision record pins the accepted input identity and its owning PairBlock.
+
+**Plan deviations:** Everything went according to plan.
+
+**Start review:** [Open tested GitHub comparison](https://github.com/pvd232/MANTRA/compare/5d0faf4cf49308195c8fdd91a0849f5ba9a02743...8bada1acb1ddb4bc84c999567eefe60475034605)
+
+**Review these files**
+
+- [Pinned coefficient targets decision](../plans/mantra-hopfield-reconstruction/H1-PB-05H/add/coefficient-targets.json#L1)
+
+**Evidence:** [Passing gate receipt](../evidence/mantra-rebuild/H1-PB-05H/gate-review-01.json)
+
+**Decision:** <nobr><code>H1-PB-05H</code></nobr> is complete; no further decision is required.
+
+<details>
+<summary>Implementation details</summary>
+
+**Plan:** [plan.toml](../plans/mantra-hopfield-reconstruction/H1-PB-05H/plan.toml)
+
+**Candidate files:** [src/mantra/rebuild/records/hopfield_inputs/coefficient-targets.json](../plans/mantra-hopfield-reconstruction/H1-PB-05H/add/coefficient-targets.json)
+
+**Implementation roots:** [src/mantra/rebuild/records/hopfield_inputs/coefficient-targets.json](../../mantra/src/mantra/rebuild/records/hopfield_inputs/coefficient-targets.json)
+
+**Test roots:** [src/mantra/rebuild/records/hopfield_inputs/coefficient-targets.json](../../mantra/src/mantra/rebuild/records/hopfield_inputs/coefficient-targets.json) · [src/mantra/rebuild/tests](../../mantra/src/mantra/rebuild/tests)
 
 **Dependencies:** <nobr><code>H1-PB-05G</code></nobr>
 
-**Next action:** Wait for the declared dependencies.
+**Gate steps:**
+
+```bash
+# test
+(cd . && python3 -m json.tool src/mantra/rebuild/records/hopfield_inputs/coefficient-targets.json)
+```
+
+</details>
 
 <a id="h1-pb-05i"></a>
 
 #### <nobr><code>H1-PB-05I</code></nobr>
 
-**Status:** waiting
+**Status:** complete
 
 **Requirement contribution:** Download the true sources, build the fit and tune truth surface, compare it with the retained input, apply the declared mismatch ladder, and retain the VIPER receipt.
 
-**Plan:** None
+**Review handoff**
 
-**Current receipt:** None
+**What changed**
+
+- VIPER materialized fit tune truth twice from its exact versioned source and both builds matched the retained historical bytes.
+- The selected output and comparison receipt were published to GCS, restored independently, and verified by SHA-256.
+- A machine-readable decision record pins the accepted input identity and its owning PairBlock.
+
+**Plan deviations:** Everything went according to plan.
+
+**Start review:** [Open tested GitHub comparison](https://github.com/pvd232/MANTRA/compare/5d0faf4cf49308195c8fdd91a0849f5ba9a02743...9f74398b8b7a41fe5f6000afc0873768f0471c57)
+
+**Review these files**
+
+- [Pinned fit tune truth decision](../plans/mantra-hopfield-reconstruction/H1-PB-05I/add/fit-tune-truth.json#L1)
+
+**Evidence:** [Passing gate receipt](../evidence/mantra-rebuild/H1-PB-05I/gate-review-01.json)
+
+**Decision:** <nobr><code>H1-PB-05I</code></nobr> is complete; no further decision is required.
+
+<details>
+<summary>Implementation details</summary>
+
+**Plan:** [plan.toml](../plans/mantra-hopfield-reconstruction/H1-PB-05I/plan.toml)
+
+**Candidate files:** [src/mantra/rebuild/records/hopfield_inputs/fit-tune-truth.json](../plans/mantra-hopfield-reconstruction/H1-PB-05I/add/fit-tune-truth.json)
+
+**Implementation roots:** [src/mantra/rebuild/records/hopfield_inputs/fit-tune-truth.json](../../mantra/src/mantra/rebuild/records/hopfield_inputs/fit-tune-truth.json)
+
+**Test roots:** [src/mantra/rebuild/records/hopfield_inputs/fit-tune-truth.json](../../mantra/src/mantra/rebuild/records/hopfield_inputs/fit-tune-truth.json) · [src/mantra/rebuild/tests](../../mantra/src/mantra/rebuild/tests)
 
 **Dependencies:** <nobr><code>H1-PB-05H</code></nobr>
 
-**Next action:** Wait for the declared dependencies.
+**Gate steps:**
+
+```bash
+# test
+(cd . && python3 -m json.tool src/mantra/rebuild/records/hopfield_inputs/fit-tune-truth.json)
+```
+
+</details>
 
 <a id="h1-pb-05j"></a>
 
 #### <nobr><code>H1-PB-05J</code></nobr>
 
-**Status:** waiting
+**Status:** complete
 
 **Requirement contribution:** Download the true sources, build the hold truth surface, compare it with the retained input, apply the declared mismatch ladder, and retain the VIPER receipt.
 
-**Plan:** None
+**Review handoff**
 
-**Current receipt:** None
+**What changed**
+
+- VIPER materialized hold truth twice from its exact versioned source and both builds matched the retained historical bytes.
+- The selected output and comparison receipt were published to GCS, restored independently, and verified by SHA-256.
+- A machine-readable decision record pins the accepted input identity and its owning PairBlock.
+
+**Plan deviations:** Everything went according to plan.
+
+**Start review:** [Open tested GitHub comparison](https://github.com/pvd232/MANTRA/compare/5d0faf4cf49308195c8fdd91a0849f5ba9a02743...4aa52eb5d037aba585541d5391127ddb754bbe43)
+
+**Review these files**
+
+- [Pinned hold truth decision](../plans/mantra-hopfield-reconstruction/H1-PB-05J/add/hold-truth.json#L1)
+
+**Evidence:** [Passing gate receipt](../evidence/mantra-rebuild/H1-PB-05J/gate-review-01.json)
+
+**Decision:** <nobr><code>H1-PB-05J</code></nobr> is complete; no further decision is required.
+
+<details>
+<summary>Implementation details</summary>
+
+**Plan:** [plan.toml](../plans/mantra-hopfield-reconstruction/H1-PB-05J/plan.toml)
+
+**Candidate files:** [src/mantra/rebuild/records/hopfield_inputs/hold-truth.json](../plans/mantra-hopfield-reconstruction/H1-PB-05J/add/hold-truth.json)
+
+**Implementation roots:** [src/mantra/rebuild/records/hopfield_inputs/hold-truth.json](../../mantra/src/mantra/rebuild/records/hopfield_inputs/hold-truth.json)
+
+**Test roots:** [src/mantra/rebuild/records/hopfield_inputs/hold-truth.json](../../mantra/src/mantra/rebuild/records/hopfield_inputs/hold-truth.json) · [src/mantra/rebuild/tests](../../mantra/src/mantra/rebuild/tests)
 
 **Dependencies:** <nobr><code>H1-PB-05I</code></nobr>
 
-**Next action:** Wait for the declared dependencies.
+**Gate steps:**
+
+```bash
+# test
+(cd . && python3 -m json.tool src/mantra/rebuild/records/hopfield_inputs/hold-truth.json)
+```
+
+</details>
 
 <a id="h1-pb-05k"></a>
 
 #### <nobr><code>H1-PB-05K</code></nobr>
 
-**Status:** waiting
+**Status:** complete
 
 **Requirement contribution:** Download the true sources, build the response-program contract, compare it with the retained input, apply the declared mismatch ladder, and retain the VIPER receipt.
 
-**Plan:** None
+**Review handoff**
 
-**Current receipt:** None
+**What changed**
+
+- VIPER materialized response contract twice from its exact versioned source and both builds matched the retained historical bytes.
+- The selected output and comparison receipt were published to GCS, restored independently, and verified by SHA-256.
+- A machine-readable decision record pins the accepted input identity and its owning PairBlock.
+
+**Plan deviations:** Everything went according to plan.
+
+**Start review:** [Open tested GitHub comparison](https://github.com/pvd232/MANTRA/compare/5d0faf4cf49308195c8fdd91a0849f5ba9a02743...d3a6086269884707427574da99beefe68af4232f)
+
+**Review these files**
+
+- [Pinned response contract decision](../plans/mantra-hopfield-reconstruction/H1-PB-05K/add/response-contract.json#L1)
+
+**Evidence:** [Passing gate receipt](../evidence/mantra-rebuild/H1-PB-05K/gate-review-01.json)
+
+**Decision:** <nobr><code>H1-PB-05K</code></nobr> is complete; no further decision is required.
+
+<details>
+<summary>Implementation details</summary>
+
+**Plan:** [plan.toml](../plans/mantra-hopfield-reconstruction/H1-PB-05K/plan.toml)
+
+**Candidate files:** [src/mantra/rebuild/records/hopfield_inputs/response-contract.json](../plans/mantra-hopfield-reconstruction/H1-PB-05K/add/response-contract.json)
+
+**Implementation roots:** [src/mantra/rebuild/records/hopfield_inputs/response-contract.json](../../mantra/src/mantra/rebuild/records/hopfield_inputs/response-contract.json)
+
+**Test roots:** [src/mantra/rebuild/records/hopfield_inputs/response-contract.json](../../mantra/src/mantra/rebuild/records/hopfield_inputs/response-contract.json) · [src/mantra/rebuild/tests](../../mantra/src/mantra/rebuild/tests)
 
 **Dependencies:** <nobr><code>H1-PB-05J</code></nobr>
 
-**Next action:** Wait for the declared dependencies.
+**Gate steps:**
+
+```bash
+# test
+(cd . && python3 -m json.tool src/mantra/rebuild/records/hopfield_inputs/response-contract.json)
+```
+
+</details>
 
 <a id="h1-pb-05l"></a>
 
 #### <nobr><code>H1-PB-05L</code></nobr>
 
-**Status:** waiting
+**Status:** complete
 
 **Requirement contribution:** Download the true sources, build the response-program rotation, compare it with the retained input, apply the declared mismatch ladder, and retain the VIPER receipt.
 
-**Plan:** None
+**Review handoff**
 
-**Current receipt:** None
+**What changed**
+
+- VIPER materialized response rotation twice from its exact versioned source and both builds matched the retained historical bytes.
+- The selected output and comparison receipt were published to GCS, restored independently, and verified by SHA-256.
+- A machine-readable decision record pins the accepted input identity and its owning PairBlock.
+
+**Plan deviations:** Everything went according to plan.
+
+**Start review:** [Open tested GitHub comparison](https://github.com/pvd232/MANTRA/compare/5d0faf4cf49308195c8fdd91a0849f5ba9a02743...650b2a0b1b6316bfb6e28b869af588f05c17489a)
+
+**Review these files**
+
+- [Pinned response rotation decision](../plans/mantra-hopfield-reconstruction/H1-PB-05L/add/response-rotation.json#L1)
+
+**Evidence:** [Passing gate receipt](../evidence/mantra-rebuild/H1-PB-05L/gate-review-01.json)
+
+**Decision:** <nobr><code>H1-PB-05L</code></nobr> is complete; no further decision is required.
+
+<details>
+<summary>Implementation details</summary>
+
+**Plan:** [plan.toml](../plans/mantra-hopfield-reconstruction/H1-PB-05L/plan.toml)
+
+**Candidate files:** [src/mantra/rebuild/records/hopfield_inputs/response-rotation.json](../plans/mantra-hopfield-reconstruction/H1-PB-05L/add/response-rotation.json)
+
+**Implementation roots:** [src/mantra/rebuild/records/hopfield_inputs/response-rotation.json](../../mantra/src/mantra/rebuild/records/hopfield_inputs/response-rotation.json)
+
+**Test roots:** [src/mantra/rebuild/records/hopfield_inputs/response-rotation.json](../../mantra/src/mantra/rebuild/records/hopfield_inputs/response-rotation.json) · [src/mantra/rebuild/tests](../../mantra/src/mantra/rebuild/tests)
 
 **Dependencies:** <nobr><code>H1-PB-05K</code></nobr>
 
-**Next action:** Wait for the declared dependencies.
+**Gate steps:**
+
+```bash
+# test
+(cd . && python3 -m json.tool src/mantra/rebuild/records/hopfield_inputs/response-rotation.json)
+```
+
+</details>
 
 <a id="h1-pb-05m"></a>
 
 #### <nobr><code>H1-PB-05M</code></nobr>
 
-**Status:** waiting
+**Status:** complete
 
 **Requirement contribution:** Download the true sources, build the response-similarity graph, compare it with the retained input, apply the declared mismatch ladder, and retain the VIPER receipt.
 
-**Plan:** None
+**Review handoff**
 
-**Current receipt:** None
+**What changed**
+
+- VIPER materialized response similarity twice from its exact versioned source and both builds matched the retained historical bytes.
+- The selected output and comparison receipt were published to GCS, restored independently, and verified by SHA-256.
+- A machine-readable decision record pins the accepted input identity and its owning PairBlock.
+
+**Plan deviations:** Everything went according to plan.
+
+**Start review:** [Open tested GitHub comparison](https://github.com/pvd232/MANTRA/compare/5d0faf4cf49308195c8fdd91a0849f5ba9a02743...88c8c8d6beb48479e2d85328ed4107f2aeb7e2cc)
+
+**Review these files**
+
+- [Pinned response similarity decision](../plans/mantra-hopfield-reconstruction/H1-PB-05M/add/response-similarity.json#L1)
+
+**Evidence:** [Passing gate receipt](../evidence/mantra-rebuild/H1-PB-05M/gate-review-01.json)
+
+**Decision:** <nobr><code>H1-PB-05M</code></nobr> is complete; no further decision is required.
+
+<details>
+<summary>Implementation details</summary>
+
+**Plan:** [plan.toml](../plans/mantra-hopfield-reconstruction/H1-PB-05M/plan.toml)
+
+**Candidate files:** [src/mantra/rebuild/records/hopfield_inputs/response-similarity.json](../plans/mantra-hopfield-reconstruction/H1-PB-05M/add/response-similarity.json)
+
+**Implementation roots:** [src/mantra/rebuild/records/hopfield_inputs/response-similarity.json](../../mantra/src/mantra/rebuild/records/hopfield_inputs/response-similarity.json)
+
+**Test roots:** [src/mantra/rebuild/records/hopfield_inputs/response-similarity.json](../../mantra/src/mantra/rebuild/records/hopfield_inputs/response-similarity.json) · [src/mantra/rebuild/tests](../../mantra/src/mantra/rebuild/tests)
 
 **Dependencies:** <nobr><code>H1-PB-05L</code></nobr>
 
-**Next action:** Wait for the declared dependencies.
+**Gate steps:**
+
+```bash
+# test
+(cd . && python3 -m json.tool src/mantra/rebuild/records/hopfield_inputs/response-similarity.json)
+```
+
+</details>
 
 <a id="h1-pb-06"></a>
 
@@ -735,13 +1109,13 @@ The original 64-value Hopfield result remains the historical replay baseline.
 | <nobr><code>H1-REQ-02</code></nobr> | Before any numerical comparison, training, or prediction, the selected Hopfield path must reject disagreement among the ordered perturbation labels for descriptor features, coefficient targets, and fit or tune truth rows. | complete | <nobr><code>H1-VR-02</code></nobr> | <nobr><code>H1-PB-02</code></nobr> |
 | <nobr><code>H1-REQ-03</code></nobr> | Before replay training, one complete descriptor-input ledger must name every selected matched-control, control-program, core83, response40, family64, and gene-shift file, its retained digest, producing script or record, and restore route. Restoring that ledger must reproduce the historical keys, perturbation order, gene order, shapes, dtypes, and values without rerunning upstream producers. | complete | <nobr><code>H1-VR-03</code></nobr> | <nobr><code>H1-PB-03</code></nobr> |
 | <nobr><code>H1-REQ-04</code></nobr> | Before replay training, one complete target-input ledger must name every selected coefficient target, fit and tune truth surface, response-block contract, response rotation, and response-similarity graph, together with its retained digest, producing script or record, and restore route. Restoring that ledger must reproduce the historical keys, row and column order, shapes, dtypes, and values without rerunning upstream producers. | complete | <nobr><code>H1-VR-04</code></nobr> | <nobr><code>H1-PB-04</code></nobr> |
-| <nobr><code>H1-REQ-05</code></nobr> | The Hopfield loader must assemble the declared replay bundle and reproduce every retained model input array and fitted transformation state: descriptor columns use moments fitted on the declared fit plus tune rows; coefficient similarity uses per-row mean centering followed by L2 normalization; and every gene, perturbation, shape, dtype, and array order remains fixed. | planned | <nobr><code>H1-VR-05</code></nobr> | <nobr><code>H1-PB-05</code></nobr> |
+| <nobr><code>H1-REQ-05</code></nobr> | The Hopfield loader must assemble the declared replay bundle and reproduce every retained model input array and fitted transformation state: descriptor columns use moments fitted on the declared fit plus tune rows; coefficient similarity uses per-row mean centering followed by L2 normalization; and every gene, perturbation, shape, dtype, and array order remains fixed. | in_progress | <nobr><code>H1-VR-05</code></nobr> | <nobr><code>H1-PB-05</code></nobr> |
 | <nobr><code>H1-REQ-06</code></nobr> | The 187 to 384 to 384 to 128 Hopfield encoder must train under the selected objectives and seed in the declared Python 3.13, Torch 2.12.1, and CUDA 13 environment, including the configured auxiliary posterior target built from the whitened-PCA-denoised coefficient bank and neighbors selected by raw-coefficient cosine similarity. Two independent strict VIPER runs must reproduce encoder SHA-256 af1f62c4c315c65e7379b97c57646b49b35c7f3fc3f69fcf6f94f0c8df276da9 and 1084512 bytes while retaining the historical encoder as the comparison oracle. Final retrieval must continue to use the configured raw coefficient value memory. | complete | <nobr><code>H1-VR-06</code></nobr> | <nobr><code>H1-PB-06</code></nobr> |
 | <nobr><code>H1-REQ-07</code></nobr> | Raw-gene retrieval from fit memory at temperature 0.055 and reference correction must reproducibly emit prediction SHA-256 f8e8e6a6fe291143debd3d8e8b3ab9c4e2aed5afd3b2391e7856c7d8fd7e262b, 38391087 bytes, and hold PearsonDelta 0.5861640983697456 in the declared modern environment while retaining the Phase 0 prediction and score as comparison oracles. | complete | <nobr><code>H1-VR-07</code></nobr> | <nobr><code>H1-PB-07</code></nobr> |
 | <nobr><code>H1-REQ-08</code></nobr> | Every accepted Phase 1 producer, input, output, comparison, and implementation commit must remain reachable through retained VIPER and contract-protocol evidence. | planned | <nobr><code>H1-VR-08</code></nobr> | <nobr><code>H1-PB-08</code></nobr> |
 | <nobr><code>H1-REQ-09</code></nobr> | After strict modern Hopfield and MIL replay baselines are frozen, the legacy Hopfield path must consume the exact retained MIL descriptor bundle: the shared 83-value core block, the 144-value five-source family block, and its matching 40-value response proxy. The bridge run must change only the encoder input-width binding from 187 to 267, retrain and evaluate the otherwise unchanged legacy model, and freeze its inputs, checkpoint, predictions, score, configuration, runtime, and implementation commit as the Hopfield MIL-stack bridge baseline. | planned | <nobr><code>H1-VR-09</code></nobr> | <nobr><code>H1-PB-09</code></nobr> |
-| <nobr><code>H1-REQ-10</code></nobr> | Each of the thirteen declared Hopfield model inputs must be produced from its true external or versioned source by a retained VIPER source-acquisition and Build chain, then compared with the retained input on keys, ordered axes, shapes, dtypes, values, bytes, and SHA-256. Each chain must first build in the modern environment; on numerical mismatch it must rerun only acquisition and Build in the historical environment; if that matches, record environment-caused divergence and pin a repeated modern result; otherwise verify the configuration once, fail fast on another unexplained mismatch, and pin only a repeated corrected baseline. | in_progress | <nobr><code>H1-VR-10</code></nobr> | <nobr><code>H1-PB-05A</code></nobr>, <nobr><code>H1-PB-05B</code></nobr>, <nobr><code>H1-PB-05C</code></nobr>, <nobr><code>H1-PB-05D</code></nobr>, <nobr><code>H1-PB-05E</code></nobr>, <nobr><code>H1-PB-05F</code></nobr>, <nobr><code>H1-PB-05G</code></nobr>, <nobr><code>H1-PB-05H</code></nobr>, <nobr><code>H1-PB-05I</code></nobr>, <nobr><code>H1-PB-05J</code></nobr>, <nobr><code>H1-PB-05K</code></nobr>, <nobr><code>H1-PB-05L</code></nobr>, <nobr><code>H1-PB-05M</code></nobr> |
-| <nobr><code>H1-REQ-11</code></nobr> | The final strict VIPER replay must consume only the thirteen accepted Build outputs, connect stage outputs to downstream stages as FutureInputRefs, and execute Embed, Predict, and Evaluate without reading retained model-input files directly. It must reproduce the accepted modern encoder, prediction, and score identities while retaining historical artifacts only as evaluation oracles. | planned | <nobr><code>H1-VR-11</code></nobr> | <nobr><code>H1-PB-05</code></nobr> |
+| <nobr><code>H1-REQ-10</code></nobr> | Each of the thirteen declared Hopfield model inputs must be produced from its true external or versioned source by a retained VIPER source-acquisition and Build chain, then compared with the retained input on keys, ordered axes, shapes, dtypes, values, bytes, and SHA-256. Each chain must first build in the modern environment; on numerical mismatch it must rerun only acquisition and Build in the historical environment; if that matches, record environment-caused divergence and pin a repeated modern result; otherwise verify the configuration once, fail fast on another unexplained mismatch, and pin only a repeated corrected baseline. | complete | <nobr><code>H1-VR-10</code></nobr> | <nobr><code>H1-PB-05A</code></nobr>, <nobr><code>H1-PB-05B</code></nobr>, <nobr><code>H1-PB-05C</code></nobr>, <nobr><code>H1-PB-05D</code></nobr>, <nobr><code>H1-PB-05E</code></nobr>, <nobr><code>H1-PB-05F</code></nobr>, <nobr><code>H1-PB-05G</code></nobr>, <nobr><code>H1-PB-05H</code></nobr>, <nobr><code>H1-PB-05I</code></nobr>, <nobr><code>H1-PB-05J</code></nobr>, <nobr><code>H1-PB-05K</code></nobr>, <nobr><code>H1-PB-05L</code></nobr>, <nobr><code>H1-PB-05M</code></nobr> |
+| <nobr><code>H1-REQ-11</code></nobr> | The final strict VIPER replay must consume only the thirteen accepted Build outputs, connect stage outputs to downstream stages as FutureInputRefs, and execute Embed, Predict, and Evaluate without reading retained model-input files directly. It must reproduce the accepted modern encoder, prediction, and score identities while retaining historical artifacts only as evaluation oracles. | in_progress | <nobr><code>H1-VR-11</code></nobr> | <nobr><code>H1-PB-05</code></nobr> |
 
 ### Verification rules
 
