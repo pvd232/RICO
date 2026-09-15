@@ -11,10 +11,10 @@ pair_block_ids = ["H1-PB-01"]
 
 [[requirements]]
 id = "H1-REQ-02"
-claim = "Every reconstructed array must retain its row identities, gene axis, fitting population, shape, dtype, and normalization population."
+claim = "Before training or prediction, the selected Hopfield path must reject disagreement among the ordered perturbation labels for descriptor features, coefficient targets, and fit or tune truth rows; reconstructed preprocessing outputs must retain the selected gene order, shapes, dtypes, and fit plus tune normalization population."
 depends_on = ["H1-REQ-01"]
-verifier_ids = ["H1-VR-02"]
-pair_block_ids = ["H1-PB-02"]
+verifier_ids = ["H1-VR-02", "H1-VR-03"]
+pair_block_ids = ["H1-PB-02", "H1-PB-03"]
 
 [[requirements]]
 id = "H1-REQ-03"
@@ -54,14 +54,14 @@ rejection_cases = [{ repository_id = "rico", path = "tests/phase1/test_hopfield_
 [[verifiers]]
 id = "H1-VR-02"
 requirement_ids = ["H1-REQ-02"]
-acceptance_conditions = ["A changed row order, gene order, fitting population, shape, dtype, or normalization population fails before numerical comparison."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_reconstruction_identity.py", symbol = "test_accepts_exact_reconstruction_identities" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_reconstruction_identity.py", symbol = "test_rejects_changed_reconstruction_identity" }]
+acceptance_conditions = ["The existing Hopfield loader accepts matching feature, coefficient-target, and truth perturbation order and rejects a truth surface whose fit or tune labels are reordered."]
+success_case = { repository_id = "mantra", path = "experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py", symbol = "test_projected_feature_spec_matches_projected_feature_bundle" }
+rejection_cases = [{ repository_id = "mantra", path = "experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py", symbol = "test_rejects_truth_perturbation_order_mismatch" }]
 
 [[verifiers]]
 id = "H1-VR-03"
-requirement_ids = ["H1-REQ-03"]
-acceptance_conditions = ["Each preprocessing producer records its ordered inputs and emits an identity-bearing artifact whose arrays meet the approved comparison rule."]
+requirement_ids = ["H1-REQ-02", "H1-REQ-03"]
+acceptance_conditions = ["Each rebuilt preprocessing artifact matches its historical perturbation rows, gene columns, shape, dtype, fit plus tune normalization population, and named numerical tolerance."]
 success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_preprocessing.py", symbol = "test_rebuilds_selected_preprocessing_chain" }
 rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_preprocessing.py", symbol = "test_rejects_changed_preprocessing_array" }]
 
@@ -99,15 +99,15 @@ id = "H1-PB-02"
 requirement_ids = ["H1-REQ-02"]
 depends_on = ["H1-PB-01"]
 repository_id = "mantra"
-requirement_contribution = "Implement the row, gene, fitting-population, shape, dtype, and normalization identity boundary."
+requirement_contribution = "Make the existing Hopfield loader reject disagreement among feature, coefficient-target, and truth perturbation order before training or prediction."
 completion_evidence = ["implementation_review"]
 
 [[pair_blocks]]
 id = "H1-PB-03"
-requirement_ids = ["H1-REQ-03"]
+requirement_ids = ["H1-REQ-02", "H1-REQ-03"]
 depends_on = ["H1-PB-02"]
 repository_id = "mantra"
-requirement_contribution = "Rebuild and compare the selected preprocessing artifacts in producer order."
+requirement_contribution = "Rebuild the selected preprocessing artifacts in producer order and compare their perturbation rows, gene columns, shapes, dtypes, normalization population, and numerical values with the historical artifacts."
 completion_evidence = ["implementation_review", "viper_registration"]
 
 [[pair_blocks]]
