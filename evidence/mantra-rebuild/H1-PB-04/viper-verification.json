@@ -1,0 +1,8 @@
+{
+  "lineage_sha256": "9e09d16b7473bba6899c25335a84346bb4618d6a5abe172c1a086ab2490b0e58",
+  "run_id": "h1-pb-04-test-impact-17f3a09bd105",
+  "schema_version": 1,
+  "source_commit": "17f3a09bd1055c432e61ee03c196bb4819845195",
+  "source_repository": "https://github.com/pvd232/MANTRA.git",
+  "verified_at": "2026-09-15T14:52:25.479641Z"
+}

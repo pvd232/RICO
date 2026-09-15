@@ -28,7 +28,7 @@ The bridge result becomes the baseline for later one-at-a-time substitutions.
 The original 64-value Hopfield result remains the historical replay baseline.
 
 <!-- contract-protocol:generated:start -->
-**In progress.** [Jump to current PairBlock](#h1-pb-04)
+**In progress.** [Jump to current PairBlock](#h1-pb-05)
 
 **Checklist:** [MANTRA rebuild](../checklists/mantra-rebuild.md)
 
@@ -220,7 +220,7 @@ The original 64-value Hopfield result remains the historical replay baseline.
 
 #### <nobr><code>H1-PB-04</code></nobr>
 
-**Status:** review
+**Status:** complete
 
 **Requirement contribution:** Freeze the target-input ledger and restore every exact historical target and response-transform file.
 
@@ -243,7 +243,7 @@ The original 64-value Hopfield result remains the historical replay baseline.
 
 **Evidence:** [Passing gate receipt](../evidence/mantra-rebuild/H1-PB-04/gate-review-03.json)
 
-**Decision:** Approve <nobr><code>H1-PB-04</code></nobr>, or return it with findings.
+**Decision:** <nobr><code>H1-PB-04</code></nobr> is complete; no further decision is required.
 
 <details>
 <summary>Implementation details</summary>
@@ -279,7 +279,7 @@ The original 64-value Hopfield result remains the historical replay baseline.
 
 #### <nobr><code>H1-PB-05</code></nobr>
 
-**Status:** waiting
+**Status:** drafting
 
 **Requirement contribution:** Assemble the restored Hopfield replay bundle and prove array and fitted-population parity.
 
@@ -289,7 +289,7 @@ The original 64-value Hopfield result remains the historical replay baseline.
 
 **Dependencies:** <nobr><code>H1-PB-04</code></nobr>
 
-**Next action:** Wait for the declared dependencies.
+**Next action:** Run the current PairBlock plan.
 
 <a id="h1-pb-06"></a>
 
@@ -363,8 +363,8 @@ The original 64-value Hopfield result remains the historical replay baseline.
 | <nobr><code>H1-REQ-01</code></nobr> | Phase 1 must begin from the selected Phase 0 Hopfield encoder SHA-256 2433527c3b23b66a16cedc0f7bc43867e4298af4d7a0733b202a8018ba876610, prediction SHA-256 d7180c4669a11b0b2fb184814aafb48ebafe75b02e4bd07998c337aa64dc59b7, and hold PearsonDelta 0.5861640938949398. | complete | <nobr><code>H1-VR-01</code></nobr> | <nobr><code>H1-PB-01</code></nobr> |
 | <nobr><code>H1-REQ-02</code></nobr> | Before any numerical comparison, training, or prediction, the selected Hopfield path must reject disagreement among the ordered perturbation labels for descriptor features, coefficient targets, and fit or tune truth rows. | complete | <nobr><code>H1-VR-02</code></nobr> | <nobr><code>H1-PB-02</code></nobr> |
 | <nobr><code>H1-REQ-03</code></nobr> | Before replay training, one complete descriptor-input ledger must name every selected matched-control, control-program, core83, response40, family64, and gene-shift file, its retained digest, producing script or record, and restore route. Restoring that ledger must reproduce the historical keys, perturbation order, gene order, shapes, dtypes, and values without rerunning upstream producers. | complete | <nobr><code>H1-VR-03</code></nobr> | <nobr><code>H1-PB-03</code></nobr> |
-| <nobr><code>H1-REQ-04</code></nobr> | Before replay training, one complete target-input ledger must name every selected coefficient target, fit and tune truth surface, response-block contract, response rotation, and response-similarity graph, together with its retained digest, producing script or record, and restore route. Restoring that ledger must reproduce the historical keys, row and column order, shapes, dtypes, and values without rerunning upstream producers. | in_progress | <nobr><code>H1-VR-04</code></nobr> | <nobr><code>H1-PB-04</code></nobr> |
-| <nobr><code>H1-REQ-05</code></nobr> | The Hopfield loader must assemble the restored replay bundle and reproduce every retained model input array and fitted transformation state: descriptor columns use moments fitted on the declared fit plus tune rows; coefficient similarity uses per-row mean centering followed by L2 normalization; and every gene, perturbation, shape, dtype, and array order remains fixed. | planned | <nobr><code>H1-VR-05</code></nobr> | <nobr><code>H1-PB-05</code></nobr> |
+| <nobr><code>H1-REQ-04</code></nobr> | Before replay training, one complete target-input ledger must name every selected coefficient target, fit and tune truth surface, response-block contract, response rotation, and response-similarity graph, together with its retained digest, producing script or record, and restore route. Restoring that ledger must reproduce the historical keys, row and column order, shapes, dtypes, and values without rerunning upstream producers. | complete | <nobr><code>H1-VR-04</code></nobr> | <nobr><code>H1-PB-04</code></nobr> |
+| <nobr><code>H1-REQ-05</code></nobr> | The Hopfield loader must assemble the restored replay bundle and reproduce every retained model input array and fitted transformation state: descriptor columns use moments fitted on the declared fit plus tune rows; coefficient similarity uses per-row mean centering followed by L2 normalization; and every gene, perturbation, shape, dtype, and array order remains fixed. | in_progress | <nobr><code>H1-VR-05</code></nobr> | <nobr><code>H1-PB-05</code></nobr> |
 | <nobr><code>H1-REQ-06</code></nobr> | The 187 to 384 to 384 to 128 Hopfield encoder must be trained under the selected historical objectives and seed, including the configured auxiliary posterior target built from the whitened-PCA-denoised coefficient bank and neighbors selected by raw-coefficient cosine similarity, and reproduce the retained weights while recording checkpoints, logs, selection scores, and the VIPER run. Final retrieval must continue to use the configured raw coefficient value memory. | planned | <nobr><code>H1-VR-06</code></nobr> | <nobr><code>H1-PB-06</code></nobr> |
 | <nobr><code>H1-REQ-07</code></nobr> | Raw-gene retrieval from fit memory at temperature 0.055 and reference correction must reproduce prediction SHA-256 d7180c4669a11b0b2fb184814aafb48ebafe75b02e4bd07998c337aa64dc59b7 byte for byte and hold PearsonDelta 0.5861640938949398 exactly. | planned | <nobr><code>H1-VR-07</code></nobr> | <nobr><code>H1-PB-07</code></nobr> |
 | <nobr><code>H1-REQ-08</code></nobr> | Every accepted Phase 1 producer, input, output, comparison, and implementation commit must remain reachable through retained VIPER and contract-protocol evidence. | planned | <nobr><code>H1-VR-08</code></nobr> | <nobr><code>H1-PB-08</code></nobr> |

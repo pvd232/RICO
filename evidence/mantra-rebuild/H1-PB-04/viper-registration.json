@@ -1,0 +1,10 @@
+{
+  "implementation_repository_commit": "17f3a09bd1055c432e61ee03c196bb4819845195",
+  "pair_block_id": "H1-PB-04",
+  "recorded_at": "2026-09-15T14:52:25.479641Z",
+  "schema_version": 1,
+  "verification_receipt_ref": {
+    "path": "evidence/mantra-rebuild/H1-PB-04/viper-verification.json",
+    "sha256": "31bda80f4321759f92e945e0e2011c3bb66858984563be39221e991f537708a5"
+  }
+}

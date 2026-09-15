@@ -12,7 +12,7 @@ conditions, and result required from each PairBlock through Phase 9. Phase 0
 remains an immutable comparison source and never runs again.
 
 <!-- contract-protocol:generated:start -->
-**Resume here:** [Resume at H1-PB-04](../contracts/mantra-hopfield-reconstruction.md#h1-pb-04)
+**Resume here:** [Resume at E0-PB-04](../contracts/mantra-execution-foundation.md#e0-pb-04)
 
 
 ### Phase 1: GPU foundation and Hopfield reconstruction
@@ -27,8 +27,8 @@ remains an immutable comparison source and never runs again.
 | <nobr><code>H1-REQ-01</code></nobr> | complete | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-req-01) | <nobr><code>H1-PB-01</code></nobr> | None |
 | <nobr><code>H1-REQ-02</code></nobr> | complete | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-req-02) | <nobr><code>H1-PB-02</code></nobr> | <nobr><code>H1-REQ-01</code></nobr> |
 | <nobr><code>H1-REQ-03</code></nobr> | complete | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-req-03) | <nobr><code>H1-PB-03</code></nobr> | <nobr><code>H1-REQ-02</code></nobr> |
-| <nobr><code>H1-REQ-04</code></nobr> | in_progress | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-req-04) | <nobr><code>H1-PB-04</code></nobr> | <nobr><code>H1-REQ-03</code></nobr> |
-| <nobr><code>H1-REQ-05</code></nobr> | planned | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-req-05) | <nobr><code>H1-PB-05</code></nobr> | <nobr><code>H1-REQ-04</code></nobr> |
+| <nobr><code>H1-REQ-04</code></nobr> | complete | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-req-04) | <nobr><code>H1-PB-04</code></nobr> | <nobr><code>H1-REQ-03</code></nobr> |
+| <nobr><code>H1-REQ-05</code></nobr> | in_progress | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-req-05) | <nobr><code>H1-PB-05</code></nobr> | <nobr><code>H1-REQ-04</code></nobr> |
 | <nobr><code>H1-REQ-06</code></nobr> | planned | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-req-06) | <nobr><code>H1-PB-06</code></nobr> | <nobr><code>H1-REQ-05</code></nobr>, <nobr><code>E0-REQ-09</code></nobr>, <nobr><code>E0-REQ-12</code></nobr> |
 | <nobr><code>H1-REQ-07</code></nobr> | planned | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-req-07) | <nobr><code>H1-PB-07</code></nobr> | <nobr><code>H1-REQ-06</code></nobr> |
 | <nobr><code>H1-REQ-08</code></nobr> | planned | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-req-08) | <nobr><code>H1-PB-08</code></nobr> | <nobr><code>H1-REQ-07</code></nobr> |
