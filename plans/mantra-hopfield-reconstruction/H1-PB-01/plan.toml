@@ -1,46 +1,63 @@
 schema_version = 1
 contract_id = "mantra-hopfield-reconstruction"
-package_sha256 = "d76392935b1d975d423c3088acf7a6305e5fd98b709ffd1f1488fac796d27503"
+package_sha256 = "b4cd6852de4b931e9fb6f83f045fc06f0b025063c8e5e5d6b032d3658447baa3"
 pair_block_id = "H1-PB-01"
-baseline_commit = "b7f336ef8406686402e32c64610b659fc84a2f3a"
+baseline_commit = "e9d9a94977fed4ce2b9a85e08b4a82bae2426a71"
+change_summary = [
+  "The MANTRA workspace now treats requirements as the checklist's long-term planning units and derives implementation ownership from PairBlocks.",
+  "Phase 1 and Phase 2 now have producer-aligned requirements, verifiers, PairBlocks, and one preflighted plan for the first implementation change.",
+  "The accepted Phase 0 result remains the immutable reconstruction oracle and is not executed again.",
+]
+deviation_summary = "The removed reverse requirement-to-PairBlock links made the old bootstrap package unreadable. This current-schema plan replaces that administrative boundary without rerunning Phase 0."
 
 [[actions]]
-operation = "add"
-source_path = "add/contracts/mantra-hopfield-reconstruction.toml"
-target_path = "contracts/mantra-hopfield-reconstruction.toml"
+operation = "patch"
+patch_path = "patches/requirement-first-contract.patch"
+target_paths = [
+  "checklists/mantra-rebuild.md",
+  "checklists/mantra-rebuild.toml",
+  "contracts/mantra-graph-encoder-v1.toml",
+  "contracts/mantra-hopfield-reconstruction.toml",
+  "contracts/mantra-mil-reconstruction.toml",
+  "docs/briefings/2026-09-15-mantra-phase-1-2-matrix-charter.md",
+  "plans/mantra-hopfield-reconstruction/H1-PB-02/README.md",
+  "plans/mantra-hopfield-reconstruction/H1-PB-02/patches/truth-perturbation-order.patch",
+  "plans/mantra-hopfield-reconstruction/H1-PB-02/plan.toml",
+  "tests/phase1/test_hopfield_contract.py",
+]
 
-[[actions]]
-operation = "add"
-source_path = "add/contracts/mantra-hopfield-reconstruction.md"
-target_path = "contracts/mantra-hopfield-reconstruction.md"
+[[handoff_targets]]
+label = "Complete requirement-first migration diff"
+source = "plan"
+path = "patches/requirement-first-contract.patch"
+line = 1
 
-[[actions]]
-operation = "add"
-source_path = "add/checklists/mantra-rebuild-phase-1.toml"
-target_path = "checklists/mantra-rebuild-phase-1.toml"
+[[handoff_targets]]
+label = "Hopfield requirements and PairBlocks"
+source = "repository"
+path = "contracts/mantra-hopfield-reconstruction.toml"
+line = 5
 
-[[actions]]
-operation = "add"
-source_path = "add/checklists/mantra-rebuild-phase-1.md"
-target_path = "checklists/mantra-rebuild-phase-1.md"
+[[handoff_targets]]
+label = "MIL requirements and PairBlocks"
+source = "repository"
+path = "contracts/mantra-mil-reconstruction.toml"
+line = 5
 
-[[actions]]
-operation = "add"
-source_path = "add/tests/phase1/__init__.py"
-target_path = "tests/phase1/__init__.py"
+[[handoff_targets]]
+label = "Requirement-owned checklist phases"
+source = "repository"
+path = "checklists/mantra-rebuild.toml"
+line = 12
 
-[[actions]]
-operation = "add"
-source_path = "add/tests/phase1/test_hopfield_contract.py"
-target_path = "tests/phase1/test_hopfield_contract.py"
-
-[[actions]]
-operation = "replace"
-source_path = "replace/docs/checklists/mantra-rebuild.md"
-target_path = "docs/checklists/mantra-rebuild.md"
+[[handoff_targets]]
+label = "Matrix execution rules"
+source = "repository"
+path = "docs/briefings/2026-09-15-mantra-phase-1-2-matrix-charter.md"
+line = 57
 
 [gate]
-source_roots = ["contracts", "checklists", "docs/checklists"]
+source_roots = ["contracts", "checklists", "docs/briefings", "plans"]
 test_roots = ["tests/phase1"]
 
 [[gate.steps]]
@@ -56,7 +73,11 @@ argv = ["python3", "-m", "unittest", "tests.phase1.test_hopfield_contract", "-q"
 [[gate.steps]]
 role = "documentation"
 working_directory = "."
-argv = ["python3", "/Users/machina/.agents/skills/code-documentation/scripts/check-schema-descriptions.py", "tests/phase1"]
+argv = [
+  "python3",
+  "/Users/machina/.agents/skills/code-documentation/scripts/check-schema-descriptions.py",
+  "tests/phase1",
+]
 
 [[gate.steps]]
 role = "lint"

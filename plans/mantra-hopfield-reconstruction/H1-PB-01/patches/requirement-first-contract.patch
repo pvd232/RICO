@@ -1,0 +1,1051 @@
+diff --git a/checklists/mantra-rebuild.md b/checklists/mantra-rebuild.md
+index c5a67d2..b23098d 100644
+--- a/checklists/mantra-rebuild.md
++++ b/checklists/mantra-rebuild.md
+@@ -6,6 +6,11 @@ registered contracts own requirements and verification. This checklist owns
+ their phase and execution order; the compiler derives current status from
+ retained evidence.
+ 
++The [Phase 1-2 Matrix charter](../docs/briefings/2026-09-15-mantra-phase-1-2-matrix-charter.md)
++fixes the autonomous execution rules, stop conditions, and result required from
++each PairBlock. Phase 0 remains an immutable comparison source and never runs
++again.
++
+ <!-- contract-protocol:generated:start -->
+ **Resume here:** [Resume at H1-PB-02](../contracts/mantra-hopfield-reconstruction.md#h1-pb-02)
+ 
+diff --git a/checklists/mantra-rebuild.toml b/checklists/mantra-rebuild.toml
+index dc7287a..b501ff2 100644
+--- a/checklists/mantra-rebuild.toml
++++ b/checklists/mantra-rebuild.toml
+@@ -9,117 +9,46 @@ contract_paths = [
+   "contracts/mantra-graph-encoder-v1.toml",
+ ]
+ 
+-[[pair_block_placements]]
+-pair_block_id = "H1-PB-01"
+-phase = 1
+-position = 0
+-section_title = "Hopfield reconstruction"
+-deferred = false
+-
+-[[pair_block_placements]]
+-pair_block_id = "H1-PB-02"
+-phase = 1
+-position = 1
+-section_title = "Hopfield reconstruction"
+-deferred = false
+-
+-[[pair_block_placements]]
+-pair_block_id = "H1-PB-03"
+-phase = 1
+-position = 2
+-section_title = "Hopfield reconstruction"
+-deferred = false
+-
+-[[pair_block_placements]]
+-pair_block_id = "H1-PB-04"
+-phase = 1
+-position = 3
+-section_title = "Hopfield reconstruction"
+-deferred = false
+-
+-[[pair_block_placements]]
+-pair_block_id = "H1-PB-05"
+-phase = 1
+-position = 4
+-section_title = "Hopfield reconstruction"
+-deferred = false
+-
+-[[pair_block_placements]]
+-pair_block_id = "H1-PB-06"
+-phase = 1
+-position = 5
+-section_title = "Hopfield reconstruction"
+-deferred = false
+-
+-[[pair_block_placements]]
+-pair_block_id = "M2-PB-01"
+-phase = 2
+-position = 0
+-section_title = "MIL reconstruction"
+-deferred = false
+-
+-[[pair_block_placements]]
+-pair_block_id = "M2-PB-02"
+-phase = 2
+-position = 1
+-section_title = "MIL reconstruction"
+-deferred = false
+-
+-[[pair_block_placements]]
+-pair_block_id = "M2-PB-03"
+-phase = 2
+-position = 2
+-section_title = "MIL reconstruction"
+-deferred = false
+-
+-[[pair_block_placements]]
+-pair_block_id = "M2-PB-04"
+-phase = 2
+-position = 3
+-section_title = "MIL reconstruction"
+-deferred = false
+-
+-[[pair_block_placements]]
+-pair_block_id = "GE-PB-01"
+-phase = 3
+-position = 0
+-section_title = "Graph identities and baselines"
+-deferred = false
+-
+-[[pair_block_placements]]
+-pair_block_id = "GE-PB-02"
+-phase = 4
+-position = 0
+-section_title = "Topology and V1 features"
+-deferred = false
+-
+-[[pair_block_placements]]
+-pair_block_id = "GE-PB-03"
+-phase = 4
+-position = 1
+-section_title = "Topology and V1 features"
+-deferred = false
+-
+-[[pair_block_placements]]
+-pair_block_id = "GE-PB-04"
+-phase = 5
+-position = 0
+-section_title = "V1 graph encoder"
+-deferred = false
+-
+-[[pair_block_placements]]
+-pair_block_id = "GE-PB-05"
+-phase = 5
+-position = 1
+-section_title = "V1 graph encoder"
+-deferred = false
+-
+-[[pair_block_placements]]
+-pair_block_id = "GE-PB-06"
+-phase = 5
+-position = 2
+-section_title = "V1 graph encoder"
+-deferred = false
++[[phases]]
++number = 1
++title = "Hopfield reconstruction"
++requirement_ids = [
++  "H1-REQ-01",
++  "H1-REQ-02",
++  "H1-REQ-03",
++  "H1-REQ-04",
++  "H1-REQ-05",
++  "H1-REQ-06",
++  "H1-REQ-07",
++  "H1-REQ-08",
++]
++
++[[phases]]
++number = 2
++title = "MIL reconstruction"
++requirement_ids = [
++  "M2-REQ-01",
++  "M2-REQ-02",
++  "M2-REQ-03",
++  "M2-REQ-04",
++  "M2-REQ-05",
++  "M2-REQ-06",
++]
++
++[[phases]]
++number = 3
++title = "Graph identities and baselines"
++requirement_ids = ["GE-REQ-01", "GE-REQ-02"]
++
++[[phases]]
++number = 4
++title = "Topology and V1 features"
++requirement_ids = ["GE-REQ-03", "GE-REQ-04"]
++
++[[phases]]
++number = 5
++title = "V1 graph encoder"
++requirement_ids = ["GE-REQ-05", "GE-REQ-06", "GE-REQ-07"]
+ 
+ [[repository_bindings]]
+ repository_id = "rico"
+diff --git a/contracts/mantra-graph-encoder-v1.toml b/contracts/mantra-graph-encoder-v1.toml
+index b04dc2a..71ca9a8 100644
+--- a/contracts/mantra-graph-encoder-v1.toml
++++ b/contracts/mantra-graph-encoder-v1.toml
+@@ -5,51 +5,44 @@ title = "MANTRA Graph Encoder V1"
+ [[requirements]]
+ id = "GE-REQ-01"
+ claim = "The graph-encoder path must preserve the ordered identities and source releases for all 2,057 perturbation rows, all 5,000 resolved response-gene columns, train, tune, and hold memberships, response-target computation, and held-out-data exclusion."
+-depends_on = ["M2-REQ-04"]
++depends_on = ["M2-REQ-06"]
+ verifier_ids = ["GE-VR-01"]
+-pair_block_ids = ["GE-PB-01"]
+ 
+ [[requirements]]
+ id = "GE-REQ-02"
+ claim = "The corrected ridge and fusion-only baselines must reproduce on the same frozen evaluation surface used to assess the graph encoder, and VIPER must retain the identity records, manifests, producer commands, splits, baselines, and checks."
+ depends_on = ["GE-REQ-01"]
+ verifier_ids = ["GE-VR-02"]
+-pair_block_ids = ["GE-PB-01"]
+ 
+ [[requirements]]
+ id = "GE-REQ-03"
+ claim = "PPI, regulatory, and signaling graph candidates must retain edge provenance and report perturbation coverage, response coverage, response mass by message-passing depth, top-K differentially expressed gene recall, graph density, and per-perturbation failure modes."
+ depends_on = ["GE-REQ-02"]
+ verifier_ids = ["GE-VR-03"]
+-pair_block_ids = ["GE-PB-02"]
+ 
+ [[requirements]]
+ id = "GE-REQ-04"
+ claim = "Every graph node must receive a validated, modality-normalized AlphaGenome feature row; the feature pipeline must reject missing nodes, invalid rows, and collapsed fused embeddings and must reproduce the frozen fusion-only baseline."
+ depends_on = ["GE-REQ-03"]
+ verifier_ids = ["GE-VR-04"]
+-pair_block_ids = ["GE-PB-03"]
+ 
+ [[requirements]]
+ id = "GE-REQ-05"
+ claim = "The V1 encoder must build the binary PPI graph, apply one-hop mean aggregation, gather perturbation rows, replace the legacy student identity at every inference consumer, train under the unchanged downstream objective, and produce valid non-collapsed embeddings for all 2,057 perturbations without using hold responses in graph construction or node features."
+ depends_on = ["GE-REQ-04"]
+ verifier_ids = ["GE-VR-05"]
+-pair_block_ids = ["GE-PB-04"]
+ 
+ [[requirements]]
+ id = "GE-REQ-06"
+ claim = "The graph-construction study must union approved prior edges with provenance, rank unique neighbors by AlphaGenome cosine similarity, sweep top-K under fixed topology and evaluation gates, and select graph construction and message depth using tune data only."
+ depends_on = ["GE-REQ-05"]
+ verifier_ids = ["GE-VR-06"]
+-pair_block_ids = ["GE-PB-05"]
+ 
+ [[requirements]]
+ id = "GE-REQ-07"
+ claim = "The selected V1 graph encoder must beat fusion-only on at least one primary unseen-perturbation metric, remain competitive with or exceed the corrected ridge baseline, and reproduce the accepted result from retained VIPER records."
+ depends_on = ["GE-REQ-06"]
+ verifier_ids = ["GE-VR-07"]
+-pair_block_ids = ["GE-PB-06"]
+ 
+ [[verifiers]]
+ id = "GE-VR-01"
+@@ -103,7 +96,7 @@ rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/
+ [[pair_blocks]]
+ id = "GE-PB-01"
+ requirement_ids = ["GE-REQ-01", "GE-REQ-02"]
+-depends_on = ["M2-PB-04"]
++depends_on = ["M2-PB-06"]
+ repository_id = "mantra"
+ requirement_contribution = "Freeze graph-encoder row, column, split, and source identities and reproduce the corrected ridge and fusion-only baselines on that surface."
+ completion_evidence = ["implementation_review", "viper_registration"]
+diff --git a/contracts/mantra-hopfield-reconstruction.toml b/contracts/mantra-hopfield-reconstruction.toml
+index d1bab9b..ffdcab9 100644
+--- a/contracts/mantra-hopfield-reconstruction.toml
++++ b/contracts/mantra-hopfield-reconstruction.toml
+@@ -7,42 +7,48 @@ id = "H1-REQ-01"
+ claim = "Phase 1 must begin from the selected Phase 0 Hopfield encoder SHA-256 2433527c3b23b66a16cedc0f7bc43867e4298af4d7a0733b202a8018ba876610, prediction SHA-256 d7180c4669a11b0b2fb184814aafb48ebafe75b02e4bd07998c337aa64dc59b7, and hold PearsonDelta 0.5861640938949398."
+ depends_on = []
+ verifier_ids = ["H1-VR-01"]
+-pair_block_ids = ["H1-PB-01"]
+ 
+ [[requirements]]
+ id = "H1-REQ-02"
+-claim = "Before training or prediction, the selected Hopfield path must reject disagreement among the ordered perturbation labels for descriptor features, coefficient targets, and fit or tune truth rows; reconstructed preprocessing outputs must retain the selected gene order, shapes, dtypes, and fit plus tune normalization population."
++claim = "Before any numerical comparison, training, or prediction, the selected Hopfield path must reject disagreement among the ordered perturbation labels for descriptor features, coefficient targets, and fit or tune truth rows."
+ depends_on = ["H1-REQ-01"]
+-verifier_ids = ["H1-VR-02", "H1-VR-03"]
+-pair_block_ids = ["H1-PB-02", "H1-PB-03"]
++verifier_ids = ["H1-VR-02"]
+ 
+ [[requirements]]
+ id = "H1-REQ-03"
+-claim = "Matched controls, control programs, response representations, biological descriptors, coefficient targets, and reference shifts must be rebuilt in dependency order and compared with their historical artifacts."
++claim = "The selected matched-control, control-program, core83, response40, family64, and gene-shift inputs must be rebuilt from their approved producers and match the retained historical files by keys, perturbation order, gene order, shape, dtype, and values."
+ depends_on = ["H1-REQ-02"]
+ verifier_ids = ["H1-VR-03"]
+-pair_block_ids = ["H1-PB-03"]
+ 
+ [[requirements]]
+ id = "H1-REQ-04"
+-claim = "The 187 to 384 to 384 to 128 Hopfield encoder must be trained under the selected historical objectives and retain its checkpoints, logs, selection decision, and VIPER run."
++claim = "The selected coefficient targets, fit and tune truth rows, response-block contract, response rotation, and response-similarity graph must be rebuilt from their approved producers and match the retained historical files by keys, row and column order, shape, dtype, and values."
+ depends_on = ["H1-REQ-03"]
+ verifier_ids = ["H1-VR-04"]
+-pair_block_ids = ["H1-PB-04"]
+ 
+ [[requirements]]
+ id = "H1-REQ-05"
+-claim = "Raw-gene retrieval at temperature 0.055 and reference correction must reproduce the selected prediction file byte for byte and the hold PearsonDelta exactly."
++claim = "The Hopfield loader must assemble the rebuilt inputs with the selected gene order, shapes, dtypes, and fit plus tune normalization population and reproduce every retained model input array."
+ depends_on = ["H1-REQ-04"]
+ verifier_ids = ["H1-VR-05"]
+-pair_block_ids = ["H1-PB-05"]
+ 
+ [[requirements]]
+ id = "H1-REQ-06"
+-claim = "Every accepted Phase 1 producer, input, output, comparison, and implementation commit must remain reachable through retained VIPER and contract-protocol evidence."
++claim = "The 187 to 384 to 384 to 128 Hopfield encoder must be trained under the selected historical objectives and seed and reproduce the retained weights while recording checkpoints, logs, selection scores, and the VIPER run."
+ depends_on = ["H1-REQ-05"]
+ verifier_ids = ["H1-VR-06"]
+-pair_block_ids = ["H1-PB-06"]
++
++[[requirements]]
++id = "H1-REQ-07"
++claim = "Raw-gene retrieval from fit memory at temperature 0.055 and reference correction must reproduce prediction SHA-256 d7180c4669a11b0b2fb184814aafb48ebafe75b02e4bd07998c337aa64dc59b7 byte for byte and hold PearsonDelta 0.5861640938949398 exactly."
++depends_on = ["H1-REQ-06"]
++verifier_ids = ["H1-VR-07"]
++
++[[requirements]]
++id = "H1-REQ-08"
++claim = "Every accepted Phase 1 producer, input, output, comparison, and implementation commit must remain reachable through retained VIPER and contract-protocol evidence."
++depends_on = ["H1-REQ-07"]
++verifier_ids = ["H1-VR-08"]
+ 
+ [[verifiers]]
+ id = "H1-VR-01"
+@@ -54,34 +60,48 @@ rejection_cases = [{ repository_id = "rico", path = "tests/phase1/test_hopfield_
+ [[verifiers]]
+ id = "H1-VR-02"
+ requirement_ids = ["H1-REQ-02"]
+-acceptance_conditions = ["The existing Hopfield loader accepts matching feature, coefficient-target, and truth perturbation order and rejects a truth surface whose fit or tune labels are reordered."]
+-success_case = { repository_id = "mantra", path = "experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py", symbol = "test_projected_feature_spec_matches_projected_feature_bundle" }
++acceptance_conditions = ["The existing Hopfield loader accepts equal feature, coefficient-target, and truth perturbation labels and rejects a truth surface whose fit or tune labels are reordered."]
++success_case = { repository_id = "mantra", path = "experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py", symbol = "test_accepts_matching_truth_perturbation_order" }
+ rejection_cases = [{ repository_id = "mantra", path = "experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py", symbol = "test_rejects_truth_perturbation_order_mismatch" }]
+ 
+ [[verifiers]]
+ id = "H1-VR-03"
+-requirement_ids = ["H1-REQ-02", "H1-REQ-03"]
+-acceptance_conditions = ["Each rebuilt preprocessing artifact matches its historical perturbation rows, gene columns, shape, dtype, fit plus tune normalization population, and named numerical tolerance."]
+-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_preprocessing.py", symbol = "test_rebuilds_selected_preprocessing_chain" }
+-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_preprocessing.py", symbol = "test_rejects_changed_preprocessing_array" }]
++requirement_ids = ["H1-REQ-03"]
++acceptance_conditions = ["Each rebuilt descriptor-side input has the same NPZ keys, ordered perturbations and genes, shapes, dtypes, and arrays as its retained historical counterpart."]
++success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_preprocessing.py", symbol = "test_rebuilds_selected_descriptor_inputs" }
++rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_preprocessing.py", symbol = "test_rejects_changed_descriptor_input" }]
+ 
+ [[verifiers]]
+ id = "H1-VR-04"
+ requirement_ids = ["H1-REQ-04"]
+-acceptance_conditions = ["The training run uses the approved architecture, objective, seed, data identities, and selection rule and retains the selected checkpoint and logs."]
+-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_training.py", symbol = "test_trains_selected_hopfield_encoder" }
+-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_training.py", symbol = "test_rejects_changed_training_contract" }]
++acceptance_conditions = ["Each rebuilt target-side input has the same NPZ or JSON keys, ordered rows and columns, shapes, dtypes, and values as its retained historical counterpart."]
++success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_preprocessing.py", symbol = "test_rebuilds_selected_target_inputs" }
++rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_preprocessing.py", symbol = "test_rejects_changed_target_input" }]
+ 
+ [[verifiers]]
+ id = "H1-VR-05"
+ requirement_ids = ["H1-REQ-05"]
++acceptance_conditions = ["The assembled model inputs reproduce every retained array and use fit plus tune rows for configured normalization and training populations."]
++success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_preprocessing.py", symbol = "test_rebuilds_selected_model_inputs" }
++rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_preprocessing.py", symbol = "test_rejects_changed_model_input_or_population" }]
++
++[[verifiers]]
++id = "H1-VR-06"
++requirement_ids = ["H1-REQ-06"]
++acceptance_conditions = ["The training run uses the approved architecture, objectives, seed, data identities, and selection rule and reproduces the retained encoder weights with complete logs and checkpoints."]
++success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_training.py", symbol = "test_trains_selected_hopfield_encoder" }
++rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_training.py", symbol = "test_rejects_changed_training_contract" }]
++
++[[verifiers]]
++id = "H1-VR-07"
++requirement_ids = ["H1-REQ-07"]
+ acceptance_conditions = ["The final gate requires equal prediction bytes and an exactly equal hold PearsonDelta of 0.5861640938949398."]
+ success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_reconstruction.py", symbol = "test_reproduces_selected_hopfield_output" }
+ rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_reconstruction.py", symbol = "test_rejects_equal_score_with_changed_prediction_bytes" }]
+ 
+ [[verifiers]]
+-id = "H1-VR-06"
+-requirement_ids = ["H1-REQ-06"]
++id = "H1-VR-08"
++requirement_ids = ["H1-REQ-08"]
+ acceptance_conditions = ["The terminal registration resolves every accepted Phase 1 receipt, artifact, source commit, and producer edge from retained records."]
+ success_case = { repository_id = "rico", path = "tests/phase1/test_hopfield_registration.py", symbol = "test_resolves_complete_phase1_provenance" }
+ rejection_cases = [{ repository_id = "rico", path = "tests/phase1/test_hopfield_registration.py", symbol = "test_rejects_severed_phase1_provenance" }]
+@@ -100,14 +120,14 @@ requirement_ids = ["H1-REQ-02"]
+ depends_on = ["H1-PB-01"]
+ repository_id = "mantra"
+ requirement_contribution = "Make the existing Hopfield loader reject disagreement among feature, coefficient-target, and truth perturbation order before training or prediction."
+-completion_evidence = ["implementation_review"]
++completion_evidence = ["implementation_review", "viper_registration"]
+ 
+ [[pair_blocks]]
+ id = "H1-PB-03"
+-requirement_ids = ["H1-REQ-02", "H1-REQ-03"]
++requirement_ids = ["H1-REQ-03"]
+ depends_on = ["H1-PB-02"]
+ repository_id = "mantra"
+-requirement_contribution = "Rebuild the selected preprocessing artifacts in producer order and compare their perturbation rows, gene columns, shapes, dtypes, normalization population, and numerical values with the historical artifacts."
++requirement_contribution = "Rebuild and compare the selected descriptor-side Hopfield inputs."
+ completion_evidence = ["implementation_review", "viper_registration"]
+ 
+ [[pair_blocks]]
+@@ -115,7 +135,7 @@ id = "H1-PB-04"
+ requirement_ids = ["H1-REQ-04"]
+ depends_on = ["H1-PB-03"]
+ repository_id = "mantra"
+-requirement_contribution = "Train and select the historical Hopfield encoder through an identity-bound VIPER run."
++requirement_contribution = "Rebuild and compare the selected target-side and response-transform Hopfield inputs."
+ completion_evidence = ["implementation_review", "viper_registration"]
+ 
+ [[pair_blocks]]
+@@ -123,13 +143,29 @@ id = "H1-PB-05"
+ requirement_ids = ["H1-REQ-05"]
+ depends_on = ["H1-PB-04"]
+ repository_id = "mantra"
+-requirement_contribution = "Rebuild raw-gene retrieval and reference correction and prove exact final output parity."
++requirement_contribution = "Assemble the rebuilt Hopfield model inputs and prove array and population parity."
+ completion_evidence = ["implementation_review", "viper_registration"]
+ 
+ [[pair_blocks]]
+ id = "H1-PB-06"
+ requirement_ids = ["H1-REQ-06"]
+ depends_on = ["H1-PB-05"]
++repository_id = "mantra"
++requirement_contribution = "Train the selected Hopfield encoder and reproduce its retained weights and selection record."
++completion_evidence = ["implementation_review", "viper_registration"]
++
++[[pair_blocks]]
++id = "H1-PB-07"
++requirement_ids = ["H1-REQ-07"]
++depends_on = ["H1-PB-06"]
++repository_id = "mantra"
++requirement_contribution = "Run raw-gene retrieval and reference correction and prove exact final output parity."
++completion_evidence = ["implementation_review", "viper_registration"]
++
++[[pair_blocks]]
++id = "H1-PB-08"
++requirement_ids = ["H1-REQ-08"]
++depends_on = ["H1-PB-07"]
+ repository_id = "rico"
+-requirement_contribution = "Register the complete Phase 1 provenance graph and close the reconstruction checklist."
++requirement_contribution = "Resolve the complete Phase 1 producer and evidence graph and close Hopfield reconstruction."
+ completion_evidence = ["implementation_review", "viper_registration"]
+diff --git a/contracts/mantra-mil-reconstruction.toml b/contracts/mantra-mil-reconstruction.toml
+index d416d57..9727fee 100644
+--- a/contracts/mantra-mil-reconstruction.toml
++++ b/contracts/mantra-mil-reconstruction.toml
+@@ -5,30 +5,38 @@ title = "MANTRA MIL Reconstruction"
+ [[requirements]]
+ id = "M2-REQ-01"
+ claim = "The standalone MIL rebuild must use the selected v1952 seed-123460 without_control inputs, create one student query, exclude the dormant proto_count 11 setting from the active architecture, and consume no Hopfield output."
+-depends_on = ["H1-REQ-06"]
++depends_on = ["H1-REQ-08"]
+ verifier_ids = ["M2-VR-01"]
+-pair_block_ids = ["M2-PB-01"]
+ 
+ [[requirements]]
+ id = "M2-REQ-02"
+-claim = "Teacher bags and conditioning, the teacher, donor embeddings, and the single-query student must be rebuilt in producer order; every selection score and checkpoint decision must be emitted to stdout and the primary experiment log and retained through VIPER."
++claim = "The selected MIL descriptor rows, coefficient and gene targets, control shift, cell-program projections, matched cell programs, teacher bags, attention priors, and conditioning arrays must be rebuilt and compared with their historical counterparts before training."
+ depends_on = ["M2-REQ-01"]
+ verifier_ids = ["M2-VR-02"]
+-pair_block_ids = ["M2-PB-02"]
+ 
+ [[requirements]]
+ id = "M2-REQ-03"
+-claim = "Covariance shrinkage, teacher-neighbor smoothing, retrieval, residual correction, reference shift, and per-gene calibration must be rebuilt and compared with their historical intermediates before final evaluation."
++claim = "The teacher, donor embeddings, and single-query student must be rebuilt in producer order and reproduce the retained MIL identity vectors; every selection score and checkpoint decision must be emitted to stdout and the primary experiment log and retained through VIPER."
+ depends_on = ["M2-REQ-02"]
+ verifier_ids = ["M2-VR-03"]
+-pair_block_ids = ["M2-PB-03"]
+ 
+ [[requirements]]
+ id = "M2-REQ-04"
+-claim = "The rebuilt MIL path must reproduce hold PearsonDelta 0.6025499488874759 and the approved prediction identities or numerical tolerances, with every accepted producer, artifact, comparison, checkpoint, and implementation commit reachable through retained VIPER and contract evidence."
++claim = "The selected Step02 covariance shrinkage, teacher-neighbor smoothing, and retrieval path must reproduce prediction SHA-256 c0011d71436c540bde8dd00f9e2f8ac8fb46aa787161460a1aefce5f0f1277be, weight SHA-256 8290145991446afd9f45c3f3be1ad7fe95518dfe6f75e1e950b86a2b84c323ab, and hold PearsonDelta 0.5924883417873266."
+ depends_on = ["M2-REQ-03"]
+ verifier_ids = ["M2-VR-04"]
+-pair_block_ids = ["M2-PB-04"]
++
++[[requirements]]
++id = "M2-REQ-05"
++claim = "The selected Step03 residual correction, reference shift, and per-gene calibration must reproduce prediction SHA-256 e39230c8c17954602a2c3dbfc26ed4759922be36bdabc6b27ffb96204a07f7fd, weight SHA-256 372e4409468d7d0441383833601d2a008ab24fd309ae4cd6fb2ebaa36e1dd3f0, and hold PearsonDelta 0.6025499488874759."
++depends_on = ["M2-REQ-04"]
++verifier_ids = ["M2-VR-05"]
++
++[[requirements]]
++id = "M2-REQ-06"
++claim = "Every accepted Phase 2 producer, input, output, comparison, checkpoint, and implementation commit must remain reachable through retained VIPER and contract-protocol evidence."
++depends_on = ["M2-REQ-05"]
++verifier_ids = ["M2-VR-06"]
+ 
+ [[verifiers]]
+ id = "M2-VR-01"
+@@ -40,38 +48,52 @@ rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/
+ [[verifiers]]
+ id = "M2-VR-02"
+ requirement_ids = ["M2-REQ-02"]
+-acceptance_conditions = ["The teacher and student training chain reproduces the approved intermediate arrays and retains every selection score and checkpoint decision."]
+-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_training.py", symbol = "test_rebuilds_selected_teacher_and_student" }
+-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_training.py", symbol = "test_rejects_changed_training_intermediate" }]
++acceptance_conditions = ["Every rebuilt MIL training input matches its historical keys, perturbation order, gene order, shape, dtype, and values, and the loader reports the selected bag and conditioning rules."]
++success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_inputs.py", symbol = "test_rebuilds_selected_mil_inputs" }
++rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_inputs.py", symbol = "test_rejects_changed_mil_input_or_bag" }]
+ 
+ [[verifiers]]
+ id = "M2-VR-03"
+ requirement_ids = ["M2-REQ-03"]
+-acceptance_conditions = ["Each retrieval and correction intermediate matches its approved identity or numerical tolerance before the final prediction is scored."]
+-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_reconstruction.py", symbol = "test_rebuilds_selected_retrieval_and_correction" }
+-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_reconstruction.py", symbol = "test_rejects_changed_correction_intermediate" }]
++acceptance_conditions = ["The approved MIL configuration reproduces the teacher and student arrays, checkpoints, selection records, and fixed MIL identity contract without loading hold targets during selection."]
++success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_training.py", symbol = "test_rebuilds_selected_teacher_and_student" }
++rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_training.py", symbol = "test_rejects_changed_training_intermediate_or_hold_selection" }]
+ 
+ [[verifiers]]
+ id = "M2-VR-04"
+ requirement_ids = ["M2-REQ-04"]
+-acceptance_conditions = ["The final prediction and hold PearsonDelta match the approved Phase 0 MIL result, and retained evidence resolves the complete accepted execution."]
++acceptance_conditions = ["The Step02 output arrays and weight arrays equal their retained historical counterparts and the hold PearsonDelta equals 0.5924883417873266."]
++success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_reconstruction.py", symbol = "test_rebuilds_selected_step02" }
++rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_reconstruction.py", symbol = "test_rejects_changed_step02_output" }]
++
++[[verifiers]]
++id = "M2-VR-05"
++requirement_ids = ["M2-REQ-05"]
++acceptance_conditions = ["The Step03 output arrays and weight arrays equal their retained historical counterparts and the final hold PearsonDelta equals 0.6025499488874759."]
++success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_reconstruction.py", symbol = "test_rebuilds_selected_step03" }
++rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_reconstruction.py", symbol = "test_rejects_equal_score_with_changed_step03_output" }]
++
++[[verifiers]]
++id = "M2-VR-06"
++requirement_ids = ["M2-REQ-06"]
++acceptance_conditions = ["The terminal registration resolves every accepted Phase 2 receipt, artifact, source commit, and producer edge from retained records."]
+ success_case = { repository_id = "rico", path = "tests/phase2/test_mil_registration.py", symbol = "test_resolves_complete_mil_reconstruction" }
+-rejection_cases = [{ repository_id = "rico", path = "tests/phase2/test_mil_registration.py", symbol = "test_rejects_changed_or_unregistered_mil_result" }]
++rejection_cases = [{ repository_id = "rico", path = "tests/phase2/test_mil_registration.py", symbol = "test_rejects_severed_phase2_provenance" }]
+ 
+ [[pair_blocks]]
+ id = "M2-PB-01"
+ requirement_ids = ["M2-REQ-01"]
+-depends_on = ["H1-PB-06"]
++depends_on = ["H1-PB-08"]
+ repository_id = "mantra"
+ requirement_contribution = "Bind the MIL rebuild to its standalone historical inputs and active single-query architecture."
+-completion_evidence = ["implementation_review"]
++completion_evidence = ["implementation_review", "viper_registration"]
+ 
+ [[pair_blocks]]
+ id = "M2-PB-02"
+ requirement_ids = ["M2-REQ-02"]
+ depends_on = ["M2-PB-01"]
+ repository_id = "mantra"
+-requirement_contribution = "Rebuild teacher bags, conditioning, teacher training, donor embeddings, and single-query student training with retained selection evidence."
++requirement_contribution = "Rebuild and compare the complete MIL training-input bundle, bags, priors, and conditioning arrays."
+ completion_evidence = ["implementation_review", "viper_registration"]
+ 
+ [[pair_blocks]]
+@@ -79,13 +101,29 @@ id = "M2-PB-03"
+ requirement_ids = ["M2-REQ-03"]
+ depends_on = ["M2-PB-02"]
+ repository_id = "mantra"
+-requirement_contribution = "Rebuild retrieval and every downstream correction and compare each intermediate before final scoring."
++requirement_contribution = "Train the selected teacher and single-query student and reproduce the retained MIL identity vectors."
+ completion_evidence = ["implementation_review", "viper_registration"]
+ 
+ [[pair_blocks]]
+ id = "M2-PB-04"
+ requirement_ids = ["M2-REQ-04"]
+ depends_on = ["M2-PB-03"]
++repository_id = "mantra"
++requirement_contribution = "Rebuild Step02 retrieval and smoothing and prove its prediction, weight, and score parity."
++completion_evidence = ["implementation_review", "viper_registration"]
++
++[[pair_blocks]]
++id = "M2-PB-05"
++requirement_ids = ["M2-REQ-05"]
++depends_on = ["M2-PB-04"]
++repository_id = "mantra"
++requirement_contribution = "Rebuild Step03 correction and calibration and prove exact final MIL parity."
++completion_evidence = ["implementation_review", "viper_registration"]
++
++[[pair_blocks]]
++id = "M2-PB-06"
++requirement_ids = ["M2-REQ-06"]
++depends_on = ["M2-PB-05"]
+ repository_id = "rico"
+-requirement_contribution = "Verify final MIL parity and retain the complete accepted execution through VIPER and contract evidence."
++requirement_contribution = "Resolve the complete Phase 2 producer and evidence graph and close MIL reconstruction."
+ completion_evidence = ["implementation_review", "viper_registration"]
+diff --git a/docs/briefings/2026-09-15-mantra-phase-1-2-matrix-charter.md b/docs/briefings/2026-09-15-mantra-phase-1-2-matrix-charter.md
+new file mode 100644
+index 0000000..9c26ede
+--- /dev/null
++++ b/docs/briefings/2026-09-15-mantra-phase-1-2-matrix-charter.md
+@@ -0,0 +1,76 @@
++# MANTRA Phase 1-2 Matrix Charter
++
++This charter explains how Matrix executes the requirements declared in
++[`mantra-hopfield-reconstruction.toml`](../../contracts/mantra-hopfield-reconstruction.toml)
++and
++[`mantra-mil-reconstruction.toml`](../../contracts/mantra-mil-reconstruction.toml).
++Those contract packages remain the authority for requirements, verifiers,
++PairBlocks, dependencies, and completion evidence.
++
++## Fixed evidence
++
++Phase 0 is complete and will not run again. Matrix reads its archived files as
++immutable comparison inputs. The
++[`index.json`](../../archive/mantra-rebuild-phase-0/evidence/phase0/index.json)
++resolves the selected Hopfield and MIL receipts, which pin the accepted file
++digests, arrays, scores, configurations, and producer history.
++
++## Phase 1: Hopfield reconstruction
++
++| PairBlock | Result required before the next PairBlock starts |
++|---|---|
++| `H1-PB-01` | The current typed contract and checklist resolve the accepted Phase 0 Hopfield result. |
++| `H1-PB-02` | The loader rejects any disagreement among feature, coefficient-target, and truth-row perturbation order. |
++| `H1-PB-03` | Rebuilt descriptor-side inputs equal their retained files by keys, labeled axes, shape, dtype, and values. |
++| `H1-PB-04` | Rebuilt targets and response transforms equal their retained files by keys, labeled axes, shape, dtype, and values. |
++| `H1-PB-05` | The loader assembles the same model input arrays with the same gene order and fit-plus-tune populations. |
++| `H1-PB-06` | Training reproduces the selected encoder weights and retains checkpoints, logs, scores, and a VIPER run. |
++| `H1-PB-07` | Retrieval and correction reproduce the accepted prediction bytes and hold PearsonDelta exactly. |
++| `H1-PB-08` | Contract and VIPER records resolve every accepted Phase 1 producer, input, output, comparison, and commit. |
++
++## Phase 2: MIL reconstruction
++
++| PairBlock | Result required before the next PairBlock starts |
++|---|---|
++| `M2-PB-01` | The selected standalone configuration resolves its inputs, uses one student query, ignores dormant `proto_count`, and consumes no Hopfield output. |
++| `M2-PB-02` | Rebuilt MIL inputs, bags, priors, and conditioning equal their retained counterparts by keys, labeled axes, shape, dtype, and values. |
++| `M2-PB-03` | Teacher and student training reproduce the retained identity vectors, checkpoints, and selection records without using hold targets for selection. |
++| `M2-PB-04` | Step02 reproduces the accepted predictions, weights, and hold PearsonDelta. |
++| `M2-PB-05` | Step03 reproduces the accepted predictions, weights, and final hold PearsonDelta. |
++| `M2-PB-06` | Contract and VIPER records resolve every accepted Phase 2 producer, input, output, comparison, checkpoint, and commit. |
++
++## Matrix rules
++
++Matrix executes one PairBlock at a time in declared dependency order.
++
++1. Load the current compiled checklist state and select its current PairBlock.
++2. Inspect that PairBlock's existing producer, its retained Phase 0 counterpart,
++   and the outputs accepted from its dependency.
++3. Freeze one `plan.toml` against the current implementation-repository commit.
++   The plan names every allowed file action, the observing tests, the gate, and
++   the human handoff. Later plans are not guessed before these inputs exist.
++4. Reuse the existing producer and persisted artifact boundary. Add a type or
++   abstraction only when no current owner can express a required value.
++5. Compare structured artifacts in this order: keys, row labels, column labels,
++   shapes, dtypes, then values. Require exact bytes or arrays when Phase 0 proves
++   exact equality; use a tolerance only when the requirement names it.
++6. Execute every implementation PairBlock through VIPER and retain its run and
++   file identities. Run training on the declared CUDA environment; keep cheap
++   source and fixture checks local.
++7. Stop the current PairBlock when a comparison fails, a required source is
++   absent, or a repair would touch an undeclared target. Matrix may choose among
++   implementations that preserve the requirement and stay within the frozen
++   targets. It may not weaken acceptance, invent a replacement artifact, or
++   expand scope without a reviewed contract or plan revision.
++8. Finish each PairBlock with its focused gate, self-review, immutable Git
++   commit, push, human-readable handoff, implementation review, and required
++   VIPER registration. Do not start its dependent before the compiler verifies
++   those records.
++
++## First entrypoint
++
++`H1-PB-02` is the first implementation PairBlock. Its source-backed plan lives
++at
++[`plans/mantra-hopfield-reconstruction/H1-PB-02/plan.toml`](../../plans/mantra-hopfield-reconstruction/H1-PB-02/plan.toml).
++Matrix creates `H1-PB-03`'s plan only after `H1-PB-02` closes and the accepted
++loader boundary is available as its exact baseline.
+diff --git a/plans/mantra-hopfield-reconstruction/H1-PB-02/README.md b/plans/mantra-hopfield-reconstruction/H1-PB-02/README.md
+new file mode 100644
+index 0000000..42db97f
+--- /dev/null
++++ b/plans/mantra-hopfield-reconstruction/H1-PB-02/README.md
+@@ -0,0 +1,20 @@
++# H1-PB-02: Truth-row alignment
++
++## What changes
++
++The Hopfield loader currently verifies that descriptor features and coefficient
++targets use the same ordered perturbations, then loads fit and tune truth arrays
++without reading their labels. The retained patch makes the loader read those
++labels and reject disagreement before it pairs any truth row with a feature row.
++
++## Start here
++
++- [Complete diff](patches/truth-perturbation-order.patch)
++- [Executable plan](plan.toml)
++- [Current loader join](../../../../mantra/experiments/v1938_sota_clean_repro/src/step01/hopfield/loader.py#L265)
++- [Current observing fixture](../../../../mantra/experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py#L451)
++
++The focused preflight passed Pyright, three selected test cases, Ruff lint, and
++range-limited Ruff formatting checks in an isolated checkout of the declared
++MANTRA baseline. The range limit avoids rewriting unrelated historical lines
++that were already outside the current formatter's output.
+diff --git a/plans/mantra-hopfield-reconstruction/H1-PB-02/patches/truth-perturbation-order.patch b/plans/mantra-hopfield-reconstruction/H1-PB-02/patches/truth-perturbation-order.patch
+new file mode 100644
+index 0000000..564d2fd
+--- /dev/null
++++ b/plans/mantra-hopfield-reconstruction/H1-PB-02/patches/truth-perturbation-order.patch
+@@ -0,0 +1,169 @@
++diff --git a/experiments/v1938_sota_clean_repro/src/step01/hopfield/loader.py b/experiments/v1938_sota_clean_repro/src/step01/hopfield/loader.py
++index 560505bab..bac7992c8 100644
++--- a/experiments/v1938_sota_clean_repro/src/step01/hopfield/loader.py
+++++ b/experiments/v1938_sota_clean_repro/src/step01/hopfield/loader.py
++@@ -29,7 +29,7 @@ from sklearn.cluster import SpectralClustering
++ from ...runtime.config import Step01SplitFeatureFileConfig
++ from ...runtime.layout import repo_root
++ from .config import HopfieldConfig, Step01FeatureContract
++-from .contract import Split, SPLITS, split_feature_key
+++from .contract import SPLITS, Split, split_feature_key
++ from .inputs import DescriptorInputs, TransportHopfieldInputs
++ from .transforms import (
++     FIT_TUNE_SPLITS,
++@@ -45,6 +45,7 @@ from .transforms import (
++     standardize_splitwise,
++ )
++ 
+++
++ def _resolve_repo_path(value: str | Path) -> Path:
++     """Resolve one repository-relative or absolute file path."""
++     path = Path(value)
++@@ -262,14 +263,18 @@ def _build_selected8_mapper(graph: np.ndarray, *, random_state: int) -> np.ndarr
++     return mapper
++ 
++ 
++-def _read_truth_surface(path: Path) -> dict[str, np.ndarray]:
++-    """Read fit and tune truth rows from the declared truth-surface NPZ."""
+++def _read_truth_surface(
+++    path: Path,
+++) -> tuple[dict[str, np.ndarray], dict[str, np.ndarray]]:
+++    """Read fit and tune truth rows and their perturbation labels."""
++     truth: dict[str, np.ndarray] = {}
+++    perts: dict[str, np.ndarray] = {}
++     with np.load(path, allow_pickle=True) as z:
++         for split in FIT_TUNE_SPLITS:
++             key = f"delta_all_{split}" if f"delta_all_{split}" in z.files else f"truth_{split}"
++             truth[split] = np.asarray(z[key], dtype=np.float32)
++-    return truth
+++            perts[split] = np.asarray(z[f"perts_{split}"], dtype=object).astype(str)
+++    return truth, perts
++ 
++ 
++ def _read_transport_hopfield_inputs(
++@@ -320,7 +325,10 @@ def _read_transport_hopfield_inputs(
++     for split in FIT_TUNE_SPLITS:
++         if not np.array_equal(perts[split], coeff_perts[split]):
++             raise ValueError(f"query and coefficient perturbation order mismatch for split={split}")
++-    truth = _read_truth_surface(truth_surface)
+++    truth, truth_perts = _read_truth_surface(truth_surface)
+++    for split in FIT_TUNE_SPLITS:
+++        if not np.array_equal(perts[split], truth_perts[split]):
+++            raise ValueError(f"query and truth perturbation order mismatch for split={split}")
++     with np.load(selected_semantic, allow_pickle=True) as z:
++         selected_mapper = np.asarray(z["semantic_default"], dtype=np.float32)
++     with np.load(selected_axis, allow_pickle=True) as z:
++diff --git a/experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py b/experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py
++index 1092be750..4f4d3c2cb 100644
++--- a/experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py
+++++ b/experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py
++@@ -18,16 +18,22 @@ Example:
++ 
++ from __future__ import annotations
++ 
++-from dataclasses import replace
++ import json
+++from dataclasses import replace
++ from pathlib import Path
+++from typing import Any
++ 
++ import numpy as np
+++import pytest
++ 
++-from experiments.v1938_sota_clean_repro.src.runtime.config import DescriptorBlockWeights, Step01SplitFeatureFileConfig, default_config
++-from experiments.v1938_sota_clean_repro.src.runtime.config import Step01DecompositionConfig
+++from experiments.v1938_sota_clean_repro.src.runtime.config import (
+++    DescriptorBlockWeights,
+++    Step01DecompositionConfig,
+++    Step01SplitFeatureFileConfig,
+++    default_config,
+++)
++ from experiments.v1938_sota_clean_repro.src.shared.normalization import standardize_split_dict
++-from experiments.v1938_sota_clean_repro.src.step01.hopfield.config import HopfieldConfig, Step01FeatureContract
+++from experiments.v1938_sota_clean_repro.src.step01.hopfield.config import Step01FeatureContract
++ from experiments.v1938_sota_clean_repro.src.step01.hopfield.loader import (
++     load_mixed_src_snk_ripple_raw_pen1_step01_inputs,
++     read_step01_feature_spec_descriptors,
++@@ -451,8 +457,13 @@ def test_load_mixed_src_snk_ripple_raw_pen1_step01_inputs_appends_student_z_when
++     assert "student_z_feature" in arrays
++ 
++ 
++-def test_projected_feature_spec_matches_projected_feature_bundle(tmp_path: Path) -> None:
++-    """The projected `feature_spec` path should read core83, family64, and response40 split files."""
+++def _load_projected_feature_bundle(
+++    tmp_path: Path,
+++    *,
+++    truth_perts_fit: tuple[str, ...],
+++    truth_perts_tune: tuple[str, ...],
+++) -> dict[str, Any]:
+++    """Build and load the smallest complete projected-feature fixture."""
++     input_root = tmp_path / "inputs"
++     (input_root / "core83").mkdir(parents=True)
++     (input_root / "family64").mkdir(parents=True)
++@@ -524,8 +535,8 @@ def test_projected_feature_spec_matches_projected_feature_bundle(tmp_path: Path)
++     )
++     np.savez_compressed(
++         truth_surface,
++-        perts_fit=np.asarray(["p1", "p2"], dtype=object),
++-        perts_tune=np.asarray(["p3"], dtype=object),
+++        perts_fit=np.asarray(truth_perts_fit, dtype=object),
+++        perts_tune=np.asarray(truth_perts_tune, dtype=object),
++         delta_all_fit=np.ones((2, 210), dtype=np.float32),
++         delta_all_tune=np.ones((1, 210), dtype=np.float32),
++     )
++@@ -607,17 +618,51 @@ def test_projected_feature_spec_matches_projected_feature_bundle(tmp_path: Path)
++         },
++     )
++ 
++-    modern_arrays = load_mixed_src_snk_ripple_raw_pen1_step01_inputs(
+++    return load_mixed_src_snk_ripple_raw_pen1_step01_inputs(
++         input_root=input_root,
++         paths_spec=paths_spec,
++         feature_spec=feature_spec,
++     )
++ 
+++
+++def test_accepts_matching_truth_perturbation_order(tmp_path: Path) -> None:
+++    """The projected loader should accept truth rows in feature-row order."""
+++    modern_arrays = _load_projected_feature_bundle(
+++        tmp_path,
+++        truth_perts_fit=("p1", "p2"),
+++        truth_perts_tune=("p3",),
+++    )
+++
++     assert modern_arrays["feature_mode"] == "core83_family_response40"
++     assert modern_arrays["feature_dim"] == 5
++     assert modern_arrays["feature"]["fit"].shape == (2, 5)
++     assert modern_arrays["feature"]["tune"].shape == (1, 5)
++     assert modern_arrays["feature"]["hold_proxy"].shape == (1, 5)
++-    assert np.array_equal(modern_arrays["perts"]["fit"], perts_fit.astype(str))
++-    assert np.array_equal(modern_arrays["perts"]["tune"], perts_tune.astype(str))
++-    assert np.array_equal(modern_arrays["perts"]["hold_proxy"], perts_hold.astype(str))
+++    assert modern_arrays["perts"]["fit"].tolist() == ["p1", "p2"]
+++    assert modern_arrays["perts"]["tune"].tolist() == ["p3"]
+++    assert modern_arrays["perts"]["hold_proxy"].tolist() == ["p4"]
+++
+++
+++@pytest.mark.parametrize(
+++    ("truth_perts_fit", "truth_perts_tune", "split"),
+++    [
+++        (("p2", "p1"), ("p3",), "fit"),
+++        (("p1", "p2"), ("other",), "tune"),
+++    ],
+++)
+++def test_rejects_truth_perturbation_order_mismatch(
+++    tmp_path: Path,
+++    truth_perts_fit: tuple[str, ...],
+++    truth_perts_tune: tuple[str, ...],
+++    split: str,
+++) -> None:
+++    """The projected loader should reject reordered truth rows before use."""
+++    with pytest.raises(
+++        ValueError,
+++        match=f"query and truth perturbation order mismatch for split={split}",
+++    ):
+++        _load_projected_feature_bundle(
+++            tmp_path,
+++            truth_perts_fit=truth_perts_fit,
+++            truth_perts_tune=truth_perts_tune,
+++        )
+diff --git a/plans/mantra-hopfield-reconstruction/H1-PB-02/plan.toml b/plans/mantra-hopfield-reconstruction/H1-PB-02/plan.toml
+new file mode 100644
+index 0000000..84c0404
+--- /dev/null
++++ b/plans/mantra-hopfield-reconstruction/H1-PB-02/plan.toml
+@@ -0,0 +1,104 @@
++schema_version = 1
++contract_id = "mantra-hopfield-reconstruction"
++package_sha256 = "b4cd6852de4b931e9fb6f83f045fc06f0b025063c8e5e5d6b032d3658447baa3"
++pair_block_id = "H1-PB-02"
++baseline_commit = "181e29768320a0d8f809428655972431e957d1c5"
++change_summary = [
++  "The Hopfield loader now reads perturbation labels beside fit and tune truth rows and compares them with the feature order before using the numeric rows.",
++  "The observing test reuses one complete fixture to prove matching labels succeed and either fit or tune disagreement fails.",
++]
++deviation_summary = "Everything went according to plan."
++
++[[actions]]
++operation = "patch"
++patch_path = "patches/truth-perturbation-order.patch"
++target_paths = [
++  "experiments/v1938_sota_clean_repro/src/step01/hopfield/loader.py",
++  "experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py",
++]
++
++[[handoff_targets]]
++label = "Complete H1-PB-02 diff"
++source = "plan"
++path = "patches/truth-perturbation-order.patch"
++line = 1
++
++[[handoff_targets]]
++label = "Truth-surface loading and row-order join"
++source = "repository"
++path = "experiments/v1938_sota_clean_repro/src/step01/hopfield/loader.py"
++line = 265
++
++[[handoff_targets]]
++label = "Existing projected-feature acceptance fixture"
++source = "repository"
++path = "experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py"
++line = 451
++
++[gate]
++source_roots = ["experiments/v1938_sota_clean_repro/src/step01/hopfield"]
++test_roots = ["experiments/v1938_sota_clean_repro/tests/step01"]
++
++[[gate.steps]]
++role = "typecheck"
++working_directory = "."
++argv = [
++  "pyright",
++  "experiments/v1938_sota_clean_repro/src/step01/hopfield/loader.py",
++  "experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py",
++]
++
++[[gate.steps]]
++role = "test"
++working_directory = "."
++argv = [
++  "python3",
++  "-m",
++  "pytest",
++  "-q",
++  "experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py",
++  "-k",
++  "truth_perturbation_order",
++]
++
++[[gate.steps]]
++role = "documentation"
++working_directory = "."
++argv = [
++  "python3",
++  "/Users/machina/.agents/skills/code-documentation/scripts/check-schema-descriptions.py",
++  "experiments/v1938_sota_clean_repro/src/step01/hopfield/loader.py",
++  "experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py",
++]
++
++[[gate.steps]]
++role = "lint"
++working_directory = "."
++argv = [
++  "ruff",
++  "check",
++  "experiments/v1938_sota_clean_repro/src/step01/hopfield/loader.py",
++  "experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py",
++]
++
++[[gate.steps]]
++role = "lint"
++working_directory = "."
++argv = [
++  "ruff",
++  "format",
++  "--check",
++  "--range=263-335",
++  "experiments/v1938_sota_clean_repro/src/step01/hopfield/loader.py",
++]
++
++[[gate.steps]]
++role = "lint"
++working_directory = "."
++argv = [
++  "ruff",
++  "format",
++  "--check",
++  "--range=457-690",
++  "experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py",
++]
+diff --git a/tests/phase1/test_hopfield_contract.py b/tests/phase1/test_hopfield_contract.py
+index 23824b0..901f05b 100644
+--- a/tests/phase1/test_hopfield_contract.py
++++ b/tests/phase1/test_hopfield_contract.py
+@@ -110,32 +110,24 @@ class HopfieldContractTests(unittest.TestCase):
+                 EXPECTED_ENCODER_SHA256,
+             )
+ 
+-    def test_places_hopfield_work_in_roadmap_phase_one(self) -> None:
+-        """Keep the six implementation blocks ordered within roadmap Phase 1."""
++    def test_places_hopfield_requirements_in_roadmap_phase_one(self) -> None:
++        """Keep every Hopfield requirement in roadmap Phase 1."""
+         checklist = tomllib.loads(CHECKLIST.read_text(encoding="utf-8"))
+-        placements = [
+-            placement
+-            for placement in checklist["pair_block_placements"]
+-            if placement["phase"] == 1
+-        ]
++        phase = next(phase for phase in checklist["phases"] if phase["number"] == 1)
+ 
+         self.assertEqual(
+-            [placement["pair_block_id"] for placement in placements],
+-            [f"H1-PB-{index:02d}" for index in range(1, 7)],
+-        )
+-        self.assertEqual(
+-            [(placement["phase"], placement["position"]) for placement in placements],
+-            [(1, position) for position in range(6)],
+-        )
+-        self.assertEqual(
+-            {placement["section_title"] for placement in placements},
+-            {"Hopfield reconstruction"},
++            phase,
++            {
++                "number": 1,
++                "title": "Hopfield reconstruction",
++                "requirement_ids": [f"H1-REQ-{index:02d}" for index in range(1, 9)],
++            },
+         )
+ 
+     def test_registers_every_roadmap_contract_and_phase(self) -> None:
+         """Require the master workspace to encode the complete Phase 1-5 map."""
+         checklist = tomllib.loads(CHECKLIST.read_text(encoding="utf-8"))
+-        placements = checklist["pair_block_placements"]
++        phases = checklist["phases"]
+ 
+         self.assertEqual(checklist["checklist_id"], "mantra-rebuild")
+         self.assertEqual(
+@@ -147,20 +139,13 @@ class HopfieldContractTests(unittest.TestCase):
+             ],
+         )
+         self.assertEqual(
++            {phase["number"]: phase["requirement_ids"] for phase in phases},
+             {
+-                phase: [
+-                    placement["pair_block_id"]
+-                    for placement in placements
+-                    if placement["phase"] == phase
+-                ]
+-                for phase in range(1, 6)
+-            },
+-            {
+-                1: [f"H1-PB-{index:02d}" for index in range(1, 7)],
+-                2: [f"M2-PB-{index:02d}" for index in range(1, 5)],
+-                3: ["GE-PB-01"],
+-                4: ["GE-PB-02", "GE-PB-03"],
+-                5: ["GE-PB-04", "GE-PB-05", "GE-PB-06"],
++                1: [f"H1-REQ-{index:02d}" for index in range(1, 9)],
++                2: [f"M2-REQ-{index:02d}" for index in range(1, 7)],
++                3: ["GE-REQ-01", "GE-REQ-02"],
++                4: ["GE-REQ-03", "GE-REQ-04"],
++                5: ["GE-REQ-05", "GE-REQ-06", "GE-REQ-07"],
+             },
+         )
+ 
+@@ -168,7 +153,7 @@ class HopfieldContractTests(unittest.TestCase):
+         graph = tomllib.loads(GRAPH_CONTRACT.read_text(encoding="utf-8"))
+         self.assertEqual(
+             [requirement["id"] for requirement in mil["requirements"]],
+-            [f"M2-REQ-{index:02d}" for index in range(1, 5)],
++            [f"M2-REQ-{index:02d}" for index in range(1, 7)],
+         )
+         self.assertEqual(
+             [requirement["id"] for requirement in graph["requirements"]],

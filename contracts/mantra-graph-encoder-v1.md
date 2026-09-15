@@ -23,7 +23,7 @@ then reserves held-out responses for final evaluation after model selection.
 
 **Current receipt:** None
 
-**Dependencies:** <nobr><code>M2-PB-04</code></nobr>
+**Dependencies:** <nobr><code>M2-PB-06</code></nobr>
 
 **Next action:** Wait for the declared dependencies.
 

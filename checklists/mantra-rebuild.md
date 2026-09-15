@@ -17,44 +17,49 @@ again.
 
 ### Phase 1: Hopfield reconstruction
 
-| PairBlock | Status | Contract | Dependencies | Receipt |
+| Requirement | Status | Contract | PairBlocks | Dependencies |
 |---|---|---|---|---|
-| <nobr><code>H1-PB-01</code></nobr> | bootstrap-complete | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-pb-01) | None | [receipt](../evidence/mantra-rebuild/bootstrap.json) |
-| <nobr><code>H1-PB-02</code></nobr> | drafting | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-pb-02) | <nobr><code>H1-PB-01</code></nobr> | None |
-| <nobr><code>H1-PB-03</code></nobr> | waiting | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-pb-03) | <nobr><code>H1-PB-02</code></nobr> | None |
-| <nobr><code>H1-PB-04</code></nobr> | waiting | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-pb-04) | <nobr><code>H1-PB-03</code></nobr> | None |
-| <nobr><code>H1-PB-05</code></nobr> | waiting | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-pb-05) | <nobr><code>H1-PB-04</code></nobr> | None |
-| <nobr><code>H1-PB-06</code></nobr> | waiting | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-pb-06) | <nobr><code>H1-PB-05</code></nobr> | None |
+| <nobr><code>H1-REQ-01</code></nobr> | complete | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-req-01) | <nobr><code>H1-PB-01</code></nobr> | None |
+| <nobr><code>H1-REQ-02</code></nobr> | in_progress | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-req-02) | <nobr><code>H1-PB-02</code></nobr> | <nobr><code>H1-REQ-01</code></nobr> |
+| <nobr><code>H1-REQ-03</code></nobr> | planned | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-req-03) | <nobr><code>H1-PB-03</code></nobr> | <nobr><code>H1-REQ-02</code></nobr> |
+| <nobr><code>H1-REQ-04</code></nobr> | planned | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-req-04) | <nobr><code>H1-PB-04</code></nobr> | <nobr><code>H1-REQ-03</code></nobr> |
+| <nobr><code>H1-REQ-05</code></nobr> | planned | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-req-05) | <nobr><code>H1-PB-05</code></nobr> | <nobr><code>H1-REQ-04</code></nobr> |
+| <nobr><code>H1-REQ-06</code></nobr> | planned | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-req-06) | <nobr><code>H1-PB-06</code></nobr> | <nobr><code>H1-REQ-05</code></nobr> |
+| <nobr><code>H1-REQ-07</code></nobr> | planned | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-req-07) | <nobr><code>H1-PB-07</code></nobr> | <nobr><code>H1-REQ-06</code></nobr> |
+| <nobr><code>H1-REQ-08</code></nobr> | planned | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-req-08) | <nobr><code>H1-PB-08</code></nobr> | <nobr><code>H1-REQ-07</code></nobr> |
 
 ### Phase 2: MIL reconstruction
 
-| PairBlock | Status | Contract | Dependencies | Receipt |
+| Requirement | Status | Contract | PairBlocks | Dependencies |
 |---|---|---|---|---|
-| <nobr><code>M2-PB-01</code></nobr> | waiting | [mantra-mil-reconstruction](../contracts/mantra-mil-reconstruction.md#m2-pb-01) | <nobr><code>H1-PB-06</code></nobr> | None |
-| <nobr><code>M2-PB-02</code></nobr> | waiting | [mantra-mil-reconstruction](../contracts/mantra-mil-reconstruction.md#m2-pb-02) | <nobr><code>M2-PB-01</code></nobr> | None |
-| <nobr><code>M2-PB-03</code></nobr> | waiting | [mantra-mil-reconstruction](../contracts/mantra-mil-reconstruction.md#m2-pb-03) | <nobr><code>M2-PB-02</code></nobr> | None |
-| <nobr><code>M2-PB-04</code></nobr> | waiting | [mantra-mil-reconstruction](../contracts/mantra-mil-reconstruction.md#m2-pb-04) | <nobr><code>M2-PB-03</code></nobr> | None |
+| <nobr><code>M2-REQ-01</code></nobr> | planned | [mantra-mil-reconstruction](../contracts/mantra-mil-reconstruction.md#m2-req-01) | <nobr><code>M2-PB-01</code></nobr> | <nobr><code>H1-REQ-08</code></nobr> |
+| <nobr><code>M2-REQ-02</code></nobr> | planned | [mantra-mil-reconstruction](../contracts/mantra-mil-reconstruction.md#m2-req-02) | <nobr><code>M2-PB-02</code></nobr> | <nobr><code>M2-REQ-01</code></nobr> |
+| <nobr><code>M2-REQ-03</code></nobr> | planned | [mantra-mil-reconstruction](../contracts/mantra-mil-reconstruction.md#m2-req-03) | <nobr><code>M2-PB-03</code></nobr> | <nobr><code>M2-REQ-02</code></nobr> |
+| <nobr><code>M2-REQ-04</code></nobr> | planned | [mantra-mil-reconstruction](../contracts/mantra-mil-reconstruction.md#m2-req-04) | <nobr><code>M2-PB-04</code></nobr> | <nobr><code>M2-REQ-03</code></nobr> |
+| <nobr><code>M2-REQ-05</code></nobr> | planned | [mantra-mil-reconstruction](../contracts/mantra-mil-reconstruction.md#m2-req-05) | <nobr><code>M2-PB-05</code></nobr> | <nobr><code>M2-REQ-04</code></nobr> |
+| <nobr><code>M2-REQ-06</code></nobr> | planned | [mantra-mil-reconstruction](../contracts/mantra-mil-reconstruction.md#m2-req-06) | <nobr><code>M2-PB-06</code></nobr> | <nobr><code>M2-REQ-05</code></nobr> |
 
 ### Phase 3: Graph identities and baselines
 
-| PairBlock | Status | Contract | Dependencies | Receipt |
+| Requirement | Status | Contract | PairBlocks | Dependencies |
 |---|---|---|---|---|
-| <nobr><code>GE-PB-01</code></nobr> | waiting | [mantra-graph-encoder-v1](../contracts/mantra-graph-encoder-v1.md#ge-pb-01) | <nobr><code>M2-PB-04</code></nobr> | None |
+| <nobr><code>GE-REQ-01</code></nobr> | planned | [mantra-graph-encoder-v1](../contracts/mantra-graph-encoder-v1.md#ge-req-01) | <nobr><code>GE-PB-01</code></nobr> | <nobr><code>M2-REQ-06</code></nobr> |
+| <nobr><code>GE-REQ-02</code></nobr> | planned | [mantra-graph-encoder-v1](../contracts/mantra-graph-encoder-v1.md#ge-req-02) | <nobr><code>GE-PB-01</code></nobr> | <nobr><code>GE-REQ-01</code></nobr> |
 
 ### Phase 4: Topology and V1 features
 
-| PairBlock | Status | Contract | Dependencies | Receipt |
+| Requirement | Status | Contract | PairBlocks | Dependencies |
 |---|---|---|---|---|
-| <nobr><code>GE-PB-02</code></nobr> | waiting | [mantra-graph-encoder-v1](../contracts/mantra-graph-encoder-v1.md#ge-pb-02) | <nobr><code>GE-PB-01</code></nobr> | None |
-| <nobr><code>GE-PB-03</code></nobr> | waiting | [mantra-graph-encoder-v1](../contracts/mantra-graph-encoder-v1.md#ge-pb-03) | <nobr><code>GE-PB-02</code></nobr> | None |
+| <nobr><code>GE-REQ-03</code></nobr> | planned | [mantra-graph-encoder-v1](../contracts/mantra-graph-encoder-v1.md#ge-req-03) | <nobr><code>GE-PB-02</code></nobr> | <nobr><code>GE-REQ-02</code></nobr> |
+| <nobr><code>GE-REQ-04</code></nobr> | planned | [mantra-graph-encoder-v1](../contracts/mantra-graph-encoder-v1.md#ge-req-04) | <nobr><code>GE-PB-03</code></nobr> | <nobr><code>GE-REQ-03</code></nobr> |
 
 ### Phase 5: V1 graph encoder
 
-| PairBlock | Status | Contract | Dependencies | Receipt |
+| Requirement | Status | Contract | PairBlocks | Dependencies |
 |---|---|---|---|---|
-| <nobr><code>GE-PB-04</code></nobr> | waiting | [mantra-graph-encoder-v1](../contracts/mantra-graph-encoder-v1.md#ge-pb-04) | <nobr><code>GE-PB-03</code></nobr> | None |
-| <nobr><code>GE-PB-05</code></nobr> | waiting | [mantra-graph-encoder-v1](../contracts/mantra-graph-encoder-v1.md#ge-pb-05) | <nobr><code>GE-PB-04</code></nobr> | None |
-| <nobr><code>GE-PB-06</code></nobr> | waiting | [mantra-graph-encoder-v1](../contracts/mantra-graph-encoder-v1.md#ge-pb-06) | <nobr><code>GE-PB-05</code></nobr> | None |
+| <nobr><code>GE-REQ-05</code></nobr> | planned | [mantra-graph-encoder-v1](../contracts/mantra-graph-encoder-v1.md#ge-req-05) | <nobr><code>GE-PB-04</code></nobr> | <nobr><code>GE-REQ-04</code></nobr> |
+| <nobr><code>GE-REQ-06</code></nobr> | planned | [mantra-graph-encoder-v1](../contracts/mantra-graph-encoder-v1.md#ge-req-06) | <nobr><code>GE-PB-05</code></nobr> | <nobr><code>GE-REQ-05</code></nobr> |
+| <nobr><code>GE-REQ-07</code></nobr> | planned | [mantra-graph-encoder-v1](../contracts/mantra-graph-encoder-v1.md#ge-req-07) | <nobr><code>GE-PB-06</code></nobr> | <nobr><code>GE-REQ-06</code></nobr> |
 <!-- contract-protocol:generated:end -->
 
 ## Terminal outcome
