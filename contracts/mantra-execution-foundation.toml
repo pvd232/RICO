@@ -4,7 +4,7 @@ title = "MANTRA Execution and Acceleration Foundation"
 
 [[requirements]]
 id = "E0-REQ-01"
-claim = "Before an ephemeral GPU run starts, VIPER must publish and restore one probe artifact through a production GCS-backed ViperCloudClient, verify its digest after restoration, and retain the durable reference in the run record. Each GCS object key must prefix the owner, workspace, and source revision while preserving the exact repository-relative path produced by VIPER's canonical initialized workspace layout."
+claim = "Before an ephemeral GPU run starts, VIPER must publish and restore one probe artifact through a production GCS-backed ViperCloudClient, verify its digest after restoration, and retain the durable reference in the run record. Each GCS object key must prefix the owner, workspace, and content-derived revision while preserving the exact repository-relative path produced by VIPER's canonical initialized workspace layout."
 depends_on = ["E0-REQ-02"]
 verifier_ids = ["E0-VR-01"]
 
