@@ -28,7 +28,7 @@ The bridge result becomes the baseline for later one-at-a-time substitutions.
 The original 64-value Hopfield result remains the historical replay baseline.
 
 <!-- contract-protocol:generated:start -->
-**In progress.** [Jump to current PairBlock](#h1-pb-02)
+**In progress.** [Jump to current PairBlock](#h1-pb-03)
 
 **Checklist:** [MANTRA rebuild](../checklists/mantra-rebuild.md)
 
@@ -100,7 +100,7 @@ The original 64-value Hopfield result remains the historical replay baseline.
 
 #### <nobr><code>H1-PB-02</code></nobr>
 
-**Status:** drafting
+**Status:** complete
 
 **Requirement contribution:** Make the existing Hopfield loader reject disagreement among feature, coefficient-target, and truth perturbation order before training or prediction.
 
@@ -111,9 +111,9 @@ The original 64-value Hopfield result remains the historical replay baseline.
 - The Hopfield loader now reads perturbation labels beside fit and tune truth rows and compares them with the feature order before using the numeric rows.
 - The observing test reuses one complete fixture to prove matching labels succeed and either fit or tune disagreement fails.
 
-**Plan deviations:** Everything went according to plan.
+**Plan deviations:** The first formatting check reached two untouched legacy lines. The gate now checks only the changed truth-reader range; no unrelated source was reformatted.
 
-**Start work:** [Open current plan](../plans/mantra-hopfield-reconstruction/H1-PB-02/plan.toml)
+**Start review:** [Open tested GitHub comparison](https://github.com/pvd232/MANTRA/compare/181e29768320a0d8f809428655972431e957d1c5...a23bf766b70941afa7c8b0fdc64b7ca1326d461b)
 
 **Review these files**
 
@@ -121,9 +121,9 @@ The original 64-value Hopfield result remains the historical replay baseline.
 - [Truth-surface loading and row-order join](../../mantra/experiments/v1938_sota_clean_repro/src/step01/hopfield/loader.py#L265)
 - [Existing projected-feature acceptance fixture](../../mantra/experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py#L451)
 
-**Evidence:** No passing gate receipt.
+**Evidence:** [Passing gate receipt](../evidence/mantra-rebuild/H1-PB-02/gate-review-02.json)
 
-**Decision:** Run the current PairBlock plan.
+**Decision:** <nobr><code>H1-PB-02</code></nobr> is complete; no further decision is required.
 
 <details>
 <summary>Implementation details</summary>
@@ -150,7 +150,7 @@ The original 64-value Hopfield result remains the historical replay baseline.
 # lint
 (cd . && ruff check experiments/v1938_sota_clean_repro/src/step01/hopfield/loader.py experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py)
 # lint
-(cd . && ruff format --check --range=263-335 experiments/v1938_sota_clean_repro/src/step01/hopfield/loader.py)
+(cd . && ruff format --check --range=263-286 experiments/v1938_sota_clean_repro/src/step01/hopfield/loader.py)
 # lint
 (cd . && ruff format --check --range=457-690 experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py)
 ```
@@ -161,7 +161,7 @@ The original 64-value Hopfield result remains the historical replay baseline.
 
 #### <nobr><code>H1-PB-03</code></nobr>
 
-**Status:** waiting
+**Status:** drafting
 
 **Requirement contribution:** Freeze the descriptor-input ledger and restore every exact historical file without rebuilding upstream producers.
 
@@ -171,7 +171,7 @@ The original 64-value Hopfield result remains the historical replay baseline.
 
 **Dependencies:** <nobr><code>H1-PB-02</code></nobr>
 
-**Next action:** Wait for the declared dependencies.
+**Next action:** Run the current PairBlock plan.
 
 <a id="h1-pb-04"></a>
 
@@ -275,8 +275,8 @@ The original 64-value Hopfield result remains the historical replay baseline.
 | Requirement | Claim | Progress | Verifiers | PairBlocks |
 |---|---|---|---|---|
 | <nobr><code>H1-REQ-01</code></nobr> | Phase 1 must begin from the selected Phase 0 Hopfield encoder SHA-256 2433527c3b23b66a16cedc0f7bc43867e4298af4d7a0733b202a8018ba876610, prediction SHA-256 d7180c4669a11b0b2fb184814aafb48ebafe75b02e4bd07998c337aa64dc59b7, and hold PearsonDelta 0.5861640938949398. | complete | <nobr><code>H1-VR-01</code></nobr> | <nobr><code>H1-PB-01</code></nobr> |
-| <nobr><code>H1-REQ-02</code></nobr> | Before any numerical comparison, training, or prediction, the selected Hopfield path must reject disagreement among the ordered perturbation labels for descriptor features, coefficient targets, and fit or tune truth rows. | in_progress | <nobr><code>H1-VR-02</code></nobr> | <nobr><code>H1-PB-02</code></nobr> |
-| <nobr><code>H1-REQ-03</code></nobr> | Before replay training, one complete descriptor-input ledger must name every selected matched-control, control-program, core83, response40, family64, and gene-shift file, its retained digest, producing script or record, and restore route. Restoring that ledger must reproduce the historical keys, perturbation order, gene order, shapes, dtypes, and values without rerunning upstream producers. | planned | <nobr><code>H1-VR-03</code></nobr> | <nobr><code>H1-PB-03</code></nobr> |
+| <nobr><code>H1-REQ-02</code></nobr> | Before any numerical comparison, training, or prediction, the selected Hopfield path must reject disagreement among the ordered perturbation labels for descriptor features, coefficient targets, and fit or tune truth rows. | complete | <nobr><code>H1-VR-02</code></nobr> | <nobr><code>H1-PB-02</code></nobr> |
+| <nobr><code>H1-REQ-03</code></nobr> | Before replay training, one complete descriptor-input ledger must name every selected matched-control, control-program, core83, response40, family64, and gene-shift file, its retained digest, producing script or record, and restore route. Restoring that ledger must reproduce the historical keys, perturbation order, gene order, shapes, dtypes, and values without rerunning upstream producers. | in_progress | <nobr><code>H1-VR-03</code></nobr> | <nobr><code>H1-PB-03</code></nobr> |
 | <nobr><code>H1-REQ-04</code></nobr> | Before replay training, one complete target-input ledger must name every selected coefficient target, fit and tune truth surface, response-block contract, response rotation, and response-similarity graph, together with its retained digest, producing script or record, and restore route. Restoring that ledger must reproduce the historical keys, row and column order, shapes, dtypes, and values without rerunning upstream producers. | planned | <nobr><code>H1-VR-04</code></nobr> | <nobr><code>H1-PB-04</code></nobr> |
 | <nobr><code>H1-REQ-05</code></nobr> | The Hopfield loader must assemble the restored replay bundle and reproduce every retained model input array and fitted transformation state: descriptor columns use moments fitted on the declared fit plus tune rows; coefficient similarity uses per-row mean centering followed by L2 normalization; and every gene, perturbation, shape, dtype, and array order remains fixed. | planned | <nobr><code>H1-VR-05</code></nobr> | <nobr><code>H1-PB-05</code></nobr> |
 | <nobr><code>H1-REQ-06</code></nobr> | The 187 to 384 to 384 to 128 Hopfield encoder must be trained under the selected historical objectives and seed, including the configured auxiliary posterior target built from the whitened-PCA-denoised coefficient bank and neighbors selected by raw-coefficient cosine similarity, and reproduce the retained weights while recording checkpoints, logs, selection scores, and the VIPER run. Final retrieval must continue to use the configured raw coefficient value memory. | planned | <nobr><code>H1-VR-06</code></nobr> | <nobr><code>H1-PB-06</code></nobr> |

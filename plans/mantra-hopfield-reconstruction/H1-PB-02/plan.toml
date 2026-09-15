@@ -1,13 +1,13 @@
 schema_version = 1
 contract_id = "mantra-hopfield-reconstruction"
-package_sha256 = "b4cd6852de4b931e9fb6f83f045fc06f0b025063c8e5e5d6b032d3658447baa3"
+package_sha256 = "61d435968fe82c4419a9a33d9871f0efa139aa08d96b57d773efab45e2d29aa8"
 pair_block_id = "H1-PB-02"
 baseline_commit = "181e29768320a0d8f809428655972431e957d1c5"
 change_summary = [
   "The Hopfield loader now reads perturbation labels beside fit and tune truth rows and compares them with the feature order before using the numeric rows.",
   "The observing test reuses one complete fixture to prove matching labels succeed and either fit or tune disagreement fails.",
 ]
-deviation_summary = "Everything went according to plan."
+deviation_summary = "The first formatting check reached two untouched legacy lines. The gate now checks only the changed truth-reader range; no unrelated source was reformatted."
 
 [[actions]]
 operation = "patch"
@@ -88,7 +88,7 @@ argv = [
   "ruff",
   "format",
   "--check",
-  "--range=263-335",
+  "--range=263-286",
   "experiments/v1938_sota_clean_repro/src/step01/hopfield/loader.py",
 ]
 
