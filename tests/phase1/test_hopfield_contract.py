@@ -129,6 +129,7 @@ class HopfieldContractTests(unittest.TestCase):
                     "E0-REQ-01",
                     "E0-REQ-02",
                     "E0-REQ-03",
+                    "E0-REQ-12",
                     "E0-REQ-09",
                     *[f"H1-REQ-{index:02d}" for index in range(1, 9)],
                 ],
@@ -178,6 +179,7 @@ class HopfieldContractTests(unittest.TestCase):
                     "E0-REQ-01",
                     "E0-REQ-02",
                     "E0-REQ-03",
+                    "E0-REQ-12",
                     "E0-REQ-09",
                     *[f"H1-REQ-{index:02d}" for index in range(1, 9)],
                 ],
@@ -220,7 +222,7 @@ class HopfieldContractTests(unittest.TestCase):
         graph = tomllib.loads(GRAPH_CONTRACT.read_text(encoding="utf-8"))
         self.assertEqual(
             [requirement["id"] for requirement in execution["requirements"]],
-            [f"E0-REQ-{index:02d}" for index in range(1, 12)],
+            [f"E0-REQ-{index:02d}" for index in range(1, 13)],
         )
         self.assertEqual(
             [requirement["id"] for requirement in contract["requirements"]],

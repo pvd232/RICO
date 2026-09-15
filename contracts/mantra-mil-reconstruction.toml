@@ -17,7 +17,7 @@ verifier_ids = ["M2-VR-02"]
 [[requirements]]
 id = "M2-REQ-03"
 claim = "The teacher, donor embeddings, and single-query student must be rebuilt in producer order and reproduce the retained MIL identity vectors; every selection score and checkpoint decision must be emitted to stdout and the primary experiment log and retained through VIPER."
-depends_on = ["M2-REQ-02", "E0-REQ-10"]
+depends_on = ["M2-REQ-02", "E0-REQ-10", "E0-REQ-12"]
 verifier_ids = ["M2-VR-03"]
 
 [[requirements]]
@@ -99,7 +99,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 [[pair_blocks]]
 id = "M2-PB-03"
 requirement_ids = ["M2-REQ-03"]
-depends_on = ["M2-PB-02", "E0-PB-10"]
+depends_on = ["M2-PB-02", "E0-PB-10", "E0-PB-12"]
 repository_id = "mantra"
 requirement_contribution = "Train the selected teacher and single-query student and reproduce the retained MIL identity vectors."
 completion_evidence = ["implementation_review", "viper_registration"]

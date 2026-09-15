@@ -35,7 +35,7 @@ verifier_ids = ["H1-VR-05"]
 [[requirements]]
 id = "H1-REQ-06"
 claim = "The 187 to 384 to 384 to 128 Hopfield encoder must be trained under the selected historical objectives and seed, including the configured auxiliary posterior target built from the whitened-PCA-denoised coefficient bank and neighbors selected by raw-coefficient cosine similarity, and reproduce the retained weights while recording checkpoints, logs, selection scores, and the VIPER run. Final retrieval must continue to use the configured raw coefficient value memory."
-depends_on = ["H1-REQ-05", "E0-REQ-09"]
+depends_on = ["H1-REQ-05", "E0-REQ-09", "E0-REQ-12"]
 verifier_ids = ["H1-VR-06"]
 
 [[requirements]]
@@ -162,7 +162,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 [[pair_blocks]]
 id = "H1-PB-06"
 requirement_ids = ["H1-REQ-06"]
-depends_on = ["H1-PB-05", "E0-PB-09"]
+depends_on = ["H1-PB-05", "E0-PB-09", "E0-PB-12"]
 repository_id = "mantra"
 requirement_contribution = "Train the selected Hopfield encoder and reproduce its retained weights and selection record."
 completion_evidence = ["implementation_review", "viper_registration"]

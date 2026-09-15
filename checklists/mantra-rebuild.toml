@@ -21,6 +21,7 @@ requirement_ids = [
   "E0-REQ-01",
   "E0-REQ-02",
   "E0-REQ-03",
+  "E0-REQ-12",
   "E0-REQ-09",
   "H1-REQ-01",
   "H1-REQ-02",

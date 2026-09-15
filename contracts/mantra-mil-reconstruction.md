@@ -58,7 +58,7 @@ hold `PearsonDelta` `0.6025499488874759`.
 
 **Current receipt:** None
 
-**Dependencies:** <nobr><code>M2-PB-02</code></nobr>, <nobr><code>E0-PB-10</code></nobr>
+**Dependencies:** <nobr><code>M2-PB-02</code></nobr>, <nobr><code>E0-PB-10</code></nobr>, <nobr><code>E0-PB-12</code></nobr>
 
 **Next action:** Wait for the declared dependencies.
 

@@ -217,7 +217,7 @@ The original 64-value Hopfield result remains the historical replay baseline.
 
 **Current receipt:** None
 
-**Dependencies:** <nobr><code>H1-PB-05</code></nobr>, <nobr><code>E0-PB-09</code></nobr>
+**Dependencies:** <nobr><code>H1-PB-05</code></nobr>, <nobr><code>E0-PB-09</code></nobr>, <nobr><code>E0-PB-12</code></nobr>
 
 **Next action:** Wait for the declared dependencies.
 
