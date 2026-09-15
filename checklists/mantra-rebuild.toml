@@ -30,6 +30,8 @@ requirement_ids = [
   "H1-REQ-05",
   "H1-REQ-06",
   "H1-REQ-07",
+  "H1-REQ-10",
+  "H1-REQ-11",
   "H1-REQ-08",
 ]
 

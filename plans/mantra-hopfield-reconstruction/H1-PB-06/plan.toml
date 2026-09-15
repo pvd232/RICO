@@ -1,0 +1,60 @@
+schema_version = 1
+contract_id = "mantra-hopfield-reconstruction"
+package_sha256 = "d381b4090b7f6c2616289d86709ad5df9547183189b95d82d066593a1bceb1ed"
+pair_block_id = "H1-PB-06"
+baseline_commit = "c6b72deb5d5b408aea60eb07c04fe4cb208b3efa"
+change_summary = [
+  "The historical Hopfield encoder was retrained twice through strict VIPER under the declared Python 3.13, Torch 2.12.1, and CUDA 13 environment.",
+  "Both runs emitted the same 1084512-byte encoder with SHA-256 af1f62c4c315c65e7379b97c57646b49b35c7f3fc3f69fcf6f94f0c8df276da9, which is now the modern replay baseline.",
+  "The environment now declares zstandard because VIPER requires it to read the retained restoration archive.",
+]
+deviation_summary = "The archived encoder bytes did not reproduce under the modern runtime after the configuration was checked. Two independent strict VIPER runs produced the same modern bytes, so the declared fallback rule pinned that reproducible result without changing the model or inputs."
+
+[[actions]]
+operation = "patch"
+patch_path = "patches/modern-encoder-baseline.patch"
+target_paths = [
+  "nuevo/environment.yml",
+  "src/mantra/rebuild/hopfield_replay.py",
+]
+
+[[handoff_targets]]
+label = "Complete H1-PB-06 diff"
+source = "plan"
+path = "patches/modern-encoder-baseline.patch"
+line = 1
+
+[[handoff_targets]]
+label = "Modern encoder identity"
+source = "repository"
+path = "src/mantra/rebuild/hopfield_replay.py"
+line = 78
+
+[gate]
+source_roots = ["src/mantra/rebuild", "nuevo/environment.yml", "pyproject.toml"]
+test_roots = ["src/mantra/rebuild/tests", "conftest.py"]
+
+[[gate.steps]]
+role = "typecheck"
+working_directory = "."
+argv = ["pyright", "src/mantra/rebuild/hopfield_replay.py", "src/mantra/rebuild/tests/test_hopfield_replay.py"]
+
+[[gate.steps]]
+role = "test"
+working_directory = "."
+argv = ["python3", "-m", "pytest", "-q", "src/mantra/rebuild/tests/test_hopfield_replay.py"]
+
+[[gate.steps]]
+role = "documentation"
+working_directory = "."
+argv = ["python3", "/Users/machina/.agents/skills/code-documentation/scripts/check-schema-descriptions.py", "src/mantra/rebuild/hopfield_replay.py", "src/mantra/rebuild/tests/test_hopfield_replay.py"]
+
+[[gate.steps]]
+role = "lint"
+working_directory = "."
+argv = ["ruff", "format", "--check", "src/mantra/rebuild/hopfield_replay.py", "src/mantra/rebuild/tests/test_hopfield_replay.py"]
+
+[[gate.steps]]
+role = "lint"
+working_directory = "."
+argv = ["ruff", "check", "src/mantra/rebuild/hopfield_replay.py", "src/mantra/rebuild/tests/test_hopfield_replay.py"]

@@ -1,0 +1,57 @@
+schema_version = 1
+contract_id = "mantra-hopfield-reconstruction"
+package_sha256 = "d381b4090b7f6c2616289d86709ad5df9547183189b95d82d066593a1bceb1ed"
+pair_block_id = "H1-PB-07"
+baseline_commit = "79a05478a59be74dfca3943208eb39bef3e81296"
+change_summary = [
+  "Two independent modern strict VIPER runs emitted the same raw-gene prediction file and hold PearsonDelta.",
+  "The accepted prediction is 38391087 bytes with SHA-256 f8e8e6a6fe291143debd3d8e8b3ab9c4e2aed5afd3b2391e7856c7d8fd7e262b, and the accepted hold PearsonDelta is 0.5861640983697456.",
+  "A third strict run passed Embed, Predict, and Evaluate against the pinned modern identities while retaining the Phase 0 artifacts as comparison oracles.",
+]
+deviation_summary = "The modern prediction arrays and serialized file differ from the historical environment despite an unchanged model, configuration, and input bundle. The repeated modern result was pinned under the approved environment-divergence rule."
+
+[[actions]]
+operation = "patch"
+patch_path = "patches/modern-prediction-baseline.patch"
+target_paths = ["src/mantra/rebuild/hopfield_replay.py"]
+
+[[handoff_targets]]
+label = "Complete H1-PB-07 diff"
+source = "plan"
+path = "patches/modern-prediction-baseline.patch"
+line = 1
+
+[[handoff_targets]]
+label = "Modern prediction and score identities"
+source = "repository"
+path = "src/mantra/rebuild/hopfield_replay.py"
+line = 75
+
+[gate]
+source_roots = ["src/mantra/rebuild", "pyproject.toml"]
+test_roots = ["src/mantra/rebuild/tests", "conftest.py"]
+
+[[gate.steps]]
+role = "typecheck"
+working_directory = "."
+argv = ["pyright", "src/mantra/rebuild/hopfield_replay.py", "src/mantra/rebuild/tests/test_hopfield_replay.py"]
+
+[[gate.steps]]
+role = "test"
+working_directory = "."
+argv = ["python3", "-m", "pytest", "-q", "src/mantra/rebuild/tests/test_hopfield_replay.py"]
+
+[[gate.steps]]
+role = "documentation"
+working_directory = "."
+argv = ["python3", "/Users/machina/.agents/skills/code-documentation/scripts/check-schema-descriptions.py", "src/mantra/rebuild/hopfield_replay.py", "src/mantra/rebuild/tests/test_hopfield_replay.py"]
+
+[[gate.steps]]
+role = "lint"
+working_directory = "."
+argv = ["ruff", "format", "--check", "src/mantra/rebuild/hopfield_replay.py", "src/mantra/rebuild/tests/test_hopfield_replay.py"]
+
+[[gate.steps]]
+role = "lint"
+working_directory = "."
+argv = ["ruff", "check", "src/mantra/rebuild/hopfield_replay.py", "src/mantra/rebuild/tests/test_hopfield_replay.py"]

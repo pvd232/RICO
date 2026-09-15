@@ -1,0 +1,26 @@
+diff --git a/nuevo/environment.yml b/nuevo/environment.yml
+index b14d4341f..95dc84f68 100644
+--- a/nuevo/environment.yml
++++ b/nuevo/environment.yml
+@@ -11,6 +11,7 @@ dependencies:
+   - threadpoolctl=3.5.0
+   - pyyaml=6.0.3
+   - h5py=3.16.0
++  - zstandard=0.25.0
+   - pyarrow=24.0.0
+diff --git a/src/mantra/rebuild/hopfield_replay.py b/src/mantra/rebuild/hopfield_replay.py
+index b957dc959..2477aaf92 100644
+--- a/src/mantra/rebuild/hopfield_replay.py
++++ b/src/mantra/rebuild/hopfield_replay.py
+@@ -81,11 +81,12 @@ HISTORICAL_ENCODER = FileIdentity(
+ # The archived configuration and inputs reproduce deterministically under the
+-# retained Torch 2.5.1/CUDA 12.1 stack, but not byte-for-byte with the archived
+-# weights. This repeated output is the accepted replay baseline.
++# selected Python 3.13/Torch 2.12.1/CUDA 13 stack, but not byte-for-byte with
++# the archived weights. Two independent VIPER runs produced this accepted
++# modern-environment replay baseline.
+ EXPECTED_ENCODER = FileIdentity(
+     bytes=1_084_512,
+-    sha256="16ff0b18814d43f0b8eb5e3514b4aa3418cc98eac5c62c29272ac4b1cf51f033",
++    sha256="af1f62c4c315c65e7379b97c57646b49b35c7f3fc3f69fcf6f94f0c8df276da9",
+ )

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import unittest
+from itertools import pairwise
 from pathlib import Path
 
 import tomllib
@@ -27,6 +28,13 @@ EXPECTED_PREDICTION_SHA256 = (
     "d7180c4669a11b0b2fb184814aafb48ebafe75b02e4bd07998c337aa64dc59b7"
 )
 EXPECTED_HOLD_PEARSON_DELTA = "0.5861640938949398"
+MODERN_ENCODER_SHA256 = (
+    "af1f62c4c315c65e7379b97c57646b49b35c7f3fc3f69fcf6f94f0c8df276da9"
+)
+MODERN_PREDICTION_SHA256 = (
+    "f8e8e6a6fe291143debd3d8e8b3ab9c4e2aed5afd3b2391e7856c7d8fd7e262b"
+)
+MODERN_HOLD_PEARSON_DELTA = "0.5861640983697456"
 
 
 def verify_selected_baseline(
@@ -131,7 +139,10 @@ class HopfieldContractTests(unittest.TestCase):
                     "E0-REQ-03",
                     "E0-REQ-12",
                     "E0-REQ-09",
-                    *[f"H1-REQ-{index:02d}" for index in range(1, 9)],
+                    *[f"H1-REQ-{index:02d}" for index in range(1, 8)],
+                    "H1-REQ-10",
+                    "H1-REQ-11",
+                    "H1-REQ-08",
                 ],
             },
         )
@@ -181,7 +192,10 @@ class HopfieldContractTests(unittest.TestCase):
                     "E0-REQ-03",
                     "E0-REQ-12",
                     "E0-REQ-09",
-                    *[f"H1-REQ-{index:02d}" for index in range(1, 9)],
+                    *[f"H1-REQ-{index:02d}" for index in range(1, 8)],
+                    "H1-REQ-10",
+                    "H1-REQ-11",
+                    "H1-REQ-08",
                 ],
                 2: [
                     "E0-REQ-10",
@@ -226,7 +240,11 @@ class HopfieldContractTests(unittest.TestCase):
         )
         self.assertEqual(
             [requirement["id"] for requirement in contract["requirements"]],
-            [f"H1-REQ-{index:02d}" for index in range(1, 10)],
+            [
+                *[f"H1-REQ-{index:02d}" for index in range(1, 10)],
+                "H1-REQ-10",
+                "H1-REQ-11",
+            ],
         )
         self.assertEqual(
             [requirement["id"] for requirement in mil["requirements"]],
@@ -327,6 +345,35 @@ class HopfieldContractTests(unittest.TestCase):
             model_requirements["M8-REQ-01"]["depends_on"][0],
             "S6-REQ-09",
         )
+
+    def test_reconstructs_inputs_after_freezing_the_modern_replay(self) -> None:
+        """Require one-at-a-time source rebuilds before rebuilt-only replay."""
+        contract = tomllib.loads(CONTRACT.read_text(encoding="utf-8"))
+        contract_text = CONTRACT.read_text(encoding="utf-8")
+        requirements = {
+            requirement["id"]: requirement for requirement in contract["requirements"]
+        }
+        blocks = {block["id"]: block for block in contract["pair_blocks"]}
+
+        self.assertIn(MODERN_ENCODER_SHA256, contract_text)
+        self.assertIn(MODERN_PREDICTION_SHA256, contract_text)
+        self.assertIn(MODERN_HOLD_PEARSON_DELTA, contract_text)
+        self.assertEqual(requirements["H1-REQ-10"]["depends_on"], ["H1-REQ-07"])
+        self.assertEqual(requirements["H1-REQ-11"]["depends_on"], ["H1-REQ-10"])
+        self.assertEqual(requirements["H1-REQ-08"]["depends_on"], ["H1-REQ-11"])
+        self.assertIn("FutureInputRefs", requirements["H1-REQ-11"]["claim"])
+
+        reconstruction_blocks = [f"H1-PB-05{suffix}" for suffix in "ABCDEFGHIJKLM"]
+        self.assertEqual(blocks[reconstruction_blocks[0]]["depends_on"], ["H1-PB-07"])
+        for previous, current in pairwise(reconstruction_blocks):
+            self.assertEqual(blocks[current]["depends_on"], [previous])
+            self.assertEqual(blocks[current]["requirement_ids"], ["H1-REQ-10"])
+        self.assertEqual(blocks["H1-PB-05"]["depends_on"], ["H1-PB-05M"])
+        self.assertEqual(
+            blocks["H1-PB-05"]["requirement_ids"],
+            ["H1-REQ-05", "H1-REQ-11"],
+        )
+        self.assertEqual(blocks["H1-PB-08"]["depends_on"], ["H1-PB-05"])
 
 
 if __name__ == "__main__":
