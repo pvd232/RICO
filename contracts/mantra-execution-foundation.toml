@@ -77,7 +77,7 @@ verifier_ids = ["E0-VR-12"]
 [[verifiers]]
 id = "E0-VR-01"
 requirement_ids = ["E0-REQ-01"]
-acceptance_conditions = ["A production VIPER client publishes a probe to GCS under owner, workspace, and source-revision prefixes while preserving VIPER's exact repository-relative artifact path; a fresh process restores the same bytes through the retained viper:// reference, and digest, path, or object substitution fails."]
+acceptance_conditions = ["A production VIPER client publishes a probe to GCS under owner, workspace, and content-revision prefixes while preserving VIPER's exact repository-relative artifact path; a fresh process restores the same bytes through the retained viper:// reference, and digest, path, or object substitution fails."]
 success_case = { repository_id = "viper", path = "tests/test_gcs_storage.py", symbol = "test_publishes_and_restores_durable_snapshot" }
 rejection_cases = [{ repository_id = "viper", path = "tests/test_gcs_storage.py", symbol = "test_rejects_changed_or_missing_cloud_object" }]
 

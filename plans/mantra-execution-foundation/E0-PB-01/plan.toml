@@ -1,6 +1,6 @@
 schema_version = 1
 contract_id = "mantra-execution-foundation"
-package_sha256 = "1baff26e93e62caf1b80175132fc7ba4934b24069f2fcc29a2311e3d3311ea15"
+package_sha256 = "042038108f925616987f834dc35bfa7c3f92426dc6ddce4b3ad93b9004fab146"
 pair_block_id = "E0-PB-01"
 baseline_commit = "aeceffbc8b92151bb6ab7d65ea846e7afc89f1d6"
 change_summary = [
@@ -9,7 +9,7 @@ change_summary = [
   "A revision becomes readable only after its manifest is sealed; every restored file is checked against its recorded byte count and SHA-256 digest.",
   "The launch probe publishes and restores one object through the production client and writes a durable receipt before an ephemeral GPU worker may start.",
 ]
-deviation_summary = "The live probe first exposed an Application Default Credentials quota-project mismatch. Rebinding ADC from the closed MEDIT billing context to MANTRA resolved it; no cloud object was written before that repair. The CodeQL-selected fast gate also exposed two frozen public API and package inventories, which were updated without expanding runtime scope."
+deviation_summary = "The live probe first exposed an Application Default Credentials quota-project mismatch. Rebinding ADC from the closed MEDIT billing context to MANTRA resolved it; no cloud object was written before that repair. The CodeQL-selected fast gate also exposed two frozen public API and package inventories. Final self-review corrected the verifier's revision terminology; runtime scope and candidate bytes did not change."
 
 [[actions]]
 operation = "patch"

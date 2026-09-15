@@ -33,9 +33,9 @@ KMeans exception used for byte-parity replay.
 - A revision becomes readable only after its manifest is sealed; every restored file is checked against its recorded byte count and SHA-256 digest.
 - The launch probe publishes and restores one object through the production client and writes a durable receipt before an ephemeral GPU worker may start.
 
-**Plan deviations:** The live probe first exposed an Application Default Credentials quota-project mismatch. Rebinding ADC from the closed MEDIT billing context to MANTRA resolved it; no cloud object was written before that repair. The CodeQL-selected fast gate also exposed two frozen public API and package inventories, which were updated without expanding runtime scope.
+**Plan deviations:** The live probe first exposed an Application Default Credentials quota-project mismatch. Rebinding ADC from the closed MEDIT billing context to MANTRA resolved it; no cloud object was written before that repair. The CodeQL-selected fast gate also exposed two frozen public API and package inventories. Final self-review corrected the verifier's revision terminology; runtime scope and candidate bytes did not change.
 
-**Start review:** [Open tested GitHub comparison](https://github.com/pvd232/viper/compare/aeceffbc8b92151bb6ab7d65ea846e7afc89f1d6...5b5f97feed28a857df70202b8a3d6023d742c31f)
+**Start review:** [Open tested GitHub comparison](https://github.com/pvd232/viper/compare/5b5f97feed28a857df70202b8a3d6023d742c31f...718aaa2a1406d1afa214efccf33407eaf64cf902)
 
 **Review these files**
 
@@ -45,7 +45,7 @@ KMeans exception used for byte-parity replay.
 - [Workspace and cloud path contract](../../viper/docs/reference/protocol.md#L56)
 - [Immutable publication acceptance cases](../plans/mantra-execution-foundation/E0-PB-01/patches/gcs-storage.patch#L751)
 
-**Evidence:** [Passing gate receipt](../evidence/mantra-rebuild/E0-PB-01/gate-review-01.json)
+**Evidence:** [Passing gate receipt](../evidence/mantra-rebuild/E0-PB-01/gate-review-02.json)
 
 **Decision:** <nobr><code>E0-PB-01</code></nobr> is complete; no further decision is required.
 
@@ -324,7 +324,7 @@ KMeans exception used for byte-parity replay.
 
 | Rule | Requirements | Acceptance conditions | Success case | Rejection cases |
 |---|---|---|---|---|
-| <nobr><code>E0-VR-01</code></nobr> | <nobr><code>E0-REQ-01</code></nobr> | A production VIPER client publishes a probe to GCS under owner, workspace, and source-revision prefixes while preserving VIPER's exact repository-relative artifact path; a fresh process restores the same bytes through the retained viper:// reference, and digest, path, or object substitution fails. | [test_publishes_and_restores_durable_snapshot](../../viper/tests/test_gcs_storage.py) | [test_rejects_changed_or_missing_cloud_object](../../viper/tests/test_gcs_storage.py) |
+| <nobr><code>E0-VR-01</code></nobr> | <nobr><code>E0-REQ-01</code></nobr> | A production VIPER client publishes a probe to GCS under owner, workspace, and content-revision prefixes while preserving VIPER's exact repository-relative artifact path; a fresh process restores the same bytes through the retained viper:// reference, and digest, path, or object substitution fails. | [test_publishes_and_restores_durable_snapshot](../../viper/tests/test_gcs_storage.py) | [test_rejects_changed_or_missing_cloud_object](../../viper/tests/test_gcs_storage.py) |
 | <nobr><code>E0-VR-02</code></nobr> | <nobr><code>E0-REQ-02</code></nobr> | The launcher searches lower-demand regions first, skips capacity and quota failures, forces and verifies boot-disk auto-delete, selects deletion on Spot preemption, cleans every resource created by a failed attempt, and blocks a live worker without a verified storage probe. Final teardown finds no worker or boot disk after accepted artifacts restore and preserves any router or NAT reused from an earlier launch. | [test_probes_launch_and_deletes_worker_and_disk](../tests/infrastructure/test_mantra_gpu_lifecycle.py) | [test_blocks_training_or_teardown_on_failed_probe](../tests/infrastructure/test_mantra_gpu_lifecycle.py) |
 | <nobr><code>E0-VR-03</code></nobr> | <nobr><code>E0-REQ-03</code></nobr> | Every required optimization has one resolvable historical owner, modular owner, reference comparison, performance threshold, execution policy, and downstream consumer, and an omitted operation fails. | [test_inventory_covers_every_accelerated_operation](../tests/roadmap/test_mantra_optimization_inventory.py) | [test_rejects_missing_owner_gate_or_consumer](../tests/roadmap/test_mantra_optimization_inventory.py) |
 | <nobr><code>E0-VR-04</code></nobr> | <nobr><code>E0-REQ-04</code></nobr> | The modular GPU cNMF path matches the CPU reference within tolerance for fixed initialization, exercises every declared optimization, and exceeds the retained minimum throughput on an L4. | [test_preserves_batched_gpu_cnmf](../../mantra/src/mantra/rebuild/tests/test_gpu_response_kernels.py) | [test_rejects_unverified_or_deoptimized_cnmf](../../mantra/src/mantra/rebuild/tests/test_gpu_response_kernels.py) |
