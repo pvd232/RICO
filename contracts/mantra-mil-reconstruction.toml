@@ -5,24 +5,24 @@ title = "MANTRA MIL Reconstruction"
 [[requirements]]
 id = "M2-REQ-01"
 claim = "The standalone MIL rebuild must use the selected v1952 seed-123460 without_control inputs, create one student query, exclude the dormant proto_count 11 setting from the active architecture, and consume no Hopfield output."
-depends_on = ["H1-REQ-08"]
+depends_on = []
 verifier_ids = ["M2-VR-01"]
 
 [[requirements]]
 id = "M2-REQ-02"
-claim = "The selected MIL descriptor rows, coefficient and gene targets, control shift, cell-program projections, matched cell programs, teacher bags, attention priors, and conditioning arrays must be rebuilt and compared with their historical counterparts before training."
+claim = "Before replay training, one complete MIL input ledger must name every selected descriptor row, coefficient and gene target, control shift, cell-program projection, matched cell program, teacher bag, attention prior, and conditioning array, together with its retained digest, producing script or record, and restore route. Restoring that ledger must reproduce every historical input without rerunning upstream producers, and every standardized descriptor must retain the exact reference population used to fit its column means and standard deviations."
 depends_on = ["M2-REQ-01"]
 verifier_ids = ["M2-VR-02"]
 
 [[requirements]]
 id = "M2-REQ-03"
 claim = "The teacher, donor embeddings, and single-query student must be rebuilt in producer order and reproduce the retained MIL identity vectors; every selection score and checkpoint decision must be emitted to stdout and the primary experiment log and retained through VIPER."
-depends_on = ["M2-REQ-02"]
+depends_on = ["M2-REQ-02", "E0-REQ-10"]
 verifier_ids = ["M2-VR-03"]
 
 [[requirements]]
 id = "M2-REQ-04"
-claim = "The selected Step02 covariance shrinkage, teacher-neighbor smoothing, and retrieval path must reproduce prediction SHA-256 c0011d71436c540bde8dd00f9e2f8ac8fb46aa787161460a1aefce5f0f1277be, weight SHA-256 8290145991446afd9f45c3f3be1ad7fe95518dfe6f75e1e950b86a2b84c323ab, and hold PearsonDelta 0.5924883417873266."
+claim = "The selected Step02 memory construction must reproduce the fitted column moments, ridge-whitened covariance shrinkage, teacher-neighbor smoothing, and retrieval path before reproducing prediction SHA-256 c0011d71436c540bde8dd00f9e2f8ac8fb46aa787161460a1aefce5f0f1277be, weight SHA-256 8290145991446afd9f45c3f3be1ad7fe95518dfe6f75e1e950b86a2b84c323ab, and hold PearsonDelta 0.5924883417873266."
 depends_on = ["M2-REQ-03"]
 verifier_ids = ["M2-VR-04"]
 
@@ -48,8 +48,8 @@ rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/
 [[verifiers]]
 id = "M2-VR-02"
 requirement_ids = ["M2-REQ-02"]
-acceptance_conditions = ["Every rebuilt MIL training input matches its historical keys, perturbation order, gene order, shape, dtype, and values, and the loader reports the selected bag and conditioning rules."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_inputs.py", symbol = "test_rebuilds_selected_mil_inputs" }
+acceptance_conditions = ["The MIL input ledger resolves every retained file to its exact digest, producing script or record, and restore route; restoring it reproduces the historical keys, perturbation order, gene order, shapes, dtypes, and values, and the loader reports each descriptor's standardization reference rows together with the selected bag and conditioning rules."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_inputs.py", symbol = "test_restores_selected_mil_inputs" }
 rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_inputs.py", symbol = "test_rejects_changed_mil_input_or_bag" }]
 
 [[verifiers]]
@@ -62,7 +62,7 @@ rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/
 [[verifiers]]
 id = "M2-VR-04"
 requirement_ids = ["M2-REQ-04"]
-acceptance_conditions = ["The Step02 output arrays and weight arrays equal their retained historical counterparts and the hold PearsonDelta equals 0.5924883417873266."]
+acceptance_conditions = ["The Step02 fitted moments, ridge-whitened and neighbor-smoothed memory, output arrays, and weight arrays equal their retained historical counterparts and the hold PearsonDelta equals 0.5924883417873266."]
 success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_reconstruction.py", symbol = "test_rebuilds_selected_step02" }
 rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_reconstruction.py", symbol = "test_rejects_changed_step02_output" }]
 
@@ -83,7 +83,7 @@ rejection_cases = [{ repository_id = "rico", path = "tests/phase2/test_mil_regis
 [[pair_blocks]]
 id = "M2-PB-01"
 requirement_ids = ["M2-REQ-01"]
-depends_on = ["H1-PB-08"]
+depends_on = []
 repository_id = "mantra"
 requirement_contribution = "Bind the MIL rebuild to its standalone historical inputs and active single-query architecture."
 completion_evidence = ["implementation_review", "viper_registration"]
@@ -93,13 +93,13 @@ id = "M2-PB-02"
 requirement_ids = ["M2-REQ-02"]
 depends_on = ["M2-PB-01"]
 repository_id = "mantra"
-requirement_contribution = "Rebuild and compare the complete MIL training-input bundle, bags, priors, and conditioning arrays."
+requirement_contribution = "Freeze the MIL input ledger and restore the exact historical training bundle, bags, priors, and conditioning arrays."
 completion_evidence = ["implementation_review", "viper_registration"]
 
 [[pair_blocks]]
 id = "M2-PB-03"
 requirement_ids = ["M2-REQ-03"]
-depends_on = ["M2-PB-02"]
+depends_on = ["M2-PB-02", "E0-PB-10"]
 repository_id = "mantra"
 requirement_contribution = "Train the selected teacher and single-query student and reproduce the retained MIL identity vectors."
 completion_evidence = ["implementation_review", "viper_registration"]

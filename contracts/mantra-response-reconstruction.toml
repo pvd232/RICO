@@ -1,0 +1,150 @@
+schema_version = 1
+contract_id = "mantra-response-reconstruction"
+title = "MANTRA Response Reconstruction"
+
+[[requirements]]
+id = "R5-REQ-01"
+claim = "Control programs must be rebuilt by cNMF from canonical control cells restricted to the frozen control panel, which excludes the core immediate-early-gene blacklist. cNMF must consume the expression residuals produced by R5-REQ-02 through the verified GPU NMF path and retain the selected rank, restarts, regularization, consensus backend, ordered genes, programs, coefficients, reconstruction diagnostics, and execution profile."
+depends_on = ["R5-REQ-02", "E0-REQ-04", "E0-REQ-08"]
+verifier_ids = ["R5-VR-01"]
+
+[[requirements]]
+id = "R5-REQ-02"
+claim = "One declared operation must regress the immediate-early-gene score, S-phase score, G2M-phase score, log UMI count, and mitochondrial percentage from the canonical control-cell expression matrix before cNMF fits control programs. The operation must retain the covariates, fitted population, coefficients, residual expression, and leakage diagnostics."
+depends_on = ["P4-REQ-06", "D3-REQ-07"]
+verifier_ids = ["R5-VR-02"]
+
+[[requirements]]
+id = "R5-REQ-03"
+claim = "One vectorized GPU Sinkhorn stage must match perturbation cells to controls from the same canonical cell set, produce barycentric controls and residual response vectors, and retain convergence, marginal-error, transport-mass, transport-cost, batch, device, precision, and donor-versus-rebuilt diagnostics."
+depends_on = ["R5-REQ-02", "E0-REQ-06"]
+verifier_ids = ["R5-VR-03"]
+
+[[requirements]]
+id = "R5-REQ-04"
+claim = "Response programs must be learned from the rebuilt Sinkhorn residual surface on the frozen GEARS 5,000-gene response panel by one declared sparse-dictionary stage. The response stage must use the complete GEARS target axis, including any core immediate-early genes present, because the response target includes their perturbation-induced signal. Program coefficients must use the verified GPU NNLS path, and the stage must retain its objective, initialization, selected parameters, ordered gene axis, loadings, coefficients, and reconstruction diagnostics."
+depends_on = ["R5-REQ-03", "E0-REQ-05"]
+verifier_ids = ["R5-VR-04"]
+
+[[requirements]]
+id = "R5-REQ-05"
+claim = "One declared response-coordinate stage must reproduce the selected single-cell recipe: fit the signed sparse SVD decoder on the declared fit plus tune Sinkhorn residual cells, ridge-encode every cell against that decoder, and rotate the 210 coefficients through the ordered fit plus tune covariance eigendecomposition. The stage must preserve the exact fitted cells, decoder, eigensystem ordering, rotation, coefficients, inverse reconstruction, numerical backend, execution state, and comparison with the historical coordinates."
+depends_on = ["R5-REQ-04", "E0-REQ-11"]
+verifier_ids = ["R5-VR-05"]
+
+[[requirements]]
+id = "R5-REQ-06"
+claim = "One response-target bundle must bind the canonical cells, distinct control and response gene panels, control programs, transport residuals, response programs, rotated coordinates, response-block definitions, perturbation order, response-gene order, split membership, execution profiles, and source evidence for both model rebuilds."
+depends_on = ["R5-REQ-01", "R5-REQ-07"]
+verifier_ids = ["R5-VR-06"]
+
+[[requirements]]
+id = "R5-REQ-07"
+claim = "One response-block definition stage must reconstruct the historical program-similarity graph, hard 16-block labels, soft semantic 16-block map, and 210-dimensional rotation from the rebuilt response programs and coefficients, preserving program order, dimensions, parameters, and parity with each retained Phase 0 definition artifact."
+depends_on = ["R5-REQ-05"]
+verifier_ids = ["R5-VR-07"]
+
+[[verifiers]]
+id = "R5-VR-01"
+requirement_ids = ["R5-REQ-01"]
+acceptance_conditions = ["The cNMF stage consumes only canonical control cells, the frozen IEG-excluded control panel, and the residual expression produced by R5-REQ-02; exercises the verified GPU NMF path; reproduces from its retained plan; emits finite non-collapsed programs; and uses CPU KMeans whenever the run claims byte parity."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_control_programs.py", symbol = "test_rebuilds_gpu_cnmf_control_programs" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_control_programs.py", symbol = "test_rejects_other_cells_deoptimized_nmf_or_wrong_kmeans_profile" }]
+
+[[verifiers]]
+id = "R5-VR-02"
+requirement_ids = ["R5-REQ-02"]
+acceptance_conditions = ["The residualization reads canonical control cells and exactly the declared immediate-early-gene, cell-cycle, library-size, and mitochondrial covariates; reproduces from retained coefficients; reduces their measured contributions; and rejects another fitted population, a missing covariate, or an unremoved contribution."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_control_programs.py", symbol = "test_removes_declared_ieg_contribution" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_control_programs.py", symbol = "test_rejects_other_cells_or_unremoved_ieg_signal" }]
+
+[[verifiers]]
+id = "R5-VR-03"
+requirement_ids = ["R5-REQ-03"]
+acceptance_conditions = ["The GPU transport stage uses only canonical cells, matches its CPU reference within named tolerances, satisfies its numerical checks, and emits a donor-versus-rebuilt comparison on the same response surface."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_transport_residuals.py", symbol = "test_builds_gpu_sinkhorn_matched_control_residuals" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_transport_residuals.py", symbol = "test_rejects_failed_transport_mixed_cells_or_cpu_gpu_drift" }]
+
+[[verifiers]]
+id = "R5-VR-04"
+requirement_ids = ["R5-REQ-04"]
+acceptance_conditions = ["The sparse dictionary reproduces from retained parameters, preserves the exact GEARS response-gene order and its declared IEG-retention policy, its GPU NNLS coefficients match the CPU reference within tolerance, and it reports sparsity, reconstruction, stability, support, and redundancy."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_response_programs.py", symbol = "test_builds_sparse_programs_with_gpu_nnls" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_response_programs.py", symbol = "test_rejects_misaligned_unstable_or_drifting_response_programs" }]
+
+[[verifiers]]
+id = "R5-VR-05"
+requirement_ids = ["R5-REQ-05"]
+acceptance_conditions = ["The saved sparse SVD decoder, ridge coefficients, fit-plus-tune covariance eigensystem, 210-dimensional rotation, and rotated coefficients reconstruct the declared residual inputs within tolerance; preserve cell, perturbation, gene, and coordinate order; and remain bound to the recorded VIPER execution identity."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_response_coordinates.py", symbol = "test_builds_reconstructible_rotated_response_coordinates" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_response_coordinates.py", symbol = "test_rejects_changed_fit_population_or_coordinate_order" }]
+
+[[verifiers]]
+id = "R5-VR-06"
+requirement_ids = ["R5-REQ-06"]
+acceptance_conditions = ["The bundle resolves every ordered axis, gene panel, intermediate, and response-block definition to one passing producer record, records each execution profile, and both model loaders consume the same bundle identity."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_response_target_bundle.py", symbol = "test_freezes_shared_response_target_bundle" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_response_target_bundle.py", symbol = "test_rejects_mixed_surface_profile_or_unresolved_target_input" }]
+
+[[verifiers]]
+id = "R5-VR-07"
+requirement_ids = ["R5-REQ-07"]
+acceptance_conditions = ["The rebuilt similarity graph, block labels, semantic map, and rotation preserve the declared response-program order and match their Phase 0 arrays or labels exactly under the parity profile; copying the historical files without executing their producers does not pass."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_response_block_definitions.py", symbol = "test_rebuilds_response_block_definitions_with_parity" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_response_block_definitions.py", symbol = "test_rejects_ingested_or_misaligned_response_block_definitions" }]
+
+[[pair_blocks]]
+id = "R5-PB-01"
+requirement_ids = ["R5-REQ-01"]
+depends_on = ["R5-PB-02", "E0-PB-04", "E0-PB-08"]
+repository_id = "mantra"
+requirement_contribution = "Rebuild control programs from IEG-excluded genes and covariate-residualized expression through verified GPU cNMF and the declared KMeans execution profile."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "R5-PB-02"
+requirement_ids = ["R5-REQ-02"]
+depends_on = ["P4-PB-06", "D3-PB-07"]
+repository_id = "mantra"
+requirement_contribution = "Estimate and remove the immediate-early-gene contribution from canonical control cells."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "R5-PB-03"
+requirement_ids = ["R5-REQ-03"]
+depends_on = ["R5-PB-02", "E0-PB-06"]
+repository_id = "mantra"
+requirement_contribution = "Build and diagnose vectorized GPU Sinkhorn matched-control residual response vectors."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "R5-PB-04"
+requirement_ids = ["R5-REQ-04"]
+depends_on = ["R5-PB-03", "E0-PB-05"]
+repository_id = "mantra"
+requirement_contribution = "Learn sparse response programs on the complete GEARS response axis and verify their GPU NNLS coefficients and reconstruction."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "R5-PB-05"
+requirement_ids = ["R5-REQ-05"]
+depends_on = ["R5-PB-04", "E0-PB-11"]
+repository_id = "mantra"
+requirement_contribution = "Fit the SVD and basis rotation and persist reconstructible ordered response coordinates."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "R5-PB-06"
+requirement_ids = ["R5-REQ-06"]
+depends_on = ["R5-PB-01", "R5-PB-07"]
+repository_id = "mantra"
+requirement_contribution = "Freeze one response-target bundle consumed unchanged by the Hopfield and MIL rebuilds."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "R5-PB-07"
+requirement_ids = ["R5-REQ-07"]
+depends_on = ["R5-PB-05"]
+repository_id = "mantra"
+requirement_contribution = "Reconstruct the response-program graph, hard and soft block maps, and rotation and prove parity with the retained Phase 0 definitions."
+completion_evidence = ["implementation_review", "viper_registration"]

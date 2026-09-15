@@ -6,54 +6,143 @@ registered contracts own requirements and verification. This checklist owns
 their phase and execution order; the compiler derives current status from
 retained evidence.
 
-The [Phase 1-2 Matrix charter](../docs/briefings/2026-09-15-mantra-phase-1-2-matrix-charter.md)
-fixes the autonomous execution rules, stop conditions, and result required from
-each PairBlock. Phase 0 remains an immutable comparison source and never runs
-again.
+The [pre-graph Matrix charter](../docs/briefings/2026-09-15-mantra-pregraph-matrix-charter.md)
+fixes the compute allocation, artifact ownership, variant policy, stop
+conditions, and result required from each PairBlock through Phase 9. Phase 0
+remains an immutable comparison source and never runs again.
 
 <!-- contract-protocol:generated:start -->
-**Resume here:** [Resume at H1-PB-02](../contracts/mantra-hopfield-reconstruction.md#h1-pb-02)
+**Resume here:** [Resume at E0-PB-02](../contracts/mantra-execution-foundation.md#e0-pb-02)
 
 
-### Phase 1: Hopfield reconstruction
+### Phase 1: GPU foundation and Hopfield reconstruction
 
 | Requirement | Status | Contract | PairBlocks | Dependencies |
 |---|---|---|---|---|
+| <nobr><code>E0-REQ-01</code></nobr> | planned | [mantra-execution-foundation](../contracts/mantra-execution-foundation.md#e0-req-01) | <nobr><code>E0-PB-01</code></nobr> | <nobr><code>E0-REQ-02</code></nobr> |
+| <nobr><code>E0-REQ-02</code></nobr> | in_progress | [mantra-execution-foundation](../contracts/mantra-execution-foundation.md#e0-req-02) | <nobr><code>E0-PB-02</code></nobr> | None |
+| <nobr><code>E0-REQ-03</code></nobr> | planned | [mantra-execution-foundation](../contracts/mantra-execution-foundation.md#e0-req-03) | <nobr><code>E0-PB-03</code></nobr> | <nobr><code>E0-REQ-01</code></nobr> |
+| <nobr><code>E0-REQ-09</code></nobr> | planned | [mantra-execution-foundation](../contracts/mantra-execution-foundation.md#e0-req-09) | <nobr><code>E0-PB-09</code></nobr> | <nobr><code>E0-REQ-03</code></nobr> |
 | <nobr><code>H1-REQ-01</code></nobr> | complete | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-req-01) | <nobr><code>H1-PB-01</code></nobr> | None |
 | <nobr><code>H1-REQ-02</code></nobr> | in_progress | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-req-02) | <nobr><code>H1-PB-02</code></nobr> | <nobr><code>H1-REQ-01</code></nobr> |
 | <nobr><code>H1-REQ-03</code></nobr> | planned | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-req-03) | <nobr><code>H1-PB-03</code></nobr> | <nobr><code>H1-REQ-02</code></nobr> |
 | <nobr><code>H1-REQ-04</code></nobr> | planned | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-req-04) | <nobr><code>H1-PB-04</code></nobr> | <nobr><code>H1-REQ-03</code></nobr> |
 | <nobr><code>H1-REQ-05</code></nobr> | planned | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-req-05) | <nobr><code>H1-PB-05</code></nobr> | <nobr><code>H1-REQ-04</code></nobr> |
-| <nobr><code>H1-REQ-06</code></nobr> | planned | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-req-06) | <nobr><code>H1-PB-06</code></nobr> | <nobr><code>H1-REQ-05</code></nobr> |
+| <nobr><code>H1-REQ-06</code></nobr> | planned | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-req-06) | <nobr><code>H1-PB-06</code></nobr> | <nobr><code>H1-REQ-05</code></nobr>, <nobr><code>E0-REQ-09</code></nobr> |
 | <nobr><code>H1-REQ-07</code></nobr> | planned | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-req-07) | <nobr><code>H1-PB-07</code></nobr> | <nobr><code>H1-REQ-06</code></nobr> |
 | <nobr><code>H1-REQ-08</code></nobr> | planned | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-req-08) | <nobr><code>H1-PB-08</code></nobr> | <nobr><code>H1-REQ-07</code></nobr> |
 
-### Phase 2: MIL reconstruction
+### Phase 2: MIL reconstruction and Hopfield input convergence
 
 | Requirement | Status | Contract | PairBlocks | Dependencies |
 |---|---|---|---|---|
-| <nobr><code>M2-REQ-01</code></nobr> | planned | [mantra-mil-reconstruction](../contracts/mantra-mil-reconstruction.md#m2-req-01) | <nobr><code>M2-PB-01</code></nobr> | <nobr><code>H1-REQ-08</code></nobr> |
+| <nobr><code>E0-REQ-10</code></nobr> | planned | [mantra-execution-foundation](../contracts/mantra-execution-foundation.md#e0-req-10) | <nobr><code>E0-PB-10</code></nobr> | <nobr><code>E0-REQ-03</code></nobr> |
+| <nobr><code>M2-REQ-01</code></nobr> | in_progress | [mantra-mil-reconstruction](../contracts/mantra-mil-reconstruction.md#m2-req-01) | <nobr><code>M2-PB-01</code></nobr> | None |
 | <nobr><code>M2-REQ-02</code></nobr> | planned | [mantra-mil-reconstruction](../contracts/mantra-mil-reconstruction.md#m2-req-02) | <nobr><code>M2-PB-02</code></nobr> | <nobr><code>M2-REQ-01</code></nobr> |
-| <nobr><code>M2-REQ-03</code></nobr> | planned | [mantra-mil-reconstruction](../contracts/mantra-mil-reconstruction.md#m2-req-03) | <nobr><code>M2-PB-03</code></nobr> | <nobr><code>M2-REQ-02</code></nobr> |
+| <nobr><code>M2-REQ-03</code></nobr> | planned | [mantra-mil-reconstruction](../contracts/mantra-mil-reconstruction.md#m2-req-03) | <nobr><code>M2-PB-03</code></nobr> | <nobr><code>M2-REQ-02</code></nobr>, <nobr><code>E0-REQ-10</code></nobr> |
 | <nobr><code>M2-REQ-04</code></nobr> | planned | [mantra-mil-reconstruction](../contracts/mantra-mil-reconstruction.md#m2-req-04) | <nobr><code>M2-PB-04</code></nobr> | <nobr><code>M2-REQ-03</code></nobr> |
 | <nobr><code>M2-REQ-05</code></nobr> | planned | [mantra-mil-reconstruction](../contracts/mantra-mil-reconstruction.md#m2-req-05) | <nobr><code>M2-PB-05</code></nobr> | <nobr><code>M2-REQ-04</code></nobr> |
 | <nobr><code>M2-REQ-06</code></nobr> | planned | [mantra-mil-reconstruction](../contracts/mantra-mil-reconstruction.md#m2-req-06) | <nobr><code>M2-PB-06</code></nobr> | <nobr><code>M2-REQ-05</code></nobr> |
+| <nobr><code>H1-REQ-09</code></nobr> | planned | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-req-09) | <nobr><code>H1-PB-09</code></nobr> | <nobr><code>H1-REQ-08</code></nobr>, <nobr><code>M2-REQ-06</code></nobr>, <nobr><code>E0-REQ-08</code></nobr>, <nobr><code>E0-REQ-09</code></nobr> |
 
-### Phase 3: Graph identities and baselines
+### Phase 3: Biological identities and canonical atlas
 
 | Requirement | Status | Contract | PairBlocks | Dependencies |
 |---|---|---|---|---|
-| <nobr><code>GE-REQ-01</code></nobr> | planned | [mantra-graph-encoder-v1](../contracts/mantra-graph-encoder-v1.md#ge-req-01) | <nobr><code>GE-PB-01</code></nobr> | <nobr><code>M2-REQ-06</code></nobr> |
+| <nobr><code>D3-REQ-01</code></nobr> | planned | [mantra-data-foundation](../contracts/mantra-data-foundation.md#d3-req-01) | <nobr><code>D3-PB-01</code></nobr> | <nobr><code>H1-REQ-09</code></nobr>, <nobr><code>M2-REQ-06</code></nobr> |
+| <nobr><code>D3-REQ-02</code></nobr> | planned | [mantra-data-foundation](../contracts/mantra-data-foundation.md#d3-req-02) | <nobr><code>D3-PB-02</code></nobr> | <nobr><code>D3-REQ-01</code></nobr> |
+| <nobr><code>D3-REQ-03</code></nobr> | planned | [mantra-data-foundation](../contracts/mantra-data-foundation.md#d3-req-03) | <nobr><code>D3-PB-03</code></nobr> | <nobr><code>D3-REQ-02</code></nobr> |
+| <nobr><code>D3-REQ-04</code></nobr> | planned | [mantra-data-foundation](../contracts/mantra-data-foundation.md#d3-req-04) | <nobr><code>D3-PB-04</code></nobr> | <nobr><code>D3-REQ-03</code></nobr> |
+| <nobr><code>D3-REQ-05</code></nobr> | planned | [mantra-data-foundation](../contracts/mantra-data-foundation.md#d3-req-05) | <nobr><code>D3-PB-05</code></nobr> | <nobr><code>D3-REQ-04</code></nobr> |
+| <nobr><code>D3-REQ-06</code></nobr> | planned | [mantra-data-foundation](../contracts/mantra-data-foundation.md#d3-req-06) | <nobr><code>D3-PB-06</code></nobr> | <nobr><code>D3-REQ-05</code></nobr> |
+| <nobr><code>D3-REQ-07</code></nobr> | planned | [mantra-data-foundation](../contracts/mantra-data-foundation.md#d3-req-07) | <nobr><code>D3-PB-07</code></nobr> | <nobr><code>D3-REQ-06</code></nobr> |
+
+### Phase 4: Prior reconstruction
+
+| Requirement | Status | Contract | PairBlocks | Dependencies |
+|---|---|---|---|---|
+| <nobr><code>E0-REQ-11</code></nobr> | planned | [mantra-execution-foundation](../contracts/mantra-execution-foundation.md#e0-req-11) | <nobr><code>E0-PB-11</code></nobr> | <nobr><code>E0-REQ-03</code></nobr> |
+| <nobr><code>P4-REQ-01</code></nobr> | planned | [mantra-prior-reconstruction](../contracts/mantra-prior-reconstruction.md#p4-req-01) | <nobr><code>P4-PB-01</code></nobr> | <nobr><code>D3-REQ-06</code></nobr> |
+| <nobr><code>P4-REQ-02</code></nobr> | planned | [mantra-prior-reconstruction](../contracts/mantra-prior-reconstruction.md#p4-req-02) | <nobr><code>P4-PB-02</code></nobr> | <nobr><code>P4-REQ-01</code></nobr> |
+| <nobr><code>P4-REQ-03</code></nobr> | planned | [mantra-prior-reconstruction](../contracts/mantra-prior-reconstruction.md#p4-req-03) | <nobr><code>P4-PB-03</code></nobr> | <nobr><code>P4-REQ-02</code></nobr> |
+| <nobr><code>P4-REQ-04</code></nobr> | planned | [mantra-prior-reconstruction](../contracts/mantra-prior-reconstruction.md#p4-req-04) | <nobr><code>P4-PB-04</code></nobr> | <nobr><code>P4-REQ-03</code></nobr> |
+| <nobr><code>P4-REQ-05</code></nobr> | planned | [mantra-prior-reconstruction](../contracts/mantra-prior-reconstruction.md#p4-req-05) | <nobr><code>P4-PB-05</code></nobr> | <nobr><code>P4-REQ-04</code></nobr> |
+| <nobr><code>P4-REQ-06</code></nobr> | planned | [mantra-prior-reconstruction](../contracts/mantra-prior-reconstruction.md#p4-req-06) | <nobr><code>P4-PB-06</code></nobr> | <nobr><code>P4-REQ-05</code></nobr> |
+
+### Phase 5: Response reconstruction
+
+| Requirement | Status | Contract | PairBlocks | Dependencies |
+|---|---|---|---|---|
+| <nobr><code>E0-REQ-04</code></nobr> | planned | [mantra-execution-foundation](../contracts/mantra-execution-foundation.md#e0-req-04) | <nobr><code>E0-PB-04</code></nobr> | <nobr><code>E0-REQ-03</code></nobr> |
+| <nobr><code>E0-REQ-05</code></nobr> | planned | [mantra-execution-foundation](../contracts/mantra-execution-foundation.md#e0-req-05) | <nobr><code>E0-PB-05</code></nobr> | <nobr><code>E0-REQ-03</code></nobr> |
+| <nobr><code>E0-REQ-06</code></nobr> | planned | [mantra-execution-foundation](../contracts/mantra-execution-foundation.md#e0-req-06) | <nobr><code>E0-PB-06</code></nobr> | <nobr><code>E0-REQ-03</code></nobr> |
+| <nobr><code>E0-REQ-08</code></nobr> | planned | [mantra-execution-foundation](../contracts/mantra-execution-foundation.md#e0-req-08) | <nobr><code>E0-PB-08</code></nobr> | <nobr><code>E0-REQ-04</code></nobr> |
+| <nobr><code>R5-REQ-01</code></nobr> | planned | [mantra-response-reconstruction](../contracts/mantra-response-reconstruction.md#r5-req-01) | <nobr><code>R5-PB-01</code></nobr> | <nobr><code>R5-REQ-02</code></nobr>, <nobr><code>E0-REQ-04</code></nobr>, <nobr><code>E0-REQ-08</code></nobr> |
+| <nobr><code>R5-REQ-02</code></nobr> | planned | [mantra-response-reconstruction](../contracts/mantra-response-reconstruction.md#r5-req-02) | <nobr><code>R5-PB-02</code></nobr> | <nobr><code>P4-REQ-06</code></nobr>, <nobr><code>D3-REQ-07</code></nobr> |
+| <nobr><code>R5-REQ-03</code></nobr> | planned | [mantra-response-reconstruction](../contracts/mantra-response-reconstruction.md#r5-req-03) | <nobr><code>R5-PB-03</code></nobr> | <nobr><code>R5-REQ-02</code></nobr>, <nobr><code>E0-REQ-06</code></nobr> |
+| <nobr><code>R5-REQ-04</code></nobr> | planned | [mantra-response-reconstruction](../contracts/mantra-response-reconstruction.md#r5-req-04) | <nobr><code>R5-PB-04</code></nobr> | <nobr><code>R5-REQ-03</code></nobr>, <nobr><code>E0-REQ-05</code></nobr> |
+| <nobr><code>R5-REQ-05</code></nobr> | planned | [mantra-response-reconstruction](../contracts/mantra-response-reconstruction.md#r5-req-05) | <nobr><code>R5-PB-05</code></nobr> | <nobr><code>R5-REQ-04</code></nobr>, <nobr><code>E0-REQ-11</code></nobr> |
+| <nobr><code>R5-REQ-06</code></nobr> | planned | [mantra-response-reconstruction](../contracts/mantra-response-reconstruction.md#r5-req-06) | <nobr><code>R5-PB-06</code></nobr> | <nobr><code>R5-REQ-01</code></nobr>, <nobr><code>R5-REQ-07</code></nobr> |
+| <nobr><code>R5-REQ-07</code></nobr> | planned | [mantra-response-reconstruction](../contracts/mantra-response-reconstruction.md#r5-req-07) | <nobr><code>R5-PB-07</code></nobr> | <nobr><code>R5-REQ-05</code></nobr> |
+
+### Phase 6: Shared perturbation representation
+
+| Requirement | Status | Contract | PairBlocks | Dependencies |
+|---|---|---|---|---|
+| <nobr><code>E0-REQ-07</code></nobr> | planned | [mantra-execution-foundation](../contracts/mantra-execution-foundation.md#e0-req-07) | <nobr><code>E0-PB-07</code></nobr> | <nobr><code>E0-REQ-03</code></nobr> |
+| <nobr><code>S6-REQ-01</code></nobr> | planned | [mantra-first-principles-models](../contracts/mantra-first-principles-models.md#s6-req-01) | <nobr><code>S6-PB-01</code></nobr> | <nobr><code>R5-REQ-06</code></nobr> |
+| <nobr><code>S6-REQ-02</code></nobr> | planned | [mantra-first-principles-models](../contracts/mantra-first-principles-models.md#s6-req-02) | <nobr><code>S6-PB-02</code></nobr> | <nobr><code>S6-REQ-01</code></nobr>, <nobr><code>E0-REQ-11</code></nobr> |
+| <nobr><code>S6-REQ-03</code></nobr> | planned | [mantra-first-principles-models](../contracts/mantra-first-principles-models.md#s6-req-03) | <nobr><code>S6-PB-03</code></nobr> | <nobr><code>S6-REQ-02</code></nobr> |
+| <nobr><code>S6-REQ-04</code></nobr> | planned | [mantra-first-principles-models](../contracts/mantra-first-principles-models.md#s6-req-04) | <nobr><code>S6-PB-04</code></nobr> | <nobr><code>S6-REQ-03</code></nobr>, <nobr><code>E0-REQ-07</code></nobr> |
+| <nobr><code>S6-REQ-05</code></nobr> | planned | [mantra-first-principles-models](../contracts/mantra-first-principles-models.md#s6-req-05) | <nobr><code>S6-PB-05</code></nobr> | <nobr><code>S6-REQ-01</code></nobr>, <nobr><code>E0-REQ-02</code></nobr> |
+| <nobr><code>S6-REQ-06</code></nobr> | planned | [mantra-first-principles-models](../contracts/mantra-first-principles-models.md#s6-req-06) | <nobr><code>S6-PB-06</code></nobr> | <nobr><code>S6-REQ-04</code></nobr>, <nobr><code>R5-REQ-07</code></nobr> |
+| <nobr><code>S6-REQ-07</code></nobr> | planned | [mantra-first-principles-models](../contracts/mantra-first-principles-models.md#s6-req-07) | <nobr><code>S6-PB-07</code></nobr> | <nobr><code>S6-REQ-05</code></nobr>, <nobr><code>S6-REQ-06</code></nobr> |
+| <nobr><code>S6-REQ-08</code></nobr> | planned | [mantra-first-principles-models](../contracts/mantra-first-principles-models.md#s6-req-08) | <nobr><code>S6-PB-08</code></nobr> | <nobr><code>S6-REQ-07</code></nobr>, <nobr><code>E0-REQ-08</code></nobr> |
+| <nobr><code>S6-REQ-09</code></nobr> | planned | [mantra-first-principles-models](../contracts/mantra-first-principles-models.md#s6-req-09) | <nobr><code>S6-PB-09</code></nobr> | <nobr><code>S6-REQ-08</code></nobr>, <nobr><code>E0-REQ-09</code></nobr>, <nobr><code>E0-REQ-10</code></nobr> |
+
+### Phase 7: First-principles Hopfield
+
+| Requirement | Status | Contract | PairBlocks | Dependencies |
+|---|---|---|---|---|
+| <nobr><code>H7-REQ-01</code></nobr> | planned | [mantra-first-principles-models](../contracts/mantra-first-principles-models.md#h7-req-01) | <nobr><code>H7-PB-01</code></nobr> | <nobr><code>S6-REQ-09</code></nobr>, <nobr><code>E0-REQ-09</code></nobr> |
+| <nobr><code>H7-REQ-02</code></nobr> | planned | [mantra-first-principles-models](../contracts/mantra-first-principles-models.md#h7-req-02) | <nobr><code>H7-PB-02</code></nobr> | <nobr><code>H7-REQ-01</code></nobr> |
+| <nobr><code>H7-REQ-03</code></nobr> | planned | [mantra-first-principles-models](../contracts/mantra-first-principles-models.md#h7-req-03) | <nobr><code>H7-PB-03</code></nobr> | <nobr><code>H7-REQ-02</code></nobr> |
+| <nobr><code>H7-REQ-04</code></nobr> | planned | [mantra-first-principles-models](../contracts/mantra-first-principles-models.md#h7-req-04) | <nobr><code>H7-PB-04</code></nobr> | <nobr><code>H7-REQ-03</code></nobr> |
+| <nobr><code>H7-REQ-05</code></nobr> | planned | [mantra-first-principles-models](../contracts/mantra-first-principles-models.md#h7-req-05) | <nobr><code>H7-PB-05</code></nobr> | <nobr><code>H7-REQ-04</code></nobr> |
+
+### Phase 8: First-principles MIL
+
+| Requirement | Status | Contract | PairBlocks | Dependencies |
+|---|---|---|---|---|
+| <nobr><code>M8-REQ-01</code></nobr> | planned | [mantra-first-principles-models](../contracts/mantra-first-principles-models.md#m8-req-01) | <nobr><code>M8-PB-01</code></nobr> | <nobr><code>S6-REQ-09</code></nobr>, <nobr><code>E0-REQ-10</code></nobr> |
+| <nobr><code>M8-REQ-02</code></nobr> | planned | [mantra-first-principles-models](../contracts/mantra-first-principles-models.md#m8-req-02) | <nobr><code>M8-PB-02</code></nobr> | <nobr><code>M8-REQ-01</code></nobr> |
+| <nobr><code>M8-REQ-03</code></nobr> | planned | [mantra-first-principles-models](../contracts/mantra-first-principles-models.md#m8-req-03) | <nobr><code>M8-PB-03</code></nobr> | <nobr><code>M8-REQ-02</code></nobr> |
+| <nobr><code>M8-REQ-04</code></nobr> | planned | [mantra-first-principles-models](../contracts/mantra-first-principles-models.md#m8-req-04) | <nobr><code>M8-PB-04</code></nobr> | <nobr><code>M8-REQ-03</code></nobr> |
+| <nobr><code>M8-REQ-05</code></nobr> | planned | [mantra-first-principles-models](../contracts/mantra-first-principles-models.md#m8-req-05) | <nobr><code>M8-PB-05</code></nobr> | <nobr><code>M8-REQ-04</code></nobr> |
+| <nobr><code>M8-REQ-06</code></nobr> | planned | [mantra-first-principles-models](../contracts/mantra-first-principles-models.md#m8-req-06) | <nobr><code>M8-PB-06</code></nobr> | <nobr><code>M8-REQ-05</code></nobr> |
+
+### Phase 9: Pre-graph baseline freeze
+
+| Requirement | Status | Contract | PairBlocks | Dependencies |
+|---|---|---|---|---|
+| <nobr><code>B9-REQ-01</code></nobr> | planned | [mantra-first-principles-models](../contracts/mantra-first-principles-models.md#b9-req-01) | <nobr><code>B9-PB-01</code></nobr> | <nobr><code>H7-REQ-05</code></nobr>, <nobr><code>M8-REQ-06</code></nobr> |
+| <nobr><code>B9-REQ-02</code></nobr> | planned | [mantra-first-principles-models](../contracts/mantra-first-principles-models.md#b9-req-02) | <nobr><code>B9-PB-02</code></nobr> | <nobr><code>B9-REQ-01</code></nobr> |
+
+### Phase 10: Graph identities and baselines
+
+| Requirement | Status | Contract | PairBlocks | Dependencies |
+|---|---|---|---|---|
+| <nobr><code>GE-REQ-01</code></nobr> | planned | [mantra-graph-encoder-v1](../contracts/mantra-graph-encoder-v1.md#ge-req-01) | <nobr><code>GE-PB-01</code></nobr> | <nobr><code>B9-REQ-02</code></nobr> |
 | <nobr><code>GE-REQ-02</code></nobr> | planned | [mantra-graph-encoder-v1](../contracts/mantra-graph-encoder-v1.md#ge-req-02) | <nobr><code>GE-PB-01</code></nobr> | <nobr><code>GE-REQ-01</code></nobr> |
 
-### Phase 4: Topology and V1 features
+### Phase 11: Topology and V1 features
 
 | Requirement | Status | Contract | PairBlocks | Dependencies |
 |---|---|---|---|---|
 | <nobr><code>GE-REQ-03</code></nobr> | planned | [mantra-graph-encoder-v1](../contracts/mantra-graph-encoder-v1.md#ge-req-03) | <nobr><code>GE-PB-02</code></nobr> | <nobr><code>GE-REQ-02</code></nobr> |
 | <nobr><code>GE-REQ-04</code></nobr> | planned | [mantra-graph-encoder-v1](../contracts/mantra-graph-encoder-v1.md#ge-req-04) | <nobr><code>GE-PB-03</code></nobr> | <nobr><code>GE-REQ-03</code></nobr> |
 
-### Phase 5: V1 graph encoder
+### Phase 12: V1 graph encoder
 
 | Requirement | Status | Contract | PairBlocks | Dependencies |
 |---|---|---|---|---|
@@ -74,7 +163,7 @@ gates, and VIPER can resolve every accepted input, output, run, and producer.
 - Provide or authorize L4-class compute when training or matrix workload exceeds
   the local execution threshold.
 
-## Deferred scope
+## Later work
 
 - CPU-only MIL acceptance remains outside the accepted CUDA reconstruction.
 - Relation-specific message passing begins after V1 passes.

@@ -39,6 +39,16 @@ digests, arrays, scores, configurations, and producer history.
 | `M2-PB-05` | Step03 reproduces the accepted predictions, weights, and final hold PearsonDelta. |
 | `M2-PB-06` | Contract and VIPER records resolve every accepted Phase 2 producer, input, output, comparison, checkpoint, and commit. |
 
+## Hopfield input convergence
+
+`H1-PB-09` starts after `H1-PB-08` and `M2-PB-06` close. It runs the unchanged
+legacy Hopfield model on the retained MIL descriptor bundle: core83, the
+144-value five-source family block, and the matching response40 proxy. The
+encoder input changes from 187 to 267 values. The run freezes its checkpoint,
+predictions, score, inputs, configuration, runtime, and source commit as a new
+bridge baseline. The original 64-value Hopfield result remains the Phase 1
+replay baseline.
+
 ## Matrix rules
 
 Matrix executes one PairBlock at a time in declared dependency order.
@@ -55,14 +65,19 @@ Matrix executes one PairBlock at a time in declared dependency order.
    shapes, dtypes, then values. Require exact bytes or arrays when Phase 0 proves
    exact equality; use a tolerance only when the requirement names it.
 6. Execute every implementation PairBlock through VIPER and retain its run and
-   file identities. Run training on the declared CUDA environment; keep cheap
-   source and fixture checks local.
-7. Stop the current PairBlock when a comparison fails, a required source is
+   file identities. Load the complete numeric training set onto the GPU once.
+   Hopfield trains on the full resident tensors; MIL preserves its historical
+   128-row steps through GPU indices. The host receives checkpoints, logs, and
+   final artifacts. Keep cheap source and fixture checks local.
+7. Use the parity execution profile for every replay and the Hopfield bridge.
+   Any KMeans call uses seeded scikit-learn Lloyd KMeans on CPU. GPU KMeans
+   belongs to a later named throughput run.
+8. Stop the current PairBlock when a comparison fails, a required source is
    absent, or a repair would touch an undeclared target. Matrix may choose among
    implementations that preserve the requirement and stay within the frozen
    targets. It may not weaken acceptance, invent a replacement artifact, or
    expand scope without a reviewed contract or plan revision.
-8. Finish each PairBlock with its focused gate, self-review, immutable Git
+9. Finish each PairBlock with its focused gate, self-review, immutable Git
    commit, push, human-readable handoff, implementation review, and required
    VIPER registration. Do not start its dependent before the compiler verifies
    those records.

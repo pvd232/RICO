@@ -1,0 +1,465 @@
+schema_version = 1
+contract_id = "mantra-first-principles-models"
+title = "MANTRA First-Principles Models"
+
+[[requirements]]
+id = "S6-REQ-01"
+claim = "One ordered perturbation-identity table must align every corrected prior modality and its observed-value mask to the canonical perturbation rows before any reduction, fusion, regression, or encoder consumes those values."
+depends_on = ["R5-REQ-06"]
+verifier_ids = ["S6-VR-01"]
+
+[[requirements]]
+id = "S6-REQ-02"
+claim = "A versioned variant manifest must enumerate the allowed per-prior transforms: unreduced identity, fit-only PCA, and fit-only MLP. Each transform must retain its inputs, fitted state, ordered outputs, dimensions, missingness handling, and reconstruction or held-out diagnostic."
+depends_on = ["S6-REQ-01", "E0-REQ-11"]
+verifier_ids = ["S6-VR-02"]
+
+[[requirements]]
+id = "S6-REQ-03"
+claim = "The variant manifest must define the selected fusion for each transformed prior set, including concatenation and a learned fusion MLP, and retain the modality order, masks, fitted parameters, output width, and validation diagnostic."
+depends_on = ["S6-REQ-02"]
+verifier_ids = ["S6-VR-03"]
+
+[[requirements]]
+id = "S6-REQ-04"
+claim = "The variant manifest must explicitly route each fused or unfused prior representation either through fit-only grouped ridge regression or directly to the Hopfield encoder. It must include unreduced identity to grouped ridge, per-prior PCA to grouped ridge, per-prior MLP and fusion to grouped ridge, reduced or fused priors directly to Hopfield, and unreduced priors directly to Hopfield, and reject every unlisted composition."
+depends_on = ["S6-REQ-03", "E0-REQ-07"]
+verifier_ids = ["S6-VR-04"]
+
+[[requirements]]
+id = "S6-REQ-05"
+claim = "One auxiliary MLP must predict a distribution over fitted control-state clusters for each held-out perturbation, decode that distribution into the 19-value ctrl19 vector, and retain the fitted MLP, cluster centers, decoder, inputs, predictions, and tune selection without reading held-out response truth."
+depends_on = ["S6-REQ-01", "E0-REQ-02"]
+verifier_ids = ["S6-VR-05"]
+
+[[requirements]]
+id = "S6-REQ-06"
+claim = "Each retained historical 40-value response-block feature must be reproduced from the rebuilt block definitions and response coefficients: fit rows use their direct coefficients, tune and held-out rows use only fit rows through that model path's declared query features and retrieval rule, and the hard 16, soft semantic 16, and spectral 8 components must match the corresponding Phase 0 artifact."
+depends_on = ["S6-REQ-04", "R5-REQ-07"]
+verifier_ids = ["S6-VR-06"]
+
+[[requirements]]
+id = "S6-REQ-07"
+claim = "One model-input bundle per declared perturbation-representation variant must bind that variant, predicted ctrl19 rows, derived core83 and declared PCA64 control features, parity-verified response-block rows, response-target bundle, canonical splits, normalization population, execution profile, and every fitted transform; each Hopfield or MIL plan must name exactly one bundle digest."
+depends_on = ["S6-REQ-05", "S6-REQ-06"]
+verifier_ids = ["S6-VR-07"]
+
+[[requirements]]
+id = "S6-REQ-08"
+claim = "Before a prior-fusion variant may train, one controlled input-substitution ladder must start Hopfield from the H1-REQ-09 MIL-stack bridge baseline and MIL from the M2-REQ-06 parity baseline while replacing the canonical atlas, gene panels, control programs, response programs, response-block definitions, response-block rows, and corrected priors one producer at a time. Each step must hold every other artifact digest fixed, use one common rebuilt artifact reference in both model paths where the artifact is shared, and preserve the corresponding frozen baseline result."
+depends_on = ["S6-REQ-07", "E0-REQ-08"]
+verifier_ids = ["S6-VR-08"]
+
+[[requirements]]
+id = "S6-REQ-09"
+claim = "After the input-substitution ladder passes, the legacy Hopfield and MIL execution scripts must be decomposed by replacing one orthogonal model component at a time with its modular owner. Each replacement must retain the target component's inputs, fitted state, outputs, and diagnostics, hold every non-target source, configuration, and artifact digest fixed, and preserve the Hopfield bridge or MIL parity prediction and score before the next component changes."
+depends_on = ["S6-REQ-08", "E0-REQ-09", "E0-REQ-10"]
+verifier_ids = ["S6-VR-09"]
+
+[[requirements]]
+id = "H7-REQ-01"
+claim = "One Hopfield construction stage must build an encoder for each declared perturbation-representation variant and persist the exact bundle digest, complete architecture, initialized parameters, memory layout, input and output dimensions, and construction diagnostics consumed by training."
+depends_on = ["S6-REQ-09", "E0-REQ-09"]
+verifier_ids = ["H7-VR-01"]
+
+[[requirements]]
+id = "H7-REQ-02"
+claim = "The Hopfield training stage must execute each declared perturbation-representation variant, exclude hold responses from fitting and selection, and retain its bundle digest, configuration, seed, checkpoints, epoch scores, selection decisions, logs, final weights, runtime, and peak GPU memory."
+depends_on = ["H7-REQ-01"]
+verifier_ids = ["H7-VR-02"]
+
+[[requirements]]
+id = "H7-REQ-03"
+claim = "The Hopfield inference stage must load each accepted variant checkpoint and frozen input bundle, produce ordered fit, tune, and hold predictions without refitting, and retain the exact output arrays and identities."
+depends_on = ["H7-REQ-02"]
+verifier_ids = ["H7-VR-03"]
+
+[[requirements]]
+id = "H7-REQ-04"
+claim = "One Hopfield diagnostic stage must read each variant's frozen inputs, accepted checkpoint, and persisted predictions and emit the declared retrieval, coefficient, response, split, runtime, memory, and failure diagnostics without fitting or changing model state."
+depends_on = ["H7-REQ-03"]
+verifier_ids = ["H7-VR-04"]
+
+[[requirements]]
+id = "H7-REQ-05"
+claim = "The Hopfield evaluation stage must compute canonical PearsonDelta through src/mantra/eval/eval.py on the named GEARS response surface for every declared variant and compare each result with both the original Phase 1 parity baseline and the H1-REQ-09 MIL-stack bridge baseline."
+depends_on = ["H7-REQ-04"]
+verifier_ids = ["H7-VR-05"]
+
+[[requirements]]
+id = "M8-REQ-01"
+claim = "One MIL bag-construction stage must build and persist the ordered bag membership, instances, masks, attention priors, conditioning values, and dimensions consumed by the MIL models from the shared model-input bundle."
+depends_on = ["S6-REQ-09", "E0-REQ-10"]
+verifier_ids = ["M8-VR-01"]
+
+[[requirements]]
+id = "M8-REQ-02"
+claim = "One MIL construction stage must build the teacher and student models from the persisted bag schema and retain their complete architectures, initialized parameters, input and output dimensions, and construction diagnostics."
+depends_on = ["M8-REQ-01"]
+verifier_ids = ["M8-VR-02"]
+
+[[requirements]]
+id = "M8-REQ-03"
+claim = "The MIL training stages must consume the persisted bags and model constructions, exclude hold responses from fitting and selection, and retain objective components, configuration, seeds, checkpoints, intermediary scores, decisions, logs, and final weights."
+depends_on = ["M8-REQ-02"]
+verifier_ids = ["M8-VR-03"]
+
+[[requirements]]
+id = "M8-REQ-04"
+claim = "The MIL inference stage must load accepted teacher and student checkpoints plus the frozen input bundle, produce ordered fit, tune, and hold predictions without refitting, and retain the exact output arrays and identities."
+depends_on = ["M8-REQ-03"]
+verifier_ids = ["M8-VR-04"]
+
+[[requirements]]
+id = "M8-REQ-05"
+claim = "One MIL diagnostic stage must read the frozen bags, accepted checkpoints, and persisted predictions and emit the declared attention, teacher-student, response, split, and failure diagnostics without fitting or changing model state."
+depends_on = ["M8-REQ-04"]
+verifier_ids = ["M8-VR-05"]
+
+[[requirements]]
+id = "M8-REQ-06"
+claim = "The MIL evaluation stage must compute canonical PearsonDelta through src/mantra/eval/eval.py on the named GEARS response surface and compare the rebuilt result with the Phase 2 parity baseline."
+depends_on = ["M8-REQ-05"]
+verifier_ids = ["M8-VR-06"]
+
+[[requirements]]
+id = "B9-REQ-01"
+claim = "One benchmark stage must compare every declared Hopfield perturbation-representation variant and the rebuilt MIL result with the original Phase 1 Hopfield parity baseline, the H1-REQ-09 MIL-stack bridge baseline, and the Phase 2 MIL parity baseline on the same ordered perturbations, response genes, split membership, truth arrays, and canonical PearsonDelta implementation."
+depends_on = ["H7-REQ-05", "M8-REQ-06"]
+verifier_ids = ["B9-VR-01"]
+
+[[requirements]]
+id = "B9-REQ-02"
+claim = "The pre-graph baseline must freeze the accepted identity table, canonical atlas, corrected priors, response targets, model inputs, weights, predictions, diagnostics, benchmark results, commits, and complete VIPER provenance without executing a graph-encoder PairBlock."
+depends_on = ["B9-REQ-01"]
+verifier_ids = ["B9-VR-02"]
+
+[[verifiers]]
+id = "S6-VR-01"
+requirement_ids = ["S6-REQ-01"]
+acceptance_conditions = ["Every corrected prior and mask resolves to the same canonical perturbation rows, observed zero remains distinct from missing data, and reordered, duplicated, absent, or extra rows fail."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_perturbation_identity_table.py", symbol = "test_aligns_every_prior_to_canonical_perturbations" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_perturbation_identity_table.py", symbol = "test_rejects_row_or_missingness_substitution" }]
+
+[[verifiers]]
+id = "S6-VR-02"
+requirement_ids = ["S6-REQ-02"]
+acceptance_conditions = ["The manifest contains exactly the approved identity, PCA, and MLP transform kinds; each fitted transform uses only its declared training rows and reproduces ordered outputs and diagnostics."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_variants.py", symbol = "test_builds_declared_per_prior_transforms" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_variants.py", symbol = "test_rejects_unlisted_transform_or_hold_fit" }]
+
+[[verifiers]]
+id = "S6-VR-03"
+requirement_ids = ["S6-REQ-03"]
+acceptance_conditions = ["Concatenation and learned-MLP fusion reproduce from retained modality order, masks, parameters, and widths, and fail when a modality or learned state is substituted."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_variants.py", symbol = "test_builds_declared_prior_fusions" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_variants.py", symbol = "test_rejects_changed_modality_order_or_fusion_state" }]
+
+[[verifiers]]
+id = "S6-VR-04"
+requirement_ids = ["S6-REQ-04"]
+acceptance_conditions = ["Every minimum approved path executes from the same ordered priors, grouped ridge uses no hold target, direct paths bypass it completely, and the runner rejects any composition absent from the manifest."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_encoder_variants.py", symbol = "test_executes_every_approved_prior_to_hopfield_path" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_encoder_variants.py", symbol = "test_rejects_unlisted_variant_or_hidden_ridge_use" }]
+
+[[verifiers]]
+id = "S6-VR-05"
+requirement_ids = ["S6-REQ-05"]
+acceptance_conditions = ["The MLP and decoder reproduce held-out ctrl19 predictions from retained fit and tune state, no hold response truth is loaded, and substituting cluster order, decoder, or prediction rows fails."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_ctrl19_holdout.py", symbol = "test_predicts_heldout_ctrl19_without_hold_truth" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_ctrl19_holdout.py", symbol = "test_rejects_hold_leakage_or_ctrl19_substitution" }]
+
+[[verifiers]]
+id = "S6-VR-06"
+requirement_ids = ["S6-REQ-06"]
+acceptance_conditions = ["Each rebuilt model path preserves perturbation order and matches its Phase 0 hard 16, soft semantic 16, and spectral 8 rows; the shared fit and tune rows remain equal across the paths, each held-out proxy names its query-feature producer, and tune and held-out response truth is unavailable to those producers."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_response_block_features.py", symbol = "test_rebuilds_response_block40_with_parity" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_response_block_features.py", symbol = "test_rejects_response_block_drift_or_hold_leakage" }]
+
+[[verifiers]]
+id = "S6-VR-07"
+requirement_ids = ["S6-REQ-07"]
+acceptance_conditions = ["Each plan resolves one complete bundle digest and rejects substituted variants, ctrl19 rows, core83 or PCA64 derivatives, response-block rows, splits, transforms, response columns, normalization populations, or execution profiles."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_model_input_bundle.py", symbol = "test_binds_one_variant_and_input_bundle_for_both_models" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_model_input_bundle.py", symbol = "test_rejects_mixed_or_substituted_model_inputs" }]
+
+[[verifiers]]
+id = "S6-VR-08"
+requirement_ids = ["S6-REQ-08"]
+acceptance_conditions = ["The substitution ledger starts Hopfield from the frozen MIL-stack bridge and MIL from its retained parity bundle, changes exactly one producer reference per step, proves that every other digest stayed fixed, uses the same rebuilt reference for shared artifacts, and preserves each frozen prediction and score before any prior-fusion result is accepted."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_shared_input_substitution.py", symbol = "test_replaces_shared_producers_one_at_a_time_with_dual_model_parity" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_shared_input_substitution.py", symbol = "test_rejects_multi_artifact_swap_split_shared_input_or_parity_loss" }]
+
+[[verifiers]]
+id = "S6-VR-09"
+requirement_ids = ["S6-REQ-09"]
+acceptance_conditions = ["Every ledger entry names one legacy component and one modular replacement, proves equal component inputs and fitted state, compares its outputs and diagnostics, holds every non-target source, configuration, and artifact digest fixed, preserves full GPU residency and the model's declared optimization granularity, and preserves the owning model's frozen prediction and score before another replacement is admitted."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_model_component_substitution.py", symbol = "test_replaces_legacy_model_components_one_at_a_time" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_model_component_substitution.py", symbol = "test_rejects_multi_component_change_hidden_state_or_baseline_drift" }]
+
+[[verifiers]]
+id = "H7-VR-01"
+requirement_ids = ["H7-REQ-01"]
+acceptance_conditions = ["Construction reproduces the same initialized encoder and memory layout from the declared input bundle, architecture, and seed, and persists every value training reads."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_first_principles.py", symbol = "test_constructs_replayable_hopfield_encoder" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_first_principles.py", symbol = "test_rejects_hidden_hopfield_construction_state" }]
+
+[[verifiers]]
+id = "H7-VR-02"
+requirement_ids = ["H7-REQ-02"]
+acceptance_conditions = ["Training reproduces from retained inputs and configuration, emits every checkpoint decision, and no fit or selection operation reads hold responses."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_first_principles.py", symbol = "test_trains_hopfield_without_hold_access" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_first_principles.py", symbol = "test_rejects_hopfield_hold_access_or_unlogged_selection" }]
+
+[[verifiers]]
+id = "H7-VR-03"
+requirement_ids = ["H7-REQ-03"]
+acceptance_conditions = ["Inference is a pure checkpoint-and-input replay whose persisted predictions preserve all declared axes and splits."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_first_principles.py", symbol = "test_replays_hopfield_inference" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_first_principles.py", symbol = "test_rejects_hopfield_refit_or_prediction_reordering" }]
+
+[[verifiers]]
+id = "H7-VR-04"
+requirement_ids = ["H7-REQ-04"]
+acceptance_conditions = ["Diagnostics replay from persisted inputs, checkpoint, and predictions, cover every declared split, and leave all input and model digests unchanged."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_first_principles.py", symbol = "test_runs_hopfield_diagnostics_without_refit" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_first_principles.py", symbol = "test_rejects_stateful_or_incomplete_hopfield_diagnostics" }]
+
+[[verifiers]]
+id = "H7-VR-05"
+requirement_ids = ["H7-REQ-05"]
+acceptance_conditions = ["Evaluation uses the canonical evaluator and response surface and reports exact comparisons with the original Phase 1 prediction and score and the H1-REQ-09 bridge prediction and score."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_first_principles.py", symbol = "test_evaluates_hopfield_on_canonical_surface" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_first_principles.py", symbol = "test_rejects_shadow_metric_or_surface_substitution" }]
+
+[[verifiers]]
+id = "M8-VR-01"
+requirement_ids = ["M8-REQ-01"]
+acceptance_conditions = ["Bag construction reproduces every ordered instance, membership, mask, prior, and conditioning value from the shared input bundle and persists every value the models read."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_first_principles.py", symbol = "test_builds_replayable_mil_bags" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_first_principles.py", symbol = "test_rejects_hidden_or_reordered_mil_bag_state" }]
+
+[[verifiers]]
+id = "M8-VR-02"
+requirement_ids = ["M8-REQ-02"]
+acceptance_conditions = ["Construction reproduces the same initialized teacher and student from the declared bag schema, architecture, and seeds and persists every value training reads."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_first_principles.py", symbol = "test_constructs_replayable_mil_models" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_first_principles.py", symbol = "test_rejects_hidden_mil_model_state" }]
+
+[[verifiers]]
+id = "M8-VR-03"
+requirement_ids = ["M8-REQ-03"]
+acceptance_conditions = ["Teacher and student training reproduce from retained inputs and configuration, emit every objective component and checkpoint decision, and use fit and tune responses for fitting and selection."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_first_principles.py", symbol = "test_trains_mil_without_hold_access" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_first_principles.py", symbol = "test_rejects_mil_hold_access_or_unlogged_selection" }]
+
+[[verifiers]]
+id = "M8-VR-04"
+requirement_ids = ["M8-REQ-04"]
+acceptance_conditions = ["Inference is a pure checkpoint-and-input replay whose persisted predictions preserve all declared axes and splits."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_first_principles.py", symbol = "test_replays_mil_inference" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_first_principles.py", symbol = "test_rejects_mil_refit_or_prediction_reordering" }]
+
+[[verifiers]]
+id = "M8-VR-05"
+requirement_ids = ["M8-REQ-05"]
+acceptance_conditions = ["Diagnostics replay from persisted bags, checkpoints, and predictions, cover every declared split, and leave all input and model digests unchanged."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_first_principles.py", symbol = "test_runs_mil_diagnostics_without_refit" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_first_principles.py", symbol = "test_rejects_stateful_or_incomplete_mil_diagnostics" }]
+
+[[verifiers]]
+id = "M8-VR-06"
+requirement_ids = ["M8-REQ-06"]
+acceptance_conditions = ["Evaluation uses the canonical evaluator and response surface and reports the exact comparison with the Phase 2 prediction and score."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_first_principles.py", symbol = "test_evaluates_mil_on_canonical_surface" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_first_principles.py", symbol = "test_rejects_mil_shadow_metric_or_surface_substitution" }]
+
+[[verifiers]]
+id = "B9-VR-01"
+requirement_ids = ["B9-REQ-01"]
+acceptance_conditions = ["One command recomputes every declared Hopfield variant comparison plus the rebuilt MIL, original Hopfield, Hopfield bridge, and original MIL results through the canonical evaluator after proving equal axes, splits, and truth surfaces."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_pregraph_benchmark.py", symbol = "test_compares_rebuilt_models_with_parity_baselines" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_pregraph_benchmark.py", symbol = "test_rejects_cross_surface_model_comparison" }]
+
+[[verifiers]]
+id = "B9-VR-02"
+requirement_ids = ["B9-REQ-02"]
+acceptance_conditions = ["The terminal evidence graph reaches every accepted pre-graph input, stage, output, comparison, and implementation commit, and contains no graph-encoder execution receipt."]
+success_case = { repository_id = "rico", path = "tests/pregraph/test_pregraph_registration.py", symbol = "test_resolves_complete_pregraph_provenance" }
+rejection_cases = [{ repository_id = "rico", path = "tests/pregraph/test_pregraph_registration.py", symbol = "test_rejects_severed_or_graph_encoder_evidence" }]
+
+[[pair_blocks]]
+id = "S6-PB-01"
+requirement_ids = ["S6-REQ-01"]
+depends_on = ["R5-PB-06"]
+repository_id = "mantra"
+requirement_contribution = "Align every corrected prior and mask to one ordered perturbation-identity table."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "S6-PB-02"
+requirement_ids = ["S6-REQ-02"]
+depends_on = ["S6-PB-01", "E0-PB-11"]
+repository_id = "mantra"
+requirement_contribution = "Implement and retain the identity, per-prior PCA, and per-prior MLP transforms named by the variant manifest."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "S6-PB-03"
+requirement_ids = ["S6-REQ-03"]
+depends_on = ["S6-PB-02"]
+repository_id = "mantra"
+requirement_contribution = "Implement and retain concatenation and learned-MLP fusion for the declared prior variants."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "S6-PB-04"
+requirement_ids = ["S6-REQ-04"]
+depends_on = ["S6-PB-03", "E0-PB-07"]
+repository_id = "mantra"
+requirement_contribution = "Execute only the declared grouped-ridge and direct-to-Hopfield representation paths."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "S6-PB-05"
+requirement_ids = ["S6-REQ-05"]
+depends_on = ["S6-PB-01", "E0-PB-02"]
+repository_id = "mantra"
+requirement_contribution = "Predict held-out ctrl19 rows through the retained auxiliary MLP and decoder without hold-response leakage."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "S6-PB-06"
+requirement_ids = ["S6-REQ-06"]
+depends_on = ["S6-PB-04", "R5-PB-07"]
+repository_id = "mantra"
+requirement_contribution = "Rebuild the split-aligned hard, soft-semantic, and spectral response-block features and prove parity without held-out response leakage."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "S6-PB-07"
+requirement_ids = ["S6-REQ-07"]
+depends_on = ["S6-PB-05", "S6-PB-06"]
+repository_id = "mantra"
+requirement_contribution = "Freeze one complete model-input bundle for each declared variant and require every model plan to name its exact bundle."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "S6-PB-08"
+requirement_ids = ["S6-REQ-08"]
+depends_on = ["S6-PB-07", "E0-PB-08"]
+repository_id = "mantra"
+requirement_contribution = "Replace each shared historical producer one at a time and preserve the Hopfield MIL-stack bridge and MIL parity baselines before variant training."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "S6-PB-09"
+requirement_ids = ["S6-REQ-09"]
+depends_on = ["S6-PB-08", "E0-PB-09", "E0-PB-10"]
+repository_id = "mantra"
+requirement_contribution = "Replace one legacy Hopfield or MIL model component at a time with its modular owner while preserving the corresponding frozen model result."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "H7-PB-01"
+requirement_ids = ["H7-REQ-01"]
+depends_on = ["S6-PB-09", "E0-PB-09"]
+repository_id = "mantra"
+requirement_contribution = "Construct and persist the complete Hopfield encoder and memory layout as a replayable VIPER stage."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "H7-PB-02"
+requirement_ids = ["H7-REQ-02"]
+depends_on = ["H7-PB-01"]
+repository_id = "mantra"
+requirement_contribution = "Train and select the first-principles Hopfield checkpoint without hold-response access."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "H7-PB-03"
+requirement_ids = ["H7-REQ-03"]
+depends_on = ["H7-PB-02"]
+repository_id = "mantra"
+requirement_contribution = "Run checkpoint-only Hopfield inference and retain ordered predictions."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "H7-PB-04"
+requirement_ids = ["H7-REQ-04"]
+depends_on = ["H7-PB-03"]
+repository_id = "mantra"
+requirement_contribution = "Run the Hopfield diagnostics from persisted inputs, checkpoint, and predictions without changing model state."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "H7-PB-05"
+requirement_ids = ["H7-REQ-05"]
+depends_on = ["H7-PB-04"]
+repository_id = "mantra"
+requirement_contribution = "Evaluate every rebuilt Hopfield variant through canonical PearsonDelta and compare it with the original and MIL-stack bridge baselines."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "M8-PB-01"
+requirement_ids = ["M8-REQ-01"]
+depends_on = ["S6-PB-09", "E0-PB-10"]
+repository_id = "mantra"
+requirement_contribution = "Build and persist the complete ordered MIL bags as a replayable VIPER stage."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "M8-PB-02"
+requirement_ids = ["M8-REQ-02"]
+depends_on = ["M8-PB-01"]
+repository_id = "mantra"
+requirement_contribution = "Construct and persist the initialized MIL teacher and student models as a replayable VIPER stage."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "M8-PB-03"
+requirement_ids = ["M8-REQ-03"]
+depends_on = ["M8-PB-02"]
+repository_id = "mantra"
+requirement_contribution = "Train and select first-principles MIL teacher and student checkpoints without hold-response access."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "M8-PB-04"
+requirement_ids = ["M8-REQ-04"]
+depends_on = ["M8-PB-03"]
+repository_id = "mantra"
+requirement_contribution = "Run checkpoint-only MIL inference and retain ordered predictions."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "M8-PB-05"
+requirement_ids = ["M8-REQ-05"]
+depends_on = ["M8-PB-04"]
+repository_id = "mantra"
+requirement_contribution = "Run the MIL diagnostics from persisted bags, checkpoints, and predictions without changing model state."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "M8-PB-06"
+requirement_ids = ["M8-REQ-06"]
+depends_on = ["M8-PB-05"]
+repository_id = "mantra"
+requirement_contribution = "Evaluate the rebuilt MIL model through canonical PearsonDelta and compare it with Phase 2."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "B9-PB-01"
+requirement_ids = ["B9-REQ-01"]
+depends_on = ["H7-PB-05", "M8-PB-06"]
+repository_id = "mantra"
+requirement_contribution = "Benchmark every declared Hopfield variant and the rebuilt MIL model against the original Hopfield, Hopfield bridge, and original MIL baselines on one frozen evaluation surface."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "B9-PB-02"
+requirement_ids = ["B9-REQ-02"]
+depends_on = ["B9-PB-01"]
+repository_id = "rico"
+requirement_contribution = "Close the complete pre-graph provenance graph and stop Matrix before graph-encoder execution."
+completion_evidence = ["implementation_review", "viper_registration"]

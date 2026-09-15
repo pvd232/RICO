@@ -16,26 +16,26 @@ verifier_ids = ["H1-VR-02"]
 
 [[requirements]]
 id = "H1-REQ-03"
-claim = "The selected matched-control, control-program, core83, response40, family64, and gene-shift inputs must be rebuilt from their approved producers and match the retained historical files by keys, perturbation order, gene order, shape, dtype, and values."
+claim = "Before replay training, one complete descriptor-input ledger must name every selected matched-control, control-program, core83, response40, family64, and gene-shift file, its retained digest, producing script or record, and restore route. Restoring that ledger must reproduce the historical keys, perturbation order, gene order, shapes, dtypes, and values without rerunning upstream producers."
 depends_on = ["H1-REQ-02"]
 verifier_ids = ["H1-VR-03"]
 
 [[requirements]]
 id = "H1-REQ-04"
-claim = "The selected coefficient targets, fit and tune truth rows, response-block contract, response rotation, and response-similarity graph must be rebuilt from their approved producers and match the retained historical files by keys, row and column order, shape, dtype, and values."
+claim = "Before replay training, one complete target-input ledger must name every selected coefficient target, fit and tune truth surface, response-block contract, response rotation, and response-similarity graph, together with its retained digest, producing script or record, and restore route. Restoring that ledger must reproduce the historical keys, row and column order, shapes, dtypes, and values without rerunning upstream producers."
 depends_on = ["H1-REQ-03"]
 verifier_ids = ["H1-VR-04"]
 
 [[requirements]]
 id = "H1-REQ-05"
-claim = "The Hopfield loader must assemble the rebuilt inputs with the selected gene order, shapes, dtypes, and fit plus tune normalization population and reproduce every retained model input array."
+claim = "The Hopfield loader must assemble the restored replay bundle and reproduce every retained model input array and fitted transformation state: descriptor columns use moments fitted on the declared fit plus tune rows; coefficient similarity uses per-row mean centering followed by L2 normalization; and every gene, perturbation, shape, dtype, and array order remains fixed."
 depends_on = ["H1-REQ-04"]
 verifier_ids = ["H1-VR-05"]
 
 [[requirements]]
 id = "H1-REQ-06"
-claim = "The 187 to 384 to 384 to 128 Hopfield encoder must be trained under the selected historical objectives and seed and reproduce the retained weights while recording checkpoints, logs, selection scores, and the VIPER run."
-depends_on = ["H1-REQ-05"]
+claim = "The 187 to 384 to 384 to 128 Hopfield encoder must be trained under the selected historical objectives and seed, including the configured auxiliary posterior target built from the whitened-PCA-denoised coefficient bank and neighbors selected by raw-coefficient cosine similarity, and reproduce the retained weights while recording checkpoints, logs, selection scores, and the VIPER run. Final retrieval must continue to use the configured raw coefficient value memory."
+depends_on = ["H1-REQ-05", "E0-REQ-09"]
 verifier_ids = ["H1-VR-06"]
 
 [[requirements]]
@@ -49,6 +49,12 @@ id = "H1-REQ-08"
 claim = "Every accepted Phase 1 producer, input, output, comparison, and implementation commit must remain reachable through retained VIPER and contract-protocol evidence."
 depends_on = ["H1-REQ-07"]
 verifier_ids = ["H1-VR-08"]
+
+[[requirements]]
+id = "H1-REQ-09"
+claim = "After the original Hopfield and MIL models reproduce their retained Phase 0 results, the legacy Hopfield path must consume the exact retained MIL descriptor bundle: the shared 83-value core block, the 144-value five-source family block, and its matching 40-value response proxy. The bridge run must change only the encoder input-width binding from 187 to 267, retrain and evaluate the otherwise unchanged legacy model, and freeze its inputs, checkpoint, predictions, score, configuration, runtime, and implementation commit as the Hopfield MIL-stack bridge baseline."
+depends_on = ["H1-REQ-08", "M2-REQ-06", "E0-REQ-08", "E0-REQ-09"]
+verifier_ids = ["H1-VR-09"]
 
 [[verifiers]]
 id = "H1-VR-01"
@@ -67,28 +73,28 @@ rejection_cases = [{ repository_id = "mantra", path = "experiments/v1938_sota_cl
 [[verifiers]]
 id = "H1-VR-03"
 requirement_ids = ["H1-REQ-03"]
-acceptance_conditions = ["Each rebuilt descriptor-side input has the same NPZ keys, ordered perturbations and genes, shapes, dtypes, and arrays as its retained historical counterpart."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_preprocessing.py", symbol = "test_rebuilds_selected_descriptor_inputs" }
+acceptance_conditions = ["The descriptor-input ledger resolves every retained file to its exact digest, producing script or record, and restore route; restoring it reproduces the historical NPZ keys, ordered perturbations and genes, shapes, dtypes, and arrays without running an upstream producer."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_preprocessing.py", symbol = "test_restores_selected_descriptor_inputs" }
 rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_preprocessing.py", symbol = "test_rejects_changed_descriptor_input" }]
 
 [[verifiers]]
 id = "H1-VR-04"
 requirement_ids = ["H1-REQ-04"]
-acceptance_conditions = ["Each rebuilt target-side input has the same NPZ or JSON keys, ordered rows and columns, shapes, dtypes, and values as its retained historical counterpart."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_preprocessing.py", symbol = "test_rebuilds_selected_target_inputs" }
+acceptance_conditions = ["The target-input ledger resolves every retained file to its exact digest, producing script or record, and restore route; restoring it reproduces the historical NPZ or JSON keys, ordered rows and columns, shapes, dtypes, and values without running an upstream producer."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_preprocessing.py", symbol = "test_restores_selected_target_inputs" }
 rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_preprocessing.py", symbol = "test_rejects_changed_target_input" }]
 
 [[verifiers]]
 id = "H1-VR-05"
 requirement_ids = ["H1-REQ-05"]
-acceptance_conditions = ["The assembled model inputs reproduce every retained array and use fit plus tune rows for configured normalization and training populations."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_preprocessing.py", symbol = "test_rebuilds_selected_model_inputs" }
+acceptance_conditions = ["The loader assembles only ledger-restored inputs and reproduces every retained array and fitted normalization state; descriptor columns use fit plus tune moments, and coefficient similarities use row-mean centering followed by L2 normalization."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_preprocessing.py", symbol = "test_assembles_selected_replay_inputs" }
 rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_preprocessing.py", symbol = "test_rejects_changed_model_input_or_population" }]
 
 [[verifiers]]
 id = "H1-VR-06"
 requirement_ids = ["H1-REQ-06"]
-acceptance_conditions = ["The training run uses the approved architecture, objectives, seed, data identities, and selection rule and reproduces the retained encoder weights with complete logs and checkpoints."]
+acceptance_conditions = ["The training run uses the approved architecture, objectives, seed, data identities, selection rule, denoised and neighbor-smoothed auxiliary coefficient target, and raw final value memory and reproduces the retained encoder weights with complete logs and checkpoints."]
 success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_training.py", symbol = "test_trains_selected_hopfield_encoder" }
 rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_training.py", symbol = "test_rejects_changed_training_contract" }]
 
@@ -105,6 +111,13 @@ requirement_ids = ["H1-REQ-08"]
 acceptance_conditions = ["The terminal registration resolves every accepted Phase 1 receipt, artifact, source commit, and producer edge from retained records."]
 success_case = { repository_id = "rico", path = "tests/phase1/test_hopfield_registration.py", symbol = "test_resolves_complete_phase1_provenance" }
 rejection_cases = [{ repository_id = "rico", path = "tests/phase1/test_hopfield_registration.py", symbol = "test_rejects_severed_phase1_provenance" }]
+
+[[verifiers]]
+id = "H1-VR-09"
+requirement_ids = ["H1-REQ-09"]
+acceptance_conditions = ["The bridge run starts from the parity-proven legacy Hopfield source and configuration; resolves the exact retained 83-value core, 144-value family, and 40-value response artifact digests with their canonical row and split identities; changes only the encoder input width from 187 to 267; keeps the complete numeric training set GPU-resident; and reproduces its frozen bridge result from the retained checkpoint and inputs."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_mil_input_bridge.py", symbol = "test_freezes_legacy_hopfield_on_exact_mil_input_stack" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_mil_input_bridge.py", symbol = "test_rejects_mixed_input_stack_or_unrelated_model_change" }]
 
 [[pair_blocks]]
 id = "H1-PB-01"
@@ -127,7 +140,7 @@ id = "H1-PB-03"
 requirement_ids = ["H1-REQ-03"]
 depends_on = ["H1-PB-02"]
 repository_id = "mantra"
-requirement_contribution = "Rebuild and compare the selected descriptor-side Hopfield inputs."
+requirement_contribution = "Freeze the descriptor-input ledger and restore every exact historical file without rebuilding upstream producers."
 completion_evidence = ["implementation_review", "viper_registration"]
 
 [[pair_blocks]]
@@ -135,7 +148,7 @@ id = "H1-PB-04"
 requirement_ids = ["H1-REQ-04"]
 depends_on = ["H1-PB-03"]
 repository_id = "mantra"
-requirement_contribution = "Rebuild and compare the selected target-side and response-transform Hopfield inputs."
+requirement_contribution = "Freeze the target-input ledger and restore every exact historical target and response-transform file."
 completion_evidence = ["implementation_review", "viper_registration"]
 
 [[pair_blocks]]
@@ -143,13 +156,13 @@ id = "H1-PB-05"
 requirement_ids = ["H1-REQ-05"]
 depends_on = ["H1-PB-04"]
 repository_id = "mantra"
-requirement_contribution = "Assemble the rebuilt Hopfield model inputs and prove array and population parity."
+requirement_contribution = "Assemble the restored Hopfield replay bundle and prove array and fitted-population parity."
 completion_evidence = ["implementation_review", "viper_registration"]
 
 [[pair_blocks]]
 id = "H1-PB-06"
 requirement_ids = ["H1-REQ-06"]
-depends_on = ["H1-PB-05"]
+depends_on = ["H1-PB-05", "E0-PB-09"]
 repository_id = "mantra"
 requirement_contribution = "Train the selected Hopfield encoder and reproduce its retained weights and selection record."
 completion_evidence = ["implementation_review", "viper_registration"]
@@ -168,4 +181,12 @@ requirement_ids = ["H1-REQ-08"]
 depends_on = ["H1-PB-07"]
 repository_id = "rico"
 requirement_contribution = "Resolve the complete Phase 1 producer and evidence graph and close Hopfield reconstruction."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "H1-PB-09"
+requirement_ids = ["H1-REQ-09"]
+depends_on = ["H1-PB-08", "M2-PB-06", "E0-PB-08", "E0-PB-09"]
+repository_id = "mantra"
+requirement_contribution = "Run the unchanged legacy Hopfield model on the exact retained MIL input stack and freeze the resulting bridge baseline before modular reconstruction."
 completion_evidence = ["implementation_review", "viper_registration"]

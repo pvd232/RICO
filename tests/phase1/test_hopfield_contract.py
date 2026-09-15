@@ -11,7 +11,12 @@ import tomllib
 ROOT = Path(__file__).parents[2]
 CONTRACT = ROOT / "contracts/mantra-hopfield-reconstruction.toml"
 CHECKLIST = ROOT / "checklists/mantra-rebuild.toml"
+EXECUTION_CONTRACT = ROOT / "contracts/mantra-execution-foundation.toml"
 MIL_CONTRACT = ROOT / "contracts/mantra-mil-reconstruction.toml"
+DATA_CONTRACT = ROOT / "contracts/mantra-data-foundation.toml"
+PRIOR_CONTRACT = ROOT / "contracts/mantra-prior-reconstruction.toml"
+RESPONSE_CONTRACT = ROOT / "contracts/mantra-response-reconstruction.toml"
+FIRST_PRINCIPLES_CONTRACT = ROOT / "contracts/mantra-first-principles-models.toml"
 GRAPH_CONTRACT = ROOT / "contracts/mantra-graph-encoder-v1.toml"
 PHASE0_EVIDENCE = ROOT / "archive/mantra-rebuild-phase-0/evidence"
 PHASE0_INDEX = PHASE0_EVIDENCE / "phase0/index.json"
@@ -110,8 +115,8 @@ class HopfieldContractTests(unittest.TestCase):
                 EXPECTED_ENCODER_SHA256,
             )
 
-    def test_places_hopfield_requirements_in_roadmap_phase_one(self) -> None:
-        """Keep every Hopfield requirement in roadmap Phase 1."""
+    def test_places_replay_requirements_with_their_first_consumers(self) -> None:
+        """Keep replay foundations early and defer modular kernels until use."""
         checklist = tomllib.loads(CHECKLIST.read_text(encoding="utf-8"))
         phase = next(phase for phase in checklist["phases"] if phase["number"] == 1)
 
@@ -119,13 +124,36 @@ class HopfieldContractTests(unittest.TestCase):
             phase,
             {
                 "number": 1,
-                "title": "Hopfield reconstruction",
-                "requirement_ids": [f"H1-REQ-{index:02d}" for index in range(1, 9)],
+                "title": "GPU foundation and Hopfield reconstruction",
+                "requirement_ids": [
+                    "E0-REQ-01",
+                    "E0-REQ-02",
+                    "E0-REQ-03",
+                    "E0-REQ-09",
+                    *[f"H1-REQ-{index:02d}" for index in range(1, 9)],
+                ],
             },
         )
 
+    def test_separates_control_and_response_ieg_policies(self) -> None:
+        """Keep nuisance removal out of the response target gene axis."""
+        data = tomllib.loads(DATA_CONTRACT.read_text(encoding="utf-8"))
+        response = tomllib.loads(RESPONSE_CONTRACT.read_text(encoding="utf-8"))
+        data_claim = next(
+            item["claim"] for item in data["requirements"] if item["id"] == "D3-REQ-07"
+        )
+        claims = {item["id"]: item["claim"] for item in response["requirements"]}
+
+        self.assertIn("core immediate-early genes", data_claim)
+        self.assertIn("retaining the core immediate-early genes", data_claim)
+        self.assertIn(
+            "excludes the core immediate-early-gene blacklist", claims["R5-REQ-01"]
+        )
+        self.assertIn("regress the immediate-early-gene score", claims["R5-REQ-02"])
+        self.assertIn("complete GEARS target axis", claims["R5-REQ-04"])
+
     def test_registers_every_roadmap_contract_and_phase(self) -> None:
-        """Require the master workspace to encode the complete Phase 1-5 map."""
+        """Require the master workspace to encode the complete roadmap."""
         checklist = tomllib.loads(CHECKLIST.read_text(encoding="utf-8"))
         phases = checklist["phases"]
 
@@ -133,31 +161,169 @@ class HopfieldContractTests(unittest.TestCase):
         self.assertEqual(
             checklist["contract_paths"],
             [
+                "contracts/mantra-execution-foundation.toml",
                 "contracts/mantra-hopfield-reconstruction.toml",
                 "contracts/mantra-mil-reconstruction.toml",
+                "contracts/mantra-data-foundation.toml",
+                "contracts/mantra-prior-reconstruction.toml",
+                "contracts/mantra-response-reconstruction.toml",
+                "contracts/mantra-first-principles-models.toml",
                 "contracts/mantra-graph-encoder-v1.toml",
             ],
         )
         self.assertEqual(
             {phase["number"]: phase["requirement_ids"] for phase in phases},
             {
-                1: [f"H1-REQ-{index:02d}" for index in range(1, 9)],
-                2: [f"M2-REQ-{index:02d}" for index in range(1, 7)],
-                3: ["GE-REQ-01", "GE-REQ-02"],
-                4: ["GE-REQ-03", "GE-REQ-04"],
-                5: ["GE-REQ-05", "GE-REQ-06", "GE-REQ-07"],
+                1: [
+                    "E0-REQ-01",
+                    "E0-REQ-02",
+                    "E0-REQ-03",
+                    "E0-REQ-09",
+                    *[f"H1-REQ-{index:02d}" for index in range(1, 9)],
+                ],
+                2: [
+                    "E0-REQ-10",
+                    *[f"M2-REQ-{index:02d}" for index in range(1, 7)],
+                    "H1-REQ-09",
+                ],
+                3: [f"D3-REQ-{index:02d}" for index in range(1, 8)],
+                4: ["E0-REQ-11", *[f"P4-REQ-{index:02d}" for index in range(1, 7)]],
+                5: [
+                    "E0-REQ-04",
+                    "E0-REQ-05",
+                    "E0-REQ-06",
+                    "E0-REQ-08",
+                    *[f"R5-REQ-{index:02d}" for index in range(1, 8)],
+                ],
+                6: [
+                    "E0-REQ-07",
+                    *[f"S6-REQ-{index:02d}" for index in range(1, 10)],
+                ],
+                7: [f"H7-REQ-{index:02d}" for index in range(1, 6)],
+                8: [f"M8-REQ-{index:02d}" for index in range(1, 7)],
+                9: [f"B9-REQ-{index:02d}" for index in range(1, 3)],
+                10: ["GE-REQ-01", "GE-REQ-02"],
+                11: ["GE-REQ-03", "GE-REQ-04"],
+                12: ["GE-REQ-05", "GE-REQ-06", "GE-REQ-07"],
             },
         )
 
+        execution = tomllib.loads(EXECUTION_CONTRACT.read_text(encoding="utf-8"))
+        contract = tomllib.loads(CONTRACT.read_text(encoding="utf-8"))
         mil = tomllib.loads(MIL_CONTRACT.read_text(encoding="utf-8"))
+        data = tomllib.loads(DATA_CONTRACT.read_text(encoding="utf-8"))
+        prior = tomllib.loads(PRIOR_CONTRACT.read_text(encoding="utf-8"))
+        response = tomllib.loads(RESPONSE_CONTRACT.read_text(encoding="utf-8"))
+        first_principles = tomllib.loads(
+            FIRST_PRINCIPLES_CONTRACT.read_text(encoding="utf-8")
+        )
         graph = tomllib.loads(GRAPH_CONTRACT.read_text(encoding="utf-8"))
+        self.assertEqual(
+            [requirement["id"] for requirement in execution["requirements"]],
+            [f"E0-REQ-{index:02d}" for index in range(1, 12)],
+        )
+        self.assertEqual(
+            [requirement["id"] for requirement in contract["requirements"]],
+            [f"H1-REQ-{index:02d}" for index in range(1, 10)],
+        )
         self.assertEqual(
             [requirement["id"] for requirement in mil["requirements"]],
             [f"M2-REQ-{index:02d}" for index in range(1, 7)],
         )
         self.assertEqual(
+            [requirement["id"] for requirement in data["requirements"]],
+            [f"D3-REQ-{index:02d}" for index in range(1, 8)],
+        )
+        self.assertEqual(
+            [requirement["id"] for requirement in prior["requirements"]],
+            [f"P4-REQ-{index:02d}" for index in range(1, 7)],
+        )
+        self.assertEqual(
+            [requirement["id"] for requirement in response["requirements"]],
+            [f"R5-REQ-{index:02d}" for index in range(1, 8)],
+        )
+        self.assertEqual(
+            [requirement["id"] for requirement in first_principles["requirements"]],
+            [
+                *[f"S6-REQ-{index:02d}" for index in range(1, 10)],
+                *[f"H7-REQ-{index:02d}" for index in range(1, 6)],
+                *[f"M8-REQ-{index:02d}" for index in range(1, 7)],
+                *[f"B9-REQ-{index:02d}" for index in range(1, 3)],
+            ],
+        )
+        self.assertEqual(
             [requirement["id"] for requirement in graph["requirements"]],
             [f"GE-REQ-{index:02d}" for index in range(1, 8)],
+        )
+
+    def test_orders_input_convergence_before_modular_substitution(self) -> None:
+        """Freeze both replay results before changing inputs or model code."""
+        execution = tomllib.loads(EXECUTION_CONTRACT.read_text(encoding="utf-8"))
+        hopfield = tomllib.loads(CONTRACT.read_text(encoding="utf-8"))
+        data = tomllib.loads(DATA_CONTRACT.read_text(encoding="utf-8"))
+        models = tomllib.loads(FIRST_PRINCIPLES_CONTRACT.read_text(encoding="utf-8"))
+
+        hopfield_requirements = {
+            requirement["id"]: requirement for requirement in hopfield["requirements"]
+        }
+        hopfield_blocks = {block["id"]: block for block in hopfield["pair_blocks"]}
+        data_requirements = {
+            requirement["id"]: requirement for requirement in data["requirements"]
+        }
+        model_requirements = {
+            requirement["id"]: requirement for requirement in models["requirements"]
+        }
+        execution_requirements = {
+            requirement["id"]: requirement for requirement in execution["requirements"]
+        }
+
+        self.assertEqual(
+            hopfield_requirements["H1-REQ-09"]["depends_on"],
+            ["H1-REQ-08", "M2-REQ-06", "E0-REQ-08", "E0-REQ-09"],
+        )
+        self.assertEqual(
+            hopfield_blocks["H1-PB-09"]["depends_on"],
+            ["H1-PB-08", "M2-PB-06", "E0-PB-08", "E0-PB-09"],
+        )
+        self.assertIn(
+            "input-width binding from 187 to 267",
+            hopfield_requirements["H1-REQ-09"]["claim"],
+        )
+        self.assertIn(
+            "seeded scikit-learn Lloyd KMeans",
+            execution_requirements["E0-REQ-08"]["claim"],
+        )
+        self.assertIn(
+            "full-dataset training",
+            execution_requirements["E0-REQ-09"]["claim"],
+        )
+        self.assertIn(
+            "128-row optimizer batches only through device-side indices",
+            execution_requirements["E0-REQ-10"]["claim"],
+        )
+        self.assertEqual(
+            data_requirements["D3-REQ-01"]["depends_on"],
+            ["H1-REQ-09", "M2-REQ-06"],
+        )
+        self.assertEqual(
+            model_requirements["S6-REQ-09"]["depends_on"],
+            ["S6-REQ-08", "E0-REQ-09", "E0-REQ-10"],
+        )
+        self.assertEqual(
+            model_requirements["S6-REQ-08"]["depends_on"],
+            ["S6-REQ-07", "E0-REQ-08"],
+        )
+        self.assertIn(
+            "H1-REQ-09 MIL-stack bridge baseline",
+            model_requirements["S6-REQ-08"]["claim"],
+        )
+        self.assertEqual(
+            model_requirements["H7-REQ-01"]["depends_on"][0],
+            "S6-REQ-09",
+        )
+        self.assertEqual(
+            model_requirements["M8-REQ-01"]["depends_on"][0],
+            "S6-REQ-09",
         )
 
 

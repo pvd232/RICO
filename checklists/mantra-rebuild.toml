@@ -4,15 +4,24 @@ title = "MANTRA rebuild"
 coordination_repository_id = "rico"
 checklist_path = "checklists/mantra-rebuild.md"
 contract_paths = [
+  "contracts/mantra-execution-foundation.toml",
   "contracts/mantra-hopfield-reconstruction.toml",
   "contracts/mantra-mil-reconstruction.toml",
+  "contracts/mantra-data-foundation.toml",
+  "contracts/mantra-prior-reconstruction.toml",
+  "contracts/mantra-response-reconstruction.toml",
+  "contracts/mantra-first-principles-models.toml",
   "contracts/mantra-graph-encoder-v1.toml",
 ]
 
 [[phases]]
 number = 1
-title = "Hopfield reconstruction"
+title = "GPU foundation and Hopfield reconstruction"
 requirement_ids = [
+  "E0-REQ-01",
+  "E0-REQ-02",
+  "E0-REQ-03",
+  "E0-REQ-09",
   "H1-REQ-01",
   "H1-REQ-02",
   "H1-REQ-03",
@@ -25,28 +34,104 @@ requirement_ids = [
 
 [[phases]]
 number = 2
-title = "MIL reconstruction"
+title = "MIL reconstruction and Hopfield input convergence"
 requirement_ids = [
+  "E0-REQ-10",
   "M2-REQ-01",
   "M2-REQ-02",
   "M2-REQ-03",
   "M2-REQ-04",
   "M2-REQ-05",
   "M2-REQ-06",
+  "H1-REQ-09",
 ]
 
 [[phases]]
 number = 3
+title = "Biological identities and canonical atlas"
+requirement_ids = [
+  "D3-REQ-01",
+  "D3-REQ-02",
+  "D3-REQ-03",
+  "D3-REQ-04",
+  "D3-REQ-05",
+  "D3-REQ-06",
+  "D3-REQ-07",
+]
+
+[[phases]]
+number = 4
+title = "Prior reconstruction"
+requirement_ids = [
+  "E0-REQ-11",
+  "P4-REQ-01",
+  "P4-REQ-02",
+  "P4-REQ-03",
+  "P4-REQ-04",
+  "P4-REQ-05",
+  "P4-REQ-06",
+]
+
+[[phases]]
+number = 5
+title = "Response reconstruction"
+requirement_ids = [
+  "E0-REQ-04",
+  "E0-REQ-05",
+  "E0-REQ-06",
+  "E0-REQ-08",
+  "R5-REQ-01",
+  "R5-REQ-02",
+  "R5-REQ-03",
+  "R5-REQ-04",
+  "R5-REQ-05",
+  "R5-REQ-06",
+  "R5-REQ-07",
+]
+
+[[phases]]
+number = 6
+title = "Shared perturbation representation"
+requirement_ids = [
+  "E0-REQ-07",
+  "S6-REQ-01",
+  "S6-REQ-02",
+  "S6-REQ-03",
+  "S6-REQ-04",
+  "S6-REQ-05",
+  "S6-REQ-06",
+  "S6-REQ-07",
+  "S6-REQ-08",
+  "S6-REQ-09",
+]
+
+[[phases]]
+number = 7
+title = "First-principles Hopfield"
+requirement_ids = ["H7-REQ-01", "H7-REQ-02", "H7-REQ-03", "H7-REQ-04", "H7-REQ-05"]
+
+[[phases]]
+number = 8
+title = "First-principles MIL"
+requirement_ids = ["M8-REQ-01", "M8-REQ-02", "M8-REQ-03", "M8-REQ-04", "M8-REQ-05", "M8-REQ-06"]
+
+[[phases]]
+number = 9
+title = "Pre-graph baseline freeze"
+requirement_ids = ["B9-REQ-01", "B9-REQ-02"]
+
+[[phases]]
+number = 10
 title = "Graph identities and baselines"
 requirement_ids = ["GE-REQ-01", "GE-REQ-02"]
 
 [[phases]]
-number = 4
+number = 11
 title = "Topology and V1 features"
 requirement_ids = ["GE-REQ-03", "GE-REQ-04"]
 
 [[phases]]
-number = 5
+number = 12
 title = "V1 graph encoder"
 requirement_ids = ["GE-REQ-05", "GE-REQ-06", "GE-REQ-07"]
 
@@ -56,11 +141,11 @@ checkout = "/Users/machina/Developer/ChatGPT/RICO"
 
 [[repository_bindings.executables]]
 command = "python3"
-path = "/Users/machina/miniconda3/bin/python3"
+path = "/Users/machina/Developer/ChatGPT/RICO/.venv/bin/python3"
 
 [[repository_bindings.executables]]
 command = "pyright"
-path = "/Users/machina/miniconda3/bin/pyright"
+path = "/Users/machina/Developer/ChatGPT/RICO/.venv/bin/pyright"
 
 [[repository_bindings.executables]]
 command = "node"
@@ -68,7 +153,7 @@ path = "/usr/local/bin/node"
 
 [[repository_bindings.executables]]
 command = "ruff"
-path = "/Users/machina/miniconda3/bin/ruff"
+path = "/Users/machina/Developer/ChatGPT/RICO/.venv/bin/ruff"
 
 [[repository_bindings.executables]]
 command = "git"
@@ -93,6 +178,30 @@ path = "/usr/local/bin/node"
 [[repository_bindings.executables]]
 command = "ruff"
 path = "/Users/machina/miniconda3/envs/mantra/bin/ruff"
+
+[[repository_bindings.executables]]
+command = "git"
+path = "/usr/bin/git"
+
+[[repository_bindings]]
+repository_id = "viper"
+checkout = "/Users/machina/Developer/ChatGPT/viper"
+
+[[repository_bindings.executables]]
+command = "python3"
+path = "/Users/machina/Developer/ChatGPT/viper/.venv/bin/python3"
+
+[[repository_bindings.executables]]
+command = "pyright"
+path = "/Users/machina/Developer/ChatGPT/viper/.venv/bin/pyright"
+
+[[repository_bindings.executables]]
+command = "node"
+path = "/usr/local/bin/node"
+
+[[repository_bindings.executables]]
+command = "ruff"
+path = "/Users/machina/Developer/ChatGPT/viper/.venv/bin/ruff"
 
 [[repository_bindings.executables]]
 command = "git"

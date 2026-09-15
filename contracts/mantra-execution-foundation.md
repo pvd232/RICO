@@ -1,0 +1,227 @@
+# MANTRA Execution and Acceleration Foundation
+
+This contract makes ephemeral GPU execution recoverable. VIPER must publish and
+restore artifacts through durable GCS storage before training starts, and each
+worker and its boot disk must be removed after accepted outputs restore.
+
+It also freezes the accelerated MANTRA operations that the modular rebuild must
+preserve. Numerical parity and L4 throughput gates cover GPU cNMF, NMF, NNLS,
+Sinkhorn, ridge, low-rank PCA and SVD, Hopfield, MIL, and the deterministic CPU
+KMeans exception used for byte-parity replay.
+
+<!-- contract-protocol:generated:start -->
+**In progress.** [Jump to current PairBlock](#e0-pb-02)
+
+**Checklist:** [MANTRA rebuild](../checklists/mantra-rebuild.md)
+
+### PairBlocks
+
+<a id="e0-pb-01"></a>
+
+#### <nobr><code>E0-PB-01</code></nobr>
+
+**Status:** waiting
+
+**Requirement contribution:** Implement and verify durable GCS publication and restoration through VIPER's existing cloud-client boundary.
+
+**Plan:** None
+
+**Current receipt:** None
+
+**Dependencies:** <nobr><code>E0-PB-02</code></nobr>
+
+**Next action:** Wait for the declared dependencies.
+
+<a id="e0-pb-02"></a>
+
+#### <nobr><code>E0-PB-02</code></nobr>
+
+**Status:** drafting
+
+**Requirement contribution:** Harden lower-demand-region launch, failure cleanup, launch identity, and deterministic worker-plus-disk teardown before any GPU is created.
+
+**Plan:** None
+
+**Current receipt:** None
+
+**Dependencies:** None
+
+**Next action:** Run the current PairBlock plan.
+
+<a id="e0-pb-03"></a>
+
+#### <nobr><code>E0-PB-03</code></nobr>
+
+**Status:** waiting
+
+**Requirement contribution:** Freeze the complete optimization inventory and its owners, consumers, and gates.
+
+**Plan:** None
+
+**Current receipt:** None
+
+**Dependencies:** <nobr><code>E0-PB-02</code></nobr>
+
+**Next action:** Wait for the declared dependencies.
+
+<a id="e0-pb-04"></a>
+
+#### <nobr><code>E0-PB-04</code></nobr>
+
+**Status:** waiting
+
+**Requirement contribution:** Port and benchmark batched GPU cNMF and NMF behind their modular owner.
+
+**Plan:** None
+
+**Current receipt:** None
+
+**Dependencies:** <nobr><code>E0-PB-03</code></nobr>
+
+**Next action:** Wait for the declared dependencies.
+
+<a id="e0-pb-05"></a>
+
+#### <nobr><code>E0-PB-05</code></nobr>
+
+**Status:** waiting
+
+**Requirement contribution:** Port and benchmark the dense and sparse GPU NNLS paths behind their modular owners.
+
+**Plan:** None
+
+**Current receipt:** None
+
+**Dependencies:** <nobr><code>E0-PB-03</code></nobr>
+
+**Next action:** Wait for the declared dependencies.
+
+<a id="e0-pb-06"></a>
+
+#### <nobr><code>E0-PB-06</code></nobr>
+
+**Status:** waiting
+
+**Requirement contribution:** Port and benchmark vectorized GPU Sinkhorn transport and barycentric residuals.
+
+**Plan:** None
+
+**Current receipt:** None
+
+**Dependencies:** <nobr><code>E0-PB-03</code></nobr>
+
+**Next action:** Wait for the declared dependencies.
+
+<a id="e0-pb-07"></a>
+
+#### <nobr><code>E0-PB-07</code></nobr>
+
+**Status:** waiting
+
+**Requirement contribution:** Port and verify the shared GPU ridge solver across every declared consumer.
+
+**Plan:** None
+
+**Current receipt:** None
+
+**Dependencies:** <nobr><code>E0-PB-03</code></nobr>
+
+**Next action:** Wait for the declared dependencies.
+
+<a id="e0-pb-08"></a>
+
+#### <nobr><code>E0-PB-08</code></nobr>
+
+**Status:** waiting
+
+**Requirement contribution:** Enforce separate parity and throughput profiles, including the deterministic CPU KMeans parity path.
+
+**Plan:** None
+
+**Current receipt:** None
+
+**Dependencies:** <nobr><code>E0-PB-04</code></nobr>
+
+**Next action:** Wait for the declared dependencies.
+
+<a id="e0-pb-09"></a>
+
+#### <nobr><code>E0-PB-09</code></nobr>
+
+**Status:** waiting
+
+**Requirement contribution:** Inventory, port, and benchmark every selected Hopfield GPU and vectorized operation.
+
+**Plan:** None
+
+**Current receipt:** None
+
+**Dependencies:** <nobr><code>E0-PB-03</code></nobr>
+
+**Next action:** Wait for the declared dependencies.
+
+<a id="e0-pb-10"></a>
+
+#### <nobr><code>E0-PB-10</code></nobr>
+
+**Status:** waiting
+
+**Requirement contribution:** Inventory, port, and benchmark every selected MIL GPU and vectorized operation.
+
+**Plan:** None
+
+**Current receipt:** None
+
+**Dependencies:** <nobr><code>E0-PB-03</code></nobr>
+
+**Next action:** Wait for the declared dependencies.
+
+<a id="e0-pb-11"></a>
+
+#### <nobr><code>E0-PB-11</code></nobr>
+
+**Status:** waiting
+
+**Requirement contribution:** Port and benchmark deterministic GPU low-rank PCA and SVD behind their modular owners.
+
+**Plan:** None
+
+**Current receipt:** None
+
+**Dependencies:** <nobr><code>E0-PB-03</code></nobr>
+
+**Next action:** Wait for the declared dependencies.
+
+
+### Requirements
+
+| Requirement | Claim | Progress | Verifiers | PairBlocks |
+|---|---|---|---|---|
+| <nobr><code>E0-REQ-01</code></nobr> | Before an ephemeral GPU run starts, VIPER must publish and restore one probe artifact through a production GCS-backed ViperCloudClient, verify its digest after restoration, and retain the durable reference in the run record. Each GCS object key must prefix the owner, workspace, and source revision while preserving the exact repository-relative path produced by VIPER's canonical initialized workspace layout. | planned | <nobr><code>E0-VR-01</code></nobr> | <nobr><code>E0-PB-01</code></nobr> |
+| <nobr><code>E0-REQ-02</code></nobr> | The governed GPU launcher must search declared lower-demand regions before us-central1, continue after regional capacity or quota rejection, force boot-disk auto-delete after machine-image overrides, and clean up every worker, boot disk, NAT, and router created by a failed launch. A live launch must require a verified durable-storage probe and record the source commit, resolved VIPER plan and configuration, command, input digests, declared seeds, Python and accelerator RNG states, determinism environment variables, image, locked Python environment, operating system, CUDA and driver versions, GPU model and count, device and dtype policy, writable VIPER workspace, and durable artifact destination. Resume must reject any unreviewed execution-identity change, and final teardown must deterministically delete the worker and boot disk after accepted records and artifacts restore. | in_progress | <nobr><code>E0-VR-02</code></nobr> | <nobr><code>E0-PB-02</code></nobr> |
+| <nobr><code>E0-REQ-03</code></nobr> | One versioned optimization inventory must map every accelerated MANTRA operation to its historical owner, modular owner, CPU reference, numerical parity gate, throughput gate, device and precision policy, determinism policy, and consuming reconstruction stage. | planned | <nobr><code>E0-VR-03</code></nobr> | <nobr><code>E0-PB-03</code></nobr> |
+| <nobr><code>E0-REQ-04</code></nobr> | The modular response pipeline must preserve batched GPU cNMF and NMF execution, including parallel restarts, mini-batching, sparse-input handling, lazy split-sign expansion, stable float32 factors, and preloaded dense device tensors. | planned | <nobr><code>E0-VR-04</code></nobr> | <nobr><code>E0-PB-04</code></nobr> |
+| <nobr><code>E0-REQ-05</code></nobr> | The modular response pipeline must preserve the GPU NNLS implementations used to score and project response programs, including batched dense and sparse Ghost paths, and must compare their coefficients and reconstructions with the declared CPU reference within a named tolerance. | planned | <nobr><code>E0-VR-05</code></nobr> | <nobr><code>E0-PB-05</code></nobr> |
+| <nobr><code>E0-REQ-06</code></nobr> | The modular response pipeline must preserve vectorized GPU Sinkhorn transport and barycentric matched-control residuals and must retain convergence, marginal error, transport mass, device, precision, batch shape, and CPU-reference diagnostics. | planned | <nobr><code>E0-VR-06</code></nobr> | <nobr><code>E0-PB-06</code></nobr> |
+| <nobr><code>E0-REQ-07</code></nobr> | The modular feature and model pipelines must preserve GPU ridge solvers for grouped-prior, control-state, coefficient, and correction regressions, with the selected primal or dual form, penalty, device, dtype, and CPU-reference prediction error retained. | planned | <nobr><code>E0-VR-07</code></nobr> | <nobr><code>E0-PB-07</code></nobr> |
+| <nobr><code>E0-REQ-08</code></nobr> | Each execution must declare a parity or throughput profile. Every replay, bridge run, or one-at-a-time substitution that preserves a frozen result must use seeded scikit-learn Lloyd KMeans on CPU wherever clustering occurs. A later throughput run may use Triton KMeans on GPU but must record that backend and may not claim parity with the deterministic KMeans result. | planned | <nobr><code>E0-VR-08</code></nobr> | <nobr><code>E0-PB-08</code></nobr> |
+| <nobr><code>E0-REQ-09</code></nobr> | The modular Hopfield pipeline must copy every numeric training tensor to the GPU once before training, keep the complete fit and tune tensors resident through full-dataset training and inference, and limit later host-device transfers to checkpoint, log, and final-artifact persistence. It must also preserve vectorized matrix operations and top-k retrieval, deterministic CUDA settings, explicit precision, historical normalization and checkpoint selection, and retain transfer counts and bytes, runtime, and peak GPU memory through VIPER. | planned | <nobr><code>E0-VR-09</code></nobr> | <nobr><code>E0-PB-09</code></nobr> |
+| <nobr><code>E0-REQ-10</code></nobr> | The modular MIL pipeline must copy every numeric training tensor to the GPU once before teacher or student training, keep the complete tensors resident through training and inference, and form the historical 128-row optimizer batches only through device-side indices. Every training step must read numeric rows from those resident tensors. The pipeline must also preserve fused CUDA optimizers, vectorized top-k and einsum routing, deterministic CUDA settings, explicit precision, historical checkpoint selection, and retain transfer counts and bytes, runtime, and peak GPU memory through VIPER. | planned | <nobr><code>E0-VR-10</code></nobr> | <nobr><code>E0-PB-10</code></nobr> |
+| <nobr><code>E0-REQ-11</code></nobr> | The modular prior and response pipelines must preserve deterministic GPU low-rank PCA and SVD where the historical pipeline used them, including fitted rows, centering, rank, seed, sign convention, device, precision, components, singular values, projections, and reconstruction diagnostics. | planned | <nobr><code>E0-VR-11</code></nobr> | <nobr><code>E0-PB-11</code></nobr> |
+
+### Verification rules
+
+| Rule | Requirements | Acceptance conditions | Success case | Rejection cases |
+|---|---|---|---|---|
+| <nobr><code>E0-VR-01</code></nobr> | <nobr><code>E0-REQ-01</code></nobr> | A production VIPER client publishes a probe to GCS under owner, workspace, and source-revision prefixes while preserving VIPER's exact repository-relative artifact path; a fresh process restores the same bytes through the retained viper:// reference, and digest, path, or object substitution fails. | [test_publishes_and_restores_durable_snapshot](../../viper/tests/test_gcs_storage.py) | [test_rejects_changed_or_missing_cloud_object](../../viper/tests/test_gcs_storage.py) |
+| <nobr><code>E0-VR-02</code></nobr> | <nobr><code>E0-REQ-02</code></nobr> | The launcher searches lower-demand regions first, skips capacity and quota failures, forces and verifies boot-disk auto-delete, cleans up every resource created by a failed attempt, and blocks a live worker without a verified storage probe. The launch probe binds the complete execution identity to the VIPER run, resume rejects an unreviewed seed, RNG-state, environment, command, input, device, or configuration change, and final teardown finds no worker or boot disk after accepted artifacts restore. | [test_probes_launch_and_deletes_worker_and_disk](../tests/infrastructure/test_mantra_gpu_lifecycle.py) | [test_blocks_training_or_teardown_on_failed_probe](../tests/infrastructure/test_mantra_gpu_lifecycle.py) |
+| <nobr><code>E0-VR-03</code></nobr> | <nobr><code>E0-REQ-03</code></nobr> | Every required optimization has one resolvable historical owner, modular owner, reference comparison, performance threshold, execution policy, and downstream consumer, and an omitted operation fails. | [test_inventory_covers_every_accelerated_operation](../tests/roadmap/test_mantra_optimization_inventory.py) | [test_rejects_missing_owner_gate_or_consumer](../tests/roadmap/test_mantra_optimization_inventory.py) |
+| <nobr><code>E0-VR-04</code></nobr> | <nobr><code>E0-REQ-04</code></nobr> | The modular GPU cNMF path matches the CPU reference within tolerance for fixed initialization, exercises every declared optimization, and exceeds the retained minimum throughput on an L4. | [test_preserves_batched_gpu_cnmf](../../mantra/src/mantra/rebuild/tests/test_gpu_response_kernels.py) | [test_rejects_unverified_or_deoptimized_cnmf](../../mantra/src/mantra/rebuild/tests/test_gpu_response_kernels.py) |
+| <nobr><code>E0-VR-05</code></nobr> | <nobr><code>E0-REQ-05</code></nobr> | Dense and sparse GPU NNLS paths satisfy coefficient and reconstruction tolerances against their CPU references and the selected path and iteration count are retained. | [test_preserves_gpu_nnls_paths](../../mantra/src/mantra/rebuild/tests/test_gpu_response_kernels.py) | [test_rejects_nnls_drift_or_unrecorded_backend](../../mantra/src/mantra/rebuild/tests/test_gpu_response_kernels.py) |
+| <nobr><code>E0-VR-06</code></nobr> | <nobr><code>E0-REQ-06</code></nobr> | The GPU Sinkhorn result matches the CPU reference within declared transport and residual tolerances and fails on non-finite output, bad marginals, or missing execution diagnostics. | [test_preserves_vectorized_gpu_sinkhorn](../../mantra/src/mantra/rebuild/tests/test_gpu_response_kernels.py) | [test_rejects_sinkhorn_drift_or_missing_diagnostics](../../mantra/src/mantra/rebuild/tests/test_gpu_response_kernels.py) |
+| <nobr><code>E0-VR-07</code></nobr> | <nobr><code>E0-REQ-07</code></nobr> | Every declared GPU ridge use matches the CPU reference within tolerance and records the form, penalty, device, dtype, and prediction error. | [test_preserves_all_gpu_ridge_consumers](../../mantra/src/mantra/rebuild/tests/test_gpu_ridge_contract.py) | [test_rejects_unmapped_or_drifting_ridge_use](../../mantra/src/mantra/rebuild/tests/test_gpu_ridge_contract.py) |
+| <nobr><code>E0-VR-08</code></nobr> | <nobr><code>E0-REQ-08</code></nobr> | Replay, bridge, and substitution plans select seeded CPU scikit-learn Lloyd KMeans wherever clustering occurs; throughput plans record GPU Triton KMeans, and the verifier rejects a frozen-result parity claim from that path. | [test_selects_kmeans_backend_by_execution_profile](../../mantra/src/mantra/rebuild/tests/test_execution_profiles.py) | [test_rejects_gpu_kmeans_byte_parity_claim](../../mantra/src/mantra/rebuild/tests/test_execution_profiles.py) |
+| <nobr><code>E0-VR-09</code></nobr> | <nobr><code>E0-REQ-09</code></nobr> | The modular Hopfield benchmark records one initialization transfer for each numeric training tensor, full-dataset device-resident optimization, only declared persistence transfers afterward, transfer counts and bytes, runtime, and peak GPU memory; it also matches the historical numerical result under the parity profile and meets the retained L4 thresholds. | [test_preserves_hopfield_gpu_execution](../../mantra/src/mantra/rebuild/tests/test_gpu_model_kernels.py) | [test_rejects_hopfield_drift_or_deoptimization](../../mantra/src/mantra/rebuild/tests/test_gpu_model_kernels.py) |
+| <nobr><code>E0-VR-10</code></nobr> | <nobr><code>E0-REQ-10</code></nobr> | The modular MIL benchmark records one initialization transfer for each numeric training tensor, 128-row batches selected only through GPU indices, only declared persistence transfers afterward, transfer counts and bytes, runtime, and peak GPU memory; it also matches the historical numerical result under the parity profile and meets the retained L4 thresholds. | [test_preserves_mil_gpu_execution](../../mantra/src/mantra/rebuild/tests/test_gpu_model_kernels.py) | [test_rejects_mil_drift_or_deoptimization](../../mantra/src/mantra/rebuild/tests/test_gpu_model_kernels.py) |
+| <nobr><code>E0-VR-11</code></nobr> | <nobr><code>E0-REQ-11</code></nobr> | Each ported GPU PCA or SVD reproduces its declared components and projections within tolerance, applies the retained sign convention, records its execution policy, and meets the L4 benchmark threshold. | [test_preserves_deterministic_gpu_pca_and_svd](../../mantra/src/mantra/rebuild/tests/test_gpu_reduction_kernels.py) | [test_rejects_changed_fit_rows_signs_or_deoptimized_reduction](../../mantra/src/mantra/rebuild/tests/test_gpu_reduction_kernels.py) |
+<!-- contract-protocol:generated:end -->

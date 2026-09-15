@@ -198,7 +198,7 @@ def test_rico_declares_its_viper_workspace_and_runtime_dependency() -> None:
     )
     assert (proposal_root / "requirements.txt").read_text(
         encoding="utf-8"
-    ).splitlines() == ["pyright", "pytest", "ruff", "viper-provenance"]
+    ).splitlines() == ["pydantic", "pyright", "pytest", "ruff", "viper-provenance"]
 
 
 def test_registration_forwards_explicit_prior_run_source_trust(

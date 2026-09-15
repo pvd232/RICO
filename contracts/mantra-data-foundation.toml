@@ -1,0 +1,150 @@
+schema_version = 1
+contract_id = "mantra-data-foundation"
+title = "MANTRA Biological Data Foundation"
+
+[[requirements]]
+id = "D3-REQ-01"
+claim = "The model-facing perturbation ID must remain the raw label in the canonical split contract. One declared identity schema must attach current HGNC, Ensembl gene, transcript, guide-pair, locus-type, and source-snapshot fields without substituting any of those identities for the perturbation ID or the separate response-gene key."
+depends_on = ["H1-REQ-09", "M2-REQ-06"]
+verifier_ids = ["D3-VR-01"]
+
+[[requirements]]
+id = "D3-REQ-02"
+claim = "The raw K562 perturbation atlas must be downloaded from a pinned source into immutable source bytes with the request, source revision, byte count, SHA-256, and retrieval result retained through VIPER."
+depends_on = ["D3-REQ-01"]
+verifier_ids = ["D3-VR-02"]
+
+[[requirements]]
+id = "D3-REQ-03"
+claim = "One versioned perturbation identity table must preserve every raw perturbation label from the pinned atlas and materialize the declared HGNC, Ensembl gene, transcript, guide-pair, locus-type, resolution-result, and source-snapshot fields, with explicit missingness for identities that do not exist."
+depends_on = ["D3-REQ-02"]
+verifier_ids = ["D3-VR-03"]
+
+[[requirements]]
+id = "D3-REQ-04"
+claim = "One QC pass must retain cells with mitochondrial percentage at or below 15 and within five median absolute deviations for the declared count, detected-gene, top-20-gene-fraction, and mitochondrial covariates, then produce one ordered cell set for every downstream consumer."
+depends_on = ["D3-REQ-03"]
+verifier_ids = ["D3-VR-04"]
+
+[[requirements]]
+id = "D3-REQ-05"
+claim = "One deterministic builder must create the canonical slim H5AD from the pinned atlas and selected cell set, retaining the expression matrix, cell and perturbation identity fields, mitochondrial fraction, and gene-axis identifiers while omitting unused derived annotations, layers, embeddings, graphs, and analysis state."
+depends_on = ["D3-REQ-04"]
+verifier_ids = ["D3-VR-05"]
+
+[[requirements]]
+id = "D3-REQ-06"
+claim = "FastH5ADLoader must read the canonical slim H5AD with the same requested rows, columns, order, dtypes, and values as the reference AnnData path, and the VIPER run must retain the input, output, timing, and comparison evidence."
+depends_on = ["D3-REQ-05"]
+verifier_ids = ["D3-VR-06"]
+
+[[requirements]]
+id = "D3-REQ-07"
+claim = "One deterministic gene-panel stage must derive the control-program panel by the documented Seurat v3 highly-variable-gene procedure from an eligible gene universe that excludes mitochondrial, ribosomal, globin, and core immediate-early genes, and must reproduce the exact ordered GEARS 5,000-gene response panel while retaining the core immediate-early genes present in that target surface. The stage must retain each selection rule, fitted population, source gene axis, ordered output, overlap, and digest; the two panels must remain distinct inputs to their named downstream consumers."
+depends_on = ["D3-REQ-06"]
+verifier_ids = ["D3-VR-07"]
+
+[[verifiers]]
+id = "D3-VR-01"
+requirement_ids = ["D3-REQ-01"]
+acceptance_conditions = ["The declared schema uses the raw split-contract label as the perturbation row key, uses the resolved gene key only for response columns, and gives every other biological or experimental identity its own named field and pinned source."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_biological_identity.py", symbol = "test_declares_distinct_perturbation_and_response_identities" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_biological_identity.py", symbol = "test_rejects_cross_axis_identity_substitution" }]
+
+[[verifiers]]
+id = "D3-VR-02"
+requirement_ids = ["D3-REQ-02"]
+acceptance_conditions = ["A clean restoration resolves the exact atlas bytes from the retained source record, and changed or partial bytes fail before QC or transformation."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_atlas_acquisition.py", symbol = "test_restores_pinned_raw_atlas" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_atlas_acquisition.py", symbol = "test_rejects_partial_or_changed_atlas" }]
+
+[[verifiers]]
+id = "D3-VR-03"
+requirement_ids = ["D3-REQ-03"]
+acceptance_conditions = ["Every atlas perturbation retains its raw label; unambiguous current gene records are attached with the resolution kind and source snapshots; unresolved or biologically absent identities remain explicit missing values."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_biological_identity.py", symbol = "test_builds_perturbation_identity_table" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_biological_identity.py", symbol = "test_rejects_ambiguous_resolution_or_implicit_missingness" }]
+
+[[verifiers]]
+id = "D3-VR-04"
+requirement_ids = ["D3-REQ-04"]
+acceptance_conditions = ["The QC record reports the median, median absolute deviation, bounds, rejected cells, retained perturbation coverage, and fixed 15 percent mitochondrial ceiling; every downstream builder consumes the same ordered cell-set identity."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_cell_qc.py", symbol = "test_builds_one_fifteen_percent_five_mad_cell_set" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_cell_qc.py", symbol = "test_rejects_changed_threshold_or_downstream_cell_set" }]
+
+[[verifiers]]
+id = "D3-VR-05"
+requirement_ids = ["D3-REQ-05"]
+acceptance_conditions = ["Rebuilding twice from the same atlas and QC record produces the same H5AD identity, every retained field has a named consumer, and legacy derived fields are absent."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_slim_atlas.py", symbol = "test_builds_minimal_canonical_slim_atlas" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_slim_atlas.py", symbol = "test_rejects_missing_identity_or_extra_derived_fields" }]
+
+[[verifiers]]
+id = "D3-VR-06"
+requirement_ids = ["D3-REQ-06"]
+acceptance_conditions = ["Fast and reference readers return equal arrays for dense and sparse fixtures, explicit row selections, repeated genes, missing genes, and the canonical slim-file schema."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_fast_h5ad_contract.py", symbol = "test_fast_reader_matches_reference_reader" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_fast_h5ad_contract.py", symbol = "test_rejects_unsupported_or_misaligned_h5ad" }]
+
+[[verifiers]]
+id = "D3-VR-07"
+requirement_ids = ["D3-REQ-07"]
+acceptance_conditions = ["The control-panel record identifies the documented Seurat v3 procedure, fitted population, per-gene statistics, eligible-gene exclusions, core immediate-early-gene blacklist, ordered output, and realized count. The response panel equals the ordered GEARS 5,000-gene surface and retains any core immediate-early genes present in that target surface. Changing either source population, selection rule, membership, order, exclusion policy, or downstream role fails."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_gene_panels.py", symbol = "test_builds_distinct_control2k_and_gears5k_panels" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_gene_panels.py", symbol = "test_rejects_changed_or_interchanged_gene_panels" }]
+
+[[pair_blocks]]
+id = "D3-PB-01"
+requirement_ids = ["D3-REQ-01"]
+depends_on = ["H1-PB-09", "M2-PB-06"]
+repository_id = "mantra"
+requirement_contribution = "Freeze the perturbation row key and the distinct fields used to join biological and experimental identities."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "D3-PB-02"
+requirement_ids = ["D3-REQ-02"]
+depends_on = ["D3-PB-01"]
+repository_id = "mantra"
+requirement_contribution = "Download and register the immutable raw K562 atlas through VIPER."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "D3-PB-03"
+requirement_ids = ["D3-REQ-03"]
+depends_on = ["D3-PB-02"]
+repository_id = "mantra"
+requirement_contribution = "Build the versioned perturbation identity table from the pinned atlas and source snapshots."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "D3-PB-04"
+requirement_ids = ["D3-REQ-04"]
+depends_on = ["D3-PB-03"]
+repository_id = "mantra"
+requirement_contribution = "Apply the fixed 15 percent mitochondrial ceiling and five-MAD rules once, then freeze one ordered cell set for every downstream stage."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "D3-PB-05"
+requirement_ids = ["D3-REQ-05"]
+depends_on = ["D3-PB-04"]
+repository_id = "mantra"
+requirement_contribution = "Build the canonical slim H5AD from the selected cells and retain only fields with downstream consumers."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "D3-PB-06"
+requirement_ids = ["D3-REQ-06"]
+depends_on = ["D3-PB-05"]
+repository_id = "mantra"
+requirement_contribution = "Verify FastH5ADLoader against the canonical slim file and retain correctness and timing evidence."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "D3-PB-07"
+requirement_ids = ["D3-REQ-07"]
+depends_on = ["D3-PB-06"]
+repository_id = "mantra"
+requirement_contribution = "Regenerate and freeze the IEG-excluded control-program panel and the distinct ordered GEARS 5,000-gene response panel."
+completion_evidence = ["implementation_review", "viper_registration"]

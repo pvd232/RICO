@@ -1,0 +1,129 @@
+schema_version = 1
+contract_id = "mantra-prior-reconstruction"
+title = "MANTRA Prior Reconstruction"
+
+[[requirements]]
+id = "P4-REQ-01"
+claim = "Before corrected reconstruction begins, the inventory must distinguish raw biological sources, transformed prior blocks, and final model inputs. It must account explicitly for the eleven arrays in the retained compressed prior bundle—corum, depmap_essentiality, dorothea_grn, gene_family, mechanistic256, motif, pathway_hallmark, ppi_spectral, ptm, regulatory256, and subcellular—and resolve every model-consumed prior to its raw sources, typed ingest, biological identity joins, transformation parameters, output arrays, historical counterpart, and demonstrated reconstruction boundary."
+depends_on = ["D3-REQ-06"]
+verifier_ids = ["P4-VR-01"]
+
+[[requirements]]
+id = "P4-REQ-02"
+claim = "Each selected prior source must be reacquired or restored through one VIPER stage that retains the exact request, source version, raw bytes, parser inputs, typed output, and failures without writing partial downloads to final paths."
+depends_on = ["P4-REQ-01"]
+verifier_ids = ["P4-VR-02"]
+
+[[requirements]]
+id = "P4-REQ-03"
+claim = "A perturbation that resolves to a current pseudogene must remain on the experimental row axis, retain its current gene identity and locus type, and mark protein-derived modalities missing instead of dropping the row or fabricating protein evidence."
+depends_on = ["P4-REQ-02"]
+verifier_ids = ["P4-VR-03"]
+
+[[requirements]]
+id = "P4-REQ-04"
+claim = "The interaction prior must parse every byte of each pinned source, preserve source attribution for every accepted edge, report per-source and union coverage, and reject a truncated or concurrently changing source before dimensional reduction."
+depends_on = ["P4-REQ-03"]
+verifier_ids = ["P4-VR-04"]
+
+[[requirements]]
+id = "P4-REQ-05"
+claim = "Every non-interaction prior selected for the rebuilt models must be reconstructed from its pinned typed sources and report unresolved perturbations, missing modalities, duplicate identities, row order, dimensions, dtypes, and transformation parameters."
+depends_on = ["P4-REQ-04"]
+verifier_ids = ["P4-VR-05"]
+
+[[requirements]]
+id = "P4-REQ-06"
+claim = "One corrected prior bundle must preserve the canonical perturbation order, distinguish observed values from missing modalities, and bind every array to its source and build evidence for downstream model stages."
+depends_on = ["P4-REQ-05"]
+verifier_ids = ["P4-VR-06"]
+
+[[verifiers]]
+id = "P4-VR-01"
+requirement_ids = ["P4-REQ-01"]
+acceptance_conditions = ["The inventory accounts for every model-consumed prior; separately names the eleven retained compressed-bundle arrays; and records each source, producer, transformation, historical identity, current reconstruction status, and first unresolved connector without treating an assembled block as a raw source."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_inventory.py", symbol = "test_inventory_accounts_for_every_consumed_prior" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_inventory.py", symbol = "test_rejects_unowned_or_unresolved_prior" }]
+
+[[verifiers]]
+id = "P4-VR-02"
+requirement_ids = ["P4-REQ-02"]
+acceptance_conditions = ["Each download or restoration publishes only verified complete bytes and the VIPER record reaches the request, source identity, parser, typed output, and failure state."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_sources.py", symbol = "test_acquires_and_ingests_prior_sources" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_sources.py", symbol = "test_rejects_partial_or_unpinned_prior_source" }]
+
+[[verifiers]]
+id = "P4-VR-03"
+requirement_ids = ["P4-REQ-03"]
+acceptance_conditions = ["The ALG1L experimental row resolves to the current ALG1L1P gene record and carries explicit missingness for protein-derived inputs while remaining present in every split and output axis."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_pseudogene_policy.py", symbol = "test_preserves_pseudogene_perturbation_with_modality_masks" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_pseudogene_policy.py", symbol = "test_rejects_dropped_row_or_fabricated_protein_identity" }]
+
+[[verifiers]]
+id = "P4-VR-04"
+requirement_ids = ["P4-REQ-04"]
+acceptance_conditions = ["The parser consumes the complete pinned IntAct bytes, reports accepted pairs and covered perturbations, and rejects the known 1,170,222,081-byte historical prefix as incomplete."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_interaction_prior.py", symbol = "test_rebuilds_interactions_from_complete_sources" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_interaction_prior.py", symbol = "test_rejects_historical_intact_prefix" }]
+
+[[verifiers]]
+id = "P4-VR-05"
+requirement_ids = ["P4-REQ-05"]
+acceptance_conditions = ["Each selected prior rebuild preserves canonical row order and emits complete identity, coverage, missingness, source, and transformation reports before model fitting."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_reconstruction.py", symbol = "test_rebuilds_selected_noninteraction_priors" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_reconstruction.py", symbol = "test_rejects_missing_or_misaligned_prior_rows" }]
+
+[[verifiers]]
+id = "P4-VR-06"
+requirement_ids = ["P4-REQ-06"]
+acceptance_conditions = ["The frozen bundle contains one ordered row per perturbation, one observation mask per modality, and a verified provenance path from every array to its raw source and builder."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_bundle.py", symbol = "test_freezes_corrected_prior_bundle" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_bundle.py", symbol = "test_rejects_unattributed_or_implicit_missing_values" }]
+
+[[pair_blocks]]
+id = "P4-PB-01"
+requirement_ids = ["P4-REQ-01"]
+depends_on = ["D3-PB-06"]
+repository_id = "mantra"
+requirement_contribution = "Inventory every prior consumed by the parity models and connect it to sources, builders, arrays, and historical evidence."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-02"
+requirement_ids = ["P4-REQ-02"]
+depends_on = ["P4-PB-01"]
+repository_id = "mantra"
+requirement_contribution = "Run each selected prior source through a complete, atomic, VIPER-recorded acquisition and ingest path."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-03"
+requirement_ids = ["P4-REQ-03"]
+depends_on = ["P4-PB-02"]
+repository_id = "mantra"
+requirement_contribution = "Preserve pseudogene perturbations while marking unsupported protein-derived modalities missing."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-04"
+requirement_ids = ["P4-REQ-04"]
+depends_on = ["P4-PB-03"]
+repository_id = "mantra"
+requirement_contribution = "Rebuild the interaction prior from complete pinned sources and reject the historical truncated IntAct input."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-05"
+requirement_ids = ["P4-REQ-05"]
+depends_on = ["P4-PB-04"]
+repository_id = "mantra"
+requirement_contribution = "Rebuild and audit every other selected prior against the canonical perturbation identities."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "P4-PB-06"
+requirement_ids = ["P4-REQ-06"]
+depends_on = ["P4-PB-05"]
+repository_id = "mantra"
+requirement_contribution = "Freeze one corrected, provenance-complete prior bundle for both model rebuilds."
+completion_evidence = ["implementation_review", "viper_registration"]

@@ -18,6 +18,15 @@ each row means. The loader already compares feature and coefficient-target
 labels; Phase 1 adds the missing comparison for the fit and tune truth labels
 before rebuilding preprocessing or training the encoder.
 
+After both historical models reproduce their retained results, the legacy
+Hopfield path receives the exact retained MIL descriptor bundle: the shared
+83-value core block, the 144-value five-source family block, and its matching
+40-value response proxy. That changes the encoder input width from 187 to 267.
+The bridge run keeps the remaining legacy model and configuration fixed, then
+freezes its checkpoint, predictions, score, inputs, runtime, and source commit.
+The bridge result becomes the baseline for later one-at-a-time substitutions.
+The original 64-value Hopfield result remains the historical replay baseline.
+
 <!-- contract-protocol:generated:start -->
 **In progress.** [Jump to current PairBlock](#h1-pb-02)
 
@@ -154,7 +163,7 @@ before rebuilding preprocessing or training the encoder.
 
 **Status:** waiting
 
-**Requirement contribution:** Rebuild and compare the selected descriptor-side Hopfield inputs.
+**Requirement contribution:** Freeze the descriptor-input ledger and restore every exact historical file without rebuilding upstream producers.
 
 **Plan:** None
 
@@ -170,7 +179,7 @@ before rebuilding preprocessing or training the encoder.
 
 **Status:** waiting
 
-**Requirement contribution:** Rebuild and compare the selected target-side and response-transform Hopfield inputs.
+**Requirement contribution:** Freeze the target-input ledger and restore every exact historical target and response-transform file.
 
 **Plan:** None
 
@@ -186,7 +195,7 @@ before rebuilding preprocessing or training the encoder.
 
 **Status:** waiting
 
-**Requirement contribution:** Assemble the rebuilt Hopfield model inputs and prove array and population parity.
+**Requirement contribution:** Assemble the restored Hopfield replay bundle and prove array and fitted-population parity.
 
 **Plan:** None
 
@@ -208,7 +217,7 @@ before rebuilding preprocessing or training the encoder.
 
 **Current receipt:** None
 
-**Dependencies:** <nobr><code>H1-PB-05</code></nobr>
+**Dependencies:** <nobr><code>H1-PB-05</code></nobr>, <nobr><code>E0-PB-09</code></nobr>
 
 **Next action:** Wait for the declared dependencies.
 
@@ -244,6 +253,22 @@ before rebuilding preprocessing or training the encoder.
 
 **Next action:** Wait for the declared dependencies.
 
+<a id="h1-pb-09"></a>
+
+#### <nobr><code>H1-PB-09</code></nobr>
+
+**Status:** waiting
+
+**Requirement contribution:** Run the unchanged legacy Hopfield model on the exact retained MIL input stack and freeze the resulting bridge baseline before modular reconstruction.
+
+**Plan:** None
+
+**Current receipt:** None
+
+**Dependencies:** <nobr><code>H1-PB-08</code></nobr>, <nobr><code>M2-PB-06</code></nobr>, <nobr><code>E0-PB-08</code></nobr>, <nobr><code>E0-PB-09</code></nobr>
+
+**Next action:** Wait for the declared dependencies.
+
 
 ### Requirements
 
@@ -251,12 +276,13 @@ before rebuilding preprocessing or training the encoder.
 |---|---|---|---|---|
 | <nobr><code>H1-REQ-01</code></nobr> | Phase 1 must begin from the selected Phase 0 Hopfield encoder SHA-256 2433527c3b23b66a16cedc0f7bc43867e4298af4d7a0733b202a8018ba876610, prediction SHA-256 d7180c4669a11b0b2fb184814aafb48ebafe75b02e4bd07998c337aa64dc59b7, and hold PearsonDelta 0.5861640938949398. | complete | <nobr><code>H1-VR-01</code></nobr> | <nobr><code>H1-PB-01</code></nobr> |
 | <nobr><code>H1-REQ-02</code></nobr> | Before any numerical comparison, training, or prediction, the selected Hopfield path must reject disagreement among the ordered perturbation labels for descriptor features, coefficient targets, and fit or tune truth rows. | in_progress | <nobr><code>H1-VR-02</code></nobr> | <nobr><code>H1-PB-02</code></nobr> |
-| <nobr><code>H1-REQ-03</code></nobr> | The selected matched-control, control-program, core83, response40, family64, and gene-shift inputs must be rebuilt from their approved producers and match the retained historical files by keys, perturbation order, gene order, shape, dtype, and values. | planned | <nobr><code>H1-VR-03</code></nobr> | <nobr><code>H1-PB-03</code></nobr> |
-| <nobr><code>H1-REQ-04</code></nobr> | The selected coefficient targets, fit and tune truth rows, response-block contract, response rotation, and response-similarity graph must be rebuilt from their approved producers and match the retained historical files by keys, row and column order, shape, dtype, and values. | planned | <nobr><code>H1-VR-04</code></nobr> | <nobr><code>H1-PB-04</code></nobr> |
-| <nobr><code>H1-REQ-05</code></nobr> | The Hopfield loader must assemble the rebuilt inputs with the selected gene order, shapes, dtypes, and fit plus tune normalization population and reproduce every retained model input array. | planned | <nobr><code>H1-VR-05</code></nobr> | <nobr><code>H1-PB-05</code></nobr> |
-| <nobr><code>H1-REQ-06</code></nobr> | The 187 to 384 to 384 to 128 Hopfield encoder must be trained under the selected historical objectives and seed and reproduce the retained weights while recording checkpoints, logs, selection scores, and the VIPER run. | planned | <nobr><code>H1-VR-06</code></nobr> | <nobr><code>H1-PB-06</code></nobr> |
+| <nobr><code>H1-REQ-03</code></nobr> | Before replay training, one complete descriptor-input ledger must name every selected matched-control, control-program, core83, response40, family64, and gene-shift file, its retained digest, producing script or record, and restore route. Restoring that ledger must reproduce the historical keys, perturbation order, gene order, shapes, dtypes, and values without rerunning upstream producers. | planned | <nobr><code>H1-VR-03</code></nobr> | <nobr><code>H1-PB-03</code></nobr> |
+| <nobr><code>H1-REQ-04</code></nobr> | Before replay training, one complete target-input ledger must name every selected coefficient target, fit and tune truth surface, response-block contract, response rotation, and response-similarity graph, together with its retained digest, producing script or record, and restore route. Restoring that ledger must reproduce the historical keys, row and column order, shapes, dtypes, and values without rerunning upstream producers. | planned | <nobr><code>H1-VR-04</code></nobr> | <nobr><code>H1-PB-04</code></nobr> |
+| <nobr><code>H1-REQ-05</code></nobr> | The Hopfield loader must assemble the restored replay bundle and reproduce every retained model input array and fitted transformation state: descriptor columns use moments fitted on the declared fit plus tune rows; coefficient similarity uses per-row mean centering followed by L2 normalization; and every gene, perturbation, shape, dtype, and array order remains fixed. | planned | <nobr><code>H1-VR-05</code></nobr> | <nobr><code>H1-PB-05</code></nobr> |
+| <nobr><code>H1-REQ-06</code></nobr> | The 187 to 384 to 384 to 128 Hopfield encoder must be trained under the selected historical objectives and seed, including the configured auxiliary posterior target built from the whitened-PCA-denoised coefficient bank and neighbors selected by raw-coefficient cosine similarity, and reproduce the retained weights while recording checkpoints, logs, selection scores, and the VIPER run. Final retrieval must continue to use the configured raw coefficient value memory. | planned | <nobr><code>H1-VR-06</code></nobr> | <nobr><code>H1-PB-06</code></nobr> |
 | <nobr><code>H1-REQ-07</code></nobr> | Raw-gene retrieval from fit memory at temperature 0.055 and reference correction must reproduce prediction SHA-256 d7180c4669a11b0b2fb184814aafb48ebafe75b02e4bd07998c337aa64dc59b7 byte for byte and hold PearsonDelta 0.5861640938949398 exactly. | planned | <nobr><code>H1-VR-07</code></nobr> | <nobr><code>H1-PB-07</code></nobr> |
 | <nobr><code>H1-REQ-08</code></nobr> | Every accepted Phase 1 producer, input, output, comparison, and implementation commit must remain reachable through retained VIPER and contract-protocol evidence. | planned | <nobr><code>H1-VR-08</code></nobr> | <nobr><code>H1-PB-08</code></nobr> |
+| <nobr><code>H1-REQ-09</code></nobr> | After the original Hopfield and MIL models reproduce their retained Phase 0 results, the legacy Hopfield path must consume the exact retained MIL descriptor bundle: the shared 83-value core block, the 144-value five-source family block, and its matching 40-value response proxy. The bridge run must change only the encoder input-width binding from 187 to 267, retrain and evaluate the otherwise unchanged legacy model, and freeze its inputs, checkpoint, predictions, score, configuration, runtime, and implementation commit as the Hopfield MIL-stack bridge baseline. | planned | <nobr><code>H1-VR-09</code></nobr> | <nobr><code>H1-PB-09</code></nobr> |
 
 ### Verification rules
 
@@ -264,12 +290,13 @@ before rebuilding preprocessing or training the encoder.
 |---|---|---|---|---|
 | <nobr><code>H1-VR-01</code></nobr> | <nobr><code>H1-REQ-01</code></nobr> | The typed Phase 1 contract names the selected score and exact prediction digest, and the retained Phase 0 index resolves the replay receipt. | [HopfieldContractTests.test_names_selected_phase0_baseline](../tests/phase1/test_hopfield_contract.py) | [HopfieldContractTests.test_rejects_changed_prediction_identity](../tests/phase1/test_hopfield_contract.py) |
 | <nobr><code>H1-VR-02</code></nobr> | <nobr><code>H1-REQ-02</code></nobr> | The existing Hopfield loader accepts equal feature, coefficient-target, and truth perturbation labels and rejects a truth surface whose fit or tune labels are reordered. | [test_accepts_matching_truth_perturbation_order](../../mantra/experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py) | [test_rejects_truth_perturbation_order_mismatch](../../mantra/experiments/v1938_sota_clean_repro/tests/step01/test_hopfield_direct_family_contract.py) |
-| <nobr><code>H1-VR-03</code></nobr> | <nobr><code>H1-REQ-03</code></nobr> | Each rebuilt descriptor-side input has the same NPZ keys, ordered perturbations and genes, shapes, dtypes, and arrays as its retained historical counterpart. | [test_rebuilds_selected_descriptor_inputs](../../mantra/src/mantra/rebuild/tests/test_hopfield_preprocessing.py) | [test_rejects_changed_descriptor_input](../../mantra/src/mantra/rebuild/tests/test_hopfield_preprocessing.py) |
-| <nobr><code>H1-VR-04</code></nobr> | <nobr><code>H1-REQ-04</code></nobr> | Each rebuilt target-side input has the same NPZ or JSON keys, ordered rows and columns, shapes, dtypes, and values as its retained historical counterpart. | [test_rebuilds_selected_target_inputs](../../mantra/src/mantra/rebuild/tests/test_hopfield_preprocessing.py) | [test_rejects_changed_target_input](../../mantra/src/mantra/rebuild/tests/test_hopfield_preprocessing.py) |
-| <nobr><code>H1-VR-05</code></nobr> | <nobr><code>H1-REQ-05</code></nobr> | The assembled model inputs reproduce every retained array and use fit plus tune rows for configured normalization and training populations. | [test_rebuilds_selected_model_inputs](../../mantra/src/mantra/rebuild/tests/test_hopfield_preprocessing.py) | [test_rejects_changed_model_input_or_population](../../mantra/src/mantra/rebuild/tests/test_hopfield_preprocessing.py) |
-| <nobr><code>H1-VR-06</code></nobr> | <nobr><code>H1-REQ-06</code></nobr> | The training run uses the approved architecture, objectives, seed, data identities, and selection rule and reproduces the retained encoder weights with complete logs and checkpoints. | [test_trains_selected_hopfield_encoder](../../mantra/src/mantra/rebuild/tests/test_hopfield_training.py) | [test_rejects_changed_training_contract](../../mantra/src/mantra/rebuild/tests/test_hopfield_training.py) |
+| <nobr><code>H1-VR-03</code></nobr> | <nobr><code>H1-REQ-03</code></nobr> | The descriptor-input ledger resolves every retained file to its exact digest, producing script or record, and restore route; restoring it reproduces the historical NPZ keys, ordered perturbations and genes, shapes, dtypes, and arrays without running an upstream producer. | [test_restores_selected_descriptor_inputs](../../mantra/src/mantra/rebuild/tests/test_hopfield_preprocessing.py) | [test_rejects_changed_descriptor_input](../../mantra/src/mantra/rebuild/tests/test_hopfield_preprocessing.py) |
+| <nobr><code>H1-VR-04</code></nobr> | <nobr><code>H1-REQ-04</code></nobr> | The target-input ledger resolves every retained file to its exact digest, producing script or record, and restore route; restoring it reproduces the historical NPZ or JSON keys, ordered rows and columns, shapes, dtypes, and values without running an upstream producer. | [test_restores_selected_target_inputs](../../mantra/src/mantra/rebuild/tests/test_hopfield_preprocessing.py) | [test_rejects_changed_target_input](../../mantra/src/mantra/rebuild/tests/test_hopfield_preprocessing.py) |
+| <nobr><code>H1-VR-05</code></nobr> | <nobr><code>H1-REQ-05</code></nobr> | The loader assembles only ledger-restored inputs and reproduces every retained array and fitted normalization state; descriptor columns use fit plus tune moments, and coefficient similarities use row-mean centering followed by L2 normalization. | [test_assembles_selected_replay_inputs](../../mantra/src/mantra/rebuild/tests/test_hopfield_preprocessing.py) | [test_rejects_changed_model_input_or_population](../../mantra/src/mantra/rebuild/tests/test_hopfield_preprocessing.py) |
+| <nobr><code>H1-VR-06</code></nobr> | <nobr><code>H1-REQ-06</code></nobr> | The training run uses the approved architecture, objectives, seed, data identities, selection rule, denoised and neighbor-smoothed auxiliary coefficient target, and raw final value memory and reproduces the retained encoder weights with complete logs and checkpoints. | [test_trains_selected_hopfield_encoder](../../mantra/src/mantra/rebuild/tests/test_hopfield_training.py) | [test_rejects_changed_training_contract](../../mantra/src/mantra/rebuild/tests/test_hopfield_training.py) |
 | <nobr><code>H1-VR-07</code></nobr> | <nobr><code>H1-REQ-07</code></nobr> | The final gate requires equal prediction bytes and an exactly equal hold PearsonDelta of 0.5861640938949398. | [test_reproduces_selected_hopfield_output](../../mantra/src/mantra/rebuild/tests/test_hopfield_reconstruction.py) | [test_rejects_equal_score_with_changed_prediction_bytes](../../mantra/src/mantra/rebuild/tests/test_hopfield_reconstruction.py) |
 | <nobr><code>H1-VR-08</code></nobr> | <nobr><code>H1-REQ-08</code></nobr> | The terminal registration resolves every accepted Phase 1 receipt, artifact, source commit, and producer edge from retained records. | [test_resolves_complete_phase1_provenance](../tests/phase1/test_hopfield_registration.py) | [test_rejects_severed_phase1_provenance](../tests/phase1/test_hopfield_registration.py) |
+| <nobr><code>H1-VR-09</code></nobr> | <nobr><code>H1-REQ-09</code></nobr> | The bridge run starts from the parity-proven legacy Hopfield source and configuration; resolves the exact retained 83-value core, 144-value family, and 40-value response artifact digests with their canonical row and split identities; changes only the encoder input width from 187 to 267; keeps the complete numeric training set GPU-resident; and reproduces its frozen bridge result from the retained checkpoint and inputs. | [test_freezes_legacy_hopfield_on_exact_mil_input_stack](../../mantra/src/mantra/rebuild/tests/test_hopfield_mil_input_bridge.py) | [test_rejects_mixed_input_stack_or_unrelated_model_change](../../mantra/src/mantra/rebuild/tests/test_hopfield_mil_input_bridge.py) |
 <!-- contract-protocol:generated:end -->
 
 ## Reconstruction order
