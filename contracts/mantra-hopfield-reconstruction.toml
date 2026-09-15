@@ -35,7 +35,7 @@ verifier_ids = ["H1-VR-05"]
 [[requirements]]
 id = "H1-REQ-06"
 claim = "The 187 to 384 to 384 to 128 Hopfield encoder must train under the selected objectives and seed in the declared Python 3.13, Torch 2.12.1, and CUDA 13 environment, including the configured auxiliary posterior target built from the whitened-PCA-denoised coefficient bank and neighbors selected by raw-coefficient cosine similarity. Two independent strict VIPER runs must reproduce encoder SHA-256 af1f62c4c315c65e7379b97c57646b49b35c7f3fc3f69fcf6f94f0c8df276da9 and 1084512 bytes while retaining the historical encoder as the comparison oracle. Final retrieval must continue to use the configured raw coefficient value memory."
-depends_on = ["H1-REQ-05", "E0-REQ-09", "E0-REQ-12"]
+depends_on = ["H1-REQ-05"]
 verifier_ids = ["H1-VR-06"]
 
 [[requirements]]
@@ -292,7 +292,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 [[pair_blocks]]
 id = "H1-PB-06"
 requirement_ids = ["H1-REQ-06"]
-depends_on = ["H1-PB-04", "E0-PB-09", "E0-PB-12"]
+depends_on = ["H1-PB-04"]
 repository_id = "mantra"
 requirement_contribution = "Train the selected Hopfield encoder and reproduce its retained weights and selection record."
 completion_evidence = ["implementation_review", "viper_registration"]

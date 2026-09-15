@@ -1,6 +1,6 @@
 schema_version = 1
 contract_id = "mantra-hopfield-reconstruction"
-package_sha256 = "d381b4090b7f6c2616289d86709ad5df9547183189b95d82d066593a1bceb1ed"
+package_sha256 = "07b42936670fbe8790344c18296454c7b9d50fa480504067e6a18a2857a2f45b"
 pair_block_id = "H1-PB-07"
 baseline_commit = "79a05478a59be74dfca3943208eb39bef3e81296"
 change_summary = [
@@ -28,7 +28,14 @@ path = "src/mantra/rebuild/hopfield_replay.py"
 line = 75
 
 [gate]
-source_roots = ["src/mantra/rebuild", "pyproject.toml"]
+source_roots = [
+  "src/mantra/rebuild",
+  "experiments/v1938_sota_clean_repro",
+  "cleanup",
+  "pyrightconfig.json",
+  "pyproject.toml",
+  "src/mantra/__init__.py",
+]
 test_roots = ["src/mantra/rebuild/tests", "conftest.py"]
 
 [[gate.steps]]

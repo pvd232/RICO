@@ -8,11 +8,15 @@ index b14d4341f..95dc84f68 100644
    - h5py=3.16.0
 +  - zstandard=0.25.0
    - pyarrow=24.0.0
+   - pytest=9.1.1
+   - black=26.5.1
 diff --git a/src/mantra/rebuild/hopfield_replay.py b/src/mantra/rebuild/hopfield_replay.py
 index b957dc959..2477aaf92 100644
 --- a/src/mantra/rebuild/hopfield_replay.py
 +++ b/src/mantra/rebuild/hopfield_replay.py
 @@ -81,11 +81,12 @@ HISTORICAL_ENCODER = FileIdentity(
+     sha256="2433527c3b23b66a16cedc0f7bc43867e4298af4d7a0733b202a8018ba876610",
+ )
  # The archived configuration and inputs reproduce deterministically under the
 -# retained Torch 2.5.1/CUDA 12.1 stack, but not byte-for-byte with the archived
 -# weights. This repeated output is the accepted replay baseline.
@@ -24,3 +28,5 @@ index b957dc959..2477aaf92 100644
 -    sha256="16ff0b18814d43f0b8eb5e3514b4aa3418cc98eac5c62c29272ac4b1cf51f033",
 +    sha256="af1f62c4c315c65e7379b97c57646b49b35c7f3fc3f69fcf6f94f0c8df276da9",
  )
+ EXPECTED_RAW_GENE_PREDICTIONS = FileIdentity(
+     bytes=38_391_283,

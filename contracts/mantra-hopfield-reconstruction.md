@@ -28,7 +28,7 @@ The bridge result becomes the baseline for later one-at-a-time substitutions.
 The original 64-value Hopfield result remains the historical replay baseline.
 
 <!-- contract-protocol:generated:start -->
-**In progress.** [Jump to current PairBlock](#h1-pb-05)
+**In progress.** [Jump to current PairBlock](#h1-pb-05a)
 
 **Checklist:** [MANTRA rebuild](../checklists/mantra-rebuild.md)
 
@@ -295,7 +295,7 @@ The original 64-value Hopfield result remains the historical replay baseline.
 
 #### <nobr><code>H1-PB-05A</code></nobr>
 
-**Status:** waiting
+**Status:** drafting
 
 **Requirement contribution:** Resolve the versioned source, build the Hopfield input contract, compare it with the retained file, apply the declared mismatch ladder, and retain the VIPER receipt.
 
@@ -305,7 +305,7 @@ The original 64-value Hopfield result remains the historical replay baseline.
 
 **Dependencies:** <nobr><code>H1-PB-07</code></nobr>
 
-**Next action:** Wait for the declared dependencies.
+**Next action:** Run the current PairBlock plan.
 
 <a id="h1-pb-05b"></a>
 
@@ -503,7 +503,7 @@ The original 64-value Hopfield result remains the historical replay baseline.
 
 #### <nobr><code>H1-PB-06</code></nobr>
 
-**Status:** waiting
+**Status:** complete
 
 **Requirement contribution:** Train the selected Hopfield encoder and reproduce its retained weights and selection record.
 
@@ -517,16 +517,16 @@ The original 64-value Hopfield result remains the historical replay baseline.
 
 **Plan deviations:** The archived encoder bytes did not reproduce under the modern runtime after the configuration was checked. Two independent strict VIPER runs produced the same modern bytes, so the declared fallback rule pinned that reproducible result without changing the model or inputs.
 
-**Start work:** [Open current plan](../plans/mantra-hopfield-reconstruction/H1-PB-06/plan.toml)
+**Start review:** [Open tested GitHub comparison](https://github.com/pvd232/MANTRA/compare/0a12592c784bcb95c48b22da6b459b3c090f6d6f...abf965119c492ca167674d8564cbd4dbbf373de7)
 
 **Review these files**
 
 - [Complete H1-PB-06 diff](../plans/mantra-hopfield-reconstruction/H1-PB-06/patches/modern-encoder-baseline.patch#L1)
 - [Modern encoder identity](../../mantra/src/mantra/rebuild/hopfield_replay.py#L78)
 
-**Evidence:** No passing gate receipt.
+**Evidence:** [Passing gate receipt](../evidence/mantra-rebuild/H1-PB-06/gate-review-05.json)
 
-**Decision:** Wait for the declared dependencies.
+**Decision:** <nobr><code>H1-PB-06</code></nobr> is complete; no further decision is required.
 
 <details>
 <summary>Implementation details</summary>
@@ -535,11 +535,11 @@ The original 64-value Hopfield result remains the historical replay baseline.
 
 **Retained patch:** [patches/modern-encoder-baseline.patch](../plans/mantra-hopfield-reconstruction/H1-PB-06/patches/modern-encoder-baseline.patch)
 
-**Implementation roots:** [src/mantra/rebuild](../../mantra/src/mantra/rebuild) · [nuevo/environment.yml](../../mantra/nuevo/environment.yml) · [pyproject.toml](../../mantra/pyproject.toml)
+**Implementation roots:** [src/mantra/rebuild](../../mantra/src/mantra/rebuild) · [experiments/v1938_sota_clean_repro](../../mantra/experiments/v1938_sota_clean_repro) · [cleanup](../../mantra/cleanup) · [nuevo/environment.yml](../../mantra/nuevo/environment.yml) · [pyrightconfig.json](../../mantra/pyrightconfig.json) · [pyproject.toml](../../mantra/pyproject.toml) · [src/mantra/__init__.py](../../mantra/src/mantra/__init__.py)
 
 **Test roots:** [src/mantra/rebuild/tests](../../mantra/src/mantra/rebuild/tests) · [conftest.py](../../mantra/conftest.py)
 
-**Dependencies:** <nobr><code>H1-PB-04</code></nobr>, <nobr><code>E0-PB-09</code></nobr>, <nobr><code>E0-PB-12</code></nobr>
+**Dependencies:** <nobr><code>H1-PB-04</code></nobr>
 
 **Gate steps:**
 
@@ -562,7 +562,7 @@ The original 64-value Hopfield result remains the historical replay baseline.
 
 #### <nobr><code>H1-PB-07</code></nobr>
 
-**Status:** waiting
+**Status:** complete
 
 **Requirement contribution:** Run raw-gene retrieval and reference correction and prove exact final output parity.
 
@@ -576,16 +576,16 @@ The original 64-value Hopfield result remains the historical replay baseline.
 
 **Plan deviations:** The modern prediction arrays and serialized file differ from the historical environment despite an unchanged model, configuration, and input bundle. The repeated modern result was pinned under the approved environment-divergence rule.
 
-**Start work:** [Open current plan](../plans/mantra-hopfield-reconstruction/H1-PB-07/plan.toml)
+**Start review:** [Open tested GitHub comparison](https://github.com/pvd232/MANTRA/compare/0a12592c784bcb95c48b22da6b459b3c090f6d6f...e38082e3ae72602d8c6d025e1b0d0cfcbcea7825)
 
 **Review these files**
 
 - [Complete H1-PB-07 diff](../plans/mantra-hopfield-reconstruction/H1-PB-07/patches/modern-prediction-baseline.patch#L1)
 - [Modern prediction and score identities](../../mantra/src/mantra/rebuild/hopfield_replay.py#L75)
 
-**Evidence:** No passing gate receipt.
+**Evidence:** [Passing gate receipt](../evidence/mantra-rebuild/H1-PB-07/gate-review-01.json)
 
-**Decision:** Wait for the declared dependencies.
+**Decision:** <nobr><code>H1-PB-07</code></nobr> is complete; no further decision is required.
 
 <details>
 <summary>Implementation details</summary>
@@ -594,7 +594,7 @@ The original 64-value Hopfield result remains the historical replay baseline.
 
 **Retained patch:** [patches/modern-prediction-baseline.patch](../plans/mantra-hopfield-reconstruction/H1-PB-07/patches/modern-prediction-baseline.patch)
 
-**Implementation roots:** [src/mantra/rebuild](../../mantra/src/mantra/rebuild) · [pyproject.toml](../../mantra/pyproject.toml)
+**Implementation roots:** [src/mantra/rebuild](../../mantra/src/mantra/rebuild) · [experiments/v1938_sota_clean_repro](../../mantra/experiments/v1938_sota_clean_repro) · [cleanup](../../mantra/cleanup) · [pyrightconfig.json](../../mantra/pyrightconfig.json) · [pyproject.toml](../../mantra/pyproject.toml) · [src/mantra/__init__.py](../../mantra/src/mantra/__init__.py)
 
 **Test roots:** [src/mantra/rebuild/tests](../../mantra/src/mantra/rebuild/tests) · [conftest.py](../../mantra/conftest.py)
 
@@ -659,11 +659,11 @@ The original 64-value Hopfield result remains the historical replay baseline.
 | <nobr><code>H1-REQ-03</code></nobr> | Before replay training, one complete descriptor-input ledger must name every selected matched-control, control-program, core83, response40, family64, and gene-shift file, its retained digest, producing script or record, and restore route. Restoring that ledger must reproduce the historical keys, perturbation order, gene order, shapes, dtypes, and values without rerunning upstream producers. | complete | <nobr><code>H1-VR-03</code></nobr> | <nobr><code>H1-PB-03</code></nobr> |
 | <nobr><code>H1-REQ-04</code></nobr> | Before replay training, one complete target-input ledger must name every selected coefficient target, fit and tune truth surface, response-block contract, response rotation, and response-similarity graph, together with its retained digest, producing script or record, and restore route. Restoring that ledger must reproduce the historical keys, row and column order, shapes, dtypes, and values without rerunning upstream producers. | complete | <nobr><code>H1-VR-04</code></nobr> | <nobr><code>H1-PB-04</code></nobr> |
 | <nobr><code>H1-REQ-05</code></nobr> | The Hopfield loader must assemble the declared replay bundle and reproduce every retained model input array and fitted transformation state: descriptor columns use moments fitted on the declared fit plus tune rows; coefficient similarity uses per-row mean centering followed by L2 normalization; and every gene, perturbation, shape, dtype, and array order remains fixed. | planned | <nobr><code>H1-VR-05</code></nobr> | <nobr><code>H1-PB-05</code></nobr> |
-| <nobr><code>H1-REQ-06</code></nobr> | The 187 to 384 to 384 to 128 Hopfield encoder must train under the selected objectives and seed in the declared Python 3.13, Torch 2.12.1, and CUDA 13 environment, including the configured auxiliary posterior target built from the whitened-PCA-denoised coefficient bank and neighbors selected by raw-coefficient cosine similarity. Two independent strict VIPER runs must reproduce encoder SHA-256 af1f62c4c315c65e7379b97c57646b49b35c7f3fc3f69fcf6f94f0c8df276da9 and 1084512 bytes while retaining the historical encoder as the comparison oracle. Final retrieval must continue to use the configured raw coefficient value memory. | planned | <nobr><code>H1-VR-06</code></nobr> | <nobr><code>H1-PB-06</code></nobr> |
-| <nobr><code>H1-REQ-07</code></nobr> | Raw-gene retrieval from fit memory at temperature 0.055 and reference correction must reproducibly emit prediction SHA-256 f8e8e6a6fe291143debd3d8e8b3ab9c4e2aed5afd3b2391e7856c7d8fd7e262b, 38391087 bytes, and hold PearsonDelta 0.5861640983697456 in the declared modern environment while retaining the Phase 0 prediction and score as comparison oracles. | planned | <nobr><code>H1-VR-07</code></nobr> | <nobr><code>H1-PB-07</code></nobr> |
+| <nobr><code>H1-REQ-06</code></nobr> | The 187 to 384 to 384 to 128 Hopfield encoder must train under the selected objectives and seed in the declared Python 3.13, Torch 2.12.1, and CUDA 13 environment, including the configured auxiliary posterior target built from the whitened-PCA-denoised coefficient bank and neighbors selected by raw-coefficient cosine similarity. Two independent strict VIPER runs must reproduce encoder SHA-256 af1f62c4c315c65e7379b97c57646b49b35c7f3fc3f69fcf6f94f0c8df276da9 and 1084512 bytes while retaining the historical encoder as the comparison oracle. Final retrieval must continue to use the configured raw coefficient value memory. | complete | <nobr><code>H1-VR-06</code></nobr> | <nobr><code>H1-PB-06</code></nobr> |
+| <nobr><code>H1-REQ-07</code></nobr> | Raw-gene retrieval from fit memory at temperature 0.055 and reference correction must reproducibly emit prediction SHA-256 f8e8e6a6fe291143debd3d8e8b3ab9c4e2aed5afd3b2391e7856c7d8fd7e262b, 38391087 bytes, and hold PearsonDelta 0.5861640983697456 in the declared modern environment while retaining the Phase 0 prediction and score as comparison oracles. | complete | <nobr><code>H1-VR-07</code></nobr> | <nobr><code>H1-PB-07</code></nobr> |
 | <nobr><code>H1-REQ-08</code></nobr> | Every accepted Phase 1 producer, input, output, comparison, and implementation commit must remain reachable through retained VIPER and contract-protocol evidence. | planned | <nobr><code>H1-VR-08</code></nobr> | <nobr><code>H1-PB-08</code></nobr> |
 | <nobr><code>H1-REQ-09</code></nobr> | After strict modern Hopfield and MIL replay baselines are frozen, the legacy Hopfield path must consume the exact retained MIL descriptor bundle: the shared 83-value core block, the 144-value five-source family block, and its matching 40-value response proxy. The bridge run must change only the encoder input-width binding from 187 to 267, retrain and evaluate the otherwise unchanged legacy model, and freeze its inputs, checkpoint, predictions, score, configuration, runtime, and implementation commit as the Hopfield MIL-stack bridge baseline. | planned | <nobr><code>H1-VR-09</code></nobr> | <nobr><code>H1-PB-09</code></nobr> |
-| <nobr><code>H1-REQ-10</code></nobr> | Each of the thirteen declared Hopfield model inputs must be produced from its true external or versioned source by a retained VIPER source-acquisition and Build chain, then compared with the retained input on keys, ordered axes, shapes, dtypes, values, bytes, and SHA-256. Each chain must first build in the modern environment; on numerical mismatch it must rerun only acquisition and Build in the historical environment; if that matches, record environment-caused divergence and pin a repeated modern result; otherwise verify the configuration once, fail fast on another unexplained mismatch, and pin only a repeated corrected baseline. | planned | <nobr><code>H1-VR-10</code></nobr> | <nobr><code>H1-PB-05A</code></nobr>, <nobr><code>H1-PB-05B</code></nobr>, <nobr><code>H1-PB-05C</code></nobr>, <nobr><code>H1-PB-05D</code></nobr>, <nobr><code>H1-PB-05E</code></nobr>, <nobr><code>H1-PB-05F</code></nobr>, <nobr><code>H1-PB-05G</code></nobr>, <nobr><code>H1-PB-05H</code></nobr>, <nobr><code>H1-PB-05I</code></nobr>, <nobr><code>H1-PB-05J</code></nobr>, <nobr><code>H1-PB-05K</code></nobr>, <nobr><code>H1-PB-05L</code></nobr>, <nobr><code>H1-PB-05M</code></nobr> |
+| <nobr><code>H1-REQ-10</code></nobr> | Each of the thirteen declared Hopfield model inputs must be produced from its true external or versioned source by a retained VIPER source-acquisition and Build chain, then compared with the retained input on keys, ordered axes, shapes, dtypes, values, bytes, and SHA-256. Each chain must first build in the modern environment; on numerical mismatch it must rerun only acquisition and Build in the historical environment; if that matches, record environment-caused divergence and pin a repeated modern result; otherwise verify the configuration once, fail fast on another unexplained mismatch, and pin only a repeated corrected baseline. | in_progress | <nobr><code>H1-VR-10</code></nobr> | <nobr><code>H1-PB-05A</code></nobr>, <nobr><code>H1-PB-05B</code></nobr>, <nobr><code>H1-PB-05C</code></nobr>, <nobr><code>H1-PB-05D</code></nobr>, <nobr><code>H1-PB-05E</code></nobr>, <nobr><code>H1-PB-05F</code></nobr>, <nobr><code>H1-PB-05G</code></nobr>, <nobr><code>H1-PB-05H</code></nobr>, <nobr><code>H1-PB-05I</code></nobr>, <nobr><code>H1-PB-05J</code></nobr>, <nobr><code>H1-PB-05K</code></nobr>, <nobr><code>H1-PB-05L</code></nobr>, <nobr><code>H1-PB-05M</code></nobr> |
 | <nobr><code>H1-REQ-11</code></nobr> | The final strict VIPER replay must consume only the thirteen accepted Build outputs, connect stage outputs to downstream stages as FutureInputRefs, and execute Embed, Predict, and Evaluate without reading retained model-input files directly. It must reproduce the accepted modern encoder, prediction, and score identities while retaining historical artifacts only as evaluation oracles. | planned | <nobr><code>H1-VR-11</code></nobr> | <nobr><code>H1-PB-05</code></nobr> |
 
 ### Verification rules
