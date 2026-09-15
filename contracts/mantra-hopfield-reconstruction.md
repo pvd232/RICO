@@ -10,7 +10,7 @@ The starting result is the Phase 0 replay: encoder SHA-256
 prediction SHA-256
 `d7180c4669a11b0b2fb184814aafb48ebafe75b02e4bd07998c337aa64dc59b7`
 and hold `PearsonDelta` `0.5861640938949398`. The retained receipt is indexed
-at `evidence/phase0/mantra/hopfield_output_parity_receipt.json`.
+at `archive/mantra-rebuild-phase-0/evidence/phase0/mantra/hopfield_output_parity_receipt.json`.
 
 <!-- contract-protocol:generated:start -->
 **In progress.** [Jump to current PairBlock](#h1-pb-02)

@@ -31,23 +31,23 @@ claims:
 1. The approved historical artifact set is present and byte-identified. The
    restored-disk receipt contains 27 files totaling 811,130,091 bytes. Each row
    records the MANTRA destination, output name, byte count, and SHA-256 digest.
-   See the [disk-import receipt](../../evidence/phase0/mantra/disk_import_receipt.json).
+   See the [disk-import receipt](../../archive/mantra-rebuild-phase-0/evidence/phase0/mantra/disk_import_receipt.json).
 2. The selected Hopfield application reproduces the exact reported
    `hold_PearsonDelta` of `0.5861640938949398`. The replay used the saved
    encoder, the fit-only donor memory, raw-gene retrieval temperature `0.055`,
    and 1,427 effective donors. Its 38,397,104-byte prediction file has SHA-256
    `d7180c4669a11b0b2fb184814aafb48ebafe75b02e4bd07998c337aa64dc59b7`.
-   See the [Hopfield replay receipt](../../evidence/phase0/mantra/hopfield_replay_receipt.json).
+   See the [Hopfield replay receipt](../../archive/mantra-rebuild-phase-0/evidence/phase0/mantra/hopfield_replay_receipt.json).
 3. The standalone MIL application reproduces the exact final
    `hold_PearsonDelta` of `0.6025499488874759`. Its Step 02 score is
    `0.5924883417873266`, and all four checked Step 02 and Step 03 prediction and
    weight arrays match their reference SHA-256 identities. See the
-   [MIL replay receipt](../../evidence/phase0/mantra/mil_replay_receipt.json).
+   [MIL replay receipt](../../archive/mantra-rebuild-phase-0/evidence/phase0/mantra/mil_replay_receipt.json).
 4. VIPER connects restoration, Hopfield replay, MIL replay, and the final RICO
    evidence registration. The graph verifier also rejects one severed input
    edge and one severed output edge. See the
-   [graph receipt](../../evidence/phase0/mantra/viper_graph_receipt.json) and
-   [dependency graph](../../evidence/phase0/dependency_graph.json).
+   [graph receipt](../../archive/mantra-rebuild-phase-0/evidence/phase0/mantra/viper_graph_receipt.json) and
+   [dependency graph](../../archive/mantra-rebuild-phase-0/evidence/phase0/dependency_graph.json).
 5. The master checklist resolves all 29 Phase 0 PairBlocks, all 25 Phase 0
    requirements, and the Phase 0 contract to `Complete`. Four early blocks use
    explicit compatibility certifications because their accepted work predates
@@ -96,7 +96,7 @@ The final capacity receipt records 52,620,079,104 free bytes and 1,853,986,370
 required bytes. The requirement includes 1,622,260,182 bytes for VIPER custody,
 221,240,428 temporary bytes, and a 10 MiB reserve. The receipt checks the actual
 storage operation. The 34-part download remains a planning fallback. See the
-[capacity receipt](../../evidence/phase0/mantra/capacity_receipt.json).
+[capacity receipt](../../archive/mantra-rebuild-phase-0/evidence/phase0/mantra/capacity_receipt.json).
 
 MANTRA gained the archive plan, archive restoration, VIPER restoration stages,
 artifact loaders, and focused tests. The relevant accepted source begins at
@@ -156,7 +156,7 @@ runs:
 | Hopfield | `01M2C3JFXQ2D8A0VB84R5493EY` | `e6482dd72beee7010afcec9292e98c0fd71d6f9d823c9add901a8d2d553ac1b1` |
 | MIL | `01M2C3SVNE98XZ0D8S4CZJ64T8` | `cd47771ce8c35c205cb23b0dec4147538916653c1c37e3bb0aaef96456463f5a` |
 
-The [graph-completeness report](../../evidence/phase0/mantra/graph_completeness_report.json)
+The [graph-completeness report](../../archive/mantra-rebuild-phase-0/evidence/phase0/mantra/graph_completeness_report.json)
 retains each stage implementation identity, declared input, declared output,
 pointer, producer run, and data role.
 
@@ -164,7 +164,7 @@ pointer, producer run, and data role.
 
 RICO gained an evidence freezer and a terminal registration program. The
 freezer hashes the required receipts and graph artifacts into
-[index.json](../../evidence/phase0/index.json). The registration program consumes
+[index.json](../../archive/mantra-rebuild-phase-0/evidence/phase0/index.json). The registration program consumes
 those frozen entries, runs their loaders, and publishes the terminal receipt.
 Its self-contained JSON loader is in
 [artifact_loaders.py](../../tools/artifact_loaders.py); this separation is
@@ -176,8 +176,8 @@ successfully in 283.833269 seconds and produced resolved-run SHA-256
 `f291dc0c12259b52305dd6b0cee966c1cf9a2d910a2c830bd08d5c62fcb16e12`.
 Its registration receipt binds 11 Phase 0 evidence artifacts and the VIPER
 usefulness ledger. See the
-[run record](../../evidence/phase0/rico/phase0_registration_run.json) and
-[terminal receipt](../../evidence/phase0/rico/phase0_registration_receipt.json).
+[run record](../../archive/mantra-rebuild-phase-0/evidence/phase0/rico/phase0_registration_run.json) and
+[terminal receipt](../../archive/mantra-rebuild-phase-0/evidence/phase0/rico/phase0_registration_receipt.json).
 
 ### 6. The lifecycle protocol gained a compatibility-certification path
 
@@ -228,7 +228,7 @@ locations. The stage-access receipt records 57 reads and 30 writes for that
 stage. The Hopfield prediction and evaluation stages record 14 and 4 reads,
 respectively. The MIL application and evaluation stages record 24 and 12 reads,
 respectively. See the
-[stage-access receipt](../../evidence/phase0/mantra/stage_file_access_receipt.json).
+[stage-access receipt](../../archive/mantra-rebuild-phase-0/evidence/phase0/mantra/stage_file_access_receipt.json).
 
 ### Hopfield parity
 
@@ -270,7 +270,7 @@ lacks this failure behavior.
 ## VIPER assessment and repairs
 
 Real restoration and replay runs exposed ten framework or implementation
-issues. The [VIPER usefulness ledger](../../evidence/viper-usefulness-ledger.json)
+issues. The [VIPER usefulness ledger](../../archive/mantra-rebuild-phase-0/evidence/viper-usefulness-ledger.json)
 records the claim, observed result, independent check, ordinary-test
 equivalent, cost, repair, and later reuse for each one.
 
@@ -512,12 +512,12 @@ briefing:
 - [Phase 0 contract](../contracts/mantra-rebuild-phase-0.md)
 - [Master execution checklist](../checklists/mantra-rebuild.md)
 - [Model-rebuild handoff](../mantra-viper-rebuild-handoff.md)
-- [Frozen Phase 0 evidence index](../../evidence/phase0/index.json)
-- [Terminal Phase 0 registration receipt](../../evidence/phase0/rico/phase0_registration_receipt.json)
-- [Terminal Phase 0 run record](../../evidence/phase0/rico/phase0_registration_run.json)
-- [VIPER usefulness ledger](../../evidence/viper-usefulness-ledger.json)
-- [Graph-completeness report](../../evidence/phase0/mantra/graph_completeness_report.json)
-- [Hopfield replay receipt](../../evidence/phase0/mantra/hopfield_replay_receipt.json)
-- [MIL replay receipt](../../evidence/phase0/mantra/mil_replay_receipt.json)
+- [Frozen Phase 0 evidence index](../../archive/mantra-rebuild-phase-0/evidence/phase0/index.json)
+- [Terminal Phase 0 registration receipt](../../archive/mantra-rebuild-phase-0/evidence/phase0/rico/phase0_registration_receipt.json)
+- [Terminal Phase 0 run record](../../archive/mantra-rebuild-phase-0/evidence/phase0/rico/phase0_registration_run.json)
+- [VIPER usefulness ledger](../../archive/mantra-rebuild-phase-0/evidence/viper-usefulness-ledger.json)
+- [Graph-completeness report](../../archive/mantra-rebuild-phase-0/evidence/phase0/mantra/graph_completeness_report.json)
+- [Hopfield replay receipt](../../archive/mantra-rebuild-phase-0/evidence/phase0/mantra/hopfield_replay_receipt.json)
+- [MIL replay receipt](../../archive/mantra-rebuild-phase-0/evidence/phase0/mantra/mil_replay_receipt.json)
 - [Graph-encoder design specification](../Biologically_Grounded_Graph_Encoder_Design_Specification.pdf)
 - [Identifier-system monograph](../GENE_IDENTIFIER_SYSTEMS_COMPLETE_REVISED.pdf)

@@ -10,7 +10,8 @@ import tomllib
 
 ROOT = Path(__file__).parents[2]
 CONTRACT = ROOT / "contracts/mantra-hopfield-reconstruction.toml"
-PHASE0_INDEX = ROOT / "evidence/phase0/index.json"
+PHASE0_EVIDENCE = ROOT / "archive/mantra-rebuild-phase-0/evidence"
+PHASE0_INDEX = PHASE0_EVIDENCE / "phase0/index.json"
 EXPECTED_ENCODER_SHA256 = (
     "2433527c3b23b66a16cedc0f7bc43867e4298af4d7a0733b202a8018ba876610"
 )
@@ -41,6 +42,14 @@ def verify_selected_baseline(
         raise AssertionError("Phase 1 declaration names another Hopfield result")
 
 
+def archived_phase0_path(recorded_path: str) -> Path:
+    """Resolve retained Phase 0 receipt paths through the archive."""
+    prefix = "evidence/"
+    if not recorded_path.startswith(prefix):
+        raise ValueError(f"unexpected Phase 0 evidence path: {recorded_path}")
+    return PHASE0_EVIDENCE / recorded_path.removeprefix(prefix)
+
+
 class HopfieldContractTests(unittest.TestCase):
     """Keep the first Phase 1 plan attached to the selected Phase 0 result."""
 
@@ -59,11 +68,12 @@ class HopfieldContractTests(unittest.TestCase):
             replay["path"],
             "evidence/phase0/mantra/hopfield_output_parity_receipt.json",
         )
-        self.assertTrue((ROOT / replay["path"]).is_file())
-        receipt = json.loads((ROOT / replay["path"]).read_text(encoding="utf-8"))
+        replay_path = archived_phase0_path(replay["path"])
+        self.assertTrue(replay_path.is_file())
+        receipt = json.loads(replay_path.read_text(encoding="utf-8"))
         restoration = phase0["evidence"]["restoration_bindings"]
         restoration_bindings = json.loads(
-            (ROOT / restoration["path"]).read_text(encoding="utf-8")
+            archived_phase0_path(restoration["path"]).read_text(encoding="utf-8")
         )
         encoder_binding = next(
             binding
@@ -85,8 +95,8 @@ class HopfieldContractTests(unittest.TestCase):
         )
 
         receipt = json.loads(
-            (
-                ROOT / "evidence/phase0/mantra/hopfield_output_parity_receipt.json"
+            archived_phase0_path(
+                "evidence/phase0/mantra/hopfield_output_parity_receipt.json"
             ).read_text(encoding="utf-8")
         )
 
