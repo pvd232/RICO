@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "H1-PB-05B",
+  "input_name": "stage_config",
+  "decision": "exact_historical",
+  "source_kind": "repository_versioned",
+  "source_path": "experiments/v1938_sota_clean_repro/specs/runtime/stages/base_step01.yaml",
+  "historical_sha256": "74ae04d65abf01fa5eccbada5de028713a7106c9c41aad0e1c9d0e340d2b967a",
+  "selected_sha256": "74ae04d65abf01fa5eccbada5de028713a7106c9c41aad0e1c9d0e340d2b967a",
+  "bytes": 1224,
+  "repeated_builds_equal": true,
+  "viper_run_id": "01M2KB42KWFDDG8YEQC2VT4F86",
+  "lineage_sha256": "4d5a0fa410bbeabdf2951dcfaa447c6f97d6ca89e5808e19a57ea2a87eb68da1",
+  "comparison_receipt_sha256": "5e61789f1976d06972ea91d283313448cf18d31277ec342945e1f569fa1e7672",
+  "cloud_run": "viper://machina/mantra@9b890cd6a322a73dfd8b75f6608047406e6703f6c3caf29e6c5bf09dd86b8533/experiments/hopfield_input_stage_config_583d976e164c/runs/selected/01M2KB42KWFDDG8YEQC2VT4F86/resolved.yaml",
+  "restored_sha256": "74ae04d65abf01fa5eccbada5de028713a7106c9c41aad0e1c9d0e340d2b967a"
+}

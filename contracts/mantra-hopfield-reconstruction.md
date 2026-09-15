@@ -28,7 +28,7 @@ The bridge result becomes the baseline for later one-at-a-time substitutions.
 The original 64-value Hopfield result remains the historical replay baseline.
 
 <!-- contract-protocol:generated:start -->
-**In progress.** [Jump to current PairBlock](#h1-pb-05b)
+**In progress.** [Jump to current PairBlock](#h1-pb-05c)
 
 **Checklist:** [MANTRA rebuild](../checklists/mantra-rebuild.md)
 
@@ -354,23 +354,57 @@ The original 64-value Hopfield result remains the historical replay baseline.
 
 #### <nobr><code>H1-PB-05B</code></nobr>
 
-**Status:** drafting
+**Status:** complete
 
 **Requirement contribution:** Resolve the versioned source, build the complete Hopfield stage configuration, compare it with the retained configuration, apply the declared mismatch ladder, and retain the VIPER receipt.
 
-**Plan:** None
+**Review handoff**
 
-**Current receipt:** None
+**What changed**
+
+- VIPER independently materialized the complete Hopfield stage configuration twice and both builds matched the retained historical bytes.
+- The selected artifact was restored from GCS and its digest matched the configured input identity.
+- A machine-readable decision record now pins the source path, build result, cloud run, and restored digest.
+
+**Plan deviations:** Everything went according to plan.
+
+**Start review:** [Open tested GitHub comparison](https://github.com/pvd232/MANTRA/compare/583d976e164c10c1b9f18b8c15af0170f2331f14...21945bb9392ab8b011856a30dabf1d466d154023)
+
+**Review these files**
+
+- [Pinned stage-configuration decision](../plans/mantra-hopfield-reconstruction/H1-PB-05B/add/stage-config.json#L1)
+
+**Evidence:** [Passing gate receipt](../evidence/mantra-rebuild/H1-PB-05B/gate-review-01.json)
+
+**Decision:** <nobr><code>H1-PB-05B</code></nobr> is complete; no further decision is required.
+
+<details>
+<summary>Implementation details</summary>
+
+**Plan:** [plan.toml](../plans/mantra-hopfield-reconstruction/H1-PB-05B/plan.toml)
+
+**Candidate files:** [src/mantra/rebuild/records/hopfield_inputs/stage-config.json](../plans/mantra-hopfield-reconstruction/H1-PB-05B/add/stage-config.json)
+
+**Implementation roots:** [src/mantra/rebuild/records/hopfield_inputs/stage-config.json](../../mantra/src/mantra/rebuild/records/hopfield_inputs/stage-config.json)
+
+**Test roots:** [src/mantra/rebuild/records/hopfield_inputs/stage-config.json](../../mantra/src/mantra/rebuild/records/hopfield_inputs/stage-config.json) · [src/mantra/rebuild/tests](../../mantra/src/mantra/rebuild/tests)
 
 **Dependencies:** <nobr><code>H1-PB-05A</code></nobr>
 
-**Next action:** Run the current PairBlock plan.
+**Gate steps:**
+
+```bash
+# test
+(cd . && python3 -m json.tool src/mantra/rebuild/records/hopfield_inputs/stage-config.json)
+```
+
+</details>
 
 <a id="h1-pb-05c"></a>
 
 #### <nobr><code>H1-PB-05C</code></nobr>
 
-**Status:** waiting
+**Status:** drafting
 
 **Requirement contribution:** Download the true sources, build core83, compare it with the retained input, apply the declared mismatch ladder, and retain the VIPER receipt.
 
@@ -380,7 +414,7 @@ The original 64-value Hopfield result remains the historical replay baseline.
 
 **Dependencies:** <nobr><code>H1-PB-05B</code></nobr>
 
-**Next action:** Wait for the declared dependencies.
+**Next action:** Run the current PairBlock plan.
 
 <a id="h1-pb-05d"></a>
 

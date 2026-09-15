@@ -1,0 +1,34 @@
+schema_version = 1
+contract_id = "mantra-hopfield-reconstruction"
+package_sha256 = "07b42936670fbe8790344c18296454c7b9d50fa480504067e6a18a2857a2f45b"
+pair_block_id = "H1-PB-05B"
+baseline_commit = "583d976e164c10c1b9f18b8c15af0170f2331f14"
+change_summary = [
+  "VIPER independently materialized the complete Hopfield stage configuration twice and both builds matched the retained historical bytes.",
+  "The selected artifact was restored from GCS and its digest matched the configured input identity.",
+  "A machine-readable decision record now pins the source path, build result, cloud run, and restored digest.",
+]
+deviation_summary = "Everything went according to plan."
+
+[[actions]]
+operation = "add"
+source_path = "add/stage-config.json"
+target_path = "src/mantra/rebuild/records/hopfield_inputs/stage-config.json"
+
+[[handoff_targets]]
+label = "Pinned stage-configuration decision"
+source = "plan"
+path = "add/stage-config.json"
+line = 1
+
+[gate]
+source_roots = ["src/mantra/rebuild/records/hopfield_inputs/stage-config.json"]
+test_roots = [
+  "src/mantra/rebuild/records/hopfield_inputs/stage-config.json",
+  "src/mantra/rebuild/tests",
+]
+
+[[gate.steps]]
+role = "test"
+working_directory = "."
+argv = ["python3", "-m", "json.tool", "src/mantra/rebuild/records/hopfield_inputs/stage-config.json"]
