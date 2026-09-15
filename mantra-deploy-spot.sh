@@ -36,6 +36,250 @@ INSTANCE_LABELS="${INSTANCE_LABELS:-}"
 ZONE_SEARCH_ORDER="${ZONE_SEARCH_ORDER:-us-west4-a us-west4-c us-east4-a us-east4-c us-west1-b us-west1-c us-west1-a us-east1-d us-east1-c us-east1-b}"
 read -r -a CANDIDATE_ZONES <<< "$ZONE_SEARCH_ORDER"
 
+ACTION="${1:-launch}"
+PYTHON="${PYTHON:-python3}"
+LAUNCH_RECEIPT_PATH="${LAUNCH_RECEIPT_PATH:-.viper/gpu/${INSTANCE_NAME}.json}"
+VIPER_CLOUD_PROBE_RECEIPT="${VIPER_CLOUD_PROBE_RECEIPT:-}"
+ARTIFACT_RESTORE_RECEIPT="${ARTIFACT_RESTORE_RECEIPT:-}"
+TEARDOWN_RECEIPT_PATH="${TEARDOWN_RECEIPT_PATH:-${LAUNCH_RECEIPT_PATH%.json}-teardown.json}"
+
+CREATED_ZONE=""
+BOOT_DISK_NAME=""
+REGION=""
+NAT_ROUTER_NAME=""
+NAT_GATEWAY_NAME=""
+NAT_ROUTER_CREATED=false
+NAT_GATEWAY_CREATED=false
+CLEANUP_ON_EXIT=false
+
+require_digest_probe() {
+  local path="$1"
+  local label="$2"
+
+  if [[ -z "$path" || ! -f "$path" ]]; then
+    echo "[!] Error: $label is required and must name a file."
+    return 1
+  fi
+  "$PYTHON" - "$path" "$label" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+path = Path(sys.argv[1])
+label = sys.argv[2]
+record = json.loads(path.read_text(encoding="utf-8"))
+required = {"passed", "artifact_uri", "sha256", "restored_sha256"}
+missing = required - record.keys()
+if missing:
+    raise SystemExit(f"{label} lacks fields: {sorted(missing)}")
+if record["passed"] is not True:
+    raise SystemExit(f"{label} did not pass")
+digest = record["sha256"]
+if not isinstance(digest, str) or len(digest) != 64:
+    raise SystemExit(f"{label} has an invalid SHA-256 digest")
+if record["restored_sha256"] != digest:
+    raise SystemExit(f"{label} restored different bytes")
+PY
+}
+
+delete_instance_and_disk() {
+  local zone="$1"
+  local disk="$2"
+
+  gcloud compute instances delete "$INSTANCE_NAME" \
+    --project="$PROJECT" \
+    --zone="$zone" \
+    --delete-disks=all \
+    --quiet >/dev/null 2>&1 || true
+  if [[ -n "$disk" ]] && gcloud compute disks describe "$disk" \
+    --project="$PROJECT" \
+    --zone="$zone" >/dev/null 2>&1; then
+    gcloud compute disks delete "$disk" \
+      --project="$PROJECT" \
+      --zone="$zone" \
+      --quiet >/dev/null
+  fi
+}
+
+delete_created_network() {
+  local region="$1"
+  local router="$2"
+  local nat="$3"
+  local nat_created="$4"
+  local router_created="$5"
+
+  if [[ "$nat_created" == true ]]; then
+    gcloud compute routers nats delete "$nat" \
+      --project="$PROJECT" \
+      --router="$router" \
+      --region="$region" \
+      --quiet >/dev/null 2>&1 || true
+  fi
+  if [[ "$router_created" == true ]]; then
+    gcloud compute routers delete "$router" \
+      --project="$PROJECT" \
+      --region="$region" \
+      --quiet >/dev/null 2>&1 || true
+  fi
+}
+
+cleanup_failed_launch() {
+  local status=$?
+  if [[ "$CLEANUP_ON_EXIT" == true && -n "$CREATED_ZONE" ]]; then
+    echo "[!] Cleaning resources created by the failed launch in $CREATED_ZONE."
+    set +e
+    delete_instance_and_disk "$CREATED_ZONE" "$BOOT_DISK_NAME"
+    if [[ -n "$REGION" ]]; then
+      delete_created_network \
+        "$REGION" \
+        "$NAT_ROUTER_NAME" \
+        "$NAT_GATEWAY_NAME" \
+        "$NAT_GATEWAY_CREATED" \
+        "$NAT_ROUTER_CREATED"
+    fi
+    set -e
+  fi
+  return "$status"
+}
+
+write_launch_receipt() {
+  local cloud_probe_sha256
+
+  cloud_probe_sha256=$(shasum -a 256 "$VIPER_CLOUD_PROBE_RECEIPT" | awk '{print $1}')
+  mkdir -p "$(dirname "$LAUNCH_RECEIPT_PATH")"
+  "$PYTHON" - \
+    "$LAUNCH_RECEIPT_PATH" "$PROJECT" "$INSTANCE_NAME" "$CREATED_ZONE" \
+    "$REGION" "$BOOT_DISK_NAME" "$NAT_ROUTER_NAME" "$NAT_GATEWAY_NAME" \
+    "$NAT_ROUTER_CREATED" "$NAT_GATEWAY_CREATED" "$cloud_probe_sha256" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+(
+    path,
+    project,
+    instance,
+    zone,
+    region,
+    boot_disk,
+    router,
+    nat,
+    router_created,
+    nat_created,
+    cloud_probe_sha256,
+) = sys.argv[1:]
+record = {
+    "schema_version": 1,
+    "project": project,
+    "instance": instance,
+    "zone": zone,
+    "region": region,
+    "boot_disk": boot_disk,
+    "router": router,
+    "nat": nat,
+    "router_created": router_created == "true",
+    "nat_created": nat_created == "true",
+    "cloud_probe_sha256": cloud_probe_sha256,
+}
+destination = Path(path)
+temporary = destination.with_suffix(destination.suffix + ".tmp")
+temporary.write_text(json.dumps(record, sort_keys=True) + "\n", encoding="utf-8")
+temporary.replace(destination)
+PY
+}
+
+teardown_worker() {
+  local receipt="$LAUNCH_RECEIPT_PATH"
+  local receipt_project
+  local receipt_instance
+  local zone
+  local region
+  local boot_disk
+  local router
+  local nat
+  local router_created
+  local nat_created
+
+  require_digest_probe "$ARTIFACT_RESTORE_RECEIPT" "ARTIFACT_RESTORE_RECEIPT"
+  if [[ ! -f "$receipt" ]]; then
+    echo "[!] Error: Launch receipt is unavailable: $receipt"
+    return 1
+  fi
+  IFS=$'\t' read -r receipt_project receipt_instance zone region boot_disk \
+    router nat router_created nat_created < <(
+    "$PYTHON" - "$receipt" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+record = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+keys = (
+    "project",
+    "instance",
+    "zone",
+    "region",
+    "boot_disk",
+    "router",
+    "nat",
+    "router_created",
+    "nat_created",
+)
+missing = set(keys) - record.keys()
+if missing:
+    raise SystemExit(f"launch receipt lacks fields: {sorted(missing)}")
+print(*(str(record[key]).lower() if isinstance(record[key], bool) else record[key] for key in keys), sep="\t")
+PY
+  )
+  if [[ "$receipt_project" != "$PROJECT" || "$receipt_instance" != "$INSTANCE_NAME" ]]; then
+    echo "[!] Error: Launch receipt names another project or instance."
+    return 1
+  fi
+
+  delete_instance_and_disk "$zone" "$boot_disk"
+  delete_created_network "$region" "$router" "$nat" "$nat_created" "$router_created"
+  if gcloud compute instances describe "$INSTANCE_NAME" \
+    --project="$PROJECT" --zone="$zone" >/dev/null 2>&1; then
+    echo "[!] Error: Worker still exists after teardown."
+    return 1
+  fi
+  if gcloud compute disks describe "$boot_disk" \
+    --project="$PROJECT" --zone="$zone" >/dev/null 2>&1; then
+    echo "[!] Error: Boot disk still exists after teardown."
+    return 1
+  fi
+
+  mkdir -p "$(dirname "$TEARDOWN_RECEIPT_PATH")"
+  "$PYTHON" - "$TEARDOWN_RECEIPT_PATH" "$receipt" "$ARTIFACT_RESTORE_RECEIPT" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+path, launch_receipt, restore_receipt = map(Path, sys.argv[1:])
+record = {
+    "schema_version": 1,
+    "launch_receipt": str(launch_receipt),
+    "artifact_restore_receipt": str(restore_receipt),
+    "worker_absent": True,
+    "boot_disk_absent": True,
+}
+temporary = path.with_suffix(path.suffix + ".tmp")
+temporary.write_text(json.dumps(record, sort_keys=True) + "\n", encoding="utf-8")
+temporary.replace(path)
+PY
+  echo "[*] Teardown verified for $INSTANCE_NAME in $zone."
+}
+
+if [[ "$ACTION" == "teardown" ]]; then
+  teardown_worker
+  exit 0
+fi
+if [[ "$ACTION" != "launch" ]]; then
+  echo "[!] Usage: $0 [launch|teardown]"
+  exit 2
+fi
+
+require_digest_probe "$VIPER_CLOUD_PROBE_RECEIPT" "VIPER_CLOUD_PROBE_RECEIPT"
+
 verify_iap_firewall_rule() {
   local rule_network
   local rule_direction
@@ -343,7 +587,7 @@ INSTANCE_CREATE_ARGS=(
   "${SOURCE_ARGS[@]}"
   "${BOOT_DISK_ARGS[@]}"
   --provisioning-model=SPOT
-  --instance-termination-action=STOP
+  --instance-termination-action=DELETE
   --maintenance-policy=TERMINATE
   --network="$NETWORK"
   --no-address
@@ -388,14 +632,15 @@ for ZONE in "${VALID_ZONES[@]}"; do
 
   # Code 0 means hardware was found AND the network bound successfully
   if [[ $STATUS -eq 0 ]]; then
+    CREATED_ZONE="$ZONE"
+    CLEANUP_ON_EXIT=true
+    trap cleanup_failed_launch EXIT
     BOOT_DISK_NAME=$(gcloud compute instances describe "$INSTANCE_NAME" \
       --project="$PROJECT" \
       --zone="$ZONE" \
       --format='value(disks[0].source.basename())')
     if [[ -z "$BOOT_DISK_NAME" ]]; then
       echo "[!] Error: The VM was created, but its boot disk could not be identified."
-      echo "[!] Inspect or delete it with:"
-      echo "gcloud compute instances delete $INSTANCE_NAME --project=$PROJECT --zone=$ZONE"
       exit 1
     fi
     if ! gcloud compute instances set-disk-auto-delete "$INSTANCE_NAME" \
@@ -405,8 +650,6 @@ for ZONE in "${VALID_ZONES[@]}"; do
       --auto-delete \
       --quiet; then
       echo "[!] Error: The VM was created, but boot-disk auto-delete could not be enabled."
-      echo "[!] Inspect or delete it with:"
-      echo "gcloud compute instances delete $INSTANCE_NAME --project=$PROJECT --zone=$ZONE"
       exit 1
     fi
     BOOT_DISK_AUTO_DELETE=$(gcloud compute instances describe "$INSTANCE_NAME" \
@@ -415,8 +658,6 @@ for ZONE in "${VALID_ZONES[@]}"; do
       --format='value(disks[0].autoDelete)')
     if [[ "$BOOT_DISK_AUTO_DELETE" != "True" ]]; then
       echo "[!] Error: The VM was created with boot-disk auto-delete disabled."
-      echo "[!] Inspect or delete it with:"
-      echo "gcloud compute instances delete $INSTANCE_NAME --project=$PROJECT --zone=$ZONE"
       exit 1
     fi
 
@@ -424,8 +665,6 @@ for ZONE in "${VALID_ZONES[@]}"; do
       --project="$PROJECT" \
       --format='value(region.basename())'); then
       echo "[!] Error: The VM was created, but its parent region could not be resolved."
-      echo "[!] Inspect or delete it with:"
-      echo "gcloud compute instances delete $INSTANCE_NAME --project=$PROJECT --zone=$ZONE"
       exit 1
     fi
 
@@ -434,17 +673,6 @@ for ZONE in "${VALID_ZONES[@]}"; do
     if ! ensure_regional_cloud_nat "$REGION"; then
       echo
       echo "[!] Error: The VM was created, but regional Cloud NAT setup failed."
-      echo "[!] The VM remains private and may not have general outbound internet access."
-      echo "[!] Inspect or delete it with:"
-      echo "gcloud compute instances delete $INSTANCE_NAME --project=$PROJECT --zone=$ZONE"
-      if [[ "$NAT_GATEWAY_CREATED" == true ]]; then
-        echo "[!] This run also created NAT '$NAT_GATEWAY_NAME'. Remove it if the failed setup left it behind:"
-        echo "gcloud compute routers nats delete $NAT_GATEWAY_NAME --project=$PROJECT --router=$NAT_ROUTER_NAME --region=$REGION"
-      fi
-      if [[ "$NAT_ROUTER_CREATED" == true ]]; then
-        echo "[!] After deleting the NAT, remove its dedicated router if it is empty:"
-        echo "gcloud compute routers delete $NAT_ROUTER_NAME --project=$PROJECT --region=$REGION"
-      fi
       exit 1
     fi
 
@@ -458,6 +686,10 @@ for ZONE in "${VALID_ZONES[@]}"; do
       echo "[!] You can still connect with the explicit gcloud command below."
     fi
 
+    write_launch_receipt
+    CLEANUP_ON_EXIT=false
+    trap - EXIT
+
     echo
     echo "[🚀] SUCCESS: Spot VM '$INSTANCE_NAME' was created in zone: $ZONE"
     echo "[*] Inbound SSH: IAP -> private VM address (the VM has no external IP)."
@@ -470,24 +702,16 @@ for ZONE in "${VALID_ZONES[@]}"; do
       echo "or use the stable editor/SSH alias: ssh $SSH_HOST_ALIAS"
     fi
     echo "--------------------------------------------------------------------------------"
-    echo "[!] WHEN FINISHED, DELETE THIS VM AND ITS AUTO-DELETE BOOT DISK WITH:"
-    echo "gcloud compute instances delete $INSTANCE_NAME --project=$PROJECT --zone=$ZONE"
+    echo "[!] WHEN FINISHED, VERIFY RESTORATION AND RUN:"
+    echo "ARTIFACT_RESTORE_RECEIPT=<receipt.json> LAUNCH_RECEIPT_PATH=$LAUNCH_RECEIPT_PATH $0 teardown"
     echo
-    echo "[!] Cloud NAT is regional and persists after VM deletion, so its public IP can continue to incur charges."
-    if [[ "$NAT_GATEWAY_CREATED" == true ]]; then
-      echo "[!] This run created NAT '$NAT_GATEWAY_NAME'. Remove it when no private VM in $REGION needs it:"
-      echo "gcloud compute routers nats delete $NAT_GATEWAY_NAME --project=$PROJECT --router=$NAT_ROUTER_NAME --region=$REGION"
-    fi
-    if [[ "$NAT_ROUTER_CREATED" == true ]]; then
-      echo "[!] After deleting that NAT, remove its dedicated router if it is empty:"
-      echo "gcloud compute routers delete $NAT_ROUTER_NAME --project=$PROJECT --region=$REGION"
-    fi
+    echo "[*] Teardown will remove only network resources recorded as created by this launch."
     exit 0
   fi
 
   # Error filtering for standard GCE stockout resource patterns
-  if grep -qiE "ZONE_RESOURCE_POOL_EXHAUSTED|resource pool exhausted|does not have enough resources|resources? (is|are) currently unavailable in .*zone" <<< "$OUTPUT"; then
-    echo "[-] Capacity Denied: No Spot L4 allocations open in $ZONE."
+  if grep -qiE "ZONE_RESOURCE_POOL_EXHAUSTED|resource pool exhausted|does not have enough resources|resources? (is|are) currently unavailable in .*zone|quota.*exceeded|exceeded.*quota|QUOTA_EXCEEDED" <<< "$OUTPUT"; then
+    echo "[-] Allocation denied by capacity or quota in $ZONE; trying the next declared zone."
   else
     echo "[⚠️] Unexpected Runtime API Exception in $ZONE:"
     echo "$OUTPUT"
