@@ -30,17 +30,11 @@ BOOT_DISK_SIZE="${BOOT_DISK_SIZE:-}"
 BOOT_DISK_TYPE="${BOOT_DISK_TYPE:-}"
 INSTANCE_LABELS="${INSTANCE_LABELS:-}"
 
-# Complete nationwide search array (west -> central -> east)
-CANDIDATE_ZONES=(
-  us-west4-a us-west4-b us-west4-c
-  us-west3-a us-west3-b us-west3-c
-  us-west2-a us-west2-b us-west2-c
-  us-west1-a us-west1-b us-west1-c
-  us-central1-a us-central1-b us-central1-c us-central1-f
-  us-east1-b us-east1-c us-east1-d
-  us-east4-a us-east4-b us-east4-c
-  us-east5-a us-east5-b us-east5-c
-)
+# Search lower-demand regions before established MANTRA regions. Central US is
+# intentionally absent because these jobs should avoid its higher Spot churn.
+# Override this ordered, space-separated list for a deliberate capacity probe.
+ZONE_SEARCH_ORDER="${ZONE_SEARCH_ORDER:-us-west4-a us-west4-c us-east4-a us-east4-c us-west1-b us-west1-c us-west1-a us-east1-d us-east1-c us-east1-b}"
+read -r -a CANDIDATE_ZONES <<< "$ZONE_SEARCH_ORDER"
 
 verify_iap_firewall_rule() {
   local rule_network
@@ -268,7 +262,7 @@ ensure_regional_cloud_nat() {
 echo "[*] Verifying the global IAP SSH firewall path..."
 verify_iap_firewall_rule
 
-echo "[*] Auditing hardware profile compatibility across all US regions..."
+echo "[*] Auditing hardware profile compatibility in the configured zone order..."
 VALID_ZONES=()
 
 for ZONE in "${CANDIDATE_ZONES[@]}"; do
@@ -377,7 +371,7 @@ fi
 echo "[*] Validated source image and G2/L4 target zones."
 echo
 
-# === NATIONWIDE DIRECT SPOT PROVISIONING LOOP ===
+# === ORDERED DIRECT SPOT PROVISIONING LOOP ===
 for ZONE in "${VALID_ZONES[@]}"; do
   echo "=== Querying Spot Resource Pool Availability: $ZONE ==="
 
@@ -502,5 +496,5 @@ for ZONE in "${VALID_ZONES[@]}"; do
   echo
 done
 
-echo "[!] Script Failure: Zero active Spot L4 capacity located across the United States."
+echo "[!] Script Failure: No Spot L4 capacity was available in the configured zones."
 exit 1
