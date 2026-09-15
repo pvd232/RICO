@@ -21,6 +21,8 @@ before rebuilding preprocessing or training the encoder.
 <!-- contract-protocol:generated:start -->
 **In progress.** [Jump to current PairBlock](#h1-pb-02)
 
+**Checklist:** [MANTRA rebuild Phase 1](../checklists/mantra-rebuild-phase-1.md)
+
 ### PairBlocks
 
 <a id="h1-pb-01"></a>
