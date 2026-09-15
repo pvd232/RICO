@@ -1,9 +1,13 @@
 schema_version = 1
-checklist_id = "mantra-rebuild-phase-1"
-title = "MANTRA rebuild Phase 1"
+checklist_id = "mantra-rebuild"
+title = "MANTRA rebuild"
 coordination_repository_id = "rico"
-checklist_path = "checklists/mantra-rebuild-phase-1.md"
-contract_paths = ["contracts/mantra-hopfield-reconstruction.toml"]
+checklist_path = "checklists/mantra-rebuild.md"
+contract_paths = [
+  "contracts/mantra-hopfield-reconstruction.toml",
+  "contracts/mantra-mil-reconstruction.toml",
+  "contracts/mantra-graph-encoder-v1.toml",
+]
 
 [[pair_block_placements]]
 pair_block_id = "H1-PB-01"
@@ -45,6 +49,76 @@ pair_block_id = "H1-PB-06"
 phase = 1
 position = 5
 section_title = "Hopfield reconstruction"
+deferred = false
+
+[[pair_block_placements]]
+pair_block_id = "M2-PB-01"
+phase = 2
+position = 0
+section_title = "MIL reconstruction"
+deferred = false
+
+[[pair_block_placements]]
+pair_block_id = "M2-PB-02"
+phase = 2
+position = 1
+section_title = "MIL reconstruction"
+deferred = false
+
+[[pair_block_placements]]
+pair_block_id = "M2-PB-03"
+phase = 2
+position = 2
+section_title = "MIL reconstruction"
+deferred = false
+
+[[pair_block_placements]]
+pair_block_id = "M2-PB-04"
+phase = 2
+position = 3
+section_title = "MIL reconstruction"
+deferred = false
+
+[[pair_block_placements]]
+pair_block_id = "GE-PB-01"
+phase = 3
+position = 0
+section_title = "Graph identities and baselines"
+deferred = false
+
+[[pair_block_placements]]
+pair_block_id = "GE-PB-02"
+phase = 4
+position = 0
+section_title = "Topology and V1 features"
+deferred = false
+
+[[pair_block_placements]]
+pair_block_id = "GE-PB-03"
+phase = 4
+position = 1
+section_title = "Topology and V1 features"
+deferred = false
+
+[[pair_block_placements]]
+pair_block_id = "GE-PB-04"
+phase = 5
+position = 0
+section_title = "V1 graph encoder"
+deferred = false
+
+[[pair_block_placements]]
+pair_block_id = "GE-PB-05"
+phase = 5
+position = 1
+section_title = "V1 graph encoder"
+deferred = false
+
+[[pair_block_placements]]
+pair_block_id = "GE-PB-06"
+phase = 5
+position = 2
+section_title = "V1 graph encoder"
 deferred = false
 
 [[repository_bindings]]

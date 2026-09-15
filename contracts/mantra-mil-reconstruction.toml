@@ -1,0 +1,91 @@
+schema_version = 1
+contract_id = "mantra-mil-reconstruction"
+title = "MANTRA MIL Reconstruction"
+
+[[requirements]]
+id = "M2-REQ-01"
+claim = "The standalone MIL rebuild must use the selected v1952 seed-123460 without_control inputs, create one student query, exclude the dormant proto_count 11 setting from the active architecture, and consume no Hopfield output."
+depends_on = ["H1-REQ-06"]
+verifier_ids = ["M2-VR-01"]
+pair_block_ids = ["M2-PB-01"]
+
+[[requirements]]
+id = "M2-REQ-02"
+claim = "Teacher bags and conditioning, the teacher, donor embeddings, and the single-query student must be rebuilt in producer order; every selection score and checkpoint decision must be emitted to stdout and the primary experiment log and retained through VIPER."
+depends_on = ["M2-REQ-01"]
+verifier_ids = ["M2-VR-02"]
+pair_block_ids = ["M2-PB-02"]
+
+[[requirements]]
+id = "M2-REQ-03"
+claim = "Covariance shrinkage, teacher-neighbor smoothing, retrieval, residual correction, reference shift, and per-gene calibration must be rebuilt and compared with their historical intermediates before final evaluation."
+depends_on = ["M2-REQ-02"]
+verifier_ids = ["M2-VR-03"]
+pair_block_ids = ["M2-PB-03"]
+
+[[requirements]]
+id = "M2-REQ-04"
+claim = "The rebuilt MIL path must reproduce hold PearsonDelta 0.6025499488874759 and the approved prediction identities or numerical tolerances, with every accepted producer, artifact, comparison, checkpoint, and implementation commit reachable through retained VIPER and contract evidence."
+depends_on = ["M2-REQ-03"]
+verifier_ids = ["M2-VR-04"]
+pair_block_ids = ["M2-PB-04"]
+
+[[verifiers]]
+id = "M2-VR-01"
+requirement_ids = ["M2-REQ-01"]
+acceptance_conditions = ["The selected MIL configuration resolves the standalone historical inputs, creates one student query, ignores proto_count 11, and has no dependency on a Hopfield output."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_contract.py", symbol = "test_accepts_selected_standalone_mil_configuration" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_contract.py", symbol = "test_rejects_hopfield_or_multi_query_dependency" }]
+
+[[verifiers]]
+id = "M2-VR-02"
+requirement_ids = ["M2-REQ-02"]
+acceptance_conditions = ["The teacher and student training chain reproduces the approved intermediate arrays and retains every selection score and checkpoint decision."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_training.py", symbol = "test_rebuilds_selected_teacher_and_student" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_training.py", symbol = "test_rejects_changed_training_intermediate" }]
+
+[[verifiers]]
+id = "M2-VR-03"
+requirement_ids = ["M2-REQ-03"]
+acceptance_conditions = ["Each retrieval and correction intermediate matches its approved identity or numerical tolerance before the final prediction is scored."]
+success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_reconstruction.py", symbol = "test_rebuilds_selected_retrieval_and_correction" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_reconstruction.py", symbol = "test_rejects_changed_correction_intermediate" }]
+
+[[verifiers]]
+id = "M2-VR-04"
+requirement_ids = ["M2-REQ-04"]
+acceptance_conditions = ["The final prediction and hold PearsonDelta match the approved Phase 0 MIL result, and retained evidence resolves the complete accepted execution."]
+success_case = { repository_id = "rico", path = "tests/phase2/test_mil_registration.py", symbol = "test_resolves_complete_mil_reconstruction" }
+rejection_cases = [{ repository_id = "rico", path = "tests/phase2/test_mil_registration.py", symbol = "test_rejects_changed_or_unregistered_mil_result" }]
+
+[[pair_blocks]]
+id = "M2-PB-01"
+requirement_ids = ["M2-REQ-01"]
+depends_on = ["H1-PB-06"]
+repository_id = "mantra"
+requirement_contribution = "Bind the MIL rebuild to its standalone historical inputs and active single-query architecture."
+completion_evidence = ["implementation_review"]
+
+[[pair_blocks]]
+id = "M2-PB-02"
+requirement_ids = ["M2-REQ-02"]
+depends_on = ["M2-PB-01"]
+repository_id = "mantra"
+requirement_contribution = "Rebuild teacher bags, conditioning, teacher training, donor embeddings, and single-query student training with retained selection evidence."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "M2-PB-03"
+requirement_ids = ["M2-REQ-03"]
+depends_on = ["M2-PB-02"]
+repository_id = "mantra"
+requirement_contribution = "Rebuild retrieval and every downstream correction and compare each intermediate before final scoring."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "M2-PB-04"
+requirement_ids = ["M2-REQ-04"]
+depends_on = ["M2-PB-03"]
+repository_id = "rico"
+requirement_contribution = "Verify final MIL parity and retain the complete accepted execution through VIPER and contract evidence."
+completion_evidence = ["implementation_review", "viper_registration"]

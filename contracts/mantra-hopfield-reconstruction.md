@@ -21,7 +21,7 @@ before rebuilding preprocessing or training the encoder.
 <!-- contract-protocol:generated:start -->
 **In progress.** [Jump to current PairBlock](#h1-pb-02)
 
-**Checklist:** [MANTRA rebuild Phase 1](../checklists/mantra-rebuild-phase-1.md)
+**Checklist:** [MANTRA rebuild](../checklists/mantra-rebuild.md)
 
 ### PairBlocks
 
@@ -35,7 +35,7 @@ before rebuilding preprocessing or training the encoder.
 
 **Plan:** [plan.toml](../plans/mantra-hopfield-reconstruction/H1-PB-01/plan.toml)
 
-**Current receipt:** [receipt](../evidence/mantra-rebuild-phase-1/bootstrap.json)
+**Current receipt:** [receipt](../evidence/mantra-rebuild/bootstrap.json)
 
 <details>
 <summary>Implementation and gate details</summary>

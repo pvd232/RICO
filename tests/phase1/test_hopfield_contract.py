@@ -10,7 +10,9 @@ import tomllib
 
 ROOT = Path(__file__).parents[2]
 CONTRACT = ROOT / "contracts/mantra-hopfield-reconstruction.toml"
-CHECKLIST = ROOT / "checklists/mantra-rebuild-phase-1.toml"
+CHECKLIST = ROOT / "checklists/mantra-rebuild.toml"
+MIL_CONTRACT = ROOT / "contracts/mantra-mil-reconstruction.toml"
+GRAPH_CONTRACT = ROOT / "contracts/mantra-graph-encoder-v1.toml"
 PHASE0_EVIDENCE = ROOT / "archive/mantra-rebuild-phase-0/evidence"
 PHASE0_INDEX = PHASE0_EVIDENCE / "phase0/index.json"
 EXPECTED_ENCODER_SHA256 = (
@@ -111,7 +113,11 @@ class HopfieldContractTests(unittest.TestCase):
     def test_places_hopfield_work_in_roadmap_phase_one(self) -> None:
         """Keep the six implementation blocks ordered within roadmap Phase 1."""
         checklist = tomllib.loads(CHECKLIST.read_text(encoding="utf-8"))
-        placements = checklist["pair_block_placements"]
+        placements = [
+            placement
+            for placement in checklist["pair_block_placements"]
+            if placement["phase"] == 1
+        ]
 
         self.assertEqual(
             [placement["pair_block_id"] for placement in placements],
@@ -124,6 +130,49 @@ class HopfieldContractTests(unittest.TestCase):
         self.assertEqual(
             {placement["section_title"] for placement in placements},
             {"Hopfield reconstruction"},
+        )
+
+    def test_registers_every_roadmap_contract_and_phase(self) -> None:
+        """Require the master workspace to encode the complete Phase 1-5 map."""
+        checklist = tomllib.loads(CHECKLIST.read_text(encoding="utf-8"))
+        placements = checklist["pair_block_placements"]
+
+        self.assertEqual(checklist["checklist_id"], "mantra-rebuild")
+        self.assertEqual(
+            checklist["contract_paths"],
+            [
+                "contracts/mantra-hopfield-reconstruction.toml",
+                "contracts/mantra-mil-reconstruction.toml",
+                "contracts/mantra-graph-encoder-v1.toml",
+            ],
+        )
+        self.assertEqual(
+            {
+                phase: [
+                    placement["pair_block_id"]
+                    for placement in placements
+                    if placement["phase"] == phase
+                ]
+                for phase in range(1, 6)
+            },
+            {
+                1: [f"H1-PB-{index:02d}" for index in range(1, 7)],
+                2: [f"M2-PB-{index:02d}" for index in range(1, 5)],
+                3: ["GE-PB-01"],
+                4: ["GE-PB-02", "GE-PB-03"],
+                5: ["GE-PB-04", "GE-PB-05", "GE-PB-06"],
+            },
+        )
+
+        mil = tomllib.loads(MIL_CONTRACT.read_text(encoding="utf-8"))
+        graph = tomllib.loads(GRAPH_CONTRACT.read_text(encoding="utf-8"))
+        self.assertEqual(
+            [requirement["id"] for requirement in mil["requirements"]],
+            [f"M2-REQ-{index:02d}" for index in range(1, 5)],
+        )
+        self.assertEqual(
+            [requirement["id"] for requirement in graph["requirements"]],
+            [f"GE-REQ-{index:02d}" for index in range(1, 8)],
         )
 
 
