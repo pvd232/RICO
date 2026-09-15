@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "pair_block_id": "H1-PB-03",
+  "source_repository": "https://github.com/pvd232/MANTRA.git",
+  "source_commit": "9638a876893493ef1955b01204158108c7ba068d",
+  "changed_declarations": [
+    "src/mantra/rebuild/hopfield_replay.py:descriptor_input_ledger",
+    "src/mantra/rebuild/hopfield_replay.py:restore_descriptor_inputs"
+  ],
+  "codeql": {
+    "result": "incomplete",
+    "analyzed_roots": ["src"],
+    "reason": "Database creation traversed archived nested Python environments outside the requested graph root; Matrix stopped the build after five minutes because it exceeded the cost of the selected tests."
+  },
+  "selection": {
+    "basis": "contract_observer_fallback",
+    "verifier_id": "H1-VR-03",
+    "tests": [
+      "src/mantra/rebuild/tests/test_hopfield_preprocessing.py::test_restores_selected_descriptor_inputs",
+      "src/mantra/rebuild/tests/test_hopfield_preprocessing.py::test_rejects_changed_descriptor_input"
+    ]
+  },
+  "result": "passed"
+}

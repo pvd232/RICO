@@ -1,0 +1,88 @@
+schema_version = 1
+contract_id = "mantra-hopfield-reconstruction"
+package_sha256 = "61d435968fe82c4419a9a33d9871f0efa139aa08d96b57d773efab45e2d29aa8"
+pair_block_id = "H1-PB-03"
+baseline_commit = "a23bf766b70941afa7c8b0fdc64b7ca1326d461b"
+change_summary = [
+  "The existing Hopfield replay identities now form one descriptor-input ledger that also names each retained producer record and exact Git restore route.",
+  "One production function restores core83, response40, family64, and gene-shift directly from the accepted commit, verifies their bytes, and never reruns the matched-control or control-program producers.",
+  "The observing tests compare every restored NPZ key, ordered axis, shape, dtype, and value and reject changed restored bytes.",
+]
+deviation_summary = "CodeQL database creation scanned archived nested environments despite the requested src boundary, so Matrix stopped it after five minutes and used the contract-named H1-VR-03 observer. The reusable sparse-analysis defect remains separate from this replay-input guarantee."
+
+[[actions]]
+operation = "patch"
+patch_path = "patches/descriptor-input-ledger.patch"
+target_paths = [
+  "src/mantra/rebuild/hopfield_replay.py",
+  "src/mantra/rebuild/tests/test_hopfield_preprocessing.py",
+]
+
+[[handoff_targets]]
+label = "Complete H1-PB-03 diff"
+source = "plan"
+path = "patches/descriptor-input-ledger.patch"
+line = 1
+
+[[handoff_targets]]
+label = "Descriptor ledger and exact Git restoration"
+source = "repository"
+path = "src/mantra/rebuild/hopfield_replay.py"
+line = 75
+
+[gate]
+source_roots = ["src/mantra/rebuild"]
+test_roots = ["src/mantra/rebuild/tests"]
+
+[[gate.steps]]
+role = "typecheck"
+working_directory = "."
+argv = [
+  "pyright",
+  "src/mantra/rebuild/hopfield_replay.py",
+  "src/mantra/rebuild/tests/test_hopfield_preprocessing.py",
+]
+
+[[gate.steps]]
+role = "test"
+working_directory = "."
+argv = [
+  "python3",
+  "-m",
+  "pytest",
+  "-q",
+  "-p",
+  "no:cacheprovider",
+  "src/mantra/rebuild/tests/test_hopfield_preprocessing.py",
+]
+
+[[gate.steps]]
+role = "documentation"
+working_directory = "."
+argv = [
+  "python3",
+  "/Users/machina/.agents/skills/code-documentation/scripts/check-schema-descriptions.py",
+  "src/mantra/rebuild/hopfield_replay.py",
+  "src/mantra/rebuild/tests/test_hopfield_preprocessing.py",
+]
+
+[[gate.steps]]
+role = "lint"
+working_directory = "."
+argv = [
+  "ruff",
+  "format",
+  "--check",
+  "src/mantra/rebuild/hopfield_replay.py",
+  "src/mantra/rebuild/tests/test_hopfield_preprocessing.py",
+]
+
+[[gate.steps]]
+role = "lint"
+working_directory = "."
+argv = [
+  "ruff",
+  "check",
+  "src/mantra/rebuild/hopfield_replay.py",
+  "src/mantra/rebuild/tests/test_hopfield_preprocessing.py",
+]

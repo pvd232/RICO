@@ -1,0 +1,225 @@
+diff --git a/src/mantra/rebuild/hopfield_replay.py b/src/mantra/rebuild/hopfield_replay.py
+index fd51fae8c..d4b5a230a 100644
+--- a/src/mantra/rebuild/hopfield_replay.py
++++ b/src/mantra/rebuild/hopfield_replay.py
+@@ -4,6 +4,7 @@ from __future__ import annotations
+ 
+ import hashlib
+ import json
++import subprocess
+ from dataclasses import asdict, dataclass, replace
+ from enum import StrEnum
+ from pathlib import Path
+@@ -25,7 +26,7 @@ from viper.authoring import (
+ )
+ from viper.config import BuildConfig
+ from viper.outputs import OutputDraft, StageOutputs, output
+-from viper.references import FileIdentity, GitFileRef, ResolvedRunRef
++from viper.references import FileIdentity, GitFileRef, GitSource, ResolvedRunRef
+ from viper.repository import read_source
+ from viper.restoration import ArtifactRestoreSelector
+ from viper.runtime import (
+@@ -74,6 +75,30 @@ PARITY_REPORT = (
+     "RAW_GENE_READOUT_TUNING_FIT_ONLY_RESULTS.json"
+ )
+ 
++DESCRIPTOR_INPUT_NAMES = ("core83", "response40", "family64", "gene_shift")
++DESCRIPTOR_INPUT_PRODUCERS = {
++    "core83": (
++        "experiments/v1938_sota_clean_repro/runs/"
++        "clean_input_root_regenerative_parity_complete/build_reports/"
++        "core83_control_descriptor.build.json"
++    ),
++    "response40": (
++        "experiments/v1938_sota_clean_repro/runs/"
++        "clean_input_root_regenerative_parity_complete/build_reports/"
++        "response40_family64_hold_proxy.build.json"
++    ),
++    "family64": (
++        "experiments/v1938_sota_clean_repro/runs/"
++        "clean_input_root_regenerative_parity_complete/build_reports/"
++        "family64_query_features.build.json"
++    ),
++    "gene_shift": (
++        "experiments/v1938_sota_clean_repro/runs/"
++        "clean_input_root_regenerative_parity_complete/build_reports/"
++        "gene_shift.build.json"
++    ),
++}
++
+ # SpectralClustering consults this shared inventory while the stage runs. Build
+ # it when the worker imports this source, before declared file access begins.
+ _SKLEARN_THREADPOOL_CONTROLLER = _get_threadpool_controller()
+@@ -282,6 +307,68 @@ def sha256_file(path: Path) -> str:
+     return digest.hexdigest()
+ 
+ 
++def descriptor_input_ledger(source: GitSource) -> tuple[dict[str, object], ...]:
++    """Describe the four retained descriptor files and their exact Git restore routes.
++
++    The producer reports name the matched-control and control-program inputs used
++    to make ``core83`` and ``gene_shift``. The restore references deliberately
++    point to the retained outputs instead: Phase 1 restores approved bytes and
++    does not rerun those upstream producers.
++    """
++
++    return tuple(
++        {
++            "name": name,
++            "identity": INPUTS[name].identity.model_dump(mode="json"),
++            "producer_record": DESCRIPTOR_INPUT_PRODUCERS[name],
++            "restore": GitFileRef(
++                repository=source.repository,
++                commit=source.commit,
++                path=INPUTS[name].path,
++            ).model_dump(mode="json"),
++        }
++        for name in DESCRIPTOR_INPUT_NAMES
++    )
++
++
++def restore_descriptor_inputs(
++    repository_root: Path,
++    destination: Path,
++    *,
++    source: GitSource,
++) -> dict[str, Path]:
++    """Restore and verify the descriptor ledger without running its producers."""
++
++    restored: dict[str, Path] = {}
++    for record in descriptor_input_ledger(source):
++        name = str(record["name"])
++        declared = INPUTS[name]
++        try:
++            completed = subprocess.run(
++                (
++                    "git",
++                    "-C",
++                    str(repository_root),
++                    "show",
++                    f"{source.commit}:{declared.path}",
++                ),
++                check=True,
++                capture_output=True,
++            )
++        except (OSError, subprocess.CalledProcessError) as error:
++            raise HopfieldReplayError(f"cannot restore descriptor input: {name}") from error
++        if (
++            len(completed.stdout) != declared.identity.bytes
++            or hashlib.sha256(completed.stdout).hexdigest() != declared.identity.sha256
++        ):
++            raise HopfieldReplayError(f"replay input identity differs: {name}")
++        target = destination / declared.path
++        target.parent.mkdir(parents=True, exist_ok=True)
++        target.write_bytes(completed.stdout)
++        restored[name] = target
++    return restored
++
++
+ def _verify_inputs(
+     context: StageContext[BuildConfig],
+     names: tuple[str, ...],
+@@ -644,5 +731,7 @@ __all__ = [
+     "HopfieldPredictionOutputs",
+     "HopfieldReplayError",
+     "build_hopfield_study",
++    "descriptor_input_ledger",
++    "restore_descriptor_inputs",
+     "run_hopfield_replay",
+ ]
+diff --git a/src/mantra/rebuild/tests/test_hopfield_preprocessing.py b/src/mantra/rebuild/tests/test_hopfield_preprocessing.py
+new file mode 100644
+index 000000000..1096265fd
+--- /dev/null
++++ b/src/mantra/rebuild/tests/test_hopfield_preprocessing.py
+@@ -0,0 +1,90 @@
++"""Verify exact restoration of the selected Hopfield descriptor inputs."""
++
++from __future__ import annotations
++
++import subprocess
++from pathlib import Path
++
++import numpy as np
++import pytest
++from viper.references import GitSource
++
++import mantra.rebuild.hopfield_replay as replay
++from mantra.rebuild.hopfield_replay import (
++    DESCRIPTOR_INPUT_NAMES,
++    DESCRIPTOR_INPUT_PRODUCERS,
++    INPUTS,
++    HopfieldReplayError,
++    descriptor_input_ledger,
++    restore_descriptor_inputs,
++)
++
++
++def _source() -> GitSource:
++    """Pin restoration to the commit that retained the approved descriptor files."""
++
++    return GitSource(
++        repository="https://github.com/pvd232/MANTRA.git",
++        commit="a23bf766b70941afa7c8b0fdc64b7ca1326d461b",
++    )
++
++
++def _assert_same_npz(left: Path, right: Path) -> None:
++    """Require equal keys, ordered axes, shapes, dtypes, and array values."""
++
++    with (
++        np.load(left, allow_pickle=True) as observed,
++        np.load(right, allow_pickle=True) as expected,
++    ):
++        assert observed.files == expected.files
++        for key in expected.files:
++            assert observed[key].shape == expected[key].shape
++            assert observed[key].dtype == expected[key].dtype
++            assert np.array_equal(observed[key], expected[key])
++
++
++def test_restores_selected_descriptor_inputs(tmp_path: Path) -> None:
++    """Restore every descriptor file and reproduce its complete NPZ content."""
++
++    repository_root = Path(__file__).parents[4]
++    source = _source()
++    ledger = descriptor_input_ledger(source)
++
++    assert tuple(record["name"] for record in ledger) == DESCRIPTOR_INPUT_NAMES
++    assert all(record["producer_record"] for record in ledger)
++    assert all(
++        (repository_root / DESCRIPTOR_INPUT_PRODUCERS[name]).is_file()
++        for name in DESCRIPTOR_INPUT_NAMES
++    )
++
++    restored = restore_descriptor_inputs(
++        repository_root,
++        tmp_path,
++        source=source,
++    )
++    for name, restored_path in restored.items():
++        _assert_same_npz(restored_path, repository_root / INPUTS[name].path)
++
++
++def test_rejects_changed_descriptor_input(
++    tmp_path: Path,
++    monkeypatch: pytest.MonkeyPatch,
++) -> None:
++    """Reject a Git-restored descriptor whose bytes differ from its ledger identity."""
++
++    repository_root = Path(__file__).parents[4]
++    source = _source()
++    real_run = replay.subprocess.run
++
++    def changed_run(*args: object, **kwargs: object) -> subprocess.CompletedProcess[bytes]:
++        completed = real_run(*args, **kwargs)
++        return subprocess.CompletedProcess(
++            completed.args,
++            completed.returncode,
++            completed.stdout + b"changed",
++            completed.stderr,
++        )
++
++    monkeypatch.setattr(replay.subprocess, "run", changed_run)
++    with pytest.raises(HopfieldReplayError, match="replay input identity differs"):
++        restore_descriptor_inputs(repository_root, tmp_path, source=source)
