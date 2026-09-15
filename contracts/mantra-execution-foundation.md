@@ -10,7 +10,7 @@ Sinkhorn, ridge, low-rank PCA and SVD, Hopfield, MIL, and the deterministic CPU
 KMeans exception used for byte-parity replay.
 
 <!-- contract-protocol:generated:start -->
-**In progress.** [Jump to current PairBlock](#e0-pb-01)
+**In progress.** [Jump to current PairBlock](#e0-pb-03)
 
 **Checklist:** [MANTRA rebuild](../checklists/mantra-rebuild.md)
 
@@ -20,17 +20,66 @@ KMeans exception used for byte-parity replay.
 
 #### <nobr><code>E0-PB-01</code></nobr>
 
-**Status:** drafting
+**Status:** complete
 
 **Requirement contribution:** Implement and verify durable GCS publication and restoration through VIPER's existing cloud-client boundary.
 
-**Plan:** None
+**Review handoff**
 
-**Current receipt:** None
+**What changed**
+
+- VIPER now publishes immutable content revisions to Google Cloud Storage through its existing cloud-client protocol.
+- Cloud object keys preserve each exact workspace-relative path beneath the owner, workspace, and content revision.
+- A revision becomes readable only after its manifest is sealed; every restored file is checked against its recorded byte count and SHA-256 digest.
+- The launch probe publishes and restores one object through the production client and writes a durable receipt before an ephemeral GPU worker may start.
+
+**Plan deviations:** The live probe first exposed an Application Default Credentials quota-project mismatch. Rebinding ADC from the closed MEDIT billing context to MANTRA resolved it; no cloud object was written before that repair. The CodeQL-selected fast gate also exposed two frozen public API and package inventories, which were updated without expanding runtime scope.
+
+**Start review:** [Open tested GitHub comparison](https://github.com/pvd232/viper/compare/aeceffbc8b92151bb6ab7d65ea846e7afc89f1d6...5b5f97feed28a857df70202b8a3d6023d742c31f)
+
+**Review these files**
+
+- [Complete E0-PB-01 diff](../plans/mantra-execution-foundation/E0-PB-01/patches/gcs-storage.patch#L1)
+- [Production GCS client](../plans/mantra-execution-foundation/E0-PB-01/patches/gcs-storage.patch#L200)
+- [Publish and restore launch probe](../plans/mantra-execution-foundation/E0-PB-01/patches/gcs-storage.patch#L448)
+- [Workspace and cloud path contract](../../viper/docs/reference/protocol.md#L56)
+- [Immutable publication acceptance cases](../plans/mantra-execution-foundation/E0-PB-01/patches/gcs-storage.patch#L751)
+
+**Evidence:** [Passing gate receipt](../evidence/mantra-rebuild/E0-PB-01/gate-review-01.json)
+
+**Decision:** <nobr><code>E0-PB-01</code></nobr> is complete; no further decision is required.
+
+<details>
+<summary>Implementation details</summary>
+
+**Plan:** [plan.toml](../plans/mantra-execution-foundation/E0-PB-01/plan.toml)
+
+**Retained patch:** [patches/gcs-storage.patch](../plans/mantra-execution-foundation/E0-PB-01/patches/gcs-storage.patch)
+
+**Implementation roots:** [src/viper/gcs.py](../../viper/src/viper/gcs.py) · [src/viper/storage.py](../../viper/src/viper/storage.py)
+
+**Test roots:** [tests/test_gcs_storage.py](../../viper/tests/test_gcs_storage.py) · [tests/test_storage.py](../../viper/tests/test_storage.py)
 
 **Dependencies:** <nobr><code>E0-PB-02</code></nobr>
 
-**Next action:** Run the current PairBlock plan.
+**Gate steps:**
+
+```bash
+# typecheck
+(cd . && pyright src/viper/gcs.py src/viper/storage.py tests/test_gcs_storage.py tests/test_public_api.py tests/test_release_tools.py tests/conftest.py)
+# test
+(cd . && python3 -m pytest -q -p no:cacheprovider tests -m '(domain_storage) and (unit or contract)')
+# test
+(cd . && python3 -m pytest -q -p no:cacheprovider tests/test_public_api.py tests/test_release_tools.py tests/test_documentation.py tests/test_workflow_documentation.py)
+# documentation
+(cd . && python3 /Users/machina/.agents/skills/code-documentation/scripts/check-schema-descriptions.py src/viper/gcs.py tests/test_gcs_storage.py)
+# lint
+(cd . && ruff format --check src/viper/gcs.py src/viper/storage.py tests/test_gcs_storage.py tests/test_public_api.py tests/test_release_tools.py tests/conftest.py)
+# lint
+(cd . && ruff check src/viper/gcs.py src/viper/storage.py tests/test_gcs_storage.py tests/test_public_api.py tests/test_release_tools.py tests/conftest.py)
+```
+
+</details>
 
 <a id="e0-pb-02"></a>
 
@@ -241,7 +290,7 @@ KMeans exception used for byte-parity replay.
 
 #### <nobr><code>E0-PB-12</code></nobr>
 
-**Status:** waiting
+**Status:** drafting
 
 **Requirement contribution:** Record and verify the live worker's complete execution identity through VIPER before replay training begins.
 
@@ -251,14 +300,14 @@ KMeans exception used for byte-parity replay.
 
 **Dependencies:** <nobr><code>E0-PB-01</code></nobr>, <nobr><code>E0-PB-02</code></nobr>
 
-**Next action:** Wait for the declared dependencies.
+**Next action:** Run the current PairBlock plan.
 
 
 ### Requirements
 
 | Requirement | Claim | Progress | Verifiers | PairBlocks |
 |---|---|---|---|---|
-| <nobr><code>E0-REQ-01</code></nobr> | Before an ephemeral GPU run starts, VIPER must publish and restore one probe artifact through a production GCS-backed ViperCloudClient, verify its digest after restoration, and retain the durable reference in the run record. Each GCS object key must prefix the owner, workspace, and content-derived revision while preserving the exact repository-relative path produced by VIPER's canonical initialized workspace layout. | in_progress | <nobr><code>E0-VR-01</code></nobr> | <nobr><code>E0-PB-01</code></nobr> |
+| <nobr><code>E0-REQ-01</code></nobr> | Before an ephemeral GPU run starts, VIPER must publish and restore one probe artifact through a production GCS-backed ViperCloudClient, verify its digest after restoration, and retain the durable reference in the run record. Each GCS object key must prefix the owner, workspace, and content-derived revision while preserving the exact repository-relative path produced by VIPER's canonical initialized workspace layout. | complete | <nobr><code>E0-VR-01</code></nobr> | <nobr><code>E0-PB-01</code></nobr> |
 | <nobr><code>E0-REQ-02</code></nobr> | The governed GPU launcher must search declared lower-demand regions before us-central1, continue after regional capacity or quota rejection, force boot-disk auto-delete after machine-image overrides, and clean up every worker, boot disk, NAT, and router created by a failed launch. A live launch must require a verified durable-storage probe, record every resource it created, select Spot deletion on preemption, and provide one deterministic teardown action that deletes the worker and boot disk after accepted records and artifacts restore while preserving reused network resources. | complete | <nobr><code>E0-VR-02</code></nobr> | <nobr><code>E0-PB-02</code></nobr> |
 | <nobr><code>E0-REQ-03</code></nobr> | One versioned optimization inventory must map every accelerated MANTRA operation to its historical owner, modular owner, CPU reference, numerical parity gate, throughput gate, device and precision policy, determinism policy, and consuming reconstruction stage. | in_progress | <nobr><code>E0-VR-03</code></nobr> | <nobr><code>E0-PB-03</code></nobr> |
 | <nobr><code>E0-REQ-04</code></nobr> | The modular response pipeline must preserve batched GPU cNMF and NMF execution, including parallel restarts, mini-batching, sparse-input handling, lazy split-sign expansion, stable float32 factors, and preloaded dense device tensors. | planned | <nobr><code>E0-VR-04</code></nobr> | <nobr><code>E0-PB-04</code></nobr> |
@@ -269,7 +318,7 @@ KMeans exception used for byte-parity replay.
 | <nobr><code>E0-REQ-09</code></nobr> | The modular Hopfield pipeline must copy every numeric training tensor to the GPU once before training, keep the complete fit and tune tensors resident through full-dataset training and inference, and limit later host-device transfers to checkpoint, log, and final-artifact persistence. It must also preserve vectorized matrix operations and top-k retrieval, deterministic CUDA settings, explicit precision, historical normalization and checkpoint selection, and retain transfer counts and bytes, runtime, and peak GPU memory through VIPER. | planned | <nobr><code>E0-VR-09</code></nobr> | <nobr><code>E0-PB-09</code></nobr> |
 | <nobr><code>E0-REQ-10</code></nobr> | The modular MIL pipeline must copy every numeric training tensor to the GPU once before teacher or student training, keep the complete tensors resident through training and inference, and form the historical 128-row optimizer batches only through device-side indices. Every training step must read numeric rows from those resident tensors. The pipeline must also preserve fused CUDA optimizers, vectorized top-k and einsum routing, deterministic CUDA settings, explicit precision, historical checkpoint selection, and retain transfer counts and bytes, runtime, and peak GPU memory through VIPER. | planned | <nobr><code>E0-VR-10</code></nobr> | <nobr><code>E0-PB-10</code></nobr> |
 | <nobr><code>E0-REQ-11</code></nobr> | The modular prior and response pipelines must preserve deterministic GPU low-rank PCA and SVD where the historical pipeline used them, including fitted rows, centering, rank, seed, sign convention, device, precision, components, singular values, projections, and reconstruction diagnostics. | planned | <nobr><code>E0-VR-11</code></nobr> | <nobr><code>E0-PB-11</code></nobr> |
-| <nobr><code>E0-REQ-12</code></nobr> | After a GPU worker boots and before training starts, one VIPER launch probe must record the source commit, resolved plan and configuration, command, input digests, declared seeds, Python and accelerator RNG states, determinism environment variables, image, locked Python environment, operating system, CUDA and driver versions, GPU model and count, device and dtype policy, writable canonical VIPER workspace, and durable artifact destination. Resume must reject every unreviewed difference in that execution identity. | planned | <nobr><code>E0-VR-12</code></nobr> | <nobr><code>E0-PB-12</code></nobr> |
+| <nobr><code>E0-REQ-12</code></nobr> | After a GPU worker boots and before training starts, one VIPER launch probe must record the source commit, resolved plan and configuration, command, input digests, declared seeds, Python and accelerator RNG states, determinism environment variables, image, locked Python environment, operating system, CUDA and driver versions, GPU model and count, device and dtype policy, writable canonical VIPER workspace, and durable artifact destination. Resume must reject every unreviewed difference in that execution identity. | in_progress | <nobr><code>E0-VR-12</code></nobr> | <nobr><code>E0-PB-12</code></nobr> |
 
 ### Verification rules
 

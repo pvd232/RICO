@@ -1,0 +1,950 @@
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index a34686d..d74f2cb 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -2,6 +2,11 @@
+ 
+ ## Unreleased
+ 
++- Add a production Google Cloud Storage client that preserves workspace-relative
++  artifact paths, exposes only sealed content revisions, and verifies restored bytes.
++- Add a publish-and-restore probe receipt for checking durable storage before an
++  ephemeral worker starts.
++
+ ## 0.1.0a5 — 2026-09-14
+ 
+ - Define one public `FileIdentity` base for exact byte count and SHA-256
+diff --git a/docs/reference/api.md b/docs/reference/api.md
+index 711d947..629f87f 100644
+--- a/docs/reference/api.md
++++ b/docs/reference/api.md
+@@ -213,6 +213,17 @@ See [Load local and HTTP inputs](../how-to/inputs.md).
+ | `viper.verification` | Run, artifact, pointer, and benchmark verification |
+ | `viper.serialization` | Canonical YAML and JSON encoding and parsing |
+ | `viper.storage` | Immutable publication and retrieval |
++| `viper.test_impact` | Repository-neutral selection from source declarations to observing tests |
++| `viper.gcs` | Google Cloud Storage publication and publish-restore probing |
++
++## Google Cloud Storage
++
++Install the optional client with `pip install 'viper-provenance[gcs]'`. Construct
++`GcsViperCloudClient` with the workspace root and bucket, then pass it wherever VIPER
++accepts a `ViperCloudClient`. `probe_gcs_storage()` publishes one immutable object,
++restores it, compares the digest, and writes a local receipt suitable for a launch
++precondition. See [Workspace and cloud paths](protocol.md#workspace-and-cloud-paths) for
++the object-key contract.
+ 
+ ## Typed operations
+ 
+diff --git a/docs/reference/protocol.md b/docs/reference/protocol.md
+index 37935db..8827718 100644
+--- a/docs/reference/protocol.md
++++ b/docs/reference/protocol.md
+@@ -53,6 +53,42 @@ workspace retrieve the referenced bytes without confusing the producer store wit
+ own. Git and Hugging Face references use repository commits. See
+ [`viper.references`](../../src/viper/references.py).
+ 
++## Workspace and cloud paths
++
++`viper.repository.init_workspace()` creates the starter files returned by
++[`workspace_files()`](../../src/viper/repository.py). A run then writes its records and
++artifacts under the same workspace root:
++
++```text
++<workspace>/
++├── src/<package>/                 # workspace-owned stage code
++├── tests/                         # workspace-owned tests
++├── benchmarks/                    # benchmark declarations
++├── experiments/<experiment_id>/
++│   └── runs/<variant_id>/<run_id>/
++│       ├── resolved.yaml
++│       ├── stages/<stage_id>/
++│       ├── artifacts/<stage_id>/<output_name>/<relative_path>
++│       └── attempts/<attempt_id>/
++└── .viper/
++    ├── store/                     # immutable local objects
++    ├── workspaces/                # materialized execution workspaces
++    ├── pointers/                  # retained artifact pointers
++    └── catalog.sqlite3
++```
++
++The GCS client stores one sealed content revision at:
++
++```text
++gs://<bucket>/<prefix>/<owner>/<workspace>/<content-revision>/<workspace-relative-path>
++gs://<bucket>/<prefix>/<owner>/<workspace>/<content-revision>.manifest.json
++```
++
++Everything after `<content-revision>/` is the exact workspace-relative path. VIPER does
++not rename an artifact to `datasets/`, `models/`, or another cloud-only category. The
++manifest is the revision's seal: readers list and restore only paths named by that
++manifest, then verify the restored byte count and SHA-256 digest.
++
+ ## Attempt and terminal states
+ 
+ `retry()` creates another numbered attempt against the same `RunSpec`. Earlier attempts
+diff --git a/pyproject.toml b/pyproject.toml
+index fc86b08..3cd05b2 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -50,6 +50,9 @@ release = [
+ mcp = [
+     "mcp>=2,<3",
+ ]
++gcs = [
++    "google-cloud-storage>=3.4,<4",
++]
+ 
+ [project.urls]
+ Repository = "https://github.com/pvd232/viper"
+diff --git a/src/viper/gcs.py b/src/viper/gcs.py
+new file mode 100644
+index 0000000..1241f46
+--- /dev/null
++++ b/src/viper/gcs.py
+@@ -0,0 +1,389 @@
++"""Store sealed VIPER revisions in Google Cloud Storage."""
++
++from __future__ import annotations
++
++import hashlib
++import json
++from pathlib import Path, PurePosixPath
++from typing import Literal
++
++from google.api_core.exceptions import GoogleAPIError, PreconditionFailed
++from google.cloud import storage
++from pydantic import Field, ValidationError, model_validator
++
++from ._schema import SHA256, ProtocolModel, RepoRelPath
++from .ids import HumanId
++from .references import SnapshotFileRef, ViperCloudFileRef
++from .storage import (
++    PublicationSource,
++    StorageConfigurationError,
++    ViperCloudClient,
++    ViperCloudDestination,
++    manifest_revision,
++    publish_resolved_files,
++    read_publication_source,
++)
++
++
++class GcsStorageProbeReceipt(ProtocolModel):
++    """Record one successful GCS publication and byte-for-byte restoration."""
++
++    schema_version: Literal[1] = Field(
++        default=1,
++        description="GCS storage-probe receipt schema version.",
++    )
++    passed: Literal[True] = Field(
++        default=True,
++        description="Whether publication, restoration, and digest comparison passed.",
++    )
++    artifact_uri: str = Field(
++        min_length=1,
++        description="Immutable viper URI restored by the probe.",
++    )
++    sha256: SHA256 = Field(
++        description="SHA-256 digest of the bytes published by the probe."
++    )
++    restored_sha256: SHA256 = Field(
++        description="SHA-256 digest recomputed after restoring the cloud object."
++    )
++
++    @model_validator(mode="after")
++    def require_matching_digests(self) -> GcsStorageProbeReceipt:
++        """Reject a receipt whose restored bytes differ from its source."""
++        if self.sha256 != self.restored_sha256:
++            raise ValueError("GCS probe restored different bytes")
++        return self
++
++
++class _GcsRevisionManifest(ProtocolModel):
++    """Describe every file exposed by one sealed cloud revision."""
++
++    schema_version: Literal[1] = Field(
++        default=1,
++        description="GCS revision-manifest schema version.",
++    )
++    owner: HumanId = Field(description="Account owning the cloud revision.")
++    workspace: HumanId = Field(description="Workspace owning the cloud revision.")
++    revision: SHA256 = Field(description="Content-derived revision identifier.")
++    files: tuple[SnapshotFileRef, ...] = Field(
++        description="Files exposed by the sealed revision in path order."
++    )
++
++    @model_validator(mode="after")
++    def require_revision_identity(self) -> _GcsRevisionManifest:
++        """Bind the manifest revision to its sorted, unique file identities."""
++        paths = tuple(file.path for file in self.files)
++        if paths != tuple(sorted(paths)) or len(paths) != len(set(paths)):
++            raise ValueError("GCS manifest files must have unique sorted paths")
++        if manifest_revision(self.files) != self.revision:
++            raise ValueError("GCS manifest content does not match its revision")
++        return self
++
++
++def _canonical_json(record: ProtocolModel) -> bytes:
++    """Serialize one protocol record into stable UTF-8 JSON bytes."""
++    return (
++        json.dumps(
++            record.model_dump(mode="json"),
++            sort_keys=True,
++            separators=(",", ":"),
++        ).encode("utf-8")
++        + b"\n"
++    )
++
++
++class GcsViperCloudClient(ViperCloudClient):
++    """Implement VIPER's immutable cloud protocol in one GCS bucket."""
++
++    def __init__(
++        self,
++        root: Path,
++        bucket: str,
++        *,
++        prefix: str = "viper",
++        client: storage.Client | None = None,
++    ) -> None:
++        """Bind publication sources and object keys to one workspace and bucket."""
++        self.root = root.resolve(strict=True)
++        prefix_path = PurePosixPath(prefix)
++        if (
++            prefix_path.is_absolute()
++            or not prefix_path.parts
++            or any(part in {"", ".", ".."} for part in prefix_path.parts)
++        ):
++            raise ValueError("GCS prefix must be a non-empty relative path")
++        self.prefix = prefix_path.as_posix()
++        self.client = client or storage.Client()
++        self.bucket = self.client.bucket(bucket)
++
++    def _revision_prefix(
++        self,
++        owner: HumanId,
++        workspace: HumanId,
++        revision: SHA256,
++    ) -> str:
++        """Return the prefix before an unchanged repository-relative file path."""
++        return f"{self.prefix}/{owner}/{workspace}/{revision}"
++
++    def _file_key(
++        self,
++        owner: HumanId,
++        workspace: HumanId,
++        revision: SHA256,
++        path: RepoRelPath,
++    ) -> str:
++        """Return the object key for one exact workspace-relative path."""
++        return f"{self._revision_prefix(owner, workspace, revision)}/{path}"
++
++    def _manifest_key(
++        self,
++        owner: HumanId,
++        workspace: HumanId,
++        revision: SHA256,
++    ) -> str:
++        """Return the seal object stored beside, rather than inside, the revision."""
++        return f"{self._revision_prefix(owner, workspace, revision)}.manifest.json"
++
++    def _upload_exact(
++        self,
++        key: str,
++        raw: bytes,
++        *,
++        sha256: SHA256,
++        size: int,
++    ) -> None:
++        """Create one object once, accepting only an identical retry."""
++        if len(raw) != size or hashlib.sha256(raw).hexdigest() != sha256:
++            raise StorageConfigurationError("GCS upload source identity changed")
++        blob = self.bucket.blob(key)
++        blob.metadata = {"sha256": sha256, "bytes": str(size)}
++        try:
++            blob.upload_from_string(
++                raw,
++                content_type="application/octet-stream",
++                if_generation_match=0,
++                checksum="auto",
++            )
++        except PreconditionFailed:
++            existing = blob.download_as_bytes(checksum="auto")
++            if existing != raw:
++                raise StorageConfigurationError(
++                    "GCS object already contains different bytes"
++                ) from None
++
++    def _load_manifest(
++        self,
++        owner: HumanId,
++        workspace: HumanId,
++        revision: SHA256,
++    ) -> _GcsRevisionManifest:
++        """Load and validate the seal before exposing any revision member."""
++        try:
++            raw = self.bucket.blob(
++                self._manifest_key(owner, workspace, revision)
++            ).download_as_bytes(checksum="auto")
++            manifest = _GcsRevisionManifest.model_validate_json(raw)
++        except (GoogleAPIError, KeyError, ValidationError) as error:
++            raise StorageConfigurationError("GCS revision is not sealed") from error
++        if (
++            manifest.owner != owner
++            or manifest.workspace != workspace
++            or manifest.revision != revision
++        ):
++            raise StorageConfigurationError("GCS manifest names another revision")
++        return manifest
++
++    def upload(
++        self,
++        *,
++        owner: HumanId,
++        workspace: HumanId,
++        revision: SHA256,
++        path: RepoRelPath,
++        source: PublicationSource,
++        sha256: SHA256,
++        bytes: int,
++    ) -> None:
++        """Upload one immutable file while leaving its revision unsealed."""
++        raw = read_publication_source(self.root, source)
++        self._upload_exact(
++            self._file_key(owner, workspace, revision, path),
++            raw,
++            sha256=sha256,
++            size=bytes,
++        )
++
++    def copy(
++        self,
++        *,
++        source: ViperCloudFileRef,
++        target: ViperCloudFileRef,
++        sha256: SHA256,
++        bytes: int,
++    ) -> None:
++        """Copy one sealed source object without downloading its payload."""
++        source_files = {
++            file.path: file
++            for file in self._load_manifest(
++                source.owner,
++                source.workspace,
++                source.revision,
++            ).files
++        }
++        if source_files.get(source.path) != SnapshotFileRef(
++            path=source.path,
++            sha256=sha256,
++            bytes=bytes,
++        ):
++            raise StorageConfigurationError("GCS copy source identity changed")
++        source_blob = self.bucket.blob(
++            self._file_key(
++                source.owner,
++                source.workspace,
++                source.revision,
++                source.path,
++            )
++        )
++        source_blob.reload()
++        if source_blob.generation is None:
++            raise StorageConfigurationError("GCS copy source has no generation")
++        target_key = self._file_key(
++            target.owner,
++            target.workspace,
++            target.revision,
++            target.path,
++        )
++        try:
++            self.bucket.copy_blob(
++                source_blob,
++                self.bucket,
++                new_name=target_key,
++                if_generation_match=0,
++                if_source_generation_match=source_blob.generation,
++            )
++        except PreconditionFailed:
++            existing = self.bucket.blob(target_key).download_as_bytes(checksum="auto")
++            if len(existing) != bytes or hashlib.sha256(existing).hexdigest() != sha256:
++                raise StorageConfigurationError(
++                    "GCS copy target already contains different bytes"
++                ) from None
++
++    def seal(
++        self,
++        *,
++        owner: HumanId,
++        workspace: HumanId,
++        revision: SHA256,
++        files: tuple[SnapshotFileRef, ...],
++    ) -> None:
++        """Publish an immutable manifest after every declared object is present."""
++        manifest = _GcsRevisionManifest(
++            owner=owner,
++            workspace=workspace,
++            revision=revision,
++            files=tuple(sorted(files, key=lambda file: file.path)),
++        )
++        for file in manifest.files:
++            blob = self.bucket.blob(
++                self._file_key(owner, workspace, revision, file.path)
++            )
++            blob.reload()
++            metadata = blob.metadata or {}
++            if metadata.get("sha256") != file.sha256 or metadata.get("bytes") != str(
++                file.bytes
++            ):
++                raise StorageConfigurationError(
++                    f"GCS file identity is missing or changed: {file.path}"
++                )
++        raw = _canonical_json(manifest)
++        self._upload_exact(
++            self._manifest_key(owner, workspace, revision),
++            raw,
++            sha256=hashlib.sha256(raw).hexdigest(),
++            size=len(raw),
++        )
++
++    def fetch(
++        self,
++        *,
++        owner: HumanId,
++        workspace: HumanId,
++        revision: SHA256,
++        path: RepoRelPath,
++    ) -> bytes:
++        """Restore one sealed file and verify its exact byte identity."""
++        files = {
++            file.path: file
++            for file in self._load_manifest(owner, workspace, revision).files
++        }
++        identity = files.get(path)
++        if identity is None:
++            raise StorageConfigurationError("GCS sealed revision has no requested file")
++        raw = self.bucket.blob(
++            self._file_key(owner, workspace, revision, path)
++        ).download_as_bytes(checksum="auto")
++        if (
++            len(raw) != identity.bytes
++            or hashlib.sha256(raw).hexdigest() != identity.sha256
++        ):
++            raise StorageConfigurationError("GCS restored file identity changed")
++        return raw
++
++    def list_files(
++        self,
++        *,
++        owner: HumanId,
++        workspace: HumanId,
++        revision: SHA256,
++    ) -> tuple[SnapshotFileRef, ...]:
++        """List the exact files exposed by one sealed revision."""
++        return self._load_manifest(owner, workspace, revision).files
++
++
++def probe_gcs_storage(
++    root: Path,
++    destination: ViperCloudDestination,
++    client: GcsViperCloudClient,
++    receipt_path: Path,
++    *,
++    artifact_path: RepoRelPath = ".viper/probes/gcs-storage.bin",
++) -> GcsStorageProbeReceipt:
++    """Publish, restore, verify, and record one deterministic GCS probe."""
++    payload = b"VIPER GCS storage probe\n"
++    references = publish_resolved_files(
++        root,
++        destination,
++        {artifact_path: payload},
++        cloud_client=client,
++    )
++    reference = references[artifact_path]
++    location = reference.stored_at
++    if not isinstance(location, ViperCloudFileRef):
++        raise StorageConfigurationError("GCS probe produced a non-cloud reference")
++    restored = client.fetch(
++        owner=location.owner,
++        workspace=location.workspace,
++        revision=location.revision,
++        path=location.path,
++    )
++    restored_sha256 = hashlib.sha256(restored).hexdigest()
++    receipt = GcsStorageProbeReceipt(
++        artifact_uri=(
++            f"viper://{location.owner}/{location.workspace}@"
++            f"{location.revision}/{location.path}"
++        ),
++        sha256=reference.sha256,
++        restored_sha256=restored_sha256,
++    )
++    receipt_path.parent.mkdir(parents=True, exist_ok=True)
++    temporary = receipt_path.with_suffix(receipt_path.suffix + ".tmp")
++    temporary.write_bytes(_canonical_json(receipt))
++    temporary.replace(receipt_path)
++    return receipt
++
++
++__all__ = [
++    "GcsStorageProbeReceipt",
++    "GcsViperCloudClient",
++    "probe_gcs_storage",
++]
+diff --git a/src/viper/storage.py b/src/viper/storage.py
+index 1d6b333..b75d110 100644
+--- a/src/viper/storage.py
++++ b/src/viper/storage.py
+@@ -301,7 +301,7 @@ class LocalSnapshotPublisher:
+         """Read validated member paths and publish one local stage snapshot."""
+         payload: dict[RepoRelPath, bytes] = {resolved_stage_path: resolved_stage}
+         for path, source in files.items():
+-            payload[path] = _read_publication_source(self.root, source)
++            payload[path] = read_publication_source(self.root, source)
+         return self.store.snapshot(payload)
+ 
+     def publish_reuse(
+@@ -359,7 +359,7 @@ def load_storage_settings(root: Path) -> StorageSettings:
+         raise StorageConfigurationError("storage settings are invalid") from error
+ 
+ 
+-def _read_publication_source(root: Path, source: PublicationSource) -> bytes:
++def read_publication_source(root: Path, source: PublicationSource) -> bytes:
+     """Return bytes from one in-memory or root-confined publication source."""
+     if isinstance(source, bytes):
+         return source
+@@ -436,7 +436,7 @@ class ViperCloudClient(Protocol):
+         ...
+ 
+ 
+-def _manifest_revision(files: tuple[SnapshotFileRef, ...]) -> SHA256:
++def manifest_revision(files: tuple[SnapshotFileRef, ...]) -> SHA256:
+     """Derive the shared local and cloud revision from file identities."""
+     digest = hashlib.sha256()
+     for file in sorted(files, key=lambda item: item.path):
+@@ -452,7 +452,7 @@ def _source_file(
+     root: Path, path: RepoRelPath, source: PublicationSource
+ ) -> SnapshotFileRef:
+     """Read one source and record the identity sent to the cloud client."""
+-    raw = _read_publication_source(root, source)
++    raw = read_publication_source(root, source)
+     return SnapshotFileRef(
+         path=path,
+         sha256=hashlib.sha256(raw).hexdigest(),
+@@ -531,7 +531,7 @@ def _cloud_publish(
+     files = tuple(
+         _source_file(root, path, source) for path, source in sorted(sources.items())
+     )
+-    revision = _manifest_revision(files)
++    revision = manifest_revision(files)
+     identities = {file.path: file for file in files}
+ 
+     for path, source in sorted(sources.items()):
+@@ -631,7 +631,7 @@ class ViperCloudSnapshotPublisher:
+             )
+ 
+         manifest = tuple(sorted(target_files, key=lambda file: file.path))
+-        revision = _manifest_revision(manifest)
++        revision = manifest_revision(manifest)
+         _cloud_upload_file(
+             destination=self.destination,
+             client=self.client,
+@@ -726,7 +726,7 @@ def publish_resolved_files(
+     """Publish standalone files and return references keyed by requested path."""
+     if isinstance(destination, LocalStorageDestination):
+         payload = {
+-            path: _read_publication_source(root, source)
++            path: read_publication_source(root, source)
+             for path, source in files.items()
+         }
+         references = LocalArtifactStore(root).resolved_files(payload)
+diff --git a/tests/conftest.py b/tests/conftest.py
+index 839e068..1916312 100644
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -19,6 +19,7 @@ TIER_BY_MODULE = {
+     "test_distribution_contents": "release",
+     "test_execution_acceptance": "integration",
+     "test_generated_project_acceptance": "release",
++    "test_gcs_storage": "contract",
+     "test_http_retrieval": "contract",
+     "test_impact_graph_build": "unit",
+     "test_impacted_test_selection": "unit",
+@@ -77,6 +78,7 @@ DOMAIN_BY_MODULE = {
+     "test_execution_policy_controls": "domain_execution",
+     "test_execution_policy_acceptance": "domain_execution",
+     "test_generated_project_acceptance": "domain_release",
++    "test_gcs_storage": "domain_storage",
+     "test_http_retrieval": "domain_http",
+     "test_impact_graph_build": "domain_protocol",
+     "test_impacted_test_selection": "domain_protocol",
+diff --git a/tests/declaration_observers.toml b/tests/declaration_observers.toml
+index 900314a..7e476dc 100644
+--- a/tests/declaration_observers.toml
++++ b/tests/declaration_observers.toml
+@@ -15,6 +15,7 @@ schema_version = 1
+ "src/viper/execution/_benchmark.py" = "domain_execution"
+ "src/viper/execution/_restore.py" = "domain_execution"
+ "src/viper/execution/_source.py" = "domain_execution"
++"src/viper/gcs.py" = "domain_storage"
+ "src/viper/knowledge.py" = "domain_verification"
+ "src/viper/preflight.py" = "domain_verification"
+ "src/viper/references.py" = "domain_storage"
+@@ -23,6 +24,23 @@ schema_version = 1
+ "src/viper/stages.py" = "domain_protocol"
+ "src/viper/verification.py" = "domain_verification"
+ 
++[[declarations]]
++id = "src/viper/gcs.py:GcsViperCloudClient"
++fallback_domain = "domain_storage"
++tests = [
++  "tests/test_gcs_storage.py::test_publishes_and_restores_durable_snapshot",
++  "tests/test_gcs_storage.py::test_rejects_changed_or_missing_cloud_object",
++  "tests/test_gcs_storage.py::test_server_side_copy_preserves_identity_and_requires_a_sealed_source",
++]
++
++[[declarations]]
++id = "src/viper/gcs.py:probe_gcs_storage"
++fallback_domain = "domain_storage"
++tests = [
++  "tests/test_gcs_storage.py::test_publishes_and_restores_durable_snapshot",
++  "tests/test_gcs_storage.py::test_rejects_changed_or_missing_cloud_object",
++]
++
+ [[declarations]]
+ id = "src/viper/execution/_publication.py:write_attempt_document"
+ fallback_domain = "domain_execution"
+diff --git a/tests/test_gcs_storage.py b/tests/test_gcs_storage.py
+new file mode 100644
+index 0000000..a06b2bc
+--- /dev/null
++++ b/tests/test_gcs_storage.py
+@@ -0,0 +1,278 @@
++"""Verify the production GCS adapter without contacting Google Cloud."""
++
++from __future__ import annotations
++
++import hashlib
++import json
++from pathlib import Path
++from typing import Any, cast
++
++import pytest
++from google.api_core.exceptions import PreconditionFailed
++
++from viper.gcs import GcsViperCloudClient, probe_gcs_storage
++from viper.references import SnapshotFileRef, ViperCloudFileRef
++from viper.storage import (
++    StorageConfigurationError,
++    ViperCloudDestination,
++    manifest_revision,
++)
++
++
++class _Blob:
++    """Model the GCS blob operations used by the production adapter."""
++
++    def __init__(self, bucket: _Bucket, name: str) -> None:
++        """Bind one object name to the shared fake bucket."""
++        self.bucket = bucket
++        self.name = name
++        self.metadata: dict[str, str] | None = None
++        self.generation: int | None = None
++
++    def upload_from_string(
++        self,
++        raw: bytes,
++        *,
++        content_type: str,
++        if_generation_match: int,
++        checksum: str,
++    ) -> None:
++        """Create an object only when its key is absent."""
++        assert content_type == "application/octet-stream"
++        assert if_generation_match == 0
++        assert checksum == "auto"
++        if self.name in self.bucket.objects:
++            raise PreconditionFailed("object exists")
++        self.bucket.next_generation += 1
++        self.generation = self.bucket.next_generation
++        self.bucket.objects[self.name] = (
++            raw,
++            dict(self.metadata or {}),
++            self.generation,
++        )
++
++    def download_as_bytes(self, *, checksum: str) -> bytes:
++        """Return the current object bytes."""
++        assert checksum == "auto"
++        return self.bucket.objects[self.name][0]
++
++    def reload(self) -> None:
++        """Load the current object's metadata and generation."""
++        raw, metadata, generation = self.bucket.objects[self.name]
++        assert raw is not None
++        self.metadata = dict(metadata)
++        self.generation = generation
++
++
++class _Bucket:
++    """Hold immutable objects and model one server-side copy."""
++
++    def __init__(self) -> None:
++        """Start with no cloud objects."""
++        self.objects: dict[str, tuple[bytes, dict[str, str], int]] = {}
++        self.next_generation = 0
++        self.copy_calls: list[tuple[str, str]] = []
++
++    def blob(self, name: str) -> _Blob:
++        """Return a handle for one object name."""
++        return _Blob(self, name)
++
++    def copy_blob(
++        self,
++        source: _Blob,
++        destination_bucket: _Bucket,
++        *,
++        new_name: str,
++        if_generation_match: int,
++        if_source_generation_match: int | None,
++    ) -> _Blob:
++        """Copy the selected source generation into one absent destination."""
++        assert destination_bucket is self
++        assert if_generation_match == 0
++        if new_name in self.objects:
++            raise PreconditionFailed("object exists")
++        raw, metadata, generation = self.objects[source.name]
++        assert generation == if_source_generation_match
++        self.next_generation += 1
++        self.objects[new_name] = (raw, dict(metadata), self.next_generation)
++        self.copy_calls.append((source.name, new_name))
++        return self.blob(new_name)
++
++
++class _Client:
++    """Return one fake bucket through the Google client boundary."""
++
++    def __init__(self) -> None:
++        """Create the shared bucket."""
++        self.selected_bucket: str | None = None
++        self.value = _Bucket()
++
++    def bucket(self, name: str) -> _Bucket:
++        """Record and return the selected bucket."""
++        self.selected_bucket = name
++        return self.value
++
++
++def _client(root: Path) -> tuple[GcsViperCloudClient, _Client]:
++    """Create the production adapter over an inspectable fake GCS client."""
++    fake = _Client()
++    client = GcsViperCloudClient(
++        root,
++        "mantra-fixture",
++        prefix="viper",
++        client=cast(Any, fake),
++    )
++    return client, fake
++
++
++def test_publishes_and_restores_durable_snapshot(tmp_path: Path) -> None:
++    """Seal a probe, restore identical bytes, and retain its durable reference."""
++    client, fake = _client(tmp_path)
++    destination = ViperCloudDestination(owner="machina", workspace="mantra")
++    receipt_path = tmp_path / ".viper" / "probes" / "gcs.json"
++
++    receipt = probe_gcs_storage(
++        tmp_path,
++        destination,
++        client,
++        receipt_path,
++    )
++
++    assert fake.selected_bucket == "mantra-fixture"
++    assert receipt.passed is True
++    assert receipt.sha256 == receipt.restored_sha256
++    assert json.loads(receipt_path.read_text()) == receipt.model_dump(mode="json")
++    revision = receipt.artifact_uri.split("@", 1)[1].split("/", 1)[0]
++    file_key = f"viper/machina/mantra/{revision}/.viper/probes/gcs-storage.bin"
++    assert file_key in fake.value.objects
++    assert f"viper/machina/mantra/{revision}.manifest.json" in fake.value.objects
++    assert fake.value.objects[file_key][0] == b"VIPER GCS storage probe\n"
++
++    repeated = probe_gcs_storage(
++        tmp_path,
++        destination,
++        client,
++        receipt_path,
++    )
++    assert repeated == receipt
++
++
++def test_rejects_changed_or_missing_cloud_object(tmp_path: Path) -> None:
++    """Reject payload substitution and any file omitted by the sealed manifest."""
++    client, fake = _client(tmp_path)
++    destination = ViperCloudDestination(owner="machina", workspace="mantra")
++    receipt = probe_gcs_storage(
++        tmp_path,
++        destination,
++        client,
++        tmp_path / "probe.json",
++    )
++    revision = receipt.artifact_uri.split("@", 1)[1].split("/", 1)[0]
++    path = ".viper/probes/gcs-storage.bin"
++    key = f"viper/machina/mantra/{revision}/{path}"
++    _, metadata, generation = fake.value.objects[key]
++    fake.value.objects[key] = (b"changed", metadata, generation + 1)
++
++    with pytest.raises(StorageConfigurationError, match="identity changed"):
++        client.fetch(
++            owner="machina",
++            workspace="mantra",
++            revision=revision,
++            path=path,
++        )
++    with pytest.raises(StorageConfigurationError, match="no requested file"):
++        client.fetch(
++            owner="machina",
++            workspace="mantra",
++            revision=revision,
++            path="missing.bin",
++        )
++
++
++def test_server_side_copy_preserves_identity_and_requires_a_sealed_source(
++    tmp_path: Path,
++) -> None:
++    """Copy a sealed file without downloading it and expose it only after sealing."""
++    client, fake = _client(tmp_path)
++    raw = b"parameters"
++    digest = hashlib.sha256(raw).hexdigest()
++    source = ViperCloudFileRef(
++        owner="machina",
++        workspace="mantra",
++        revision="a" * 64,
++        path="runs/source/model.bin",
++    )
++    client.upload(
++        owner=source.owner,
++        workspace=source.workspace,
++        revision=source.revision,
++        path=source.path,
++        source=raw,
++        sha256=digest,
++        bytes=len(raw),
++    )
++    with pytest.raises(StorageConfigurationError, match="not sealed"):
++        client.copy(
++            source=source,
++            target=ViperCloudFileRef(
++                owner="machina",
++                workspace="mantra",
++                revision="b" * 64,
++                path="runs/target/model.bin",
++            ),
++            sha256=digest,
++            bytes=len(raw),
++        )
++
++    source_file = SnapshotFileRef(
++        path=source.path,
++        sha256=digest,
++        bytes=len(raw),
++    )
++    actual_revision = manifest_revision((source_file,))
++    client.upload(
++        owner=source.owner,
++        workspace=source.workspace,
++        revision=actual_revision,
++        path=source.path,
++        source=raw,
++        sha256=digest,
++        bytes=len(raw),
++    )
++    client.seal(
++        owner=source.owner,
++        workspace=source.workspace,
++        revision=actual_revision,
++        files=(source_file,),
++    )
++    target_path = "runs/target/model.bin"
++    target_file = SnapshotFileRef(path=target_path, sha256=digest, bytes=len(raw))
++    target_revision_value = manifest_revision((target_file,))
++    client.copy(
++        source=source.model_copy(update={"revision": actual_revision}),
++        target=ViperCloudFileRef(
++            owner="machina",
++            workspace="mantra",
++            revision=target_revision_value,
++            path=target_path,
++        ),
++        sha256=digest,
++        bytes=len(raw),
++    )
++    client.seal(
++        owner="machina",
++        workspace="mantra",
++        revision=target_revision_value,
++        files=(target_file,),
++    )
++
++    assert fake.value.copy_calls
++    assert (
++        client.fetch(
++            owner="machina",
++            workspace="mantra",
++            revision=target_revision_value,
++            path=target_path,
++        )
++        == raw
++    )
+diff --git a/tests/test_public_api.py b/tests/test_public_api.py
+index 98e1589..73225da 100644
+--- a/tests/test_public_api.py
++++ b/tests/test_public_api.py
+@@ -20,6 +20,7 @@ import viper.execution as execution
+ import viper.execution.errors as execution_errors
+ import viper.execution.results as execution_results
+ import viper.experiments as experiments
++import viper.gcs as gcs
+ import viper.http as http
+ import viper.ids as ids
+ import viper.inputs as inputs
+@@ -42,6 +43,7 @@ import viper.runtime as runtime
+ import viper.serialization as serialization
+ import viper.stages as stages
+ import viper.storage as storage
++import viper.test_impact as test_impact
+ import viper.verification as verification
+ import viper.worker as worker
+ import viper.workspace as workspace
+@@ -87,6 +89,7 @@ PUBLIC_MODULES_BY_NAME = {
+         execution_errors,
+         execution_results,
+         experiments,
++        gcs,
+         http,
+         ids,
+         inputs,
+@@ -109,6 +112,7 @@ PUBLIC_MODULES_BY_NAME = {
+         serialization,
+         stages,
+         storage,
++        test_impact,
+         verification,
+         worker,
+         workspace,
+diff --git a/tests/test_release_tools.py b/tests/test_release_tools.py
+index 41ff79c..2aa07de 100644
+--- a/tests/test_release_tools.py
++++ b/tests/test_release_tools.py
+@@ -38,7 +38,7 @@ def test_release_metadata_matches_the_approved_public_identity() -> None:
+         "Issues": "https://github.com/pvd232/viper/issues",
+     }
+     assert project["scripts"] == {"viper": "viper.cli:main"}
+-    assert set(project["optional-dependencies"]) == {"test", "release", "mcp"}
++    assert set(project["optional-dependencies"]) == {"test", "release", "mcp", "gcs"}
+     assert project["dependencies"] == [
+         "huggingface_hub>=1,<2",
+         "httpx>=0.28,<1",

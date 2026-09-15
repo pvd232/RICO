@@ -12,17 +12,17 @@ conditions, and result required from each PairBlock through Phase 9. Phase 0
 remains an immutable comparison source and never runs again.
 
 <!-- contract-protocol:generated:start -->
-**Resume here:** [Resume at E0-PB-01](../contracts/mantra-execution-foundation.md#e0-pb-01)
+**Resume here:** [Resume at E0-PB-03](../contracts/mantra-execution-foundation.md#e0-pb-03)
 
 
 ### Phase 1: GPU foundation and Hopfield reconstruction
 
 | Requirement | Status | Contract | PairBlocks | Dependencies |
 |---|---|---|---|---|
-| <nobr><code>E0-REQ-01</code></nobr> | in_progress | [mantra-execution-foundation](../contracts/mantra-execution-foundation.md#e0-req-01) | <nobr><code>E0-PB-01</code></nobr> | <nobr><code>E0-REQ-02</code></nobr> |
+| <nobr><code>E0-REQ-01</code></nobr> | complete | [mantra-execution-foundation](../contracts/mantra-execution-foundation.md#e0-req-01) | <nobr><code>E0-PB-01</code></nobr> | <nobr><code>E0-REQ-02</code></nobr> |
 | <nobr><code>E0-REQ-02</code></nobr> | complete | [mantra-execution-foundation](../contracts/mantra-execution-foundation.md#e0-req-02) | <nobr><code>E0-PB-02</code></nobr> | None |
 | <nobr><code>E0-REQ-03</code></nobr> | in_progress | [mantra-execution-foundation](../contracts/mantra-execution-foundation.md#e0-req-03) | <nobr><code>E0-PB-03</code></nobr> | <nobr><code>E0-REQ-01</code></nobr> |
-| <nobr><code>E0-REQ-12</code></nobr> | planned | [mantra-execution-foundation](../contracts/mantra-execution-foundation.md#e0-req-12) | <nobr><code>E0-PB-12</code></nobr> | <nobr><code>E0-REQ-01</code></nobr>, <nobr><code>E0-REQ-02</code></nobr> |
+| <nobr><code>E0-REQ-12</code></nobr> | in_progress | [mantra-execution-foundation](../contracts/mantra-execution-foundation.md#e0-req-12) | <nobr><code>E0-PB-12</code></nobr> | <nobr><code>E0-REQ-01</code></nobr>, <nobr><code>E0-REQ-02</code></nobr> |
 | <nobr><code>E0-REQ-09</code></nobr> | planned | [mantra-execution-foundation](../contracts/mantra-execution-foundation.md#e0-req-09) | <nobr><code>E0-PB-09</code></nobr> | <nobr><code>E0-REQ-03</code></nobr> |
 | <nobr><code>H1-REQ-01</code></nobr> | complete | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-req-01) | <nobr><code>H1-PB-01</code></nobr> | None |
 | <nobr><code>H1-REQ-02</code></nobr> | in_progress | [mantra-hopfield-reconstruction](../contracts/mantra-hopfield-reconstruction.md#h1-req-02) | <nobr><code>H1-PB-02</code></nobr> | <nobr><code>H1-REQ-01</code></nobr> |

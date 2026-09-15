@@ -1,0 +1,146 @@
+schema_version = 1
+contract_id = "mantra-execution-foundation"
+package_sha256 = "1baff26e93e62caf1b80175132fc7ba4934b24069f2fcc29a2311e3d3311ea15"
+pair_block_id = "E0-PB-01"
+baseline_commit = "aeceffbc8b92151bb6ab7d65ea846e7afc89f1d6"
+change_summary = [
+  "VIPER now publishes immutable content revisions to Google Cloud Storage through its existing cloud-client protocol.",
+  "Cloud object keys preserve each exact workspace-relative path beneath the owner, workspace, and content revision.",
+  "A revision becomes readable only after its manifest is sealed; every restored file is checked against its recorded byte count and SHA-256 digest.",
+  "The launch probe publishes and restores one object through the production client and writes a durable receipt before an ephemeral GPU worker may start.",
+]
+deviation_summary = "The live probe first exposed an Application Default Credentials quota-project mismatch. Rebinding ADC from the closed MEDIT billing context to MANTRA resolved it; no cloud object was written before that repair. The CodeQL-selected fast gate also exposed two frozen public API and package inventories, which were updated without expanding runtime scope."
+
+[[actions]]
+operation = "patch"
+patch_path = "patches/gcs-storage.patch"
+target_paths = [
+  "CHANGELOG.md",
+  "docs/reference/api.md",
+  "docs/reference/protocol.md",
+  "pyproject.toml",
+  "src/viper/gcs.py",
+  "src/viper/storage.py",
+  "tests/conftest.py",
+  "tests/declaration_observers.toml",
+  "tests/test_gcs_storage.py",
+  "tests/test_public_api.py",
+  "tests/test_release_tools.py",
+]
+
+[[handoff_targets]]
+label = "Complete E0-PB-01 diff"
+source = "plan"
+path = "patches/gcs-storage.patch"
+line = 1
+
+[[handoff_targets]]
+label = "Production GCS client"
+source = "plan"
+path = "patches/gcs-storage.patch"
+line = 200
+
+[[handoff_targets]]
+label = "Publish and restore launch probe"
+source = "plan"
+path = "patches/gcs-storage.patch"
+line = 448
+
+[[handoff_targets]]
+label = "Workspace and cloud path contract"
+source = "repository"
+path = "docs/reference/protocol.md"
+line = 56
+
+[[handoff_targets]]
+label = "Immutable publication acceptance cases"
+source = "plan"
+path = "patches/gcs-storage.patch"
+line = 751
+
+[gate]
+source_roots = ["src/viper/gcs.py", "src/viper/storage.py"]
+test_roots = ["tests/test_gcs_storage.py", "tests/test_storage.py"]
+
+[[gate.steps]]
+role = "typecheck"
+working_directory = "."
+argv = [
+  "pyright",
+  "src/viper/gcs.py",
+  "src/viper/storage.py",
+  "tests/test_gcs_storage.py",
+  "tests/test_public_api.py",
+  "tests/test_release_tools.py",
+  "tests/conftest.py",
+]
+
+[[gate.steps]]
+role = "test"
+working_directory = "."
+argv = [
+  "python3",
+  "-m",
+  "pytest",
+  "-q",
+  "-p",
+  "no:cacheprovider",
+  "tests",
+  "-m",
+  "(domain_storage) and (unit or contract)",
+]
+
+[[gate.steps]]
+role = "test"
+working_directory = "."
+argv = [
+  "python3",
+  "-m",
+  "pytest",
+  "-q",
+  "-p",
+  "no:cacheprovider",
+  "tests/test_public_api.py",
+  "tests/test_release_tools.py",
+  "tests/test_documentation.py",
+  "tests/test_workflow_documentation.py",
+]
+
+[[gate.steps]]
+role = "documentation"
+working_directory = "."
+argv = [
+  "python3",
+  "/Users/machina/.agents/skills/code-documentation/scripts/check-schema-descriptions.py",
+  "src/viper/gcs.py",
+  "tests/test_gcs_storage.py",
+]
+
+[[gate.steps]]
+role = "lint"
+working_directory = "."
+argv = [
+  "ruff",
+  "format",
+  "--check",
+  "src/viper/gcs.py",
+  "src/viper/storage.py",
+  "tests/test_gcs_storage.py",
+  "tests/test_public_api.py",
+  "tests/test_release_tools.py",
+  "tests/conftest.py",
+]
+
+[[gate.steps]]
+role = "lint"
+working_directory = "."
+argv = [
+  "ruff",
+  "check",
+  "src/viper/gcs.py",
+  "src/viper/storage.py",
+  "tests/test_gcs_storage.py",
+  "tests/test_public_api.py",
+  "tests/test_release_tools.py",
+  "tests/conftest.py",
+]

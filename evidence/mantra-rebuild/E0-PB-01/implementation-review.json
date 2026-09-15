@@ -1,0 +1,11 @@
+{
+  "gate_receipt_ref": {
+    "path": "evidence/mantra-rebuild/E0-PB-01/gate-review-01.json",
+    "sha256": "f6bafefd3fb5a04ad8ede601ac8533570ca2124709a4a63cf67b14f3fda5809b"
+  },
+  "implementation_repository_commit": "5b5f97feed28a857df70202b8a3d6023d742c31f",
+  "pair_block_id": "E0-PB-01",
+  "reviewed_at": "2026-09-15T10:38:50.630815Z",
+  "reviewer": "Codex Matrix self-review",
+  "schema_version": 1
+}
