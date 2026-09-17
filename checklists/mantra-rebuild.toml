@@ -200,6 +200,30 @@ command = "git"
 path = "/usr/bin/git"
 
 [[repository_bindings]]
+repository_id = "rico-rebuild"
+checkout = "/Users/machina/Developer/ChatGPT/mantra-rebuild"
+
+[[repository_bindings.executables]]
+command = "python3"
+path = "/Users/machina/Developer/ChatGPT/mantra-rebuild/.venv/bin/python3"
+
+[[repository_bindings.executables]]
+command = "pyright"
+path = "/Users/machina/Developer/ChatGPT/mantra-rebuild/.venv/bin/pyright"
+
+[[repository_bindings.executables]]
+command = "node"
+path = "/usr/local/bin/node"
+
+[[repository_bindings.executables]]
+command = "ruff"
+path = "/Users/machina/Developer/ChatGPT/mantra-rebuild/.venv/bin/ruff"
+
+[[repository_bindings.executables]]
+command = "git"
+path = "/usr/bin/git"
+
+[[repository_bindings]]
 repository_id = "mantra"
 checkout = "/Users/machina/Developer/ChatGPT/mantra"
 
