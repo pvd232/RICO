@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "contract_id": "viper-cloud-persistence",
+  "recorded_at": "2026-09-18T01:13:24-04:00",
+  "implementation_status": "accepted_candidate",
+  "lifecycle_status": "unregistered",
+  "repositories": {
+    "viper": {
+      "branch": "codex/viper-cloud-persistence",
+      "commit": "cbe801c239bd78b1d1e3c11cea4f57bc81b8a6f4",
+      "upstream_commit": "cbe801c239bd78b1d1e3c11cea4f57bc81b8a6f4",
+      "worktree": "/Users/machina/Developer/ChatGPT/viper-vipercloud"
+    },
+    "mantra": {
+      "branch": "codex/viper-cloud-boundary",
+      "commit": "e9443c0bb0728e1285a864f47aa53fd88304cbc8",
+      "upstream_commit": "e9443c0bb0728e1285a864f47aa53fd88304cbc8",
+      "worktree": "/Users/machina/Developer/ChatGPT/MANTRA-vipercloud"
+    }
+  },
+  "verification": {
+    "viper_complete_gate_before_followup_acceptance": {
+      "result": "passed",
+      "tests_passed": 497,
+      "tests_deselected": 174,
+      "subtests_passed": 9
+    },
+    "viper_execution_and_storage_after_retry_repair": {
+      "result": "passed",
+      "tests_passed": 58,
+      "duration_seconds": 330.37
+    },
+    "viper_provider_and_promotion_acceptance": {
+      "result": "passed",
+      "tests_passed": 3,
+      "tests_deselected": 30
+    },
+    "viper_type_and_style": {
+      "pyright_errors": 0,
+      "ruff_format": "passed",
+      "ruff_check": "passed"
+    },
+    "mantra_focused_rebuild": {
+      "result": "passed",
+      "tests_passed": 43,
+      "tests_deselected": 1,
+      "pyright_errors": 0
+    },
+    "mantra_cloud_boundary_after_final_pin": {
+      "result": "passed",
+      "tests_passed": 1
+    }
+  },
+  "known_unrelated_results": [
+    {
+      "scope": "viper integration suite",
+      "result": "161 passed, 1 failed, 509 deselected, 24 subtests passed",
+      "failure": "CompleteProvenanceAcceptanceTests.test_stored_inputs_verify_one_shared_producer_run_once",
+      "disposition": "The assertion expects verify_pointer_run(), while the unchanged base implementation uses verify_pointer_producer()."
+    },
+    {
+      "scope": "mantra focused rebuild suite",
+      "result": "43 passed, 1 deselected",
+      "failure": "The deselected legacy MIL assertion expects every producer stage ID to be restore; the existing baseline uses restore_training for twelve inputs.",
+      "disposition": "Not caused by the ViperCloud boundary change."
+    }
+  ],
+  "requirements": {
+    "VC-REQ-01": "implemented_and_observed",
+    "VC-REQ-02": "implemented_and_observed",
+    "VC-REQ-03": "implemented_and_observed",
+    "VC-REQ-04": "implemented_and_observed",
+    "VC-REQ-05": "implemented_and_observed",
+    "VC-REQ-06": "implemented_and_observed",
+    "VC-REQ-07": "implemented_and_observed"
+  }
+}

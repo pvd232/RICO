@@ -1,10 +1,11 @@
 # VIPER Cloud Persistence
 
 The [single governing contract](../contracts/viper-cloud-persistence.md) owns
-the gap, impact analysis, design, requirements, and PairBlocks. This checklist
-only compiles execution order and evidence state. It closes when fresh
-workspaces consume promoted producer artifacts from both supported repositories
-through ViperCloud without access to producer paths or provider implementations.
+the gap, impact analysis, design, requirements, and PairBlocks. The candidate
+implementation and focused evidence are complete; the generated statuses below
+remain open until the existing results are registered as PairBlock lifecycle
+receipts. The retained implementation record is
+[`viper-cloud-persistence.json`](../evidence/viper-cloud-persistence/viper-cloud-persistence.json).
 
 <!-- contract-protocol:generated:start -->
 **Resume here:** [Resume at VC-PB-01](../contracts/viper-cloud-persistence.md#vc-pb-01)
