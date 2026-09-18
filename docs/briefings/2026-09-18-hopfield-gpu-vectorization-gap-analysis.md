@@ -25,10 +25,13 @@ The user will implement the source changes through pair coding. The PairBlocks
 below define implementation order and acceptance. No source file is changed by
 this analysis.
 
-**Review status.** The second source review corrected the decoder repair and
-added monitoring and reuse omissions. Algorithm excerpts are proposals, not
-validated replacement files; several use incomplete operations or proposed
-types. Full working-set memory and numerical parity still require observation.
+**Review status.** The full replay sweep below records 54 numerical and
+execution boundaries, including preserved behavior and eight new speedup
+candidates. The sweep adds Sinkhorn-initialization and decoder-centering gaps
+and corrects inherited-cost classifications. Algorithm excerpts are proposals,
+not validated replacement files; several use incomplete operations or proposed
+types. Historical run selection and full failure receipts remain evidence gaps
+where identified. Full working-set memory and numerical parity require observation.
 
 ## Evidence snapshot
 
@@ -170,8 +173,10 @@ accepts NumPy, uploads internally, returns NumPy, and calls `.item()` on every
 iteration.
 
 **Required.** The stage owns transfer boundaries. The solver accepts and
-returns tensors. Compile the repeated update and inspect convergence only at a
-declared cadence:
+returns tensors. The convergence-checked sketch below is an optional solver
+variant, not the historical control-state replay algorithm. The selected
+historical builder uses fixed iterations; preserve that loop and iteration
+count for reproduction. Compilation can be evaluated independently:
 
 ```python
 def projected_gradient_step(
@@ -705,7 +710,7 @@ embeds memory rows, and embeds split queries again. Its `train.py:276` repeats
 `centered_l2(bank_mem)` inside the epoch loop. G19 is an inherited improvement
 opportunity, not evidence of a newly introduced monitoring regression.
 
-## Selected-model comparison coverage
+## Selected-model comparison coverage (supplemented by the sweep table below)
 
 This table records the additional pinned-source comparison. It establishes
 specific implementation correspondences, not an exhaustive optimization or
@@ -722,13 +727,10 @@ runtime-parity certificate. Historical locations below are at commit
 | `src/step01/hopfield/train.py:train_encoder` optimizer and bank-posterior loop | `train_v1938_encoder` | G18's unfused optimizer and G19's repeated fixed-bank normalization are inherited. Full loss/configuration and checkpoint-selection equivalence still require comparison. |
 | `runs/matrix_fit_only_bold_step02_20260715T083000Z/scripts/run_raw_gene_readout_tuning.py:predict_raw_gene_readout` | `predict_raw_gene_readout` | G17's 16-query batching is inherited verbatim in structure. Preserve self-exclusion, memory membership, softmax temperature and the hold-shift application when replacing it. |
 
-**Open audit boundary.** A complete claim that every original optimization is
-captured still requires a function-level ledger for the imported input
-producers, determinism helpers, selected configuration, losses and evaluation
-callers. The failed-stage table also requires full receipts to distinguish
-observed errors from causal hypotheses. Until those rows are checked, this
-report identifies confirmed gaps and proposed improvements but does not certify
-exhaustive historical coverage.
+**Evidence boundary.** The expanded table below includes input producers,
+solvers, determinism, training and evaluation callers. Rows that lack a selected
+historical configuration or full failure receipt state that limitation. Source
+coverage does not establish numerical parity or measured acceleration.
 
 ## Audited CPU boundaries and unmeasured opportunities
 
@@ -746,6 +748,177 @@ not proof that no optimization exists:
 They remain subject to vectorized label grouping, but they are not GPU
 residency failures.
 
+# Full replay sweep: numerical operations and execution boundaries
+
+The table covers the clean replay from atlas access through persisted
+Pearson-delta evaluation, plus the VIPER boundaries implicated in failed
+stages. It includes preserved mechanisms, inherited costs, introduced
+differences, and new opportunities. A source comparison identifies operations;
+speedup factors and numerical equivalence require measurements.
+
+**Snapshots.** Rebuild: `bf12bc03591e09f5ea7a5f9adea197f4aa680839`,
+plus the pre-existing uncommitted one-read transport change. Historical v1691
+files: clean checkout `86e0bc001e66ff9c4f1774ab2c3b35c9f22b6624`.
+Selected v1938 trainer: pinned `919db054d6b0a87815824a9e1702ad1e710632ff`.
+VIPER: `6aa809a0a6060be78695e4c85514c9ae2671298e`.
+The transport edit belongs to the user and is preserved.
+
+**Path key.** R means [rebuild source](../../../../mantra-rebuild/src/rico/);
+H means [historical v1691 source](../../../../mantra/experiments/v1691_full_scratch_family64_ag_film_rebuild/src/);
+T means pinned `experiments/v1938_sota_clean_repro/src/` in
+[MANTRA](../../../../mantra/); V means [VIPER source](../../../../viper/src/viper/).
+R domain paths below are relative to `domain/k562/` unless prefixed by
+`solvers/`, `data/`, `commands/` or `stages/`. Each row names the numerical or
+execution owner, including helpers reached through that owner.
+
+| # | Operation / rebuild owner | Original implementation or comparison boundary | Classification / action |
+|---|---|---|---|
+| 01 | `data/fast_h5ad.py:350–424` dense/CSR selection | H `step01_hopfield_base/response_programs/perturbation_mean_cell_svd.py:66–82` selects expression once using the sorted-row reader | Dense column-first access is retained. CSR splits selection into contiguous runs; scattered rows can still cause many small reads. New opportunity: coalesce nearby runs or load selected CSR storage once, restoring requested order. Measure physical reads, not just API calls. |
+| 02 | `atlas.py:136–196` QC | New canonical raw-atlas QC boundary | Streams 1,024-row dense blocks and performs vectorized reductions within each block. New opportunity: sparse-native totals, nonzero counts, mitochondrial sums and top-20 reductions. Full raw all-gene dense residency has not been shown to fit; the 5K selected response matrix memory calculation does not establish that. |
+| 03 | `atlas.py:198–265` normalization/slim write | Canonical log1p-CP10K preprocessing | Sparse normalization preserves sparsity and applies log1p to stored values. Preserve this; dense conversion is unnecessary. Compression/write throughput is separate from numerical GPU work. |
+| 04 | `gene_panels.py:441–525,593–665` | Control-only HVG fit; GEARS response gene-axis source | HVG fitting stays Scanpy/CPU. GEARS supplies the gene axis, not cell membership. No historical GPU HVG implementation established. Cache accepted panel outputs through stage reuse. |
+| 05 | `control_programs.py:403–544` residual construction | H control-program preprocessing | CPU covariate/residual linear algebra; G1 is a proposed GPU move, not established loss of historical acceleration. Preserve covariates, sign split and scaling. |
+| 06 | `control_programs.py:546–651` NMF updates | H `step01_hopfield_base/control_programs/nmf_torch_batched.py:88–275` | Preserved: one resident dense input, parallel restart tensors, compiled multiplicative updates when enabled, every-tenth-iteration error check. Restart parallelism is not cell minibatching. |
+| 07 | `control_programs.py:1028–1045` NMF RMSE | Same historical module: full-batch error branch uses `chunk = 10000` | **Inherited**, not introduced batching. G2 can remove reconstruction chunks through a validated norm identity; cancellation can affect stopping. |
+| 08 | `control_programs.py:654–696` consensus | H `control_programs/cnmf.py:79–97` and `kmeans_gpu.py:389–498` | Historical `KMeansTorch` defaults to `engine="sklearn"`. Its name and optional Triton branch do not prove GPU consensus was selected. Rebuild's sklearn path does not establish a lost Triton optimization. GPU consensus is a new candidate with cluster/seed parity risk. |
+| 09 | `control_programs.py:953–991` consensus reconstruction | Additional rebuild diagnostic fit | Recomputes `programs @ programs.T` and `values @ programs.T` on every usage-only iteration through `_update_usages`. New exact-algebra opportunity N1: prepare these fixed products once. |
+| 10 | `control_state.py:422–486` projection | H `inputs/builders/numbered/04_build_control_state_cache.py:204–243` | Historical path also reads/projects batches. G3 removes inherited batching under the new residency requirement; it is not evidence that historical projection was fully resident. |
+| 11 | `solvers/nnls.py:91–149` control PGD | Same H builder: fixed-iteration eager PGD; default 50 at line 300 | Introduced per-iteration scalar synchronization and changed stopping contract. A separate historical `batched_nnls` supports compilation, but this selected builder does not call it. G4 must distinguish fixed-iteration reproduction from optional compiled acceleration. |
+| 12 | `solvers/nnls.py:30–75` step preparation | Same H builder: CPU float32 Gram, float64 spectral norm, float32 learning rate | Rebuild computes Gram/norm on GPU float32. This is a numerical-path difference, not automatically an optimization regression. Compare coefficient outputs at the same iteration count before changing solver policy. |
+| 13 | `transport_residuals.py:416–466` membership | H `perturbation_mean_cell_svd.py:97–104` also groups labels | G6 removes repeated label scans. Preserve split order, row order and controls. One grouping map serves means and cellwise outputs. |
+| 14 | `transport_residuals.py:468–489` whitening | H `response_programs/shared_cost.py:150–167` | Control-derived whitening is a small-matrix preparation boundary. Keep its fitted population, dtype and eigenvalue floor; GPU move is a new opportunity. |
+| 15 | `transport_residuals.py:_run_transport` expression acquisition | H `perturbation_mean_cell_svd.py:66–82` one expression acquisition | Confirmed introduced repeated-read regression in committed rebuild; existing dirty edit changes acquisition to once. G5 remains open for residency and transfers. |
+| 16 | `transport_residuals.py:491–514,620–741` padded transport groups | H `perturbation_mean_cell_svd.py:85–146` also packs groups and downloads barycenters | Group packing/round trips are partly inherited. New requirement: all selected input tensors remain resident; only temporary plans are group-local. Do not materialize all plans simultaneously. |
+| 17 | `transport_residuals.py:516–531` distances | H `shared_cost.py:114–118` | Preserved norm-plus-matmul squared-distance formula. New opportunity: cache control squared norms once; avoid repeated norms for every group. |
+| 18 | `transport_residuals.py:534–577` Sinkhorn | H `shared_cost.py:121–147` | G7: two new scalar reads each fixed iteration. Keep final diagnostic on device until the loop ends. **New parity gap G20:** initial scaling changed from normalized ones to ones. |
+| 19 | `transport_residuals.py:711–727` matched means | Historical barycentric cell construction | G8: derive means from existing matched cells; eliminate the second control-expression multiply. Preserve row normalization and actual, unpadded counts. |
+| 20 | `transport_residuals.py:728–777` residuals/diagnostics | Historical path also downloads matched groups | New opportunity: subtract and scatter into resident output tensors; download final arrays once. Retain diagnostics without per-group host waits. |
+| 21 | `response_programs.py:289–342` dictionary | H `response_programs/sparse_dictionary.py:fit_torch_svd_sparse_dictionary` | G9 correctness regression: sparsifying/normalizing loadings replaces soft-thresholded projected codes and ridge-refit decoder. Restore the same mathematical object before optimizing. |
+| 22 | `response_programs.py:344–399` coefficient projection | Same historical signed-code dictionary | G9 correctness regression: NNLS forces nonnegative coefficients. Delete this response NNLS branch when restoring signed codes; retain control NNLS. |
+| 23 | `response_coordinates.py:134–211,312–338` decoder fit | H `perturbation_mean_cell_svd.py` consumes perturbation-mean decoder | G10: second cellwise randomized dictionary fit changes the model and adds large repeated work. Consume the response-bank decoder. |
+| 24 | `solvers/randomized_svd.py:74–218` | Historical selected mean dictionary uses full Torch SVD on small means | G11: repeated full input transfers through power iterations in an unnecessary cellwise fit. Remove from this path; do not optimize an algorithm the baseline does not require. |
+| 25 | `solvers/ridge.py:24–64` projection | H `perturbation_mean_cell_svd.py:166–172` | **New parity gap G21:** historical decoder columns are centered across genes before constructing the ridge projector; rebuild omits centering. Restore at the domain-owned call boundary. |
+| 26 | `response_coordinates.py:235–267` cell encoding | H `perturbation_mean_cell_svd.py:175–197` also chunks encoding | G12 removes inherited transfer batching through a tensor-returning resident solve. Centering and ridge value must match first. |
+| 27 | `response_coordinates.py:270–294` cell rotation | H `perturbation_mean_cell_svd.py:200–213` | Preserved second moment/eigendecomposition/descending ordering. CPU return then reupload is inherited opportunity; keep coefficients resident across encoding and rotation. |
+| 28 | `response_coordinates.py:347–374` RMSE | Rebuild diagnostic on cell outputs | G12: CPU reconstruction repeats cell-scale work. Resident per-cell reduction can reuse already resident coefficients and decoder. Include reconstruction workspace in peak memory. |
+| 29 | `response_blocks.py:285–329` varimax | Historical response-block rotation is a distinct producer from cell PCA | G14 removes redundant host scalar reads while retaining stopping checks. No claim of historical fixed iteration policy: that caller has not been established. |
+| 30 | `response_blocks.py:332–378` signed poles / graph / clustering | Historical response-block objects | Vectorized matrices followed by sklearn spectral clustering. GPU spectral clustering remains an unmeasured algorithm/backend change, not an established dropped optimization. |
+| 31 | `response_targets.py:589–601` coordinate means | H `perturbation_mean_cell_svd.py:148–163` one row pass | Rebuild scans the label vector once per perturbation. G6/G15 should also cover this caller, not only transport and ctrl-state means. Preserve accumulation precision and missing-label checks. |
+| 32 | `response_targets.py:568–586` matched-control projection | Historical centered decoder projection | This caller already centers the decoder; `solvers/ridge.py` does not. Unify through an explicit centered projection, without centering twice. |
+| 33 | `response_targets.py:687–739` global-control truth | Canonical scoring definition / `mantra.eval.eval` | G13: repeated H5AD chunks and CPU grouped sums; cache/read selected 5K surface once. Preserve float64 sums and global-control membership. Never replace scoring truth with matched-control residuals. |
+| 34 | `response_targets.py:839–903` hold gene-shift ridge | Perturbation-level ridge selection | New N2: reuse augmented design, Gram and cross-product across penalties; optionally prepare one decomposition. Preserve unpenalized intercept, tie rule and tune-only selection. |
+| 35 | `ctrl19_holdout.py:84–108` means | Perturbation-level grouping | G15 repeated label masks. Reuse a filtered label-index map; control labels must not be indexed into a treated-only output map. |
+| 36 | `ctrl19_holdout.py:140–255` clustering and distribution MLP | Historical selected holdout recipe not re-established by a name match | Resident full-batch training is present. New N3: keep best model tensors on device and copy once; per-epoch tune comparison remains required for exact checkpoint selection. No measured gain claimed. |
+| 37 | `core83.py:363–427` ridge candidates | Perturbation-level coefficient prediction | N2 also applies here: repeated design/Gram work per penalty. A shared prepared ridge implementation must preserve float64/intercept behavior; current GPU cell ridge has different semantics. |
+| 38 | `core83.py:430–521` SVD and feature transform | v1938 ctrl-state + coefficient-tail representation | CPU vectorized SVD/standardization; no established lost GPU path. Moving small SVD to GPU is optional and requires sign/subspace/feature parity. |
+| 39 | `response40.py:90–157` retrieval and feature scaling | Response occupancy feature construction | Vectorized CPU top-k retrieval. New N4: prepare standardized fit keys once for all requested splits; scatter weights and multiply if donor gather matters. Preserve fit-only statistics and top-k tie behavior. |
+| 40 | `hopfield.py:346–421` encoder, determinism, utility | T `hopfield/encoder.py`, `shared/determinism.py`, `hopfield/model.py:36–47` | Dense MLP, full matrix similarity, deterministic algorithms, disabled TF32 and top-k scatter target are retained. AMP/TF32 would be new numerical modes, not restorations. |
+| 41 | `hopfield.py:879–919` bank preparation | T `hopfield/model.py:50–94` | G16 inherited CPU PCA/smoothing. Preserve float64 PCA and signs. |
+| 42 | `hopfield.py:973–1060` training | T `hopfield/train.py:129–297` | Full-batch features/coefficients, dense attention, KL, bank loss, `zero_grad(set_to_none=True)` and clipping are retained. Rebuild skips branches constrained to zero weight; confirm selected historical configuration when claiming exact model parity. |
+| 43 | `hopfield.py:1013–1043` fixed targets/bank normalization | T `hopfield/train.py:225–230,275–276` | Targets are prepared once (preserved). Normalized fixed bank is recomputed each epoch (inherited G19 opportunity). |
+| 44 | `hopfield.py:1019` AdamW | T `hopfield/train.py:232–236` | G18 unfused optimizer is inherited. Fusion is an opt-in measured candidate, not a required baseline restoration. |
+| 45 | `hopfield.py:921–969,1065–1106` monitor/checkpoint | T `hopfield/model.py:134–182`, `hopfield/train.py:296–337` | G19 repeated uploads/queries are inherited. New N5: compute only the tune monitor split and reuse embeddings. Preserve first/10th/final cadence and score selection. Rebuild writes each scored checkpoint; retain required durable evidence. |
+| 46 | `hopfield.py:1111–1183` raw-gene inference | Pinned tuning script `predict_raw_gene_readout:172–221` | G17 16-query donor gather is inherited. Scatter-plus-matmul removes it; fit self-mask and one hold gene shift remain mandatory. |
+| 47 | `stages/k562/hopfield.py:244–284,398–466` output/scoring | `mantra/eval/eval.py:23–37` | Predictions persisted before scoring; evaluator calls canonical Pearson delta and checks both axes. Preserve this failure/reuse boundary. No reason to rerun model inference to repair reporting. |
+| 48 | `commands/replay.py:81–96` environment | V `reuse.py:358–382` | F1: Git-address changes alter environment hash even for same file bytes. False-miss mechanism confirmed; exact historical rejection cause needs that run's keys. |
+| 49 | V `authoring.py:1090–1128` / `reuse.py:246–261` | Whole wrapper/config files hashed into stage | F1b: unrelated edits cause misses; imported numerical dependency coverage must precede relaxed identities. |
+| 50 | V `reuse.py:_normalized_stage` / stage `inputs` | Input refs retained in serialized stage as well as content identities | New F1c: address-only input changes can change stage hash despite equal input bytes. Normalize logical input role/content separately from receipt location; preserve provenance pointers outside computation identity. |
+| 51 | V `execution/_promotion.py:306–376` | Snapshot fetch/rewrite/publish | F2: reads all snapshot payloads into a bytes dictionary, verifies revision, rewrites documents in multiple passes. Streaming payload copy and one typed bottom-up identity transform are proposed; keep immutable source receipts. |
+| 52 | `commands/replay.py:133–169` and gene-panel declaration | Immutable experiment definition | F3: caller-provided alternative experiment ID is observed. Version changed definitions explicitly; a rename is not proof that stale inputs are valid. |
+| 53 | `stages/k562/control_programs.py:34–41` / replay environment | CPU smoke versus final CUDA command | CUDA is hardcoded at this wrapper. CPU smoke cannot exercise the identical wrapper without explicit device configuration. Fix configuration propagation, not a parallel smoke-only implementation. |
+| 54 | Failed-run records listed in Part II | Full local receipts unavailable in searched `.viper` trees | Recorded error strings are retained; promotion/auth causal attribution remains unverified. A receipt-free confident root-cause table would be fabricated. |
+
+### Corrections to earlier regression labels
+
+G2, G3, G12's cell-encoding chunks, and parts of G5's group transfers are
+inherited costs. The confirmed lost behavior is the one-read expression path,
+the fixed-loop absence of Sinkhorn host synchronization, and the original
+response dictionary/coordinate mathematics. G4's compiled helper exists, but
+the inspected historical control-state builder uses eager fixed iterations.
+The new residency policy can justify improvements to inherited costs without
+mislabeling their origin.
+
+## G20 — Sinkhorn initialization changed
+
+Historical H `response_programs/shared_cost.py:139–140`:
+
+```python
+u = torch.ones((batch, n_rows), device=cost.device, dtype=cost.dtype) / float(n_rows)
+v = torch.ones((batch, n_controls), device=cost.device, dtype=cost.dtype) / float(n_controls)
+```
+
+Rebuild `transport_residuals.py:546–547`:
+
+```python
+treated_scaling = torch.ones_like(treated_mass)
+control_scaling = torch.ones_like(control_mass)
+```
+
+Unbalanced fixed-iteration Sinkhorn can retain dependence on initialization.
+GPU-PB-03 must restore the selected initialization and compare the plan,
+barycentric means and residuals after exactly the same iteration count.
+Removing scalar diagnostics does not by itself restore transport parity.
+
+## G21 — The cell ridge encoder dropped decoder centering
+
+Historical H `perturbation_mean_cell_svd.py:166–172`:
+
+```python
+w_raw = torch.as_tensor(decoder, dtype=torch.float32, device=device)
+w = w_raw - w_raw.mean(dim=0, keepdim=True)
+gram = w.T @ w
+projection = w @ torch.linalg.solve(gram + ridge * eye, eye)
+```
+
+Rebuild `solvers/ridge.py:44–60` uses `decoder_tensor` directly for both
+Gram and projection. A decoder with nonzero column means is a counterexample:
+the two projectors differ even with identical ridge values and input cells.
+GPU-PB-04 must apply centering explicitly once at the response-coordinate
+boundary. Keep the decoder used for reconstruction distinct from the centered
+encoding basis; do not silently redefine every generic ridge caller.
+
+## Additional speedups, separate from baseline regressions
+
+These are proposals, not measured speedups. Rank by work removed, then measure
+the full stage. Preserve the existing accepted output as the comparison.
+
+| Candidate | Exact owner | Work removed | Numerical/behavior constraint | PairBlock |
+|---|---|---|---|---|
+| N1 | `control_programs.py:953–982` | Repeated fixed-basis Gram/cross products in consensus reconstruction | Same multiplicative updates, clamps and iteration count | GPU-PB-01 |
+| N2 | `response_targets.py:839–903`; `core83.py:363–427` | Rebuilding ridge design, Gram and cross-product for each penalty | Float64, unpenalized intercept, same tune-score tie selection; reuse factorization only when mathematically valid | GPU-PB-06 |
+| N3 | `ctrl19_holdout.py:196–255` | CPU checkpoint copy on every improvement, plus final feature reuploads | Keep tune comparisons each epoch; clone best state on device, download once | GPU-PB-06 |
+| N4 | `response40.py:107–139` | Repeated fit-key normalization / donor gather | Fit-only statistics, identical top-k membership and scaling | GPU-PB-06 |
+| N5 | `hopfield.py:921–969` | Monitor inference on splits discarded by tune-only scoring | Model eval mode; full memory unchanged; retain externally consumed diagnostics if any | GPU-PB-06 |
+| N6 | `transport_residuals.py:516–531` | Recompute fixed control squared norms per group | Same cost division and clamps | GPU-PB-03 |
+| N7 | `data/fast_h5ad.py:394–424` | Tiny CSR reads for fragmented selected rows | Reconstruct duplicate/requested ordering; cap extra bytes read, benchmark full selection | GPU-PB-03 |
+| N8 | `atlas.py:136–181` | Densifying all genes for QC | Preserve exact top-20 and float64 sums; sparse zero semantics | GPU-PB-01 |
+
+N1's current usage update repeatedly forms two fixed products:
+
+```python
+numerator = values.unsqueeze(0) @ programs.transpose(1, 2)
+denominator = usages @ (programs @ programs.transpose(1, 2))
+```
+
+Proposed preparation for this fixed-program diagnostic only:
+
+```python
+cross = values @ program_tensor.T
+gram = program_tensor @ program_tensor.T
+for _ in range(max_iterations):
+    coefficients = coefficients * (cross / (coefficients @ gram + epsilon))
+    coefficients = torch.nan_to_num(coefficients, nan=0.0, posinf=0.0, neginf=0.0)
+    coefficients.clamp_(min=epsilon, max=1.0e4)
+```
+
+Preserve the existing initial coefficients. This preparation cannot be moved
+outside the main NMF loop because its program matrix changes each iteration.
+
+**Validation boundary.** This sweep changes the report only. No numerical
+tests, model run, source edits, or speedup measurements are performed here.
+The table exposes unresolved historical selection/receipt evidence explicitly;
+those unknowns are not claims that an optimization was preserved.
+
 # Part II — Why replay kept failing
 
 ## Observed failure sequence
@@ -756,7 +929,7 @@ The final column contains hypotheses requiring those receipts and the exact
 candidate definitions. An HTTP failure alone does not establish an auth cause,
 and missing credentials alone does not establish inconsistent retry state.
 
-| Run | Stage | Terminal evidence | First unsupported connector |
+| Run | Stage | Previously recorded terminal error | Causal hypothesis, pending full receipt |
 |---|---|---|---|
 | `01M2T90X…` | preflight | `preflight_failed: http.credentials` | GPU run began without proving every DownloadSpec credential |
 | `01M2T92P…` attempts 1–2 | GEARS download | HTTP retrieval failed | Source acquisition was retried inside replay instead of accepted once and reused |
@@ -847,6 +1020,16 @@ reuse; relevant schema or imported solver changes invalidate reuse; explicit
 and inherited environments apply the same normalization. Keep conservative
 invalidation until these requirements are supported.
 
+### F1c — Input locations also remain in the stage hash
+
+`reuse.py:_normalized_stage()` removes the reuse flag and normalizes output
+paths, while retaining `stage.inputs`. `BuildSpec` inputs contain typed input
+references. Therefore changing only an input's receipt/storage address can
+change `stage_sha256`, even when the separately supplied content identities
+match. Normalizing the environment alone does not resolve this source of
+false misses. VIPER-PB-01 must test address-only input changes as well as
+content changes, while retaining provenance addresses in persisted receipts.
+
 ## F2 — Cloud promotion uses duplicated walks and special-case identity repair
 
 **Observed.** `_RunGraphPromoter` has:
@@ -858,8 +1041,9 @@ invalidation until these requirements are supported.
 - full snapshot materialization into `dict[str, bytes]`;
 - full snapshot rereads to calculate a content revision.
 
-The recent fixes cover the known pointer and SHA failures, but ownership
-remains split across ad hoc passes.
+The implementation contains pointer rewriting and stage-SHA repair, but
+closure of the previously recorded failures requires their full receipts and
+a focused reproducer. Ownership remains split across separate passes.
 
 **Principled repair.** One typed graph transformer must visit every child once,
 rewrite leaves first, serialize changed children, propagate each new identity
@@ -991,8 +1175,10 @@ cost do not. Group-local temporary state preserves full input residency without
 an impossible global plan.
 
 **Focused test.** One response read; one state and expression upload;
-group-local output equals the current algorithm; matched mean equals the
-cellwise mean; no Sinkhorn scalar read; exact row order is preserved.
+group-local output matches the historical normalized initialization after the
+same fixed iteration count (G20); matched mean equals the cellwise mean;
+no Sinkhorn scalar read; exact row order is preserved. Compare padded and
+unpadded groups explicitly because initialization depends on row count.
 
 **Completion gate.** No `_pack_groups`, padding tensor, row-budget config, or
 per-group host transfer remains.
@@ -1018,7 +1204,8 @@ cell rows, repeatedly retransfers the surface, then reconstructs on CPU.
 
 **Focused test.** Signed SVD codes and ridge decoder refit match the historical
 function on the same perturbation means; coordinate decoder identity equals
-that fitted decoder; one upload produces coordinates,
+that fitted decoder; the encoding basis is centered across genes exactly once
+(G21), including a fixture with nonzero decoder column means; one upload produces coordinates,
 rotation, decoder, and RMSE; no randomized SVD or batch field remains.
 
 **Completion gate.** Decoder fit rows are perturbation means and coordinate
@@ -1060,6 +1247,9 @@ Inference has no query batches and no donor cube.
 **Depends on.** GPU-PB-04 and GPU-PB-05.
 
 **Targets.** `hopfield.py` and new `tests/test_hopfield_model.py`.
+Optional N2–N4 extend the focused targets to `core83.py`,
+`response_targets.py`, `ctrl19_holdout.py` and `response40.py` only when those
+speedups are selected. They do not block restoration of baseline mathematics.
 
 **Context.** Training is full-batch, but bank construction round-trips through
 NumPy. Inference chunks queries because its gather creates a 65.8 GB
