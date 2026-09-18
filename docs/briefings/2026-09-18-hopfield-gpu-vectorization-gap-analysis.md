@@ -25,10 +25,12 @@ The user will implement the source changes through pair coding. The PairBlocks
 below define implementation order and acceptance. No source file is changed by
 this analysis.
 
-**Review status.** The full replay sweep below records 54 numerical and
+**Review status.** The full replay sweep below records 58 numerical and
 execution boundaries, including preserved behavior and eight new speedup
 candidates. The sweep adds Sinkhorn-initialization and decoder-centering gaps
-and corrects inherited-cost classifications. Algorithm excerpts are proposals,
+and corrects inherited-cost classifications. The final correctness pass adds
+two response40 basis mismatches, a hold-axis/value alias inconsistency, and
+the exact control-consensus authority comparison (G22–G25). Algorithm excerpts are proposals,
 not validated replacement files; several use incomplete operations or proposed
 types. Historical run selection and full failure receipts remain evidence gaps
 where identified. Full working-set memory and numerical parity require observation.
@@ -780,14 +782,14 @@ execution owner, including helpers reached through that owner.
 | 05 | `control_programs.py:403–544` residual construction | H control-program preprocessing | CPU covariate/residual linear algebra; G1 is a proposed GPU move, not established loss of historical acceleration. Preserve covariates, sign split and scaling. |
 | 06 | `control_programs.py:546–651` NMF updates | H `step01_hopfield_base/control_programs/nmf_torch_batched.py:88–275` | Preserved: one resident dense input, parallel restart tensors, compiled multiplicative updates when enabled, every-tenth-iteration error check. Restart parallelism is not cell minibatching. |
 | 07 | `control_programs.py:1028–1045` NMF RMSE | Same historical module: full-batch error branch uses `chunk = 10000` | **Inherited**, not introduced batching. G2 can remove reconstruction chunks through a validated norm identity; cancellation can affect stopping. |
-| 08 | `control_programs.py:654–696` consensus | H `control_programs/cnmf.py:79–97` and `kmeans_gpu.py:389–498` | Historical `KMeansTorch` defaults to `engine="sklearn"`. Its name and optional Triton branch do not prove GPU consensus was selected. Rebuild's sklearn path does not establish a lost Triton optimization. GPU consensus is a new candidate with cluster/seed parity risk. |
+| 08 | `control_programs.py:654–696` consensus | Recipe pin `6bedf04247d76738ff57ff51153166bde9757c10`, `SOTA/sota7/src/mantra_sota7/program_discovery/kmeans_gpu.py:634–685` | G25 corrects the earlier v1691 comparison: the declared authority is `stability_kmeans_labels_centers`, with an environment-gated GPU Lloyd path and sklearn fallback. Current CPU fixture covers only the CPU branch. Historical runtime backend remains unverified. |
 | 09 | `control_programs.py:953–991` consensus reconstruction | Additional rebuild diagnostic fit | Recomputes `programs @ programs.T` and `values @ programs.T` on every usage-only iteration through `_update_usages`. New exact-algebra opportunity N1: prepare these fixed products once. |
 | 10 | `control_state.py:422–486` projection | H `inputs/builders/numbered/04_build_control_state_cache.py:204–243` | Historical path also reads/projects batches. G3 removes inherited batching under the new residency requirement; it is not evidence that historical projection was fully resident. |
 | 11 | `solvers/nnls.py:91–149` control PGD | Same H builder: fixed-iteration eager PGD; default 50 at line 300 | Introduced per-iteration scalar synchronization and changed stopping contract. A separate historical `batched_nnls` supports compilation, but this selected builder does not call it. G4 must distinguish fixed-iteration reproduction from optional compiled acceleration. |
 | 12 | `solvers/nnls.py:30–75` step preparation | Same H builder: CPU float32 Gram, float64 spectral norm, float32 learning rate | Rebuild computes Gram/norm on GPU float32. This is a numerical-path difference, not automatically an optimization regression. Compare coefficient outputs at the same iteration count before changing solver policy. |
 | 13 | `transport_residuals.py:416–466` membership | H `perturbation_mean_cell_svd.py:97–104` also groups labels | G6 removes repeated label scans. Preserve split order, row order and controls. One grouping map serves means and cellwise outputs. |
 | 14 | `transport_residuals.py:468–489` whitening | H `response_programs/shared_cost.py:150–167` | Control-derived whitening is a small-matrix preparation boundary. Keep its fitted population, dtype and eigenvalue floor; GPU move is a new opportunity. |
-| 15 | `transport_residuals.py:_run_transport` expression acquisition | H `perturbation_mean_cell_svd.py:66–82` one expression acquisition | Confirmed introduced repeated-read regression in committed rebuild; existing dirty edit changes acquisition to once. G5 remains open for residency and transfers. |
+| 15 | `transport_residuals.py:598–675` expression acquisition | H `perturbation_mean_cell_svd.py:66–82` one expression acquisition | Confirmed introduced repeated-read regression. Final recheck of the clean checkout still reads control expression once and treated expression inside the group loop. The previously observed dirty one-read edit is absent; it cannot count as a completed repair. |
 | 16 | `transport_residuals.py:491–514,620–741` padded transport groups | H `perturbation_mean_cell_svd.py:85–146` also packs groups and downloads barycenters | Group packing/round trips are partly inherited. New requirement: all selected input tensors remain resident; only temporary plans are group-local. Do not materialize all plans simultaneously. |
 | 17 | `transport_residuals.py:516–531` distances | H `shared_cost.py:114–118` | Preserved norm-plus-matmul squared-distance formula. New opportunity: cache control squared norms once; avoid repeated norms for every group. |
 | 18 | `transport_residuals.py:534–577` Sinkhorn | H `shared_cost.py:121–147` | G7: two new scalar reads each fixed iteration. Keep final diagnostic on device until the loop ends. **New parity gap G20:** initial scaling changed from normalized ones to ones. |
@@ -827,6 +829,122 @@ execution owner, including helpers reached through that owner.
 | 52 | `commands/replay.py:133–169` and gene-panel declaration | Immutable experiment definition | F3: caller-provided alternative experiment ID is observed. Version changed definitions explicitly; a rename is not proof that stale inputs are valid. |
 | 53 | `stages/k562/control_programs.py:34–41` / replay environment | CPU smoke versus final CUDA command | CUDA is hardcoded at this wrapper. CPU smoke cannot exercise the identical wrapper without explicit device configuration. Fix configuration propagation, not a parallel smoke-only implementation. |
 | 54 | Failed-run records listed in Part II | Full local receipts unavailable in searched `.viper` trees | Recorded error strings are retained; promotion/auth causal attribution remains unverified. A receipt-free confident root-cause table would be fabricated. |
+| 55 | `response_blocks.py:388–400` → `response_targets.py:568–586,664,1017–1024` → `response40.py:200–213` | Coordinate-basis consistency | **P1, G22:** block rotations belong to the mean-program bank; consumed coefficients belong to the separately fitted, PCA-rotated cell decoder. Equal component counts cannot establish a shared basis. |
+| 56 | `response_blocks.py:332–339,394–400` → `response40.py:90–104` | Signed-pole assignment consistency | **P1, G23:** hard labels are fitted on rotated signed poles but applied to unrotated signed coefficients. Separate from G22. |
+| 57 | `response40.py:183–186,217` | Hold labels and values must select the same representation | **P2, G24:** labels accept `perts_hold`, but values require `family64_hold_proxy`; the fallback does not support a non-proxy archive as a pair. |
+| 58 | `control_programs.py:359–382`; `tests/test_control_programs.py:357–474` | Exact producer authority and observed parity boundary | G25: inspected CPU fixture exists; no execution in this audit and no GPU-branch parity conclusion. CPU bank publication is rejected by the metadata validator's one-upload/GPU requirements, so the CPU solver fixture is not an end-to-end publication smoke. |
+
+## Final correctness recheck: G22–G25
+
+All locations below refer to `src/rico/domain/k562/` in the rebuilt checkout
+unless another root is stated. These are source findings, not newly measured
+Pearson-Delta effects. The local `tests/` tree contains control-program tests
+but no dedicated response40, response-coordinate, or response-target test module.
+
+### G22 — Response40 combines different coordinate bases (P1)
+
+The block producer derives its rotation from the response-program bank:
+
+```python
+# response_blocks.py:394–395
+rotation = _fit_varimax(archive.programs, config, device=device)
+signed_poles = _signed_poles(archive.coefficients, rotation)
+```
+
+The coordinate producer instead fits another decoder to cell residuals and
+rotates that decoder (`response_coordinates.py:326–344`). The target builder
+loads this `rotated_decoder` (`response_targets.py:664`) and projects matched
+controls into its basis (`:568–586,1020–1024`). Response40 then multiplies those
+control coefficients by the first bank's rotation (`response40.py:200–213`).
+The cross-source guard at `response_targets.py:1017` checks component counts;
+individual file hashes establish file identity, not basis equivalence.
+
+Counterexample: swap two decoder columns and their corresponding coordinate
+columns together. Reconstruction remains unchanged, dimensions remain equal,
+but applying the unchanged block map changes channel assignments.
+
+**Required repair / PairBlock extension:** bind block definitions to the exact
+decoder basis their consumer uses. Either construct blocks in that basis or
+carry an explicit, justified change-of-basis transform. Independently fitted
+subspaces need not admit an exact invertible transform. Restoring G9/G10 alone
+does not remove a later PCA rotation mismatch. A repair must reject mixed-basis
+inputs and preserve occupancies under a consistent basis permutation.
+
+### G23 — Hard16 applies rotated-pole labels to unrotated poles (P1)
+
+The producer fits `hard_block_labels` from `signed_poles`, which already uses
+`coefficients @ rotation` (`response_blocks.py:332–339,394–400`). The consumer:
+
+```python
+# response40.py:98–103
+rotated = values @ np.asarray(rotation, dtype=np.float32)
+return {
+    "hard16": _occupancy(_signed_channels(values), hard_mapper),
+    "semantic16": _occupancy(_signed_channels(rotated), semantic_mapper),
+    "spectral8": _occupancy(_signed_channels(rotated), spectral_mapper),
+}
+```
+
+Even after G22 is repaired, a nonidentity rotation leaves hard16 inconsistent
+with its own fitted labels. **Required repair:** recover the historical hard16
+definition before choosing between a separate unrotated-pole clustering and
+applying the rotated-pole map to rotated coefficients. Blindly changing the
+hard16 line could erase a historical distinction between hard and semantic
+channels. Add a nonidentity-rotation fixture; an identity fixture misses this.
+
+### G24 — Hold-label fallback does not select matching values (P2)
+
+```python
+# response40.py:183–186
+family_hold_key = (
+    "perts_hold_proxy" if "perts_hold_proxy" in family else "perts_hold"
+)
+_require_axis(targets["perts_hold"], family[family_hold_key], "hold")
+# response40.py:217
+hold_query = np.asarray(family["family64_hold_proxy"], dtype=np.float32)
+```
+
+A non-proxy archive containing `perts_hold` and `family64_hold` passes the axis
+branch and then raises `KeyError`. This does not establish that the current
+producer emits that archive. It establishes an incomplete fallback contract.
+**Required repair:** select the label/value keys together, or require only the
+proxy pair and remove the fallback. Test both the supported pair and a mixed pair.
+
+### G25 — Consensus authority and CPU-smoke boundary correction
+
+`reviewed_control_program_recipe()` pins consensus to
+`6bedf04247d76738ff57ff51153166bde9757c10`,
+`SOTA/sota7/src/mantra_sota7/program_discovery/kmeans_gpu.py`,
+`stability_kmeans_labels_centers`; the earlier table cited another wrapper.
+The pinned function uses GPU Lloyd iterations when `backend == "auto"`, CUDA
+is available, and `MANTRA_FORCE_TRITON_KMEANS` is enabled. Otherwise it uses
+sklearn KMeans. The environment variable's name does not make that selected
+Lloyd function a Triton kernel.
+
+The rebuild fixes consensus to CPU. Its inspected fixture at
+`tests/test_control_programs.py:357–474` compares CPU outputs with stored arrays
+and digests. That supports a named CPU comparison, not evidence that the
+historical production run selected CPU, nor a measured CPU/GPU parity result.
+Recover the historical configuration/environment receipt before classifying
+GPU consensus as either restored acceleration or a new numerical variant.
+
+`ControlProgramBankMetadata.validate_bank()` (`control_programs.py:261–276`)
+requires a GPU backend and one upload. CPU diagnostic fitting records zero
+uploads, so publishing a CPU-built bank is rejected rather than silently
+accepted as GPU evidence. The solver fixture and end-to-end CPU publication
+are therefore different checks; row 53's wrapper issue is not the only CPU
+smoke boundary.
+
+### Coverage and next implementation boundary
+
+The table covers the inspected replay operations, their cross-stage basis
+joins, and the listed failed-stage mechanisms. It is not proof that every
+runtime defect has been excluded. Remaining evidence needs are explicit:
+historical backend selection, full failed-stage receipts, numerical parity,
+peak live GPU allocations, and actual end-to-end timings. Repair G22/G23
+alongside the response dictionary/coordinate work before timing response40.
+Keep source receipt traversal metadata-only; none of these checks requires
+replaying downloads or rereading every unchanged payload.
 
 ### Corrections to earlier regression labels
 
