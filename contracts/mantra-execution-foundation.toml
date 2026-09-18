@@ -22,7 +22,7 @@ verifier_ids = ["E0-VR-03"]
 
 [[requirements]]
 id = "E0-REQ-04"
-claim = "The modular response pipeline must preserve batched GPU cNMF and NMF execution, including parallel restarts, mini-batching, sparse-input handling, lazy split-sign expansion, stable float32 factors, and preloaded dense device tensors."
+claim = "The K562 control-program pipeline must fit every declared NMF restart concurrently from one preloaded dense nonnegative float32 residual tensor, execute batched multiplicative updates on the GPU, and use seeded CPU Lloyd KMeans for deterministic consensus. It must retain the accepted rank, programs, coefficients, reconstruction diagnostics, backend, elapsed time, input-transfer count and bytes, and peak GPU memory."
 depends_on = ["E0-REQ-03"]
 verifier_ids = ["E0-VR-04"]
 
@@ -98,9 +98,9 @@ rejection_cases = [{ repository_id = "rico", path = "tests/roadmap/test_mantra_o
 [[verifiers]]
 id = "E0-VR-04"
 requirement_ids = ["E0-REQ-04"]
-acceptance_conditions = ["The modular GPU cNMF path matches the CPU reference within tolerance for fixed initialization, exercises every declared optimization, and exceeds the retained minimum throughput on an L4."]
-success_case = { repository_id = "rico-rebuild", path = "tests/test_gpu_response_kernels.py", symbol = "test_preserves_batched_gpu_cnmf" }
-rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_gpu_response_kernels.py", symbol = "test_rejects_unverified_or_deoptimized_cnmf" }]
+acceptance_conditions = ["The GPU update kernels match the CPU reference within the declared tolerance for identical initialization; the accepted control-program run loads the dense residual matrix onto the device exactly once, executes every restart concurrently with finite float32 factors, emits 19 non-collapsed programs through seeded CPU Lloyd KMeans consensus, and retains elapsed time, transfer bytes, and peak GPU memory. A changed transfer count, dtype, backend, consensus profile, numerical result, or missing execution diagnostic fails."]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_control_programs.py", symbol = "test_gpu_cnmf_matches_reference_and_records_execution" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_control_programs.py", symbol = "test_rejects_changed_gpu_cnmf_execution_record" }]
 
 [[verifiers]]
 id = "E0-VR-05"
@@ -187,7 +187,7 @@ id = "E0-PB-04"
 requirement_ids = ["E0-REQ-04"]
 depends_on = ["E0-PB-03"]
 repository_id = "rico-rebuild"
-requirement_contribution = "Port and benchmark batched GPU cNMF and NMF behind their modular owner."
+requirement_contribution = "Verify and record the single-upload batched GPU NMF execution used to build the K562 control-program bank."
 completion_evidence = ["implementation_review", "viper_registration"]
 
 [[pair_blocks]]

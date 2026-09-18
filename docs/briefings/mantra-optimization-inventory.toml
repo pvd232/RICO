@@ -7,14 +7,14 @@ schema_version = 1
 [[operations]]
 id = "cnmf_nmf"
 historical_owners = ["src/mantra/sota/programs/discovery/cnmf.py:run_cnmf", "src/mantra/sota/programs/discovery/nmf_torch_batched.py:nmf_torch_batched"]
-modular_owner = "src/mantra/rebuild/response/cnmf.py:run_cnmf"
-cpu_reference = "sklearn.decomposition.NMF"
+modular_owner = "src/rico/cell_types/k562/control_programs.py:fit_control_program_bank"
+cpu_reference = "src/rico/cell_types/k562/control_programs.py:_update_programs and _update_usages on CPU with identical tensors"
 requirement_id = "E0-REQ-04"
 pair_block_id = "E0-PB-04"
 verifier_id = "E0-VR-04"
-device_policy = "Preload dense float32 tensors on one CUDA device; sparse batches stay sparse until the declared kernel consumes them."
-determinism_policy = "Use fixed initialization and seeded CPU Lloyd KMeans for parity; GPU KMeans belongs only to a throughput run."
-consumers = ["R5-PB-03", "R5-PB-05"]
+device_policy = "Load the dense nonnegative float32 control-residual matrix onto one CUDA device exactly once and execute all declared restarts concurrently."
+determinism_policy = "Use fixed initialization and seeded CPU Lloyd KMeans consensus."
+consumers = ["R5-PB-01"]
 
 [[operations]]
 id = "response_nnls"

@@ -85,9 +85,9 @@ def validate_inventory(
                 raise ValueError(f"historical owner is missing: {owner}")
         modular_owner = operation["modular_owner"]
         if not isinstance(modular_owner, str) or not modular_owner.startswith(
-            "src/mantra/rebuild/"
+            ("src/rico/", "src/mantra/rebuild/")
         ):
-            raise ValueError("modular owner must be a MANTRA rebuild path")
+            raise ValueError("modular owner must be a declared rebuild path")
         if operation["requirement_id"] not in requirement_ids:
             raise ValueError("inventory requirement is not declared")
         if operation["pair_block_id"] not in pair_block_ids:

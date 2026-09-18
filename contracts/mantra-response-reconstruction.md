@@ -34,58 +34,13 @@ execution profile, and producer record.
 
 **Requirement contribution:** Rebuild control programs from IEG-excluded genes and covariate-residualized expression through verified GPU cNMF and the declared KMeans execution profile.
 
-**Review handoff**
+**Plan:** None
 
-**What changed**
-
-- Extend the accepted control-residual namespace with the reviewed GPU-resident multi-restart NMF fit and deterministic CPU KMeans consensus.
-- Require exactly 19 stable control programs and retain the program bank, restart candidates, assignments, coverage, ordered axes, source-authority recipe, and execution diagnostics.
-- Extend the download-rooted VIPER graph so the program-bank Build consumes only the accepted residual and panel artifacts, with focused parity, determinism, and worker-safety tests.
-- Provide a bank-only execution graph that consumes the accepted residual receipt without rerunning residualization.
-
-**Plan deviations:** No deviations from the declared requirement.
-
-**Start work:** [Open current plan](../plans/mantra-response-reconstruction/R5-PB-01/plan.toml)
-
-**Review these files**
-
-- [GPU cNMF domain implementation](../plans/mantra-response-reconstruction/R5-PB-01/replace/src/rico/cell_types/k562/control_programs.py#L1)
-- [Download-rooted residual and program-bank graph](../plans/mantra-response-reconstruction/R5-PB-01/replace/src/rico/plans/k562/control_programs.py#L1)
-- [Program-bank acceptance and rejection tests](../plans/mantra-response-reconstruction/R5-PB-01/replace/tests/test_control_programs.py#L175)
-
-**Evidence:** No passing gate receipt.
-
-**Decision:** Wait for the declared dependencies.
-
-<details>
-<summary>Implementation details</summary>
-
-**Plan:** [plan.toml](../plans/mantra-response-reconstruction/R5-PB-01/plan.toml)
-
-**Candidate files:** [patches/control-program-bank.patch](../plans/mantra-response-reconstruction/R5-PB-01/patches/control-program-bank.patch) · [src/rico/cell_types/k562/control_programs.py](../plans/mantra-response-reconstruction/R5-PB-01/replace/src/rico/cell_types/k562/control_programs.py) · [src/rico/stages/k562/control_programs.py](../plans/mantra-response-reconstruction/R5-PB-01/replace/src/rico/stages/k562/control_programs.py) · [src/rico/plans/k562/control_programs.py](../plans/mantra-response-reconstruction/R5-PB-01/replace/src/rico/plans/k562/control_programs.py) · [tests/test_control_programs.py](../plans/mantra-response-reconstruction/R5-PB-01/replace/tests/test_control_programs.py)
-
-**Implementation roots:** [src/rico](../../mantra-rebuild/src/rico) · [pyproject.toml](../../mantra-rebuild/pyproject.toml)
-
-**Test roots:** [tests/test_control_programs.py](../../mantra-rebuild/tests/test_control_programs.py)
+**Current receipt:** None
 
 **Dependencies:** <nobr><code>R5-PB-02</code></nobr>, <nobr><code>E0-PB-04</code></nobr>, <nobr><code>E0-PB-08</code></nobr>
 
-**Gate steps:**
-
-```bash
-# typecheck
-(cd . && pyright --pythonpath /Users/machina/Developer/ChatGPT/mantra-rebuild/.venv/bin/python src/rico/cell_types/k562/control_programs.py src/rico/stages/k562/control_programs.py src/rico/plans/k562/control_programs.py tests/test_control_programs.py)
-# test
-(cd . && python3 -m pytest -q tests/test_control_programs.py)
-# documentation
-(cd . && python3 /Users/machina/.agents/skills/code-documentation/scripts/check-schema-descriptions.py src/rico/cell_types/k562/control_programs.py src/rico/stages/k562/control_programs.py src/rico/plans/k562/control_programs.py tests/test_control_programs.py)
-# lint
-(cd . && ruff format --check src/rico/cell_types/k562/control_programs.py src/rico/stages/k562/control_programs.py src/rico/plans/k562/control_programs.py tests/test_control_programs.py)
-# lint
-(cd . && ruff check src/rico/cell_types/k562/control_programs.py src/rico/stages/k562/control_programs.py src/rico/plans/k562/control_programs.py tests/test_control_programs.py)
-```
-
-</details>
+**Next action:** Wait for the declared dependencies.
 
 <a id="r5-pb-02"></a>
 
