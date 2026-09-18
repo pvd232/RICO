@@ -16,14 +16,19 @@ its rows.
 
 This document has two parts:
 
-1. every confirmed GPU-residency, vectorization, synchronization, duplicated
+1. the inspected GPU-residency, vectorization, synchronization, duplicated
    computation, and parity defect in the rebuilt numerical path;
-2. every observed replay failure, the exact unsupported connector, and the
+2. recorded replay failures, supported causes, remaining evidence gaps, and the
    brittle workaround or principled repair that followed.
 
 The user will implement the source changes through pair coding. The PairBlocks
 below define implementation order and acceptance. No source file is changed by
 this analysis.
+
+**Review status.** The second source review corrected the decoder repair and
+added monitoring and reuse omissions. Algorithm excerpts are proposals, not
+validated replacement files; several use incomplete operations or proposed
+types. Full working-set memory and numerical parity still require observation.
 
 ## Evidence snapshot
 
@@ -81,7 +86,9 @@ and small regression metadata.
 expression = torch.as_tensor(source.expression, device=device)
 design = torch.as_tensor(design_numpy, device=device)
 coefficients = torch.linalg.pinv(design.T @ design) @ design.T @ expression
-residuals = expression - design @ coefficients
+residuals = torch.nan_to_num(
+    expression - design @ coefficients, nan=0.0, posinf=0.0, neginf=0.0
+)
 shifts = torch.clamp_min(-residuals.amin(dim=0), 0.0)
 shifted = residuals + shifts
 ```
@@ -331,29 +338,36 @@ perturbation-level matched-control mean.
 downloaded, then uploaded in 512-row NNLS batches. The entire surface is only
 about 35.7 MB.
 
-**Required.** One resident tensor feeds SVD, sparse program construction, and
-NNLS:
+**Additional parity defect.** The rebuild thresholds SVD loadings, normalizes
+them, and fits nonnegative coefficients. The historical
+[sparse_dictionary.py](../../../../mantra/experiments/v1691_full_scratch_family64_ag_film_rebuild/src/step01_hopfield_base/response_programs/sparse_dictionary.py),
+line 182, thresholds signed projected coefficients and ridge-refits a decoder.
+Optimizing response NNLS would retain a different model.
+
+**Required.** One resident perturbation-mean tensor feeds the historical SVD,
+coefficient threshold, and decoder refit:
 
 ```python
 values = torch.as_tensor(residuals, device=device)
 _, singular_values, right_vectors = torch.linalg.svd(
     values, full_matrices=False
 )
-programs = normalize_and_threshold(
-    right_vectors[: config.component_count].T,
-    config.sparsity_weight,
-)
-kernel = prepare_dense_nnls_tensor(programs)
-projection = solve_dense_nnls_tensor(
-    values,
-    kernel,
-    max_iterations=config.coefficient_max_iterations,
-    tolerance=config.coefficient_tolerance,
-)
+components = right_vectors[:component_count]
+projected = values @ components.T
+codes = projected.sign() * (projected.abs() - alpha).clamp_min(0.0)
+identity = torch.eye(component_count, device=values.device, dtype=values.dtype)
+decoder = torch.linalg.solve(
+    codes.T @ codes + dictionary_ridge * identity,
+    codes.T @ values,
+).T.contiguous()
 ```
 
 Remove `batch_rows` and `batch_count` from response-program config and metadata.
 Require one input transfer.
+
+Use historical alpha 0.15 and dictionary ridge 0.001 for the selected profile.
+Retire response-NNLS configuration and nonnegativity assertions for this
+signed-code path. Preserve control-state NNLS.
 
 **Disposition.** Confirmed full-residency violation.
 
@@ -364,14 +378,16 @@ runs randomized SVD on every cellwise residual and fits a second decoder.
 
 **Historical contract.** Fit the decoder on fit-and-tune perturbation means,
 then use that decoder to encode cellwise residuals. The preceding response
-program stage already owns that perturbation-level fit.
+program stage must own that perturbation-level fit after G9 is repaired. Its
+current normalized loading matrix is not the historical fitted decoder.
 
-**Required.** Consume the response-program decoder directly. Delete
+**Required.** First implement G9 and persist its fitted decoder explicitly.
+Then consume that decoder. Delete
 `_fit_decoder()` from the coordinate stage and remove randomized SVD from this
 hot path:
 
 ```python
-decoder = torch.as_tensor(inputs.response_programs, device=device)
+decoder = torch.as_tensor(inputs.response_decoder, device=device)
 residuals = torch.as_tensor(inputs.cellwise_residuals, device=device)
 encoder = prepare_ridge_encoder_tensor(decoder, ridge=config.encoding_ridge)
 coefficients = residuals @ encoder.projection
@@ -435,7 +451,7 @@ surface and 216 MB coefficient matrix resident:
 
 ```python
 residuals = torch.as_tensor(inputs.cellwise_residuals, device=device)
-decoder = torch.as_tensor(inputs.response_programs, device=device)
+decoder = torch.as_tensor(inputs.response_decoder, device=device)
 encoder = prepare_ridge_encoder_tensor(decoder, ridge=config.encoding_ridge)
 coefficients = residuals @ encoder.projection
 
@@ -547,9 +563,10 @@ neighbor smoothing, then uploads the bank.
 **Required.** Torch-native PCA sign normalization and smoothing:
 
 ```python
-mean = coefficients.mean(dim=0, keepdim=True)
-scale = coefficients.std(dim=0, keepdim=True).clamp_min(1.0e-6)
-whitened = (coefficients - mean) / scale
+value = coefficients.to(torch.float64)
+mean = value.mean(dim=0, keepdim=True)
+scale = value.std(dim=0, correction=0, keepdim=True).clamp_min(1.0e-6)
+whitened = (value - mean) / scale
 left, singular, right = torch.linalg.svd(whitened, full_matrices=False)
 pivots = right.abs().argmax(dim=1)
 rows = torch.arange(right.shape[0], device=device)
@@ -557,9 +574,11 @@ signs = torch.sign(right[rows, pivots])
 signs = torch.where(signs == 0.0, torch.ones_like(signs), signs)
 left = left * signs
 right = right * signs[:, None]
-bank = ((left[:, :rank] * singular[:rank]) @ right[:rank]) * scale + mean
+reconstructed = (left[:, :rank] * singular[:rank]) @ right[:rank]
+bank = ((reconstructed + whitened.mean(dim=0, keepdim=True)) * scale + mean)
+bank = bank.to(torch.float32)
 
-normalized = torch.nn.functional.normalize(coefficients, dim=1)
+normalized = coefficients / coefficients.norm(dim=1, keepdim=True).clamp_min(1.0e-8)
 similarity = normalized @ normalized.T
 similarity.fill_diagonal_(-torch.inf)
 neighbors = torch.topk(similarity, k=neighbor_count, dim=1)
@@ -569,6 +588,10 @@ bank = (1.0 - blend) * bank + blend * neighbor_mean
 ```
 
 **Disposition.** Confirmed avoidable CPU round trip.
+
+The historical PCA uses float64 and population standard deviation. Preserve
+both, plus its residual whitened mean. Test neighbor ordering, ties, and SVD
+differences explicitly before claiming parity with NumPy.
 
 ## G17 — Hopfield inference uses 16-query batches to hide a 65.8 GB gather
 
@@ -622,11 +645,49 @@ within the declared tolerance.
 
 **Disposition.** Confirmed kernel-fusion opportunity.
 
-## Audited work that should remain on CPU
+G1 and G18 are proposed acceleration opportunities, not measured historical
+regressions. Preserve their numerical settings until focused comparisons
+justify changes. G2's norm identity can suffer cancellation near convergence;
+compare it against direct residual error, including near-exact reconstruction.
+Use a higher-precision reduction or direct full-resident reconstruction if the
+identity changes convergence decisions.
 
-These operations are small, deterministic, and outside the cell-scale hot
-path. Moving them changes numerical libraries without a material transfer or
-runtime benefit:
+G4 and G14 must preserve the accepted stopping rule. Changing check cadence or
+forcing extra iterations can change outputs. In varimax, combine the existing
+condition into one device Boolean and one scalar read per required check
+before considering a different cadence. A profiler gain alone is not parity.
+
+G13 must preserve float64 accumulation and the configured determinism policy.
+A float32 atomic indexed reduction is not automatically equivalent to the
+current CPU sums. Validate an appropriate grouped reduction on the installed
+runtime; retain the global-control definition and exact membership.
+
+The memory ledger describes individual arrays, not measured peak allocation.
+Account for simultaneous residual, reconstruction, squared-error, solver
+workspace, and allocator storage before accepting each full-resident stage.
+The 65.8 GB Hopfield cube is an illustrative all-query upper-bound construction;
+actual split sizes and the fit-memory count determine the current peak.
+
+## G19 — Monitoring reuploads resident data and repeats forward passes
+
+[hopfield.py](../../../../mantra-rebuild/src/rico/domain/k562/hopfield.py),
+lines 921–969: every `_predict_coefficients()` call concatenates and uploads
+the same feature and coefficient memories. It computes memory embeddings, then
+computes the same rows again as split queries. Lines 1013 and 1042 also
+normalize the fixed bank repeatedly.
+
+Pass existing resident memories and split offsets into the monitor. Compute
+memory embeddings once per monitoring epoch, slice them for queries, use the
+scatter-and-multiply readout from G17, and cache the normalized bank before
+the training loop. Recompute embeddings when model weights change. Preserve
+evaluation mode, self-exclusion, checkpoint selection, and monitor cadence.
+GPU-PB-06 owns this repair; its observer must count uploads and forward calls.
+
+## Audited CPU boundaries and unmeasured opportunities
+
+The following boundaries were inspected. Their relative runtime benefit has
+not been measured; retaining them is a baseline-preservation recommendation,
+not proof that no optimization exists:
 
 - consensus KMeans over control-program vectors;
 - spectral clustering over the response-program graph;
@@ -641,6 +702,12 @@ residency failures.
 # Part II — Why replay kept failing
 
 ## Observed failure sequence
+
+The terminal errors below were recorded in the earlier audit. Their run IDs
+are abbreviated and this document does not link complete immutable receipts.
+The final column contains hypotheses requiring those receipts and the exact
+candidate definitions. An HTTP failure alone does not establish an auth cause,
+and missing credentials alone does not establish inconsistent retry state.
 
 | Run | Stage | Terminal evidence | First unsupported connector |
 |---|---|---|---|
@@ -678,8 +745,10 @@ lockfile=GitFileRef(
 
 Any commit therefore changes `env_sha256` even when `pyproject.toml` bytes,
 the observed Python environment, CUDA compute, stage implementation, inputs,
-seed, reproducibility settings, and metrics are identical. This is the direct
-cause of completed stages being rejected after unrelated commits.
+seed, reproducibility settings, and metrics are identical. This proves a
+cross-commit invalidation mechanism. Assigning it as the cause of any specific
+failed reuse requires that candidate's key comparison or rejection receipt;
+those comparisons are not retained here.
 
 **Brittle workaround.** `--gene-panel-run` and `--response-run` manually bypass
 normal stage discovery. They duplicate orchestration knowledge and require the
@@ -709,6 +778,27 @@ def reuse_environment_identity(env: ResolvedEnv) -> ReuseEnvironmentIdentity:
 The test holds lockfile bytes constant while changing the Git commit and proves
 the reuse key remains equal. It then changes one lockfile byte and proves the
 key changes.
+
+### F1b — Shared config identity and imported-code coverage
+
+[authoring.py](../../../../viper/src/viper/authoring.py), lines 1095–1120,
+hashes the entire configuration source file and the stage wrapper file.
+`_normalized_stage()` retains both references. Thus changing an unrelated
+class in shared `config.py` changes a stage key even when its own fields and
+values are unchanged. Normalizing only `env_sha256` is insufficient; an explicit
+stage environment also remains inside the hashed stage payload.
+
+Conversely, the control-state wrapper calls imported domain and solver code.
+Its own file digest does not identify those dependencies. Removing the Git
+commit discriminator without covering executed dependencies risks reusing
+outputs after numerical code changes.
+
+VIPER-PB-01 must first establish a content identity for the relevant executable
+dependency closure and selected config schema, using existing framework
+mechanisms where available. Tests must prove: unrelated config changes preserve
+reuse; relevant schema or imported solver changes invalidate reuse; explicit
+and inherited environments apply the same normalization. Keep conservative
+invalidation until these requirements are supported.
 
 ## F2 — Cloud promotion uses duplicated walks and special-case identity repair
 
@@ -879,8 +969,9 @@ tests.
 **Context.** The coordinate stage changes the fitted object by refitting on
 cell rows, repeatedly retransfers the surface, then reconstructs on CPU.
 
-**Focused test.** Program SVD and NNLS share one tensor; coordinate decoder
-identity equals the accepted program decoder; one upload produces coordinates,
+**Focused test.** Signed SVD codes and ridge decoder refit match the historical
+function on the same perturbation means; coordinate decoder identity equals
+that fitted decoder; one upload produces coordinates,
 rotation, decoder, and RMSE; no randomized SVD or batch field remains.
 
 **Completion gate.** Decoder fit rows are perturbation means and coordinate
@@ -927,7 +1018,9 @@ Inference has no query batches and no donor cube.
 NumPy. Inference chunks queries because its gather creates a 65.8 GB
 intermediate; a 13 MB weight matrix gives the same sum.
 
-**Focused test.** Torch PCA/smoothing equals NumPy within tolerance; scatter
+**Focused test.** Monitoring reuses resident tensors and computes each memory
+embedding once per monitoring epoch; bank normalization is cached. Torch
+PCA/smoothing preserves float64 population statistics and matches NumPy within tolerance; scatter
 plus matrix multiplication equals indexed gathering; fit self-exclusion and
 hold shift remain exact; fused and unfused AdamW agree for one update.
 
@@ -979,6 +1072,10 @@ bypasses.
 **Focused test.** Two commits with identical lockfile bytes produce the same
 key; one changed byte changes it; other semantic changes change it; provenance
 still retains the original commit.
+
+Additionally require imported-domain/solver changes to invalidate reuse, and
+unrelated shared-config edits to preserve it. Normalize explicit stage
+environments as well as inherited run environments.
 
 **Completion gate.** Cross-commit reuse selects the completed stage without an
 operator-provided run.
