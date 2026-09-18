@@ -25,12 +25,14 @@ The user will implement the source changes through pair coding. The PairBlocks
 below define implementation order and acceptance. No source file is changed by
 this analysis.
 
-**Review status.** The full replay sweep below records 58 numerical and
+**Review status.** The full replay sweep below records 60 numerical and
 execution boundaries, including preserved behavior and eight new speedup
 candidates. The sweep adds Sinkhorn-initialization and decoder-centering gaps
 and corrects inherited-cost classifications. The final correctness pass adds
 two response40 basis mismatches, a hold-axis/value alias inconsistency, and
-the exact control-consensus authority comparison (G22–G25). Algorithm excerpts are proposals,
+the exact control-consensus authority comparison (G22–G25). A subsequent
+cross-stage pass adds incomplete coordinate-axis binding and inconsistent
+transport transfer accounting (G26–G27). Algorithm excerpts are proposals,
 not validated replacement files; several use incomplete operations or proposed
 types. Historical run selection and full failure receipts remain evidence gaps
 where identified. Full working-set memory and numerical parity require observation.
@@ -833,6 +835,93 @@ execution owner, including helpers reached through that owner.
 | 56 | `response_blocks.py:332–339,394–400` → `response40.py:90–104` | Signed-pole assignment consistency | **P1, G23:** hard labels are fitted on rotated signed poles but applied to unrotated signed coefficients. Separate from G22. |
 | 57 | `response40.py:183–186,217` | Hold labels and values must select the same representation | **P2, G24:** labels accept `perts_hold`, but values require `family64_hold_proxy`; the fallback does not support a non-proxy archive as a pair. |
 | 58 | `control_programs.py:359–382`; `tests/test_control_programs.py:357–474` | Exact producer authority and observed parity boundary | G25: inspected CPU fixture exists; no execution in this audit and no GPU-branch parity conclusion. CPU bank publication is rejected by the metadata validator's one-upload/GPU requirements, so the CPU solver fixture is not an end-to-end publication smoke. |
+| 59 | `response_coordinates.py:417–488,585–600` | Input axes must match producer metadata before acquiring new output identities | **P1, G26:** residual matrix digest is checked; cell IDs, perturbation labels, split labels, actual gene-axis digests and actual program-matrix digest remain unbound to their supplied producer metadata. |
+| 60 | `transport_residuals.py:111–119,608–619,640–643,683–693,762–763` | Transfer counters must describe the same measured objects | **P2, G27:** fields describe expression uploads, but totals include treated state and omit control state and other host tensors. CPU execution also increments these counters. |
+
+## Subsequent cross-stage recheck: G26–G27
+
+This pass inspected the unchanged rebuild at
+`bf12bc03591e09f5ea7a5f9adea197f4aa680839`. It followed transport row order into
+coordinate axes and checked the counters used to support residency claims.
+Source edits and numerical execution remain the user's implementation step.
+
+### G26 — Coordinate loading accepts unbound axis identities (P1)
+
+In [response_coordinates.py](../../../mantra-rebuild/src/rico/domain/k562/response_coordinates.py),
+`_validate_coordinate_shapes` (`:440–463`) checks axis dimensions.
+`_validate_coordinate_identity` (`:466–488`) checks the split-name set,
+agreement between the two loaded gene axes, rank, agreement between two
+metadata gene digests, and this numerical digest:
+
+```python
+if typed_array_sha256(residuals) != residual_metadata.cellwise_residuals_sha256:
+    raise ValueError("cellwise residual bytes changed")
+```
+
+The function leaves the producer's `residual_cell_ids_sha256`,
+`residual_cell_perturbation_labels_sha256`, and
+`residual_cell_split_labels_sha256` unchecked. It also leaves the loaded gene
+axes and program matrix unchecked against their recorded digests.
+The output builder (`:585–600`) hashes the accepted labels anew and copies the
+claimed source-program digest into its metadata.
+
+**Counterexample:** swap two entries in `residual_cell_perturbation_labels`
+while retaining cell IDs, residual rows, shapes and metadata. The inspected
+domain loader accepts the arrays and assigns those numerical rows to different
+perturbations. A later output hash records the new assignment rather than
+detecting the broken input relationship. This is a loader counterexample;
+whether a particular VIPER invocation admits those files also depends on its
+outer artifact checks. Separate valid artifacts from incompatible producers
+still require semantic binding at this join.
+
+**Repair / PairBlock obligation:** compare each already-loaded ordered axis
+against its corresponding producer digest before fitting. Compare the loaded
+program matrix against `program_metadata.programs_sha256`; bind each actual
+gene axis to its metadata digest. Reuse the existing ordered-string and typed
+array hash helpers. This adds boundary validation for consumed arrays, not a
+whole-DAG payload reread. Preserve the distinction between an artifact's file
+digest and the cross-artifact relationships its metadata claims.
+
+**Focused observer:** independently permute cell IDs, perturbation labels,
+split labels, and both gene axes; alter one program value while holding
+metadata fixed. Each mismatch must fail before numerical fitting. Keep an
+unchanged-input case to establish that the validator accepts the original
+producer output. These observers are specified, not executed in this review.
+
+### G27 — Transfer metrics mix incompatible counting rules (P2)
+
+In [transport_residuals.py](../../../mantra-rebuild/src/rico/domain/k562/transport_residuals.py),
+the field descriptions (`:111–119`) call the totals expression transfers and
+expression bytes. The initial totals (`:640–643`) count only control expression.
+Each batch then does:
+
+```python
+# transport_residuals.py:762–763
+input_transfer_count += 2
+input_transfer_bytes += treated_state.nbytes + treated_expression.nbytes
+```
+
+Those increments include treated state. Control state (`:616–619`), treated
+mass (`:690–693`) and sizes (`:715–719`) also originate as host arrays, but
+receive no corresponding accounting. The same counters increment with
+`device="cpu"`, where their values cannot establish host-to-GPU traffic.
+
+**Counterexample:** one CUDA batch records three transfers: control expression,
+treated state and treated expression. That is neither expression-only traffic
+nor all host-input traffic. Adding state dimensions changes the recorded byte
+total despite the field's expression-only description.
+
+**Repair / PairBlock obligation:** define the metric before using it to certify
+single-upload execution. Expression-only accounting counts expression arrays
+only; total host-to-device accounting counts every transferred host tensor.
+Record CPU execution separately. Count device-created tensors such as
+`torch.full(..., device=...)` as allocations, not host uploads. Apply the same
+definition to the other residency diagnostics before comparing their totals.
+
+**Focused observer:** a small two-group fixture must predict counts and bytes
+from the declared rule, separately for CPU and CUDA. An execution trace is
+still required to establish actual copies; incrementing a counter alone cannot
+prove residency or physical transfer behavior.
 
 ## Final correctness recheck: G22–G25
 
