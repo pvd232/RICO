@@ -22,8 +22,18 @@ requirement_ids = ["VC-REQ-04"]
 
 [[phases]]
 number = 4
-title = "Fresh-workspace acceptance"
+title = "Provider refs and ViperCloud service"
 requirement_ids = ["VC-REQ-05"]
+
+[[phases]]
+number = 5
+title = "Stopgap retirement"
+requirement_ids = ["VC-REQ-06"]
+
+[[phases]]
+number = 6
+title = "Fresh-workspace acceptance"
+requirement_ids = ["VC-REQ-07"]
 
 [[repository_bindings]]
 repository_id = "rico"
@@ -32,6 +42,30 @@ checkout = "/Users/machina/Developer/ChatGPT/RICO"
 [[repository_bindings.executables]]
 command = "python3"
 path = "/Users/machina/Developer/ChatGPT/RICO/.venv/bin/python3"
+
+[[repository_bindings.executables]]
+command = "git"
+path = "/usr/bin/git"
+
+[[repository_bindings]]
+repository_id = "mantra"
+checkout = "/Users/machina/Developer/ChatGPT/MANTRA"
+
+[[repository_bindings.executables]]
+command = "python3"
+path = "/Users/machina/miniconda3/envs/mantra/bin/python3"
+
+[[repository_bindings.executables]]
+command = "pyright"
+path = "/Users/machina/miniconda3/envs/mantra/bin/pyright"
+
+[[repository_bindings.executables]]
+command = "node"
+path = "/usr/local/bin/node"
+
+[[repository_bindings.executables]]
+command = "ruff"
+path = "/Users/machina/miniconda3/envs/mantra/bin/ruff"
 
 [[repository_bindings.executables]]
 command = "git"

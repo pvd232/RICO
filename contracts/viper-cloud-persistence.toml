@@ -10,7 +10,7 @@ verifier_ids = ["VC-VR-01"]
 
 [[requirements]]
 id = "VC-REQ-02"
-claim = "resolve_run_reference must prefer an adjacent saved cloud reference, require ViperCloudFileRef storage, verify that its digest, byte count, and canonical path identify the terminal resolved.yaml, and reject any disagreement without rereading remote payload bytes."
+claim = "resolve_run_reference must prefer an adjacent saved cloud reference, require GcsFileRef or HuggingFaceFileRef storage, verify that its digest, byte count, and canonical path identify the terminal resolved.yaml, and reject any disagreement without rereading remote payload bytes."
 depends_on = ["VC-REQ-01"]
 verifier_ids = ["VC-VR-02"]
 
@@ -28,9 +28,21 @@ verifier_ids = ["VC-VR-04"]
 
 [[requirements]]
 id = "VC-REQ-05"
-claim = "A fresh workspace with no producer path and an empty verified-object cache must consume the cloud-rooted graph through existing VIPER authoring, verification, and materialization boundaries while stage and consumer code receive no provider client, bucket, URI, or cache selector."
-depends_on = ["VC-REQ-01", "VC-REQ-02", "VC-REQ-03", "VC-REQ-04"]
+claim = "Workspace configuration must let a user select one GCS or Hugging Face repository; the public ViperCloud facade must own publication, sealing, copying, fetching, verification, and materialization and return that repository's provider-specific immutable file and snapshot refs; an internal ViperCloudProvider base class must implement shared manifest, identity, retry, and atomic-materialization behavior while provider subclasses implement only repository-specific I/O."
+depends_on = []
 verifier_ids = ["VC-VR-05"]
+
+[[requirements]]
+id = "VC-REQ-06"
+claim = "Public run, retry, restore, benchmark, and export operations must resolve ViperCloud internally, and the migration must remove MANTRA's provider loader, every application-level cloud_client injection, GCS-owned shared manifest logic, direct Hugging Face fetch dispatch outside ViperCloud, and blanket execution trust switches that are not derived from an immutable reference or verification receipt."
+depends_on = ["VC-REQ-05"]
+verifier_ids = ["VC-VR-06"]
+
+[[requirements]]
+id = "VC-REQ-07"
+claim = "For both GCS and Hugging Face repositories, a fresh workspace with no producer path and an empty verified-object cache must consume the cloud-rooted graph through existing VIPER authoring, verification, and materialization boundaries while stage and consumer code receive only resolved references and verified local paths."
+depends_on = ["VC-REQ-01", "VC-REQ-02", "VC-REQ-03", "VC-REQ-04", "VC-REQ-05", "VC-REQ-06"]
+verifier_ids = ["VC-VR-07"]
 
 [[verifiers]]
 id = "VC-VR-01"
@@ -63,8 +75,22 @@ rejection_cases = [{ repository_id = "viper", path = "tests/test_cloud_execution
 [[verifiers]]
 id = "VC-VR-05"
 requirement_ids = ["VC-REQ-05"]
-acceptance_conditions = ["A consumer in a fresh workspace freezes and executes against the promoted cloud root, receives verified local paths, exposes no provider configuration to stage code, and creates no duplicate immutable payload beneath .viper/store."]
-success_case = { repository_id = "viper", path = "tests/test_cloud_execution.py", symbol = "test_fresh_workspace_consumes_promoted_run_through_viper_cloud" }
+acceptance_conditions = ["The same ViperCloud operations publish and restore through a configured GCS repository and a configured Hugging Face repository, returning that repository's file and snapshot refs; both providers inherit shared invariants from ViperCloudProvider; an unsupported provider or invalid repository fails before publication."]
+success_case = { repository_id = "viper", path = "tests/test_cloud_service.py", symbol = "test_viper_cloud_dispatches_by_configured_repository_ref" }
+rejection_cases = [{ repository_id = "viper", path = "tests/test_cloud_service.py", symbol = "test_viper_cloud_rejects_unknown_or_invalid_repository" }]
+
+[[verifiers]]
+id = "VC-VR-06"
+requirement_ids = ["VC-REQ-06"]
+acceptance_conditions = ["VIPER's public operations expose no cloud_client parameter; all provider dispatch and shared manifest behavior live behind ViperCloud; MANTRA rebuild modules contain no provider construction or injection; execution trust follows an immutable reference or receipt rather than a caller-selected Boolean."]
+success_case = { repository_id = "viper", path = "tests/test_public_api.py", symbol = "test_public_cloud_operations_use_viper_cloud_service" }
+rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_cloud_boundary.py", symbol = "test_rebuild_rejects_provider_coupling" }]
+
+[[verifiers]]
+id = "VC-VR-07"
+requirement_ids = ["VC-REQ-07"]
+acceptance_conditions = ["For each configured provider, a consumer in a fresh workspace freezes and executes against the promoted cloud root, receives verified local paths, and creates no duplicate immutable payload beneath .viper/store."]
+success_case = { repository_id = "viper", path = "tests/test_cloud_execution.py", symbol = "test_fresh_workspace_consumes_each_provider_ref" }
 rejection_cases = [{ repository_id = "viper", path = "tests/test_prior_run_inputs.py", symbol = "test_cloud_pointer_rejects_a_local_producer" }]
 
 [[pair_blocks]]
@@ -96,5 +122,21 @@ id = "VC-PB-04"
 requirement_ids = ["VC-REQ-05"]
 depends_on = ["VC-PB-03"]
 repository_id = "viper"
-requirement_contribution = "Prove provider-opaque fresh-workspace consumption through the existing ViperCloud boundary and publish the final documentation."
+requirement_contribution = "Make ViperCloud own both provider services, centralize shared behavior in ViperCloudProvider, and return one immutable reference type per provider."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "VC-PB-05"
+requirement_ids = ["VC-REQ-06"]
+depends_on = ["VC-PB-04"]
+repository_id = "mantra"
+requirement_contribution = "Remove MANTRA provider plumbing and every superseded cloud-persistence stopgap named by the contract's immediate retirement map."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "VC-PB-06"
+requirement_ids = ["VC-REQ-07"]
+depends_on = ["VC-PB-05"]
+repository_id = "viper"
+requirement_contribution = "Prove provider-opaque fresh-workspace consumption through both provider refs and publish the final documentation."
 completion_evidence = ["implementation_review", "viper_registration"]
