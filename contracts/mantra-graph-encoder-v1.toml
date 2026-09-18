@@ -48,56 +48,56 @@ verifier_ids = ["GE-VR-07"]
 id = "GE-VR-01"
 requirement_ids = ["GE-REQ-01"]
 acceptance_conditions = ["Every required perturbation and response column has one ordered identity, an approved split membership, and a retained source release; held-out responses are excluded from training inputs."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_graph_identities.py", symbol = "test_freezes_graph_encoder_identities" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_graph_identities.py", symbol = "test_rejects_changed_identity_or_hold_leakage" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_graph_identities.py", symbol = "test_freezes_graph_encoder_identities" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_graph_identities.py", symbol = "test_rejects_changed_identity_or_hold_leakage" }]
 
 [[verifiers]]
 id = "GE-VR-02"
 requirement_ids = ["GE-REQ-02"]
 acceptance_conditions = ["The corrected ridge and fusion-only predictions and metrics reproduce from the frozen identity surface."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_graph_baselines.py", symbol = "test_reproduces_corrected_graph_baselines" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_graph_baselines.py", symbol = "test_rejects_baseline_on_another_evaluation_surface" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_graph_baselines.py", symbol = "test_reproduces_corrected_graph_baselines" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_graph_baselines.py", symbol = "test_rejects_baseline_on_another_evaluation_surface" }]
 
 [[verifiers]]
 id = "GE-VR-03"
 requirement_ids = ["GE-REQ-03"]
 acceptance_conditions = ["The topology report retains every candidate edge source and reports the declared reachability, response-mass, recall, density, and failure measurements."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_graph_topology.py", symbol = "test_reports_candidate_graph_topology" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_graph_topology.py", symbol = "test_rejects_unattributed_or_incomplete_topology" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_graph_topology.py", symbol = "test_reports_candidate_graph_topology" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_graph_topology.py", symbol = "test_rejects_unattributed_or_incomplete_topology" }]
 
 [[verifiers]]
 id = "GE-VR-04"
 requirement_ids = ["GE-REQ-04"]
 acceptance_conditions = ["Every graph node has one valid fused feature row, each modality follows the approved normalization, and the fusion-only baseline reproduces."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_graph_features.py", symbol = "test_builds_complete_v1_feature_matrix" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_graph_features.py", symbol = "test_rejects_missing_invalid_or_collapsed_features" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_graph_features.py", symbol = "test_builds_complete_v1_feature_matrix" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_graph_features.py", symbol = "test_rejects_missing_invalid_or_collapsed_features" }]
 
 [[verifiers]]
 id = "GE-VR-05"
 requirement_ids = ["GE-REQ-05"]
 acceptance_conditions = ["The V1 encoder produces one finite non-collapsed embedding for every perturbation and no graph or feature input contains hold response data."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_graph_encoder.py", symbol = "test_trains_v1_graph_encoder" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_graph_encoder.py", symbol = "test_rejects_missing_embeddings_or_hold_leakage" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_graph_encoder.py", symbol = "test_trains_v1_graph_encoder" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_graph_encoder.py", symbol = "test_rejects_missing_embeddings_or_hold_leakage" }]
 
 [[verifiers]]
 id = "GE-VR-06"
 requirement_ids = ["GE-REQ-06"]
 acceptance_conditions = ["Every candidate edge retains its source, the top-K sweep uses fixed gates, and graph and depth selection consume tune results without reading hold results."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_graph_construction.py", symbol = "test_selects_graph_and_depth_on_tune_data" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_graph_construction.py", symbol = "test_rejects_unattributed_edges_or_hold_selection" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_graph_construction.py", symbol = "test_selects_graph_and_depth_on_tune_data" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_graph_construction.py", symbol = "test_rejects_unattributed_edges_or_hold_selection" }]
 
 [[verifiers]]
 id = "GE-VR-07"
 requirement_ids = ["GE-REQ-07"]
 acceptance_conditions = ["The selected encoder beats fusion-only on a primary unseen-perturbation metric, satisfies the corrected-ridge comparison, and reproduces from resolved VIPER records."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_graph_acceptance.py", symbol = "test_accepts_reproducible_v1_graph_encoder" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_graph_acceptance.py", symbol = "test_rejects_uncompetitive_or_unresolved_v1_result" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_graph_acceptance.py", symbol = "test_accepts_reproducible_v1_graph_encoder" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_graph_acceptance.py", symbol = "test_rejects_uncompetitive_or_unresolved_v1_result" }]
 
 [[pair_blocks]]
 id = "GE-PB-01"
 requirement_ids = ["GE-REQ-01", "GE-REQ-02"]
 depends_on = ["B9-PB-02"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Freeze graph-encoder row, column, split, and source identities and reproduce the corrected ridge and fusion-only baselines on that surface."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -105,7 +105,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "GE-PB-02"
 requirement_ids = ["GE-REQ-03"]
 depends_on = ["GE-PB-01"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Build the candidate biological graphs and retain the topology measurements and edge provenance used to choose message depth."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -113,7 +113,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "GE-PB-03"
 requirement_ids = ["GE-REQ-04"]
 depends_on = ["GE-PB-02"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Build and validate the AlphaGenome feature pipeline and reproduce the frozen fusion-only baseline."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -121,7 +121,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "GE-PB-04"
 requirement_ids = ["GE-REQ-05"]
 depends_on = ["GE-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Train the first graph encoder and replace the legacy student representation at every inference-time consumer."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -129,7 +129,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "GE-PB-05"
 requirement_ids = ["GE-REQ-06"]
 depends_on = ["GE-PB-04"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Run the provenance-preserving graph and message-depth study and freeze the selection using tune data only."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -137,6 +137,6 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "GE-PB-06"
 requirement_ids = ["GE-REQ-07"]
 depends_on = ["GE-PB-05"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Apply the V1 comparison gates and reproduce the selected graph-encoder result from retained VIPER records."
 completion_evidence = ["implementation_review", "viper_registration"]

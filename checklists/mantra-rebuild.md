@@ -12,7 +12,7 @@ conditions, and result required from each PairBlock through Phase 9. Phase 0
 remains an immutable comparison source and never runs again.
 
 <!-- contract-protocol:generated:start -->
-**Resume here:** [Resume at R5-PB-02](../contracts/mantra-response-reconstruction.md#r5-pb-02)
+**Resume here:** [Resume at E0-PB-04](../contracts/mantra-execution-foundation.md#e0-pb-04)
 
 
 ### Phase 1: GPU foundation and Hopfield reconstruction
@@ -118,7 +118,7 @@ remains an immutable comparison source and never runs again.
 | <nobr><code>E0-REQ-06</code></nobr> | in_progress | [mantra-execution-foundation](../contracts/mantra-execution-foundation.md#e0-req-06) | <nobr><code>E0-PB-06</code></nobr> | <nobr><code>E0-REQ-03</code></nobr> |
 | <nobr><code>E0-REQ-08</code></nobr> | planned | [mantra-execution-foundation](../contracts/mantra-execution-foundation.md#e0-req-08) | <nobr><code>E0-PB-08</code></nobr> | <nobr><code>E0-REQ-04</code></nobr> |
 | <nobr><code>R5-REQ-01</code></nobr> | planned | [mantra-response-reconstruction](../contracts/mantra-response-reconstruction.md#r5-req-01) | <nobr><code>R5-PB-01</code></nobr> | <nobr><code>R5-REQ-02</code></nobr>, <nobr><code>E0-REQ-04</code></nobr>, <nobr><code>E0-REQ-08</code></nobr> |
-| <nobr><code>R5-REQ-02</code></nobr> | in_progress | [mantra-response-reconstruction](../contracts/mantra-response-reconstruction.md#r5-req-02) | <nobr><code>R5-PB-02</code></nobr> | None |
+| <nobr><code>R5-REQ-02</code></nobr> | complete | [mantra-response-reconstruction](../contracts/mantra-response-reconstruction.md#r5-req-02) | <nobr><code>R5-PB-02</code></nobr> | None |
 | <nobr><code>R5-REQ-03</code></nobr> | planned | [mantra-response-reconstruction](../contracts/mantra-response-reconstruction.md#r5-req-03) | <nobr><code>R5-PB-03</code></nobr> | <nobr><code>R5-REQ-01</code></nobr>, <nobr><code>E0-REQ-06</code></nobr> |
 | <nobr><code>R5-REQ-04</code></nobr> | planned | [mantra-response-reconstruction](../contracts/mantra-response-reconstruction.md#r5-req-04) | <nobr><code>R5-PB-04</code></nobr> | <nobr><code>R5-REQ-03</code></nobr>, <nobr><code>E0-REQ-05</code></nobr> |
 | <nobr><code>R5-REQ-05</code></nobr> | planned | [mantra-response-reconstruction](../contracts/mantra-response-reconstruction.md#r5-req-05) | <nobr><code>R5-PB-05</code></nobr> | <nobr><code>R5-REQ-04</code></nobr>, <nobr><code>E0-REQ-11</code></nobr> |

@@ -99,64 +99,64 @@ rejection_cases = [{ repository_id = "rico", path = "tests/roadmap/test_mantra_o
 id = "E0-VR-04"
 requirement_ids = ["E0-REQ-04"]
 acceptance_conditions = ["The modular GPU cNMF path matches the CPU reference within tolerance for fixed initialization, exercises every declared optimization, and exceeds the retained minimum throughput on an L4."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_gpu_response_kernels.py", symbol = "test_preserves_batched_gpu_cnmf" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_gpu_response_kernels.py", symbol = "test_rejects_unverified_or_deoptimized_cnmf" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_gpu_response_kernels.py", symbol = "test_preserves_batched_gpu_cnmf" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_gpu_response_kernels.py", symbol = "test_rejects_unverified_or_deoptimized_cnmf" }]
 
 [[verifiers]]
 id = "E0-VR-05"
 requirement_ids = ["E0-REQ-05"]
 acceptance_conditions = ["Dense and sparse GPU NNLS paths satisfy coefficient and reconstruction tolerances against their CPU references and the selected path and iteration count are retained."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_gpu_response_kernels.py", symbol = "test_preserves_gpu_nnls_paths" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_gpu_response_kernels.py", symbol = "test_rejects_nnls_drift_or_unrecorded_backend" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_gpu_response_kernels.py", symbol = "test_preserves_gpu_nnls_paths" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_gpu_response_kernels.py", symbol = "test_rejects_nnls_drift_or_unrecorded_backend" }]
 
 [[verifiers]]
 id = "E0-VR-06"
 requirement_ids = ["E0-REQ-06"]
 acceptance_conditions = ["The GPU Sinkhorn result matches the CPU reference within declared transport and residual tolerances and fails on non-finite output, bad marginals, or missing execution diagnostics."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_gpu_response_kernels.py", symbol = "test_preserves_vectorized_gpu_sinkhorn" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_gpu_response_kernels.py", symbol = "test_rejects_sinkhorn_drift_or_missing_diagnostics" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_gpu_response_kernels.py", symbol = "test_preserves_vectorized_gpu_sinkhorn" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_gpu_response_kernels.py", symbol = "test_rejects_sinkhorn_drift_or_missing_diagnostics" }]
 
 [[verifiers]]
 id = "E0-VR-07"
 requirement_ids = ["E0-REQ-07"]
 acceptance_conditions = ["Every declared GPU ridge use matches the CPU reference within tolerance and records the form, penalty, device, dtype, and prediction error."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_gpu_ridge_contract.py", symbol = "test_preserves_all_gpu_ridge_consumers" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_gpu_ridge_contract.py", symbol = "test_rejects_unmapped_or_drifting_ridge_use" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_gpu_ridge_contract.py", symbol = "test_preserves_all_gpu_ridge_consumers" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_gpu_ridge_contract.py", symbol = "test_rejects_unmapped_or_drifting_ridge_use" }]
 
 [[verifiers]]
 id = "E0-VR-08"
 requirement_ids = ["E0-REQ-08"]
 acceptance_conditions = ["Replay, bridge, and substitution plans select seeded CPU scikit-learn Lloyd KMeans wherever clustering occurs; throughput plans record GPU Triton KMeans, and the verifier rejects a frozen-result parity claim from that path."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_execution_profiles.py", symbol = "test_selects_kmeans_backend_by_execution_profile" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_execution_profiles.py", symbol = "test_rejects_gpu_kmeans_byte_parity_claim" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_execution_profiles.py", symbol = "test_selects_kmeans_backend_by_execution_profile" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_execution_profiles.py", symbol = "test_rejects_gpu_kmeans_byte_parity_claim" }]
 
 [[verifiers]]
 id = "E0-VR-09"
 requirement_ids = ["E0-REQ-09"]
 acceptance_conditions = ["The modular Hopfield benchmark records one initialization transfer for each numeric training tensor, full-dataset device-resident optimization, only declared persistence transfers afterward, transfer counts and bytes, runtime, and peak GPU memory; it also matches the historical numerical result under the parity profile and meets the retained L4 thresholds."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_gpu_model_kernels.py", symbol = "test_preserves_hopfield_gpu_execution" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_gpu_model_kernels.py", symbol = "test_rejects_hopfield_drift_or_deoptimization" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_gpu_model_kernels.py", symbol = "test_preserves_hopfield_gpu_execution" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_gpu_model_kernels.py", symbol = "test_rejects_hopfield_drift_or_deoptimization" }]
 
 [[verifiers]]
 id = "E0-VR-10"
 requirement_ids = ["E0-REQ-10"]
 acceptance_conditions = ["The modular MIL benchmark records one initialization transfer for each numeric training tensor, 128-row batches selected only through GPU indices, only declared persistence transfers afterward, transfer counts and bytes, runtime, and peak GPU memory; it also matches the historical numerical result under the parity profile and meets the retained L4 thresholds."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_gpu_model_kernels.py", symbol = "test_preserves_mil_gpu_execution" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_gpu_model_kernels.py", symbol = "test_rejects_mil_drift_or_deoptimization" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_gpu_model_kernels.py", symbol = "test_preserves_mil_gpu_execution" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_gpu_model_kernels.py", symbol = "test_rejects_mil_drift_or_deoptimization" }]
 
 [[verifiers]]
 id = "E0-VR-11"
 requirement_ids = ["E0-REQ-11"]
 acceptance_conditions = ["Each ported GPU PCA or SVD reproduces its declared components and projections within tolerance, applies the retained sign convention, records its execution policy, and meets the L4 benchmark threshold."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_gpu_reduction_kernels.py", symbol = "test_preserves_deterministic_gpu_pca_and_svd" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_gpu_reduction_kernels.py", symbol = "test_rejects_changed_fit_rows_signs_or_deoptimized_reduction" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_gpu_reduction_kernels.py", symbol = "test_preserves_deterministic_gpu_pca_and_svd" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_gpu_reduction_kernels.py", symbol = "test_rejects_changed_fit_rows_signs_or_deoptimized_reduction" }]
 
 [[verifiers]]
 id = "E0-VR-12"
 requirement_ids = ["E0-REQ-12"]
 acceptance_conditions = ["The live worker probe records every declared execution-identity field through VIPER before training, confirms the canonical workspace and durable destination are writable, and rejects a resume after any unreviewed source, plan, configuration, command, input, seed, RNG state, environment, runtime, accelerator, device, dtype, workspace, or destination change."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_gpu_launch_probe.py", symbol = "test_records_complete_live_worker_identity" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_gpu_launch_probe.py", symbol = "test_rejects_changed_or_incomplete_worker_identity" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_gpu_launch_probe.py", symbol = "test_records_complete_live_worker_identity" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_gpu_launch_probe.py", symbol = "test_rejects_changed_or_incomplete_worker_identity" }]
 
 [[pair_blocks]]
 id = "E0-PB-01"
@@ -186,7 +186,7 @@ completion_evidence = ["implementation_review"]
 id = "E0-PB-04"
 requirement_ids = ["E0-REQ-04"]
 depends_on = ["E0-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Port and benchmark batched GPU cNMF and NMF behind their modular owner."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -194,7 +194,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "E0-PB-05"
 requirement_ids = ["E0-REQ-05"]
 depends_on = ["E0-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Port and benchmark the dense and sparse GPU NNLS paths behind their modular owners."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -202,7 +202,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "E0-PB-06"
 requirement_ids = ["E0-REQ-06"]
 depends_on = ["E0-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Port and benchmark vectorized GPU Sinkhorn transport and barycentric residuals."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -210,7 +210,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "E0-PB-07"
 requirement_ids = ["E0-REQ-07"]
 depends_on = ["E0-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Port and verify the shared GPU ridge solver across every declared consumer."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -218,7 +218,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "E0-PB-08"
 requirement_ids = ["E0-REQ-08"]
 depends_on = ["E0-PB-04"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Enforce separate parity and throughput profiles, including the deterministic CPU KMeans parity path."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -226,7 +226,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "E0-PB-09"
 requirement_ids = ["E0-REQ-09"]
 depends_on = ["E0-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Inventory, port, and benchmark every selected Hopfield GPU and vectorized operation."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -234,7 +234,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "E0-PB-10"
 requirement_ids = ["E0-REQ-10"]
 depends_on = ["E0-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Inventory, port, and benchmark every selected MIL GPU and vectorized operation."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -242,7 +242,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "E0-PB-11"
 requirement_ids = ["E0-REQ-11"]
 depends_on = ["E0-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Port and benchmark deterministic GPU low-rank PCA and SVD behind their modular owners."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -250,6 +250,6 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "E0-PB-12"
 requirement_ids = ["E0-REQ-12"]
 depends_on = ["E0-PB-01", "E0-PB-02"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Record and verify the live worker's complete execution identity through VIPER before replay training begins."
 completion_evidence = ["implementation_review", "viper_registration"]

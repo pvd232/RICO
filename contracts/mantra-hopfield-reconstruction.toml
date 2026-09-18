@@ -128,8 +128,8 @@ rejection_cases = [{ repository_id = "rico", path = "tests/phase1/test_hopfield_
 id = "H1-VR-09"
 requirement_ids = ["H1-REQ-09"]
 acceptance_conditions = ["The bridge run starts from the parity-proven legacy Hopfield source and configuration; resolves the exact retained 83-value core, 144-value family, and 40-value response artifact digests with their canonical row and split identities; changes only the encoder input width from 187 to 267; keeps the complete numeric training set GPU-resident; and reproduces its frozen bridge result from the retained checkpoint and inputs."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_mil_input_bridge.py", symbol = "test_freezes_legacy_hopfield_on_exact_mil_input_stack" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_mil_input_bridge.py", symbol = "test_rejects_mixed_input_stack_or_unrelated_model_change" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_hopfield_mil_input_bridge.py", symbol = "test_freezes_legacy_hopfield_on_exact_mil_input_stack" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_hopfield_mil_input_bridge.py", symbol = "test_rejects_mixed_input_stack_or_unrelated_model_change" }]
 
 [[verifiers]]
 id = "H1-VR-10"
@@ -317,6 +317,6 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "H1-PB-09"
 requirement_ids = ["H1-REQ-09"]
 depends_on = ["H1-PB-08", "M2-PB-06", "E0-PB-08", "E0-PB-09"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Run the unchanged legacy Hopfield model on the exact retained MIL input stack and freeze the resulting bridge baseline before modular reconstruction."
 completion_evidence = ["implementation_review", "viper_registration"]

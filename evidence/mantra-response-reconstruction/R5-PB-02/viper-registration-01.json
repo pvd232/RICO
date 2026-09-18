@@ -1,0 +1,10 @@
+{
+  "implementation_repository_commit": "0649557b6724b3d9ffcc2ef9e8a215a1ed7b72b6",
+  "pair_block_id": "R5-PB-02",
+  "recorded_at": "2026-09-18T07:41:41.925756Z",
+  "schema_version": 1,
+  "verification_receipt_ref": {
+    "path": "evidence/mantra-response-reconstruction/R5-PB-02/viper-verification-01.json",
+    "sha256": "1d8a711822ede5ed4b63a531bdcc9eb0a5257a9d686fdc2f89efe2e11744f422"
+  }
+}

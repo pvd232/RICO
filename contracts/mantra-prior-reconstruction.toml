@@ -264,43 +264,43 @@ verifier_ids = ["P4-VR-20"]
 id = "P4-VR-01"
 requirement_ids = ["P4-REQ-01"]
 acceptance_conditions = ["The inventory accounts for every model-consumed prior; separately names the eleven retained compressed-bundle arrays; and records each source, producer, transformation, historical identity, current reconstruction status, and first unresolved connector without treating an assembled block as a raw source."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_inventory.py", symbol = "test_inventory_accounts_for_every_consumed_prior" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_inventory.py", symbol = "test_rejects_unowned_or_unresolved_prior" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_prior_inventory.py", symbol = "test_inventory_accounts_for_every_consumed_prior" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_prior_inventory.py", symbol = "test_rejects_unowned_or_unresolved_prior" }]
 
 [[verifiers]]
 id = "P4-VR-02"
 requirement_ids = ["P4-REQ-02"]
 acceptance_conditions = ["Each download or restoration publishes only verified complete bytes and the VIPER record reaches the request, source identity, parser, typed output, and failure state."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_sources.py", symbol = "test_acquires_and_ingests_prior_sources" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_sources.py", symbol = "test_rejects_partial_or_unpinned_prior_source" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_prior_sources.py", symbol = "test_acquires_and_ingests_prior_sources" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_prior_sources.py", symbol = "test_rejects_partial_or_unpinned_prior_source" }]
 
 [[verifiers]]
 id = "P4-VR-03"
 requirement_ids = ["P4-REQ-03"]
 acceptance_conditions = ["The ALG1L experimental row resolves to the current ALG1L1P gene record and carries explicit missingness for protein-derived inputs while remaining present in every split and output axis."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_pseudogene_policy.py", symbol = "test_preserves_pseudogene_perturbation_with_modality_masks" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_pseudogene_policy.py", symbol = "test_rejects_dropped_row_or_fabricated_protein_identity" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_pseudogene_policy.py", symbol = "test_preserves_pseudogene_perturbation_with_modality_masks" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_pseudogene_policy.py", symbol = "test_rejects_dropped_row_or_fabricated_protein_identity" }]
 
 [[verifiers]]
 id = "P4-VR-04"
 requirement_ids = ["P4-REQ-04", "P4-REQ-10R"]
 acceptance_conditions = ["The parser consumes the complete pinned IntAct bytes, reports accepted pairs and covered perturbations, and rejects the known 1,170,222,081-byte historical prefix as incomplete."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_interaction_prior.py", symbol = "test_rebuilds_interactions_from_complete_sources" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_interaction_prior.py", symbol = "test_rejects_historical_intact_prefix" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_interaction_prior.py", symbol = "test_rebuilds_interactions_from_complete_sources" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_interaction_prior.py", symbol = "test_rejects_historical_intact_prefix" }]
 
 [[verifiers]]
 id = "P4-VR-05"
 requirement_ids = ["P4-REQ-05"]
 acceptance_conditions = ["Each selected prior rebuild preserves canonical row order and emits complete identity, coverage, missingness, source, and transformation reports before model fitting."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_reconstruction.py", symbol = "test_rebuilds_selected_noninteraction_priors" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_reconstruction.py", symbol = "test_rejects_missing_or_misaligned_prior_rows" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_prior_reconstruction.py", symbol = "test_rebuilds_selected_noninteraction_priors" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_prior_reconstruction.py", symbol = "test_rejects_missing_or_misaligned_prior_rows" }]
 
 [[verifiers]]
 id = "P4-VR-06"
 requirement_ids = ["P4-REQ-06"]
 acceptance_conditions = ["The frozen bundle contains one ordered row per perturbation, one observation mask per modality, and a verified provenance path from every array to its raw source and builder."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_bundle.py", symbol = "test_freezes_corrected_prior_bundle" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_bundle.py", symbol = "test_rejects_unattributed_or_implicit_missing_values" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_prior_bundle.py", symbol = "test_freezes_corrected_prior_bundle" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_prior_bundle.py", symbol = "test_rejects_unattributed_or_implicit_missing_values" }]
 
 [[verifiers]]
 id = "P4-VR-10"
@@ -332,8 +332,8 @@ requirement_ids = [
   "P4-REQ-10Z",
 ]
 acceptance_conditions = ["Each package-specific observer resolves the raw or versioned source, executes the declared VIPER acquisition and build path, compares the accepted output with its historical counterpart or repeated modern baseline, restores it from GCS, and rejects a missing source, unexplained mismatch, or changed restored digest."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_reconstruction.py", symbol = "test_rebuilds_each_declared_prior_package" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_reconstruction.py", symbol = "test_rejects_incomplete_package_provenance_or_unexplained_mismatch" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_prior_reconstruction.py", symbol = "test_rebuilds_each_declared_prior_package" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_prior_reconstruction.py", symbol = "test_rejects_incomplete_package_provenance_or_unexplained_mismatch" }]
 
 [[verifiers]]
 id = "P4-VR-20"
@@ -351,14 +351,14 @@ requirement_ids = [
   "P4-REQ-20K",
 ]
 acceptance_conditions = ["Each compressed-array observer consumes only accepted package outputs, records its deterministic transform and environment, compares the result with the retained array or repeated modern baseline, restores it from GCS, and rejects an unresolved input, unexplained mismatch, or changed restored digest."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_bundle.py", symbol = "test_rebuilds_each_declared_compressed_array" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_bundle.py", symbol = "test_rejects_incomplete_compressed_array_provenance" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_prior_bundle.py", symbol = "test_rebuilds_each_declared_compressed_array" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_prior_bundle.py", symbol = "test_rejects_incomplete_compressed_array_provenance" }]
 
 [[pair_blocks]]
 id = "P4-PB-01"
 requirement_ids = ["P4-REQ-01"]
 depends_on = ["D3-PB-06"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Inventory every prior consumed by the parity models and connect it to sources, builders, arrays, and historical evidence."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -366,7 +366,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-02"
 requirement_ids = ["P4-REQ-02"]
 depends_on = ["P4-PB-01"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Run each selected prior source through a complete, atomic, VIPER-recorded acquisition and ingest path."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -374,7 +374,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-03"
 requirement_ids = ["P4-REQ-03"]
 depends_on = ["P4-PB-02"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Preserve pseudogene perturbations while marking unsupported protein-derived modalities missing."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -382,7 +382,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-04"
 requirement_ids = ["P4-REQ-04", "P4-REQ-10R"]
 depends_on = ["P4-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Acquire and rebuild ppi_union from the complete IntAct and interaction source family, reject the truncated historical input, and retain its VIPER source, build, comparison, and restore evidence."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -390,7 +390,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-05A"
 requirement_ids = ["P4-REQ-10A"]
 depends_on = ["P4-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Acquire and rebuild alphagenome, then freeze a repeated modern source-native baseline because the historical neural coordinates did not reproduce."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -398,7 +398,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-05B"
 requirement_ids = ["P4-REQ-10B"]
 depends_on = ["P4-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Acquire and verify the alphagenome_regulatory_tracks source collection through VIPER."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -406,7 +406,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-05C"
 requirement_ids = ["P4-REQ-10C"]
 depends_on = ["P4-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Acquire and rebuild chromatin_accessibility and reproduce its historical output exactly."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -414,7 +414,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-05D"
 requirement_ids = ["P4-REQ-10D"]
 depends_on = ["P4-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Recover or deliberately replace the missing historical DepMap gene-effect source, then rebuild depmap_essentiality with a retained mismatch classification."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -422,7 +422,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-05E"
 requirement_ids = ["P4-REQ-10E"]
 depends_on = ["P4-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Acquire and rebuild dna_motif and reproduce its historical output exactly."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -430,7 +430,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-05F"
 requirement_ids = ["P4-REQ-10F"]
 depends_on = ["P4-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Acquire and rebuild esmc and reproduce its historical output exactly."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -438,7 +438,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-05G"
 requirement_ids = ["P4-REQ-10G"]
 depends_on = ["P4-PB-05D"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Use the resolved DepMap gene-effect source to rebuild fitness_regime and retain its comparison result."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -446,7 +446,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-05H"
 requirement_ids = ["P4-REQ-10H"]
 depends_on = ["P4-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Acquire and verify the pinned gencode_annotation source package through VIPER."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -454,7 +454,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-05I"
 requirement_ids = ["P4-REQ-10I"]
 depends_on = ["P4-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Acquire and rebuild gene_family and reproduce its historical output exactly."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -462,7 +462,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-05J"
 requirement_ids = ["P4-REQ-10J"]
 depends_on = ["P4-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Acquire and rebuild go_localized_string, then apply the historical-environment ladder or freeze a repeated modern coordinate baseline."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -470,7 +470,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-05K"
 requirement_ids = ["P4-REQ-10K"]
 depends_on = ["P4-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Acquire and rebuild gocam_mechanistic and reproduce its historical output exactly."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -478,7 +478,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-05L"
 requirement_ids = ["P4-REQ-10L"]
 depends_on = ["P4-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Acquire and verify the pinned hgnc source package through VIPER."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -486,7 +486,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-05M"
 requirement_ids = ["P4-REQ-10M"]
 depends_on = ["P4-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Acquire and rebuild histone_chromatin and reproduce its historical output exactly."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -494,7 +494,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-05N"
 requirement_ids = ["P4-REQ-10N"]
 depends_on = ["P4-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Acquire and verify the pinned joung_tfatlas source package through VIPER."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -502,7 +502,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-05O"
 requirement_ids = ["P4-REQ-10O"]
 depends_on = ["P4-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Acquire and rebuild metabolomics and reproduce its historical output exactly."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -510,7 +510,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-05P"
 requirement_ids = ["P4-REQ-10P"]
 depends_on = ["P4-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Acquire and rebuild pathway_hallmark, then apply the historical-environment ladder or freeze a repeated modern coordinate baseline."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -518,7 +518,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-05Q"
 requirement_ids = ["P4-REQ-10Q"]
 depends_on = ["P4-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Acquire and rebuild pathways_highres and reproduce its historical output exactly."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -526,7 +526,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-05S"
 requirement_ids = ["P4-REQ-10S"]
 depends_on = ["P4-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Acquire and rebuild protein_domains and reproduce its historical output exactly."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -534,7 +534,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-05T"
 requirement_ids = ["P4-REQ-10T"]
 depends_on = ["P4-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Acquire and rebuild ptm_uniprot and reproduce its historical output exactly."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -542,7 +542,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-05U"
 requirement_ids = ["P4-REQ-10U"]
 depends_on = ["P4-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Acquire and rebuild regulatory_hocomoco_union and reproduce its historical output exactly."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -550,7 +550,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-05V"
 requirement_ids = ["P4-REQ-10V"]
 depends_on = ["P4-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Acquire and rebuild rna_biology and reproduce its historical output exactly."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -558,7 +558,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-05W"
 requirement_ids = ["P4-REQ-10W"]
 depends_on = ["P4-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Acquire and rebuild subcellular and reproduce its historical output exactly."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -566,7 +566,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-05X"
 requirement_ids = ["P4-REQ-10X"]
 depends_on = ["P4-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Acquire and rebuild tf_motif_binding and reproduce its historical output exactly."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -574,7 +574,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-05Y"
 requirement_ids = ["P4-REQ-10Y"]
 depends_on = ["P4-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Acquire and rebuild tissue_expression and reproduce its historical output exactly."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -582,7 +582,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-05Z"
 requirement_ids = ["P4-REQ-10Z"]
 depends_on = ["P4-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Acquire and verify the pinned uniprot_pfam_interpro source package through VIPER."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -617,7 +617,7 @@ depends_on = [
   "P4-PB-05Y",
   "P4-PB-05Z",
 ]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Verify that the 26 package receipts cover every selected source and prior without an unresolved or unattributed package."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -625,7 +625,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-06A"
 requirement_ids = ["P4-REQ-20A"]
 depends_on = ["P4-PB-05D"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Rebuild and verify the depmap_essentiality compressed array from its accepted package output."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -633,7 +633,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-06B"
 requirement_ids = ["P4-REQ-20B"]
 depends_on = ["P4-PB-05W"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Rebuild and verify the subcellular compressed array from its accepted package output."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -641,7 +641,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-06C"
 requirement_ids = ["P4-REQ-20C"]
 depends_on = ["P4-PB-05L", "P4-PB-04"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Recover the raw CORUM and HGNC identities, rebuild corum, and apply the declared environment-mismatch ladder."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -649,7 +649,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-06D"
 requirement_ids = ["P4-REQ-20D"]
 depends_on = ["P4-PB-05U"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Rebuild dorothea_grn and reproduce its historical intermediate before applying deterministic compression."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -657,7 +657,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-06E"
 requirement_ids = ["P4-REQ-20E"]
 depends_on = ["P4-PB-05I"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Rebuild gene_family and reproduce its historical intermediate before applying deterministic compression."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -665,7 +665,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-06F"
 requirement_ids = ["P4-REQ-20F"]
 depends_on = ["P4-PB-05E"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Rebuild motif and reproduce its historical intermediate before applying deterministic compression."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -673,7 +673,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-06G"
 requirement_ids = ["P4-REQ-20G"]
 depends_on = ["P4-PB-05P"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Rebuild pathway_hallmark and reproduce its historical intermediate before applying deterministic compression."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -681,7 +681,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-06H"
 requirement_ids = ["P4-REQ-20H"]
 depends_on = ["P4-PB-04"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Rebuild ppi_spectral from the complete interaction source family and apply the declared environment-mismatch ladder."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -689,7 +689,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-06I"
 requirement_ids = ["P4-REQ-20I"]
 depends_on = ["P4-PB-05T"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Rebuild ptm and reproduce its historical intermediate before applying deterministic compression."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -697,7 +697,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-06J"
 requirement_ids = ["P4-REQ-20J"]
 depends_on = ["P4-PB-05"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Bind the five completion-model inputs and execute the mechanistic256 compressed-array build."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -705,7 +705,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "P4-PB-06K"
 requirement_ids = ["P4-REQ-20K"]
 depends_on = ["P4-PB-05"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Bind the five regulatory source matrices and execute the regulatory256 compressed-array build."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -725,6 +725,6 @@ depends_on = [
   "P4-PB-06J",
   "P4-PB-06K",
 ]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Freeze one corrected, provenance-complete prior bundle, restore it from GCS, and make it the only prior input for both model rebuilds."
 completion_evidence = ["implementation_review", "viper_registration"]

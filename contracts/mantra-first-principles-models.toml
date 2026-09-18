@@ -138,148 +138,148 @@ verifier_ids = ["B9-VR-02"]
 id = "S6-VR-01"
 requirement_ids = ["S6-REQ-01"]
 acceptance_conditions = ["Every corrected prior and mask resolves to the same canonical perturbation rows, observed zero remains distinct from missing data, and reordered, duplicated, absent, or extra rows fail."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_perturbation_identity_table.py", symbol = "test_aligns_every_prior_to_canonical_perturbations" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_perturbation_identity_table.py", symbol = "test_rejects_row_or_missingness_substitution" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_perturbation_identity_table.py", symbol = "test_aligns_every_prior_to_canonical_perturbations" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_perturbation_identity_table.py", symbol = "test_rejects_row_or_missingness_substitution" }]
 
 [[verifiers]]
 id = "S6-VR-02"
 requirement_ids = ["S6-REQ-02"]
 acceptance_conditions = ["The manifest contains exactly the approved identity, PCA, and MLP transform kinds; each fitted transform uses only its declared training rows and reproduces ordered outputs and diagnostics."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_variants.py", symbol = "test_builds_declared_per_prior_transforms" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_variants.py", symbol = "test_rejects_unlisted_transform_or_hold_fit" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_prior_variants.py", symbol = "test_builds_declared_per_prior_transforms" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_prior_variants.py", symbol = "test_rejects_unlisted_transform_or_hold_fit" }]
 
 [[verifiers]]
 id = "S6-VR-03"
 requirement_ids = ["S6-REQ-03"]
 acceptance_conditions = ["Concatenation and learned-MLP fusion reproduce from retained modality order, masks, parameters, and widths, and fail when a modality or learned state is substituted."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_variants.py", symbol = "test_builds_declared_prior_fusions" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_variants.py", symbol = "test_rejects_changed_modality_order_or_fusion_state" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_prior_variants.py", symbol = "test_builds_declared_prior_fusions" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_prior_variants.py", symbol = "test_rejects_changed_modality_order_or_fusion_state" }]
 
 [[verifiers]]
 id = "S6-VR-04"
 requirement_ids = ["S6-REQ-04"]
 acceptance_conditions = ["Every minimum approved path executes from the same ordered priors, grouped ridge uses no hold target, direct paths bypass it completely, and the runner rejects any composition absent from the manifest."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_encoder_variants.py", symbol = "test_executes_every_approved_prior_to_hopfield_path" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_prior_encoder_variants.py", symbol = "test_rejects_unlisted_variant_or_hidden_ridge_use" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_prior_encoder_variants.py", symbol = "test_executes_every_approved_prior_to_hopfield_path" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_prior_encoder_variants.py", symbol = "test_rejects_unlisted_variant_or_hidden_ridge_use" }]
 
 [[verifiers]]
 id = "S6-VR-05"
 requirement_ids = ["S6-REQ-05"]
 acceptance_conditions = ["The MLP and decoder reproduce held-out ctrl19 predictions from retained fit and tune state, no hold response truth is loaded, and substituting cluster order, decoder, or prediction rows fails."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_ctrl19_holdout.py", symbol = "test_predicts_heldout_ctrl19_without_hold_truth" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_ctrl19_holdout.py", symbol = "test_rejects_hold_leakage_or_ctrl19_substitution" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_ctrl19_holdout.py", symbol = "test_predicts_heldout_ctrl19_without_hold_truth" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_ctrl19_holdout.py", symbol = "test_rejects_hold_leakage_or_ctrl19_substitution" }]
 
 [[verifiers]]
 id = "S6-VR-06"
 requirement_ids = ["S6-REQ-06"]
 acceptance_conditions = ["Each rebuilt model path preserves perturbation order and matches its Phase 0 hard 16, soft semantic 16, and spectral 8 rows; the shared fit and tune rows remain equal across the paths, each held-out proxy names its query-feature producer, and tune and held-out response truth is unavailable to those producers."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_response_block_features.py", symbol = "test_rebuilds_response_block40_with_parity" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_response_block_features.py", symbol = "test_rejects_response_block_drift_or_hold_leakage" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_response_block_features.py", symbol = "test_rebuilds_response_block40_with_parity" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_response_block_features.py", symbol = "test_rejects_response_block_drift_or_hold_leakage" }]
 
 [[verifiers]]
 id = "S6-VR-07"
 requirement_ids = ["S6-REQ-07"]
 acceptance_conditions = ["Each plan resolves one complete bundle digest and rejects substituted variants, ctrl19 rows, core83 or PCA64 derivatives, response-block rows, splits, transforms, response columns, normalization populations, or execution profiles."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_model_input_bundle.py", symbol = "test_binds_one_variant_and_input_bundle_for_both_models" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_model_input_bundle.py", symbol = "test_rejects_mixed_or_substituted_model_inputs" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_model_input_bundle.py", symbol = "test_binds_one_variant_and_input_bundle_for_both_models" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_model_input_bundle.py", symbol = "test_rejects_mixed_or_substituted_model_inputs" }]
 
 [[verifiers]]
 id = "S6-VR-08"
 requirement_ids = ["S6-REQ-08"]
 acceptance_conditions = ["The substitution ledger starts Hopfield from the frozen MIL-stack bridge and MIL from its retained parity bundle, changes exactly one producer reference per step, proves that every other digest stayed fixed, uses the same rebuilt reference for shared artifacts, and preserves each frozen prediction and score before any prior-fusion result is accepted."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_shared_input_substitution.py", symbol = "test_replaces_shared_producers_one_at_a_time_with_dual_model_parity" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_shared_input_substitution.py", symbol = "test_rejects_multi_artifact_swap_split_shared_input_or_parity_loss" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_shared_input_substitution.py", symbol = "test_replaces_shared_producers_one_at_a_time_with_dual_model_parity" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_shared_input_substitution.py", symbol = "test_rejects_multi_artifact_swap_split_shared_input_or_parity_loss" }]
 
 [[verifiers]]
 id = "S6-VR-09"
 requirement_ids = ["S6-REQ-09"]
 acceptance_conditions = ["Every ledger entry names one legacy component and one modular replacement, proves equal component inputs and fitted state, compares its outputs and diagnostics, holds every non-target source, configuration, and artifact digest fixed, preserves full GPU residency and the model's declared optimization granularity, and preserves the owning model's frozen prediction and score before another replacement is admitted."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_model_component_substitution.py", symbol = "test_replaces_legacy_model_components_one_at_a_time" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_model_component_substitution.py", symbol = "test_rejects_multi_component_change_hidden_state_or_baseline_drift" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_model_component_substitution.py", symbol = "test_replaces_legacy_model_components_one_at_a_time" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_model_component_substitution.py", symbol = "test_rejects_multi_component_change_hidden_state_or_baseline_drift" }]
 
 [[verifiers]]
 id = "H7-VR-01"
 requirement_ids = ["H7-REQ-01"]
 acceptance_conditions = ["Construction reproduces the same initialized encoder and memory layout from the declared input bundle, architecture, and seed, and persists every value training reads."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_first_principles.py", symbol = "test_constructs_replayable_hopfield_encoder" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_first_principles.py", symbol = "test_rejects_hidden_hopfield_construction_state" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_hopfield_first_principles.py", symbol = "test_constructs_replayable_hopfield_encoder" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_hopfield_first_principles.py", symbol = "test_rejects_hidden_hopfield_construction_state" }]
 
 [[verifiers]]
 id = "H7-VR-02"
 requirement_ids = ["H7-REQ-02"]
 acceptance_conditions = ["Training reproduces from retained inputs and configuration, emits every checkpoint decision, and no fit or selection operation reads hold responses."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_first_principles.py", symbol = "test_trains_hopfield_without_hold_access" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_first_principles.py", symbol = "test_rejects_hopfield_hold_access_or_unlogged_selection" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_hopfield_first_principles.py", symbol = "test_trains_hopfield_without_hold_access" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_hopfield_first_principles.py", symbol = "test_rejects_hopfield_hold_access_or_unlogged_selection" }]
 
 [[verifiers]]
 id = "H7-VR-03"
 requirement_ids = ["H7-REQ-03"]
 acceptance_conditions = ["Inference is a pure checkpoint-and-input replay whose persisted predictions preserve all declared axes and splits."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_first_principles.py", symbol = "test_replays_hopfield_inference" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_first_principles.py", symbol = "test_rejects_hopfield_refit_or_prediction_reordering" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_hopfield_first_principles.py", symbol = "test_replays_hopfield_inference" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_hopfield_first_principles.py", symbol = "test_rejects_hopfield_refit_or_prediction_reordering" }]
 
 [[verifiers]]
 id = "H7-VR-04"
 requirement_ids = ["H7-REQ-04"]
 acceptance_conditions = ["Diagnostics replay from persisted inputs, checkpoint, and predictions, cover every declared split, and leave all input and model digests unchanged."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_first_principles.py", symbol = "test_runs_hopfield_diagnostics_without_refit" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_first_principles.py", symbol = "test_rejects_stateful_or_incomplete_hopfield_diagnostics" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_hopfield_first_principles.py", symbol = "test_runs_hopfield_diagnostics_without_refit" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_hopfield_first_principles.py", symbol = "test_rejects_stateful_or_incomplete_hopfield_diagnostics" }]
 
 [[verifiers]]
 id = "H7-VR-05"
 requirement_ids = ["H7-REQ-05"]
 acceptance_conditions = ["Evaluation uses the canonical evaluator and response surface and reports exact comparisons with the original Phase 1 prediction and score and the H1-REQ-09 bridge prediction and score."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_first_principles.py", symbol = "test_evaluates_hopfield_on_canonical_surface" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_hopfield_first_principles.py", symbol = "test_rejects_shadow_metric_or_surface_substitution" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_hopfield_first_principles.py", symbol = "test_evaluates_hopfield_on_canonical_surface" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_hopfield_first_principles.py", symbol = "test_rejects_shadow_metric_or_surface_substitution" }]
 
 [[verifiers]]
 id = "M8-VR-01"
 requirement_ids = ["M8-REQ-01"]
 acceptance_conditions = ["Bag construction reproduces every ordered instance, membership, mask, prior, and conditioning value from the shared input bundle and persists every value the models read."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_first_principles.py", symbol = "test_builds_replayable_mil_bags" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_first_principles.py", symbol = "test_rejects_hidden_or_reordered_mil_bag_state" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_mil_first_principles.py", symbol = "test_builds_replayable_mil_bags" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_mil_first_principles.py", symbol = "test_rejects_hidden_or_reordered_mil_bag_state" }]
 
 [[verifiers]]
 id = "M8-VR-02"
 requirement_ids = ["M8-REQ-02"]
 acceptance_conditions = ["Construction reproduces the same initialized teacher and student from the declared bag schema, architecture, and seeds and persists every value training reads."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_first_principles.py", symbol = "test_constructs_replayable_mil_models" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_first_principles.py", symbol = "test_rejects_hidden_mil_model_state" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_mil_first_principles.py", symbol = "test_constructs_replayable_mil_models" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_mil_first_principles.py", symbol = "test_rejects_hidden_mil_model_state" }]
 
 [[verifiers]]
 id = "M8-VR-03"
 requirement_ids = ["M8-REQ-03"]
 acceptance_conditions = ["Teacher and student training reproduce from retained inputs and configuration, emit every objective component and checkpoint decision, and use fit and tune responses for fitting and selection."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_first_principles.py", symbol = "test_trains_mil_without_hold_access" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_first_principles.py", symbol = "test_rejects_mil_hold_access_or_unlogged_selection" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_mil_first_principles.py", symbol = "test_trains_mil_without_hold_access" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_mil_first_principles.py", symbol = "test_rejects_mil_hold_access_or_unlogged_selection" }]
 
 [[verifiers]]
 id = "M8-VR-04"
 requirement_ids = ["M8-REQ-04"]
 acceptance_conditions = ["Inference is a pure checkpoint-and-input replay whose persisted predictions preserve all declared axes and splits."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_first_principles.py", symbol = "test_replays_mil_inference" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_first_principles.py", symbol = "test_rejects_mil_refit_or_prediction_reordering" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_mil_first_principles.py", symbol = "test_replays_mil_inference" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_mil_first_principles.py", symbol = "test_rejects_mil_refit_or_prediction_reordering" }]
 
 [[verifiers]]
 id = "M8-VR-05"
 requirement_ids = ["M8-REQ-05"]
 acceptance_conditions = ["Diagnostics replay from persisted bags, checkpoints, and predictions, cover every declared split, and leave all input and model digests unchanged."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_first_principles.py", symbol = "test_runs_mil_diagnostics_without_refit" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_first_principles.py", symbol = "test_rejects_stateful_or_incomplete_mil_diagnostics" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_mil_first_principles.py", symbol = "test_runs_mil_diagnostics_without_refit" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_mil_first_principles.py", symbol = "test_rejects_stateful_or_incomplete_mil_diagnostics" }]
 
 [[verifiers]]
 id = "M8-VR-06"
 requirement_ids = ["M8-REQ-06"]
 acceptance_conditions = ["Evaluation uses the canonical evaluator and response surface and reports the exact comparison with the Phase 2 prediction and score."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_first_principles.py", symbol = "test_evaluates_mil_on_canonical_surface" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_first_principles.py", symbol = "test_rejects_mil_shadow_metric_or_surface_substitution" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_mil_first_principles.py", symbol = "test_evaluates_mil_on_canonical_surface" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_mil_first_principles.py", symbol = "test_rejects_mil_shadow_metric_or_surface_substitution" }]
 
 [[verifiers]]
 id = "B9-VR-01"
 requirement_ids = ["B9-REQ-01"]
 acceptance_conditions = ["One command recomputes every declared Hopfield variant comparison plus the rebuilt MIL, original Hopfield, Hopfield bridge, and original MIL results through the canonical evaluator after proving equal axes, splits, and truth surfaces."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_pregraph_benchmark.py", symbol = "test_compares_rebuilt_models_with_parity_baselines" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_pregraph_benchmark.py", symbol = "test_rejects_cross_surface_model_comparison" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_pregraph_benchmark.py", symbol = "test_compares_rebuilt_models_with_parity_baselines" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_pregraph_benchmark.py", symbol = "test_rejects_cross_surface_model_comparison" }]
 
 [[verifiers]]
 id = "B9-VR-02"
@@ -292,7 +292,7 @@ rejection_cases = [{ repository_id = "rico", path = "tests/pregraph/test_pregrap
 id = "S6-PB-01"
 requirement_ids = ["S6-REQ-01"]
 depends_on = ["R5-PB-06"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Align every corrected prior and mask to one ordered perturbation-identity table."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -300,7 +300,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "S6-PB-02"
 requirement_ids = ["S6-REQ-02"]
 depends_on = ["S6-PB-01", "E0-PB-11"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Implement and retain the identity, per-prior PCA, and per-prior MLP transforms named by the variant manifest."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -308,7 +308,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "S6-PB-03"
 requirement_ids = ["S6-REQ-03"]
 depends_on = ["S6-PB-02"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Implement and retain concatenation and learned-MLP fusion for the declared prior variants."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -316,7 +316,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "S6-PB-04"
 requirement_ids = ["S6-REQ-04"]
 depends_on = ["S6-PB-03", "E0-PB-07"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Execute only the declared grouped-ridge and direct-to-Hopfield representation paths."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -324,7 +324,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "S6-PB-05"
 requirement_ids = ["S6-REQ-05"]
 depends_on = ["S6-PB-01", "E0-PB-02"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Predict held-out ctrl19 rows through the retained auxiliary MLP and decoder without hold-response leakage."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -332,7 +332,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "S6-PB-06"
 requirement_ids = ["S6-REQ-06"]
 depends_on = ["S6-PB-04", "R5-PB-07"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Rebuild the split-aligned hard, soft-semantic, and spectral response-block features and prove parity without held-out response leakage."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -340,7 +340,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "S6-PB-07"
 requirement_ids = ["S6-REQ-07"]
 depends_on = ["S6-PB-05", "S6-PB-06"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Freeze one complete model-input bundle for each declared variant and require every model plan to name its exact bundle."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -348,7 +348,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "S6-PB-08"
 requirement_ids = ["S6-REQ-08"]
 depends_on = ["S6-PB-07", "E0-PB-08"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Replace each shared historical producer one at a time and preserve the Hopfield MIL-stack bridge and MIL parity baselines before variant training."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -356,7 +356,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "S6-PB-09"
 requirement_ids = ["S6-REQ-09"]
 depends_on = ["S6-PB-08", "E0-PB-09", "E0-PB-10"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Replace one legacy Hopfield or MIL model component at a time with its modular owner while preserving the corresponding frozen model result."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -364,7 +364,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "H7-PB-01"
 requirement_ids = ["H7-REQ-01"]
 depends_on = ["S6-PB-09", "E0-PB-09"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Construct and persist the complete Hopfield encoder and memory layout as a replayable VIPER stage."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -372,7 +372,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "H7-PB-02"
 requirement_ids = ["H7-REQ-02"]
 depends_on = ["H7-PB-01"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Train and select the first-principles Hopfield checkpoint without hold-response access."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -380,7 +380,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "H7-PB-03"
 requirement_ids = ["H7-REQ-03"]
 depends_on = ["H7-PB-02"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Run checkpoint-only Hopfield inference and retain ordered predictions."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -388,7 +388,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "H7-PB-04"
 requirement_ids = ["H7-REQ-04"]
 depends_on = ["H7-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Run the Hopfield diagnostics from persisted inputs, checkpoint, and predictions without changing model state."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -396,7 +396,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "H7-PB-05"
 requirement_ids = ["H7-REQ-05"]
 depends_on = ["H7-PB-04"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Evaluate every rebuilt Hopfield variant through canonical PearsonDelta and compare it with the original and MIL-stack bridge baselines."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -404,7 +404,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "M8-PB-01"
 requirement_ids = ["M8-REQ-01"]
 depends_on = ["S6-PB-09", "E0-PB-10"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Build and persist the complete ordered MIL bags as a replayable VIPER stage."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -412,7 +412,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "M8-PB-02"
 requirement_ids = ["M8-REQ-02"]
 depends_on = ["M8-PB-01"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Construct and persist the initialized MIL teacher and student models as a replayable VIPER stage."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -420,7 +420,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "M8-PB-03"
 requirement_ids = ["M8-REQ-03"]
 depends_on = ["M8-PB-02"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Train and select first-principles MIL teacher and student checkpoints without hold-response access."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -428,7 +428,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "M8-PB-04"
 requirement_ids = ["M8-REQ-04"]
 depends_on = ["M8-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Run checkpoint-only MIL inference and retain ordered predictions."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -436,7 +436,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "M8-PB-05"
 requirement_ids = ["M8-REQ-05"]
 depends_on = ["M8-PB-04"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Run the MIL diagnostics from persisted bags, checkpoints, and predictions without changing model state."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -444,7 +444,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "M8-PB-06"
 requirement_ids = ["M8-REQ-06"]
 depends_on = ["M8-PB-05"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Evaluate the rebuilt MIL model through canonical PearsonDelta and compare it with Phase 2."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -452,7 +452,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "B9-PB-01"
 requirement_ids = ["B9-REQ-01"]
 depends_on = ["H7-PB-05", "M8-PB-06"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Benchmark every declared Hopfield variant and the rebuilt MIL model against the original Hopfield, Hopfield bridge, and original MIL baselines on one frozen evaluation surface."
 completion_evidence = ["implementation_review", "viper_registration"]
 

@@ -42,36 +42,36 @@ verifier_ids = ["M2-VR-06"]
 id = "M2-VR-01"
 requirement_ids = ["M2-REQ-01"]
 acceptance_conditions = ["The selected MIL configuration resolves the standalone historical inputs, creates one student query, ignores proto_count 11, and has no dependency on a Hopfield output."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_contract.py", symbol = "test_accepts_selected_standalone_mil_configuration" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_contract.py", symbol = "test_rejects_hopfield_or_multi_query_dependency" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_mil_contract.py", symbol = "test_accepts_selected_standalone_mil_configuration" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_mil_contract.py", symbol = "test_rejects_hopfield_or_multi_query_dependency" }]
 
 [[verifiers]]
 id = "M2-VR-02"
 requirement_ids = ["M2-REQ-02"]
 acceptance_conditions = ["The MIL input ledger resolves every retained file to its exact digest, producing script or record, and restore route; restoring it reproduces the historical keys, perturbation order, gene order, shapes, dtypes, and values, and the loader reports each descriptor's standardization reference rows together with the selected bag and conditioning rules."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_inputs.py", symbol = "test_restores_selected_mil_inputs" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_inputs.py", symbol = "test_rejects_changed_mil_input_or_bag" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_mil_inputs.py", symbol = "test_restores_selected_mil_inputs" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_mil_inputs.py", symbol = "test_rejects_changed_mil_input_or_bag" }]
 
 [[verifiers]]
 id = "M2-VR-03"
 requirement_ids = ["M2-REQ-03"]
 acceptance_conditions = ["The approved MIL configuration reproduces the teacher and student arrays, checkpoints, selection records, and fixed MIL identity contract without loading hold targets during selection."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_training.py", symbol = "test_rebuilds_selected_teacher_and_student" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_training.py", symbol = "test_rejects_changed_training_intermediate_or_hold_selection" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_mil_training.py", symbol = "test_rebuilds_selected_teacher_and_student" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_mil_training.py", symbol = "test_rejects_changed_training_intermediate_or_hold_selection" }]
 
 [[verifiers]]
 id = "M2-VR-04"
 requirement_ids = ["M2-REQ-04"]
 acceptance_conditions = ["The Step02 fitted moments, ridge-whitened and neighbor-smoothed memory, output arrays, and weight arrays equal their retained historical counterparts and the hold PearsonDelta equals 0.5924883417873266."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_reconstruction.py", symbol = "test_rebuilds_selected_step02" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_reconstruction.py", symbol = "test_rejects_changed_step02_output" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_mil_reconstruction.py", symbol = "test_rebuilds_selected_step02" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_mil_reconstruction.py", symbol = "test_rejects_changed_step02_output" }]
 
 [[verifiers]]
 id = "M2-VR-05"
 requirement_ids = ["M2-REQ-05"]
 acceptance_conditions = ["The Step03 output arrays and weight arrays equal their retained historical counterparts and the final hold PearsonDelta equals 0.6025499488874759."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_reconstruction.py", symbol = "test_rebuilds_selected_step03" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_mil_reconstruction.py", symbol = "test_rejects_equal_score_with_changed_step03_output" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_mil_reconstruction.py", symbol = "test_rebuilds_selected_step03" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_mil_reconstruction.py", symbol = "test_rejects_equal_score_with_changed_step03_output" }]
 
 [[verifiers]]
 id = "M2-VR-06"
@@ -84,7 +84,7 @@ rejection_cases = [{ repository_id = "rico", path = "tests/phase2/test_mil_regis
 id = "M2-PB-01"
 requirement_ids = ["M2-REQ-01"]
 depends_on = []
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Bind the MIL rebuild to its standalone historical inputs and active single-query architecture."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -92,7 +92,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "M2-PB-02"
 requirement_ids = ["M2-REQ-02"]
 depends_on = ["M2-PB-01"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Freeze the MIL input ledger and restore the exact historical training bundle, bags, priors, and conditioning arrays."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -100,7 +100,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "M2-PB-03"
 requirement_ids = ["M2-REQ-03"]
 depends_on = ["M2-PB-02", "E0-PB-10", "E0-PB-12"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Train the selected teacher and single-query student and reproduce the retained MIL identity vectors."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -108,7 +108,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "M2-PB-04"
 requirement_ids = ["M2-REQ-04"]
 depends_on = ["M2-PB-03"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Rebuild Step02 retrieval and smoothing and prove its prediction, weight, and score parity."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -116,7 +116,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "M2-PB-05"
 requirement_ids = ["M2-REQ-05"]
 depends_on = ["M2-PB-04"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Rebuild Step03 correction and calibration and prove exact final MIL parity."
 completion_evidence = ["implementation_review", "viper_registration"]
 

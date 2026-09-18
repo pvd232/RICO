@@ -1,0 +1,8 @@
+{
+  "lineage_sha256": "7a40b9695b160b3b01d29707e323f764737e27d2c94955c93e2ca2c69eaa447e",
+  "run_id": "01M2SQ7E3T784YX5YYF59EVAVW",
+  "schema_version": 1,
+  "source_commit": "0649557b6724b3d9ffcc2ef9e8a215a1ed7b72b6",
+  "source_repository": "https://github.com/pvd232/rico-rebuild.git",
+  "verified_at": "2026-09-18T07:41:41.925756Z"
+}

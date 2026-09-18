@@ -20,7 +20,7 @@ every intermediate to one cell set, perturbation order, split contract,
 execution profile, and producer record.
 
 <!-- contract-protocol:generated:start -->
-**In progress.** [Jump to current PairBlock](#r5-pb-02)
+**In progress.** [Jump to current PairBlock](#r5-pb-01)
 
 **Checklist:** [MANTRA rebuild](../checklists/mantra-rebuild.md)
 
@@ -41,8 +41,9 @@ execution profile, and producer record.
 - Extend the accepted control-residual namespace with the reviewed GPU-resident multi-restart NMF fit and deterministic CPU KMeans consensus.
 - Require exactly 19 stable control programs and retain the program bank, restart candidates, assignments, coverage, ordered axes, source-authority recipe, and execution diagnostics.
 - Extend the download-rooted VIPER graph so the program-bank Build consumes only the accepted residual and panel artifacts, with focused parity, determinism, and worker-safety tests.
+- Provide a bank-only execution graph that consumes the accepted residual receipt without rerunning residualization.
 
-**Plan deviations:** The baseline_commit is the pre-R5-PB-02 repository commit solely so the draft can be typed before the upstream review commit exists. Rebind this field to the accepted R5-PB-02 review commit before materialization or execution; no other plan field is contingent.
+**Plan deviations:** No deviations from the declared requirement.
 
 **Start work:** [Open current plan](../plans/mantra-response-reconstruction/R5-PB-01/plan.toml)
 
@@ -90,7 +91,7 @@ execution profile, and producer record.
 
 #### <nobr><code>R5-PB-02</code></nobr>
 
-**Status:** applied
+**Status:** complete
 
 **Requirement contribution:** Regress exactly mitopercent and IEG_score with an intercept from canonical control cells, apply the retained nonnegative residual offsets, and bind the residual matrix to its fitted cell and gene axes.
 
@@ -114,7 +115,7 @@ execution profile, and producer record.
 
 **Evidence:** [Passing gate receipt](../evidence/mantra-response-reconstruction/R5-PB-02/gate-review-01.json)
 
-**Decision:** Implementation review is accepted for <nobr><code>R5-PB-02</code></nobr>; register it.
+**Decision:** <nobr><code>R5-PB-02</code></nobr> is complete; no further decision is required.
 
 <details>
 <summary>Implementation details</summary>
@@ -232,7 +233,7 @@ execution profile, and producer record.
 | Requirement | Claim | Progress | Verifiers | PairBlocks |
 |---|---|---|---|---|
 | <nobr><code>R5-REQ-01</code></nobr> | Control programs must be rebuilt by cNMF from canonical control cells restricted to the frozen control panel, which excludes the core immediate-early-gene blacklist. cNMF must consume the expression residuals produced by R5-REQ-02 through the verified GPU NMF path and retain the selected rank, restarts, regularization, consensus backend, ordered genes, programs, coefficients, reconstruction diagnostics, and execution profile. | planned | <nobr><code>R5-VR-01</code></nobr> | <nobr><code>R5-PB-01</code></nobr> |
-| <nobr><code>R5-REQ-02</code></nobr> | One declared operation must validate the canonical log1p-CP10K slim-atlas metadata and ordered cell and gene axes, then regress exactly mitopercent and the derived IEG_score, with an intercept, from its control-cell expression matrix before cNMF fits control programs. It must shift each residual gene by its fitted nonnegative offset and retain the ordered two-covariate contract, fitted control-cell and gene axes, regression coefficients, per-gene offsets, residual expression, and array digests. Cell-cycle scores, log UMI count, and other removed atlas fields must not enter this operation. | in_progress | <nobr><code>R5-VR-02</code></nobr> | <nobr><code>R5-PB-02</code></nobr> |
+| <nobr><code>R5-REQ-02</code></nobr> | One declared operation must validate the canonical log1p-CP10K slim-atlas metadata and ordered cell and gene axes, then regress exactly mitopercent and the derived IEG_score, with an intercept, from its control-cell expression matrix before cNMF fits control programs. It must shift each residual gene by its fitted nonnegative offset and retain the ordered two-covariate contract, fitted control-cell and gene axes, regression coefficients, per-gene offsets, residual expression, and array digests. Cell-cycle scores, log UMI count, and other removed atlas fields must not enter this operation. | complete | <nobr><code>R5-VR-02</code></nobr> | <nobr><code>R5-PB-02</code></nobr> |
 | <nobr><code>R5-REQ-03</code></nobr> | One cellwise control-state stage must project canonical fit, tune, and control cells onto the ordered 19 control programs by nonnegative least squares, preserving the cell, gene, and program axes and the solver diagnostics. One vectorized GPU Sinkhorn stage must use those ctrl19 coordinates to match fit and tune perturbation cells to canonical controls, then persist the ordered treated means, barycentric matched-control means, and matched-control residual response vectors. The stages must retain convergence, marginal-error, transport-mass, transport-cost, batch, device, precision, and donor-versus-rebuilt diagnostics; neither stage may consume hold response rows. | planned | <nobr><code>R5-VR-03</code></nobr> | <nobr><code>R5-PB-03</code></nobr> |
 | <nobr><code>R5-REQ-04</code></nobr> | Response programs must be learned from the rebuilt Sinkhorn residual surface on the frozen GEARS 5,000-gene response panel by one declared sparse-dictionary stage. The response stage must use the complete GEARS target axis, including any core immediate-early genes present, because the response target includes their perturbation-induced signal. Program coefficients must use the verified GPU NNLS path, and the stage must retain its objective, initialization, selected parameters, ordered gene axis, loadings, coefficients, and reconstruction diagnostics. | planned | <nobr><code>R5-VR-04</code></nobr> | <nobr><code>R5-PB-04</code></nobr> |
 | <nobr><code>R5-REQ-05</code></nobr> | One declared response-coordinate stage must reproduce the selected single-cell recipe: fit the signed sparse SVD decoder on the declared fit plus tune Sinkhorn residual cells, ridge-encode every cell against that decoder, and rotate the 210 coefficients through the ordered fit plus tune covariance eigendecomposition. The stage must preserve the exact fitted cells, decoder, eigensystem ordering, rotation, coefficients, inverse reconstruction, numerical backend, execution state, and comparison with the historical coordinates. | planned | <nobr><code>R5-VR-05</code></nobr> | <nobr><code>R5-PB-05</code></nobr> |
