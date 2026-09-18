@@ -1,0 +1,100 @@
+schema_version = 1
+contract_id = "viper-cloud-persistence"
+title = "VIPER Cloud Persistence"
+
+[[requirements]]
+id = "VC-REQ-01"
+claim = "A successful run or retry using ViperCloudDestination must atomically save and publicly return the exact cloud-backed ResolvedRunRef created for terminal resolved.yaml."
+depends_on = []
+verifier_ids = ["VC-VR-01"]
+
+[[requirements]]
+id = "VC-REQ-02"
+claim = "resolve_run_reference must prefer an adjacent saved cloud reference, require ViperCloudFileRef storage, verify that its digest, byte count, and canonical path identify the terminal resolved.yaml, and reject any disagreement without rereading remote payload bytes."
+depends_on = ["VC-REQ-01"]
+verifier_ids = ["VC-VR-02"]
+
+[[requirements]]
+id = "VC-REQ-03"
+claim = "An explicit producer-side promotion operation must verify a complete local run graph and return an equivalent cloud-rooted ResolvedRunRef without invoking any stage callable or mutating the source graph."
+depends_on = []
+verifier_ids = ["VC-VR-03"]
+
+[[requirements]]
+id = "VC-REQ-04"
+claim = "Promotion must preserve scientific payload digests and byte counts, canonical workspace-relative paths, producer and input relationships, and verified DownloadSpec-rooted lineage; every rewritten protocol document must receive the identity of its new serialized bytes."
+depends_on = ["VC-REQ-03"]
+verifier_ids = ["VC-VR-04"]
+
+[[requirements]]
+id = "VC-REQ-05"
+claim = "A fresh workspace with no producer path and an empty verified-object cache must consume the cloud-rooted graph through existing VIPER authoring, verification, and materialization boundaries while stage and consumer code receive no provider client, bucket, URI, or cache selector."
+depends_on = ["VC-REQ-01", "VC-REQ-02", "VC-REQ-03", "VC-REQ-04"]
+verifier_ids = ["VC-VR-05"]
+
+[[verifiers]]
+id = "VC-VR-01"
+requirement_ids = ["VC-REQ-01"]
+acceptance_conditions = ["Cloud run and retry success records expose the same ResolvedRunRef returned by execution and save the same serialized reference beside terminal resolved.yaml; a different existing sidecar is rejected with RunError('terminal cloud reference differs')."]
+success_case = { repository_id = "viper", path = "tests/test_run_execution.py", symbol = "test_cloud_run_persists_and_returns_terminal_reference" }
+rejection_cases = [{ repository_id = "viper", path = "tests/test_run_execution.py", symbol = "test_cloud_run_rejects_mismatched_terminal_reference" }]
+
+[[verifiers]]
+id = "VC-VR-02"
+requirement_ids = ["VC-REQ-02"]
+acceptance_conditions = ["Restart resolution loads a matching adjacent cloud sidecar without network I/O and rejects a non-cloud location or terminal identity mismatch with RestoreError('stored run reference differs from terminal identity')."]
+success_case = { repository_id = "viper", path = "tests/test_storage.py", symbol = "test_resolve_run_reference_prefers_verified_cloud_sidecar" }
+rejection_cases = [{ repository_id = "viper", path = "tests/test_storage.py", symbol = "test_resolve_run_reference_rejects_mismatched_cloud_sidecar" }]
+
+[[verifiers]]
+id = "VC-VR-03"
+requirement_ids = ["VC-REQ-03"]
+acceptance_conditions = ["Promotion verifies and publishes the reachable local graph, returns a cloud-rooted ResolvedRunRef, leaves source bytes unchanged, and records zero stage calls; missing or changed source bytes raise RunPromotionError('source run graph is unavailable')."]
+success_case = { repository_id = "viper", path = "tests/test_cloud_execution.py", symbol = "test_promotes_verified_local_run_without_stage_execution" }
+rejection_cases = [{ repository_id = "viper", path = "tests/test_cloud_execution.py", symbol = "test_promotion_rejects_missing_or_changed_source_bytes" }]
+
+[[verifiers]]
+id = "VC-VR-04"
+requirement_ids = ["VC-REQ-04"]
+acceptance_conditions = ["The promoted graph retains every scientific payload identity, canonical path, producer and input relationship, and required DownloadSpec root while rewritten protocol records match their new bytes; an unverified or unrooted source graph is rejected before publication."]
+success_case = { repository_id = "viper", path = "tests/test_cloud_execution.py", symbol = "test_promotion_preserves_payloads_paths_and_download_lineage" }
+rejection_cases = [{ repository_id = "viper", path = "tests/test_cloud_execution.py", symbol = "test_promotion_rejects_unverified_or_unrooted_source_graph" }]
+
+[[verifiers]]
+id = "VC-VR-05"
+requirement_ids = ["VC-REQ-05"]
+acceptance_conditions = ["A consumer in a fresh workspace freezes and executes against the promoted cloud root, receives verified local paths, exposes no provider configuration to stage code, and creates no duplicate immutable payload beneath .viper/store."]
+success_case = { repository_id = "viper", path = "tests/test_cloud_execution.py", symbol = "test_fresh_workspace_consumes_promoted_run_through_viper_cloud" }
+rejection_cases = [{ repository_id = "viper", path = "tests/test_prior_run_inputs.py", symbol = "test_cloud_pointer_rejects_a_local_producer" }]
+
+[[pair_blocks]]
+id = "VC-PB-01"
+requirement_ids = ["VC-REQ-01", "VC-REQ-02"]
+depends_on = []
+repository_id = "viper"
+requirement_contribution = "Persist, return, reload, and verify one cloud-backed terminal run reference."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "VC-PB-02"
+requirement_ids = ["VC-REQ-03"]
+depends_on = ["VC-PB-01"]
+repository_id = "viper"
+requirement_contribution = "Add explicit verified local-to-cloud run-graph promotion without stage execution."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "VC-PB-03"
+requirement_ids = ["VC-REQ-04"]
+depends_on = ["VC-PB-02"]
+repository_id = "viper"
+requirement_contribution = "Prove that promotion preserves scientific payload identities, canonical paths, graph meaning, and download-rooted lineage."
+completion_evidence = ["implementation_review", "viper_registration"]
+
+[[pair_blocks]]
+id = "VC-PB-04"
+requirement_ids = ["VC-REQ-05"]
+depends_on = ["VC-PB-03"]
+repository_id = "viper"
+requirement_contribution = "Prove provider-opaque fresh-workspace consumption through the existing ViperCloud boundary and publish the final documentation."
+completion_evidence = ["implementation_review", "viper_registration"]

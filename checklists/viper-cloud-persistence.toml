@@ -1,0 +1,62 @@
+schema_version = 1
+checklist_id = "viper-cloud-persistence"
+title = "VIPER cloud persistence"
+coordination_repository_id = "rico"
+checklist_path = "checklists/viper-cloud-persistence.md"
+contract_paths = ["contracts/viper-cloud-persistence.toml"]
+
+[[phases]]
+number = 1
+title = "Durable cloud run root"
+requirement_ids = ["VC-REQ-01", "VC-REQ-02"]
+
+[[phases]]
+number = 2
+title = "Explicit verified promotion"
+requirement_ids = ["VC-REQ-03"]
+
+[[phases]]
+number = 3
+title = "Identity and lineage preservation"
+requirement_ids = ["VC-REQ-04"]
+
+[[phases]]
+number = 4
+title = "Fresh-workspace acceptance"
+requirement_ids = ["VC-REQ-05"]
+
+[[repository_bindings]]
+repository_id = "rico"
+checkout = "/Users/machina/Developer/ChatGPT/RICO"
+
+[[repository_bindings.executables]]
+command = "python3"
+path = "/Users/machina/Developer/ChatGPT/RICO/.venv/bin/python3"
+
+[[repository_bindings.executables]]
+command = "git"
+path = "/usr/bin/git"
+
+[[repository_bindings]]
+repository_id = "viper"
+checkout = "/Users/machina/Developer/ChatGPT/viper"
+
+[[repository_bindings.executables]]
+command = "python3"
+path = "/Users/machina/Developer/ChatGPT/viper/.venv/bin/python3"
+
+[[repository_bindings.executables]]
+command = "pyright"
+path = "/Users/machina/Developer/ChatGPT/viper/.venv/bin/pyright"
+
+[[repository_bindings.executables]]
+command = "node"
+path = "/usr/local/bin/node"
+
+[[repository_bindings.executables]]
+command = "ruff"
+path = "/Users/machina/Developer/ChatGPT/viper/.venv/bin/ruff"
+
+[[repository_bindings.executables]]
+command = "git"
+path = "/usr/bin/git"
