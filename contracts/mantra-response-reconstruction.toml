@@ -10,14 +10,14 @@ verifier_ids = ["R5-VR-01"]
 
 [[requirements]]
 id = "R5-REQ-02"
-claim = "One declared operation must regress the immediate-early-gene score, S-phase score, G2M-phase score, log UMI count, and mitochondrial percentage from the canonical control-cell expression matrix before cNMF fits control programs. The operation must retain the covariates, fitted population, coefficients, residual expression, and leakage diagnostics."
-depends_on = ["P4-REQ-06", "D3-REQ-07"]
+claim = "One declared operation must validate the canonical log1p-CP10K slim-atlas metadata and ordered cell and gene axes, then regress exactly mitopercent and the derived IEG_score, with an intercept, from its control-cell expression matrix before cNMF fits control programs. It must shift each residual gene by its fitted nonnegative offset and retain the ordered two-covariate contract, fitted control-cell and gene axes, regression coefficients, per-gene offsets, residual expression, and array digests. Cell-cycle scores, log UMI count, and other removed atlas fields must not enter this operation."
+depends_on = []
 verifier_ids = ["R5-VR-02"]
 
 [[requirements]]
 id = "R5-REQ-03"
-claim = "One vectorized GPU Sinkhorn stage must match perturbation cells to controls from the same canonical cell set, produce barycentric controls and residual response vectors, and retain convergence, marginal-error, transport-mass, transport-cost, batch, device, precision, and donor-versus-rebuilt diagnostics."
-depends_on = ["R5-REQ-02", "E0-REQ-06"]
+claim = "One cellwise control-state stage must project canonical fit, tune, and control cells onto the ordered 19 control programs by nonnegative least squares, preserving the cell, gene, and program axes and the solver diagnostics. One vectorized GPU Sinkhorn stage must use those ctrl19 coordinates to match fit and tune perturbation cells to canonical controls, then persist the ordered treated means, barycentric matched-control means, and matched-control residual response vectors. The stages must retain convergence, marginal-error, transport-mass, transport-cost, batch, device, precision, and donor-versus-rebuilt diagnostics; neither stage may consume hold response rows."
+depends_on = ["R5-REQ-01", "E0-REQ-06"]
 verifier_ids = ["R5-VR-03"]
 
 [[requirements]]
@@ -34,7 +34,7 @@ verifier_ids = ["R5-VR-05"]
 
 [[requirements]]
 id = "R5-REQ-06"
-claim = "One response-target bundle must bind the canonical cells, distinct control and response gene panels, control programs, transport residuals, response programs, rotated coordinates, response-block definitions, perturbation order, response-gene order, split membership, execution profiles, and source evidence for both model rebuilds."
+claim = "One response-target bundle must bind the canonical cells, distinct control and response gene panels, control programs, ctrl19-matched fit/tune transport residuals, canonical global-control PearsonDelta truth, matched fit/tune coefficient targets, direct fit/tune gene shift, the legal descriptor-ridge hold gene shift, response programs, rotated coordinates, response-block definitions, perturbation order, response-gene order, split membership, execution profiles, and source evidence for both model rebuilds. The bundle must preserve the identity matched training truth plus gene shift equals global-control truth on fit and tune rows while keeping global-control truth as the only PearsonDelta scoring surface."
 depends_on = ["R5-REQ-01", "R5-REQ-07"]
 verifier_ids = ["R5-VR-06"]
 
@@ -48,80 +48,86 @@ verifier_ids = ["R5-VR-07"]
 id = "R5-VR-01"
 requirement_ids = ["R5-REQ-01"]
 acceptance_conditions = ["The cNMF stage consumes only canonical control cells, the frozen IEG-excluded control panel, and the residual expression produced by R5-REQ-02; exercises the verified GPU NMF path; reproduces from its retained plan; emits finite non-collapsed programs; and uses CPU KMeans whenever the run claims byte parity."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_control_programs.py", symbol = "test_rebuilds_gpu_cnmf_control_programs" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_control_programs.py", symbol = "test_rejects_other_cells_deoptimized_nmf_or_wrong_kmeans_profile" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_control_programs.py", symbol = "test_gpu_compiled_path_emits_nineteen_programs_and_diagnostics" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_control_programs.py", symbol = "test_gpu_rejects_a_worker_initialized_without_the_reviewed_workspace" }]
 
 [[verifiers]]
 id = "R5-VR-02"
 requirement_ids = ["R5-REQ-02"]
-acceptance_conditions = ["The residualization reads canonical control cells and exactly the declared immediate-early-gene, cell-cycle, library-size, and mitochondrial covariates; reproduces from retained coefficients; reduces their measured contributions; and rejects another fitted population, a missing covariate, or an unremoved contribution."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_control_programs.py", symbol = "test_removes_declared_ieg_contribution" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_control_programs.py", symbol = "test_rejects_other_cells_or_unremoved_ieg_signal" }]
+acceptance_conditions = ["The residualization validates the canonical log1p-CP10K slim-atlas metadata and axes; reads canonical control cells and exactly mitopercent and IEG_score; includes an intercept; persists the fitted coefficients and nonnegative residual offsets; reproduces the same residual bytes; and rejects another expression transform, normalization target, fitted cell or gene axis, covariate set, intercept policy, or output bytes."]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_control_programs.py", symbol = "test_builds_deterministic_nonnegative_control_residuals" }
+rejection_cases = [
+  { repository_id = "rico-rebuild", path = "tests/test_control_programs.py", symbol = "test_rejects_a_control_panel_from_a_different_cell_axis" },
+  { repository_id = "rico-rebuild", path = "tests/test_control_programs.py", symbol = "test_rejects_a_noncanonical_or_misaligned_slim_atlas" },
+]
 
 [[verifiers]]
 id = "R5-VR-03"
 requirement_ids = ["R5-REQ-03"]
-acceptance_conditions = ["The GPU transport stage uses only canonical cells, matches its CPU reference within named tolerances, satisfies its numerical checks, and emits a donor-versus-rebuilt comparison on the same response surface."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_transport_residuals.py", symbol = "test_builds_gpu_sinkhorn_matched_control_residuals" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_transport_residuals.py", symbol = "test_rejects_failed_transport_mixed_cells_or_cpu_gpu_drift" }]
+acceptance_conditions = ["The control-state stage projects the canonical fit, tune, and control cells onto the ordered ctrl19 programs with nonnegative coefficients and a checked reconstruction; the GPU transport stage consumes those coordinates, emits ordered treated means, barycentric matched-control means, and residuals, matches its CPU reference within named tolerances, satisfies its numerical checks, and rejects any hold response input."]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_transport_residuals.py", symbol = "test_builds_ctrl19_matched_means_and_residuals" }
+rejection_cases = [
+  { repository_id = "rico-rebuild", path = "tests/test_control_state.py", symbol = "test_rejects_changed_program_or_cell_axis" },
+  { repository_id = "rico-rebuild", path = "tests/test_transport_residuals.py", symbol = "test_rejects_hold_rows_or_failed_transport_diagnostics" },
+]
 
 [[verifiers]]
 id = "R5-VR-04"
 requirement_ids = ["R5-REQ-04"]
 acceptance_conditions = ["The sparse dictionary reproduces from retained parameters, preserves the exact GEARS response-gene order and its declared IEG-retention policy, its GPU NNLS coefficients match the CPU reference within tolerance, and it reports sparsity, reconstruction, stability, support, and redundancy."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_response_programs.py", symbol = "test_builds_sparse_programs_with_gpu_nnls" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_response_programs.py", symbol = "test_rejects_misaligned_unstable_or_drifting_response_programs" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_response_programs.py", symbol = "test_builds_sparse_programs_with_gpu_nnls" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_response_programs.py", symbol = "test_rejects_misaligned_unstable_or_drifting_response_programs" }]
 
 [[verifiers]]
 id = "R5-VR-05"
 requirement_ids = ["R5-REQ-05"]
 acceptance_conditions = ["The saved sparse SVD decoder, ridge coefficients, fit-plus-tune covariance eigensystem, 210-dimensional rotation, and rotated coefficients reconstruct the declared residual inputs within tolerance; preserve cell, perturbation, gene, and coordinate order; and remain bound to the recorded VIPER execution identity."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_response_coordinates.py", symbol = "test_builds_reconstructible_rotated_response_coordinates" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_response_coordinates.py", symbol = "test_rejects_changed_fit_population_or_coordinate_order" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_response_coordinates.py", symbol = "test_builds_reconstructible_rotated_response_coordinates" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_response_coordinates.py", symbol = "test_rejects_changed_fit_population_or_coordinate_order" }]
 
 [[verifiers]]
 id = "R5-VR-06"
 requirement_ids = ["R5-REQ-06"]
-acceptance_conditions = ["The bundle resolves every ordered axis, gene panel, intermediate, and response-block definition to one passing producer record, records each execution profile, and both model loaders consume the same bundle identity."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_response_target_bundle.py", symbol = "test_freezes_shared_response_target_bundle" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_response_target_bundle.py", symbol = "test_rejects_mixed_surface_profile_or_unresolved_target_input" }]
+acceptance_conditions = ["The bundle resolves every ordered axis, gene panel, global-control scoring truth, ctrl19-matched training truth, coefficient target, gene shift, intermediate, and response-block definition to one passing producer record; verifies matched_delta + gene_shift == global_delta on fit and tune rows; proves that the hold shift uses no hold responses; records each execution profile; and both model loaders consume the same bundle identity."]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_response_target_bundle.py", symbol = "test_freezes_shared_response_target_bundle" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_response_target_bundle.py", symbol = "test_rejects_mixed_surface_profile_or_unresolved_target_input" }]
 
 [[verifiers]]
 id = "R5-VR-07"
 requirement_ids = ["R5-REQ-07"]
 acceptance_conditions = ["The rebuilt similarity graph, block labels, semantic map, and rotation preserve the declared response-program order and match their Phase 0 arrays or labels exactly under the parity profile; copying the historical files without executing their producers does not pass."]
-success_case = { repository_id = "mantra", path = "src/mantra/rebuild/tests/test_response_block_definitions.py", symbol = "test_rebuilds_response_block_definitions_with_parity" }
-rejection_cases = [{ repository_id = "mantra", path = "src/mantra/rebuild/tests/test_response_block_definitions.py", symbol = "test_rejects_ingested_or_misaligned_response_block_definitions" }]
+success_case = { repository_id = "rico-rebuild", path = "tests/test_response_block_definitions.py", symbol = "test_rebuilds_response_block_definitions_with_parity" }
+rejection_cases = [{ repository_id = "rico-rebuild", path = "tests/test_response_block_definitions.py", symbol = "test_rejects_ingested_or_misaligned_response_block_definitions" }]
 
 [[pair_blocks]]
 id = "R5-PB-01"
 requirement_ids = ["R5-REQ-01"]
 depends_on = ["R5-PB-02", "E0-PB-04", "E0-PB-08"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Rebuild control programs from IEG-excluded genes and covariate-residualized expression through verified GPU cNMF and the declared KMeans execution profile."
 completion_evidence = ["implementation_review", "viper_registration"]
 
 [[pair_blocks]]
 id = "R5-PB-02"
 requirement_ids = ["R5-REQ-02"]
-depends_on = ["P4-PB-06", "D3-PB-07"]
-repository_id = "mantra"
-requirement_contribution = "Estimate and remove the immediate-early-gene contribution from canonical control cells."
+depends_on = []
+repository_id = "rico-rebuild"
+requirement_contribution = "Regress exactly mitopercent and IEG_score with an intercept from canonical control cells, apply the retained nonnegative residual offsets, and bind the residual matrix to its fitted cell and gene axes."
 completion_evidence = ["implementation_review", "viper_registration"]
 
 [[pair_blocks]]
 id = "R5-PB-03"
 requirement_ids = ["R5-REQ-03"]
-depends_on = ["R5-PB-02", "E0-PB-06"]
-repository_id = "mantra"
-requirement_contribution = "Build and diagnose vectorized GPU Sinkhorn matched-control residual response vectors."
+depends_on = ["R5-PB-01", "E0-PB-06"]
+repository_id = "rico-rebuild"
+requirement_contribution = "Build cellwise nonnegative ctrl19 control-state coordinates, then use them to build and diagnose vectorized GPU Sinkhorn matched treated means, control means, and fit/tune residual response vectors without loading hold responses."
 completion_evidence = ["implementation_review", "viper_registration"]
 
 [[pair_blocks]]
 id = "R5-PB-04"
 requirement_ids = ["R5-REQ-04"]
 depends_on = ["R5-PB-03", "E0-PB-05"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Learn sparse response programs on the complete GEARS response axis and verify their GPU NNLS coefficients and reconstruction."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -129,7 +135,7 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "R5-PB-05"
 requirement_ids = ["R5-REQ-05"]
 depends_on = ["R5-PB-04", "E0-PB-11"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Fit the SVD and basis rotation and persist reconstructible ordered response coordinates."
 completion_evidence = ["implementation_review", "viper_registration"]
 
@@ -137,14 +143,14 @@ completion_evidence = ["implementation_review", "viper_registration"]
 id = "R5-PB-06"
 requirement_ids = ["R5-REQ-06"]
 depends_on = ["R5-PB-01", "R5-PB-07"]
-repository_id = "mantra"
-requirement_contribution = "Freeze one response-target bundle consumed unchanged by the Hopfield and MIL rebuilds."
+repository_id = "rico-rebuild"
+requirement_contribution = "Freeze one response-target bundle that keeps global-control scoring truth, ctrl19-matched training targets, coefficient targets, and gene shift distinct and is consumed unchanged by the Hopfield and MIL rebuilds."
 completion_evidence = ["implementation_review", "viper_registration"]
 
 [[pair_blocks]]
 id = "R5-PB-07"
 requirement_ids = ["R5-REQ-07"]
 depends_on = ["R5-PB-05"]
-repository_id = "mantra"
+repository_id = "rico-rebuild"
 requirement_contribution = "Reconstruct the response-program graph, hard and soft block maps, and rotation and prove parity with the retained Phase 0 definitions."
 completion_evidence = ["implementation_review", "viper_registration"]

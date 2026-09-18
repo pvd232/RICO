@@ -1,0 +1,90 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 2ee659b..9d24d91 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -12,7 +12,9 @@ dependencies = [
+     "pydantic>=2.12,<3",
+     "pyyaml>=6,<7",
+     "scanpy>=1.12,<1.13",
++    "scikit-learn>=1.7,<2",
+     "scikit-misc>=0.5,<0.6",
++    "torch>=2.8,<3",
+     "viper-provenance[gcs] @ git+https://github.com/pvd232/viper.git@c952c46ba1841bc3cabd6074b555cbbb9a15aa22",
+ ]
+ 
+diff --git a/src/rico/config.py b/src/rico/config.py
+index 574b7e1..01923e5 100644
+--- a/src/rico/config.py
++++ b/src/rico/config.py
+@@ -1,5 +1,7 @@
+ """Define validated settings consumed by MANTRA's VIPER stages."""
+ 
++from typing import Literal
++
+ from pydantic import Field
+ from viper.config import (
+     BuildConfig as ViperBuildConfig,
+@@ -193,6 +195,63 @@ class ControlResidualsConfig(ViperBuildConfig):
+     )
+ 
+ 
++class ControlProgramBankConfig(ViperBuildConfig):
++    """Configure the accepted K562 control-program cNMF build."""
++
++    control_label: str = Field(
++        default="non-targeting",
++        min_length=1,
++        description="Perturbation label whose selected cells define the control population.",
++    )
++    nominal_components: int = Field(
++        default=30,
++        gt=0,
++        description="Programs fitted in each NMF restart before stability filtering.",
++    )
++    expected_realized_components: int = Field(
++        default=19,
++        gt=0,
++        description="Stable programs required from the accepted canonical K562 build.",
++    )
++    restarts: int = Field(
++        default=12,
++        gt=1,
++        description="Parallel GPU NMF restarts used to estimate program stability.",
++    )
++    max_iterations: int = Field(
++        default=500,
++        gt=0,
++        description="Maximum multiplicative-update iterations in each NMF restart.",
++    )
++    tolerance: float = Field(
++        default=1.0e-4,
++        gt=0.0,
++        description="Root-mean-square reconstruction threshold for early convergence.",
++    )
++    random_seed: int = Field(
++        default=9,
++        ge=0,
++        description="Seed shared by NMF initialization and consensus clustering.",
++    )
++    program_regularization: float = Field(default=10.0, ge=0.0)
++    usage_regularization: float = Field(default=0.0, ge=0.0)
++    l1_ratio: float = Field(default=1.0, ge=0.0, le=1.0)
++    consensus_initializations: int = Field(default=10, gt=0)
++    minimum_run_coverage: float = Field(default=0.7, gt=0.0, le=1.0)
++    factorization_backend: Literal["gpu"] = Field(
++        default="gpu",
++        description="Verified GPU-resident batched NMF execution profile.",
++    )
++    consensus_backend: Literal["cpu"] = Field(
++        default="cpu",
++        description="Deterministic seeded CPU KMeans required for baseline builds.",
++    )
++    compile_updates: bool = Field(
++        default=True,
++        description="Whether torch.compile optimizes the repeated NMF update kernels.",
++    )
++
++
+ class GzipDecompressionConfig(ViperBuildConfig):
+     """Bind one gzip expansion to the reviewed identity of its complete output."""
+ 

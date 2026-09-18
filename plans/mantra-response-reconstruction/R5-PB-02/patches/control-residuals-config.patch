@@ -1,0 +1,21 @@
+diff --git a/src/rico/config.py b/src/rico/config.py
+index 56ddbb8..574b7e1 100644
+--- a/src/rico/config.py
++++ b/src/rico/config.py
+@@ -182,6 +182,16 @@ class PriorSourceRestoreConfig(ViperBuildConfig):
+     )
+ 
+ 
++class ControlResidualsConfig(ViperBuildConfig):
++    """Configure the accepted K562 control-expression residualization."""
++
++    control_label: str = Field(
++        default="non-targeting",
++        min_length=1,
++        description="Perturbation label whose selected cells define the fitted population.",
++    )
++
++
+ class GzipDecompressionConfig(ViperBuildConfig):
+     """Bind one gzip expansion to the reviewed identity of its complete output."""
+ 

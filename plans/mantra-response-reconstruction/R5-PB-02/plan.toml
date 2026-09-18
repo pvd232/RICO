@@ -1,0 +1,83 @@
+schema_version = 1
+contract_id = "mantra-response-reconstruction"
+package_sha256 = "9368ad5336703566965a4a3f9616d227b0b7dde570e65ef1ba6190203dc4b97d"
+pair_block_id = "R5-PB-02"
+baseline_commit = "54e1f3aaf74abd45abdb5a5bff7b9ae8a611a336"
+change_summary = [
+  "Add the typed K562 control-residual producer that regresses exactly mitopercent and IEG_score with an intercept, then applies and records one nonnegative offset per gene.",
+  "Bind residual values, coefficients, offsets, and their immutable metadata to the canonical control-cell and ordered control-gene axes.",
+  "Expose the residual producer as a download-rooted VIPER Build with focused deterministic and axis-rejection tests.",
+]
+deviation_summary = "The reviewed worktree also contains the dependent cNMF bank in these namespaces. This plan intentionally stops at residual production; R5-PB-01 activates and verifies the 19-program bank in the next plan."
+
+[[actions]]
+operation = "patch"
+patch_path = "patches/control-residuals-config.patch"
+target_paths = ["src/rico/config.py"]
+
+[[actions]]
+operation = "add"
+source_path = "add/src/rico/cell_types/k562/control_programs.py"
+target_path = "src/rico/cell_types/k562/control_programs.py"
+
+[[actions]]
+operation = "add"
+source_path = "add/src/rico/stages/k562/control_programs.py"
+target_path = "src/rico/stages/k562/control_programs.py"
+
+[[actions]]
+operation = "add"
+source_path = "add/src/rico/plans/k562/control_programs.py"
+target_path = "src/rico/plans/k562/control_programs.py"
+
+[[actions]]
+operation = "add"
+source_path = "add/tests/test_control_programs.py"
+target_path = "tests/test_control_programs.py"
+
+[[handoff_targets]]
+label = "Control-residual domain implementation"
+source = "plan"
+path = "add/src/rico/cell_types/k562/control_programs.py"
+line = 1
+
+[[handoff_targets]]
+label = "Download-rooted residual plan"
+source = "plan"
+path = "add/src/rico/plans/k562/control_programs.py"
+line = 1
+
+[[handoff_targets]]
+label = "Residual acceptance and rejection tests"
+source = "plan"
+path = "add/tests/test_control_programs.py"
+line = 1
+
+[gate]
+source_roots = ["src/rico", "pyproject.toml"]
+test_roots = ["tests/test_control_programs.py"]
+
+[[gate.steps]]
+role = "typecheck"
+working_directory = "."
+argv = ["pyright", "--pythonpath", "/Users/machina/Developer/ChatGPT/mantra-rebuild/.venv/bin/python", "src/rico/cell_types/k562/control_programs.py", "src/rico/stages/k562/control_programs.py", "src/rico/plans/k562/control_programs.py", "tests/test_control_programs.py"]
+
+[[gate.steps]]
+role = "test"
+working_directory = "."
+argv = ["python3", "-m", "pytest", "-q", "tests/test_control_programs.py"]
+
+[[gate.steps]]
+role = "documentation"
+working_directory = "."
+argv = ["python3", "/Users/machina/.agents/skills/code-documentation/scripts/check-schema-descriptions.py", "src/rico/cell_types/k562/control_programs.py", "src/rico/stages/k562/control_programs.py", "src/rico/plans/k562/control_programs.py", "tests/test_control_programs.py"]
+
+[[gate.steps]]
+role = "lint"
+working_directory = "."
+argv = ["ruff", "format", "--check", "src/rico/cell_types/k562/control_programs.py", "src/rico/stages/k562/control_programs.py", "src/rico/plans/k562/control_programs.py", "tests/test_control_programs.py"]
+
+[[gate.steps]]
+role = "lint"
+working_directory = "."
+argv = ["ruff", "check", "src/rico/cell_types/k562/control_programs.py", "src/rico/stages/k562/control_programs.py", "src/rico/plans/k562/control_programs.py", "tests/test_control_programs.py"]
