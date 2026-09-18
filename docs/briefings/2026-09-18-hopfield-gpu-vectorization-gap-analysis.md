@@ -34,6 +34,11 @@ types. Full working-set memory and numerical parity still require observation.
 
 - Rebuilt source: `mantra-rebuild@bf12bc03591e09f5ea7a5f9adea197f4aa680839`.
 - Historical source: `v1691_full_scratch_family64_ag_film_rebuild`.
+- Selected model reference: `mantra@919db054d6b0a87815824a9e1702ad1e710632ff`,
+  `experiments/v1938_sota_clean_repro/src/step01/hopfield/{encoder,model,train}.py`
+  and `runs/matrix_fit_only_bold_step02_20260715T083000Z/scripts/run_raw_gene_readout_tuning.py`
+  beneath the same experiment. The v1691 input producers and v1938 model are
+  separate comparison boundaries.
 - Accelerator: one NVIDIA L4 with 24 GB.
 - Raw atlas: `K562_essential_raw_singlecell_01.h5ad`, 10,661,879,995 bytes.
 - Selected cells: 257,507.
@@ -587,7 +592,10 @@ neighbor_mean = torch.einsum("nk,nkd->nd", weights, bank[neighbors.indices])
 bank = (1.0 - blend) * bank + blend * neighbor_mean
 ```
 
-**Disposition.** Confirmed avoidable CPU round trip.
+**Disposition.** Inherited optimization opportunity. The pinned v1938
+`model.py:50–94` performs NumPy PCA and neighbor smoothing, and
+`train.py:211–224` transfers coefficients to CPU and the resulting bank back
+to the device. The rebuild did not introduce this round trip.
 
 The historical PCA uses float64 and population standard deviation. Preserve
 both, plus its residual whitened mean. Test neighbor ordering, ties, and SVD
@@ -619,7 +627,11 @@ coefficient_prediction = dense_weights @ memory_coefficients
 The dense weights occupy about 13 MB. This removes query batching and the donor
 cube.
 
-**Disposition.** Confirmed batching and intermediate-representation defect.
+**Disposition.** Inherited optimization opportunity. The pinned v1938
+`run_raw_gene_readout_tuning.py:209–213` uses the same 16-query gather loop.
+Scatter-plus-matmul satisfies the new no-query-batching requirement, but it
+restores no lost historical optimization. Check floating-point reduction
+differences before accepting prediction parity.
 
 ## G18 — CUDA AdamW explicitly disables its fused implementation
 
@@ -644,6 +656,10 @@ The focused test compares one deterministic update with the unfused reference
 within the declared tolerance.
 
 **Disposition.** Confirmed kernel-fusion opportunity.
+
+The pinned v1938 `train.py:232–236` also sets `fused=False`. Enabling fusion
+changes the historical optimizer execution and requires the focused update
+comparison; the rebuild did not remove historical fusion.
 
 G1 and G18 are proposed acceleration opportunities, not measured historical
 regressions. Preserve their numerical settings until focused comparisons
@@ -682,6 +698,37 @@ scatter-and-multiply readout from G17, and cache the normalized bank before
 the training loop. Recompute embeddings when model weights change. Preserve
 evaluation mode, self-exclusion, checkpoint selection, and monitor cadence.
 GPU-PB-06 owns this repair; its observer must count uploads and forward calls.
+
+**Historical classification.** These costs also occur in the pinned v1938
+`model.py:134–182`: each monitor prediction constructs memories, uploads them,
+embeds memory rows, and embeds split queries again. Its `train.py:276` repeats
+`centered_l2(bank_mem)` inside the epoch loop. G19 is an inherited improvement
+opportunity, not evidence of a newly introduced monitoring regression.
+
+## Selected-model comparison coverage
+
+This table records the additional pinned-source comparison. It establishes
+specific implementation correspondences, not an exhaustive optimization or
+runtime-parity certificate. Historical locations below are at commit
+`919db054d6b0a87815824a9e1702ad1e710632ff`; paths are relative to
+`experiments/v1938_sota_clean_repro/` in the
+[historical checkout](../../../../mantra/).
+
+| Historical owner | Rebuild owner | Inspected result and remaining check |
+|---|---|---|
+| `src/step01/hopfield/encoder.py:HopfieldEncoder` | `domain/k562/hopfield.py:HopfieldEncoder` | Historical encoder is a dense SiLU/LayerNorm MLP with normalized outputs. No historical compiled or mixed-precision encoder optimization was found in this class. Exact rebuilt layer and initialization parity remains a separate check. |
+| `src/step01/hopfield/model.py:whitened_pca_denoise_np` and `smooth_memory_by_neighbors_np` | `_whitened_pca_bank`, `_smooth_bank` | G16 proposes moving historically CPU work to GPU. Preserve float64 PCA, population variance, sign policy and neighbor ordering. |
+| `src/step01/hopfield/model.py:predict_coefficients` | `_predict_coefficients` | G19's repeated uploads and forward passes are inherited; coefficient donor gathering is also historical. The shared scatter readout can remove that intermediate. |
+| `src/step01/hopfield/train.py:train_encoder` optimizer and bank-posterior loop | `train_v1938_encoder` | G18's unfused optimizer and G19's repeated fixed-bank normalization are inherited. Full loss/configuration and checkpoint-selection equivalence still require comparison. |
+| `runs/matrix_fit_only_bold_step02_20260715T083000Z/scripts/run_raw_gene_readout_tuning.py:predict_raw_gene_readout` | `predict_raw_gene_readout` | G17's 16-query batching is inherited verbatim in structure. Preserve self-exclusion, memory membership, softmax temperature and the hold-shift application when replacing it. |
+
+**Open audit boundary.** A complete claim that every original optimization is
+captured still requires a function-level ledger for the imported input
+producers, determinism helpers, selected configuration, losses and evaluation
+callers. The failed-stage table also requires full receipts to distinguish
+observed errors from causal hypotheses. Until those rows are checked, this
+report identifies confirmed gaps and proposed improvements but does not certify
+exhaustive historical coverage.
 
 ## Audited CPU boundaries and unmeasured opportunities
 
